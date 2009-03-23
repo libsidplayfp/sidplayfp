@@ -1,0 +1,58 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hardsid_builder", "..\..\..\builders\hardsid-builder\win\VC\hardsid_builder.vcproj", "{6B509DB8-0740-4249-A0B4-DD7F9C602DA2}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsidplay", "..\..\..\libsidplay\win\VC\libsidplay.vcproj", "{0F30513A-5D45-4BB9-A00A-27B1F6E93241}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libsidutils", "..\..\..\libsidutils\win\VC\libsidutils.vcproj", "{3B73BE15-7879-4886-9C59-621482865031}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0F30513A-5D45-4BB9-A00A-27B1F6E93241} = {0F30513A-5D45-4BB9-A00A-27B1F6E93241}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resid_builder", "..\..\..\builders\resid-builder\win\VC\resid_builder.vcproj", "{A6924EF7-2833-4D83-9C76-F47ED7F15BB0}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sidplay", "sidplay.vcproj", "{0ACEC72B-89F1-4098-A71F-94121D88362A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3B73BE15-7879-4886-9C59-621482865031} = {3B73BE15-7879-4886-9C59-621482865031}
+		{0F30513A-5D45-4BB9-A00A-27B1F6E93241} = {0F30513A-5D45-4BB9-A00A-27B1F6E93241}
+		{6B509DB8-0740-4249-A0B4-DD7F9C602DA2} = {6B509DB8-0740-4249-A0B4-DD7F9C602DA2}
+		{A6924EF7-2833-4D83-9C76-F47ED7F15BB0} = {A6924EF7-2833-4D83-9C76-F47ED7F15BB0}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{6B509DB8-0740-4249-A0B4-DD7F9C602DA2}.Debug.ActiveCfg = Debug|Win32
+		{6B509DB8-0740-4249-A0B4-DD7F9C602DA2}.Debug.Build.0 = Debug|Win32
+		{6B509DB8-0740-4249-A0B4-DD7F9C602DA2}.Release.ActiveCfg = Release|Win32
+		{6B509DB8-0740-4249-A0B4-DD7F9C602DA2}.Release.Build.0 = Release|Win32
+		{0F30513A-5D45-4BB9-A00A-27B1F6E93241}.Debug.ActiveCfg = Debug|Win32
+		{0F30513A-5D45-4BB9-A00A-27B1F6E93241}.Debug.Build.0 = Debug|Win32
+		{0F30513A-5D45-4BB9-A00A-27B1F6E93241}.Release.ActiveCfg = Release|Win32
+		{0F30513A-5D45-4BB9-A00A-27B1F6E93241}.Release.Build.0 = Release|Win32
+		{3B73BE15-7879-4886-9C59-621482865031}.Debug.ActiveCfg = Debug|Win32
+		{3B73BE15-7879-4886-9C59-621482865031}.Debug.Build.0 = Debug|Win32
+		{3B73BE15-7879-4886-9C59-621482865031}.Release.ActiveCfg = Release|Win32
+		{3B73BE15-7879-4886-9C59-621482865031}.Release.Build.0 = Release|Win32
+		{A6924EF7-2833-4D83-9C76-F47ED7F15BB0}.Debug.ActiveCfg = Debug|Win32
+		{A6924EF7-2833-4D83-9C76-F47ED7F15BB0}.Debug.Build.0 = Debug|Win32
+		{A6924EF7-2833-4D83-9C76-F47ED7F15BB0}.Release.ActiveCfg = Release|Win32
+		{A6924EF7-2833-4D83-9C76-F47ED7F15BB0}.Release.Build.0 = Release|Win32
+		{0ACEC72B-89F1-4098-A71F-94121D88362A}.Debug.ActiveCfg = Debug|Win32
+		{0ACEC72B-89F1-4098-A71F-94121D88362A}.Debug.Build.0 = Debug|Win32
+		{0ACEC72B-89F1-4098-A71F-94121D88362A}.Release.ActiveCfg = Release|Win32
+		{0ACEC72B-89F1-4098-A71F-94121D88362A}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
