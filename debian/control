@@ -3,7 +3,8 @@ Section: sound
 Priority: optional
 Maintainer: Laszlo Boszormenyi (GCS) <gcs@debian.hu>
 Build-Depends: debhelper (>= 4.0.0), libsidplay2-dev (>= 2.1.1-4), pkg-config, libresid-builder-dev (>= 2.1.1), libsidutils-dev, chrpath
-Standards-Version: 3.7.2
+Homepage: http://sidplay2.sourceforge.net/
+Standards-Version: 3.7.3
 
 Package: sidplay
 Architecture: any

@@ -353,7 +353,7 @@ void ConsolePlayer::consoleColour (player_colour_t colour, bool bold)
 {
     if ((m_iniCfg.console ()).ansi)
     {
-        char *mode = "";
+        const char *mode = "";
 
         switch (colour)
         {

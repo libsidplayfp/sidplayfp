@@ -43,7 +43,7 @@ class AudioBase
 {
 protected:
     AudioConfig _settings;
-    char       *_errorString;
+    const char *_errorString;
     void       *_sampleBuffer;
 
 public:

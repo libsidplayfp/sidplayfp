@@ -1,3 +1,11 @@
+sidplay (2.0.9-5) unstable; urgency=low
+
+  * Fix a compilation error and warnings with gcc-4.3/g++-4.3 .
+  * Update watch file thanks to Raphael Geissert (closes: #449887).
+  * Correct minor packaging issues and update Standards-Version to 3.7.3 .
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.hu>  Mon, 07 Apr 2008 23:46:50 +0200
+
 sidplay (2.0.9-4) unstable; urgency=medium
 
   * Again a fix for GNU/kFreeFSD compilation (closes: #399124).

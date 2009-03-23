@@ -119,7 +119,7 @@ void IniConfig::clear ()
 }
 
 
-bool IniConfig::readInt (ini_fd_t ini, char *key, int &value)
+bool IniConfig::readInt (ini_fd_t ini, const char *key, int &value)
 {
     int i = value;
     if (ini_locateKey (ini, key) < 0)
@@ -133,7 +133,7 @@ bool IniConfig::readInt (ini_fd_t ini, char *key, int &value)
 }
 
 
-bool IniConfig::readString (ini_fd_t ini, char *key, char *&str)
+bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
 {
     char  *ret;
     size_t length;
@@ -164,7 +164,7 @@ IniCofig_readString_error:
 }
 
 
-bool IniConfig::readBool (ini_fd_t ini, char *key, bool &boolean)
+bool IniConfig::readBool (ini_fd_t ini, const char *key, bool &boolean)
 {
     int b = boolean;
     if (ini_locateKey (ini, key) < 0)
@@ -178,7 +178,7 @@ bool IniConfig::readBool (ini_fd_t ini, char *key, bool &boolean)
 }
 
 
-bool IniConfig::readChar (ini_fd_t ini, char *key, char &ch)
+bool IniConfig::readChar (ini_fd_t ini, const char *key, char &ch)
 {
     char *str, c = 0;
     bool  ret = readString (ini, key, str);
@@ -205,7 +205,7 @@ bool IniConfig::readChar (ini_fd_t ini, char *key, char &ch)
 }
 
 
-bool IniConfig::readTime (ini_fd_t ini, char *key, int &value)
+bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
 {
     char *str, *sep;
     int   time;
@@ -377,7 +377,7 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
 void IniConfig::read ()
 {
-    char   *path = (char *) getenv ("HOME");
+    char *path = (char *) getenv ("HOME");
     ini_fd_t ini  = 0;
     char   *configPath;
     size_t  length;
@@ -386,7 +386,7 @@ void IniConfig::read ()
         path = (char *) getenv ("windir");
 
     if (!path)
-        path = "";
+        path = (char *) "";
 
     length     = strlen (path) + strlen (DIR_NAME) + strlen (FILE_NAME) + 3;
     configPath = (char *) malloc (length);

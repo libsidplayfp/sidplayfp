@@ -1,2 +1,2 @@
-version=2
-http://osdn.dl.sourceforge.net/sourceforge/sidplay2/sidplay-([\d.]+)\.tar\.gz debian uupdate
+version=3
+http://sf.net/sidplay2/sidplay-([\d.]+)\.tar\.gz debian uupdate
