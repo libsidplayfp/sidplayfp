@@ -102,7 +102,7 @@ bool ConsolePlayer::parseTime (const char *str, uint_least32_t &time)
     if (*str == '\0')
         return false;
 
-    sep = strstr (str, ":");
+    sep = (char *) strstr (str, ":");
     if (!sep)
     {   // User gave seconds
         _time = atoi (str);

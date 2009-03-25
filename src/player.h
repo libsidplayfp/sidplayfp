@@ -58,7 +58,7 @@
 #   include <sidplay/sidplay.h>
 #   define  sidplay2 sidplay
 #else
-#   include <sidplay/sidplay2.h>
+#   include <headers/sidplay2.h>
 #endif
 
 #include <sidplay/utils/SidDatabase.h>

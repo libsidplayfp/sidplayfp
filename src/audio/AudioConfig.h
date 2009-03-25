@@ -33,7 +33,7 @@
 #ifndef _AudioConfig_h_
 #define _AudioConfig_h_
 
-#include <sidplay/sidtypes.h>
+#include <headers/sidtypes.h>
 //typedef SID2::uint uint;
 #define FOREVER SID_FOREVER
 #define SWAP    SID_SWAP
