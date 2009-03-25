@@ -135,7 +135,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../include,../../../libsidplay/include,../../../libsidutils/include,../../../builders/resid-builder/include,../../../builders/hardsid-builder/include"
+				AdditionalIncludeDirectories="../../include;&quot;../../../sidplay-libs-2.1.1/libsidplay/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidutils/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/resid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/hardsid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidplay/win/VC&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MSWINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="2"
