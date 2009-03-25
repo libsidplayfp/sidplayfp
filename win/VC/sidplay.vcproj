@@ -113,6 +113,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -135,11 +136,15 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
+				EnableIntrinsicFunctions="true"
+				OmitFramePointers="true"
+				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="../../include;&quot;../../../sidplay-libs-2.1.1/libsidplay/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidutils/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/resid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/hardsid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidplay/win/VC&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MSWINDOWS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
+				EnableEnhancedInstructionSet="1"
 				UsePrecompiledHeader="0"
 				PrecompiledHeaderFile=".\Release/sidplay.pch"
 				AssemblerListingLocation=".\Release/"
