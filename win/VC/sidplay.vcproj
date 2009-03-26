@@ -134,9 +134,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
+				Optimization="3"
+				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="../../include;&quot;../../../sidplay-libs-2.1.1/libsidplay/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidutils/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/resid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/hardsid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidplay/win/VC&quot;"
