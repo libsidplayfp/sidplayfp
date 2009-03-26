@@ -132,7 +132,7 @@ AC_CHECK_LIB(resid-builder, main)
 AC_CHECK_LIB(hardsid-builder, main)
 
 dnl Add absolute directory for header files
-CXXFLAGS="$CXXFLAGS -DHAVE_UNIX -I\$(top_srcdir)/include"
+CXXFLAGS="$CXXFLAGS -DHAVE_UNIX -I\$(top_srcdir)/include -I/usr/include/sidplay"
 
 AC_OUTPUT(
 Makefile \

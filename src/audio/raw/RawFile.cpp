@@ -27,7 +27,7 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <sidplay/sidendian.h>
+#include <headers/sidendian.h>
 #include "RawFile.h"
 
 #ifdef WAV_HAVE_EXCEPTIONS
