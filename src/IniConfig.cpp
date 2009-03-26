@@ -64,12 +64,15 @@
 #   include <sys/types.h>
 #   include <sys/stat.h>  /* mkdir */
 #   include <dirent.h>    /* opendir */
+    const char *IniConfig::DIR_NAME  = ".sidplay";
 #endif
-
-#define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
-const char *IniConfig::DIR_NAME  = ".sidplay";
+#ifdef _WIN32
+#   include <windows.h>
+    const char *IniConfig::DIR_NAME  = "Application Data/sidplay2";
+#endif
 const char *IniConfig::FILE_NAME = "sidplay2.ini";
 
+#define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
 
 IniConfig::IniConfig ()
 :status(true)
@@ -377,45 +380,40 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
 void IniConfig::read ()
 {
-    char *path = (char *) getenv ("HOME");
+    char *path = NULL;
     ini_fd_t ini  = 0;
     char   *configPath;
     size_t  length;
 
-    if (!path)
-        path = (char *) getenv ("windir");
+#ifdef _WIN32
+    path = (char *) getenv("USERPROFILE");
+#endif
+#ifdef HAVE_UNIX
+    path = (char *) getenv("HOME");
+#endif
 
     if (!path)
-        path = (char *) "";
-
-    length     = strlen (path) + strlen (DIR_NAME) + strlen (FILE_NAME) + 3;
-    configPath = (char *) malloc (length);
-    if (!configPath)
         goto IniConfig_read_error;
 
-    {   // Format path from system
-        char *s = path;
-        while (*s != '\0')
-        {
-            if (*s == '\\')
-                *s = '/';
-            s++;
-        }
-    }
+    length = strlen(path) + strlen(DIR_NAME) + strlen(FILE_NAME) + 3;
+    configPath = (char *) malloc(length);
+    if (! configPath)
+        goto IniConfig_read_error;
+
+    sprintf(configPath, "%s/%s", path, DIR_NAME);
 
 #ifdef HAVE_UNIX
-    sprintf (configPath, "%s/%s", path, DIR_NAME);
-
     // Make sure the config path exists
-    if (!opendir (configPath))
-        mkdir (configPath, 0755);
+    if (!opendir(configPath))
+        mkdir(configPath, 0755);
+#endif
+#ifdef _WIN32
+    CreateDirectory(configPath, NULL);
+#endif
 
     /* sprintf on top of itself fails nowadays. */
     strcat(configPath, "/");
     strcat(configPath, FILE_NAME);
-#else
-    sprintf (configPath, "%s/%s", path, FILE_NAME);
-#endif
 
     // Opens an existing file or creates a new one
     ini = ini_open (configPath, "w", ";");
