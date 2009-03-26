@@ -44,7 +44,7 @@ class AudioBase
 protected:
     AudioConfig _settings;
     const char *_errorString;
-    void       *_sampleBuffer;
+    float      *_sampleBuffer;
 
 public:
     AudioBase ()
@@ -55,24 +55,19 @@ public:
     virtual ~AudioBase () {;}
 
     // All drivers must support these
-    virtual void *open  (AudioConfig &cfg, const char *name) = 0;
-    // Rev 1.3 (saw) - Definition is incorrect and has been updated.
-    // On a reset hardware buffers may have changed and therefore a
-    // new address needs to be returned by the driver.
-    virtual void *reset () = 0;
-    virtual void *write () = 0;
+    virtual float *open(AudioConfig &cfg, const char *name) = 0;
+    virtual float *reset() = 0;
+    virtual float *write() = 0;
     virtual void  close () = 0;
     virtual void  pause () = 0;
     virtual const char *extension () const { return ""; }
-    void   *buffer () { return _sampleBuffer; }
+    float *buffer () { return _sampleBuffer; }
 
-    void getConfig (AudioConfig &cfg) const
-    {
+    void getConfig (AudioConfig &cfg) const {
         cfg = _settings;
     }
     
-    const char *getErrorString () const
-    {
+    const char *getErrorString () const {
         return _errorString;
     }
 };

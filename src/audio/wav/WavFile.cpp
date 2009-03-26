@@ -86,7 +86,7 @@ WavFile::WavFile()
     isOpen = headerWritten = false;
 }
 
-void* WavFile::open(AudioConfig &cfg, const char* name,
+float* WavFile::open(AudioConfig &cfg, const char* name,
                     const bool overWrite)
 {
     unsigned long  int freq;
@@ -94,17 +94,12 @@ void* WavFile::open(AudioConfig &cfg, const char* name,
     unsigned short int blockAlign;
     unsigned long  int bufSize;
 
-    bits        = cfg.precision;
+    bits        = 32;
     channels    = cfg.channels;
     freq        = cfg.frequency;
     blockAlign  = (bits>>3)*channels;
     bufSize     = freq * blockAlign;
     cfg.bufSize = bufSize;
-
-    // Setup Encoding
-    cfg.encoding = AUDIO_SIGNED_PCM;
-    if (bits == 8)
-        cfg.encoding = AUDIO_UNSIGNED_PCM;
 
     if (name == NULL)
         return NULL;
@@ -116,9 +111,9 @@ void* WavFile::open(AudioConfig &cfg, const char* name,
 
     // We need to make a buffer for the user
 #if defined(WAV_HAVE_EXCEPTIONS)
-    _sampleBuffer = new(std::nothrow) uint_least8_t[bufSize];
+    _sampleBuffer = new(std::nothrow) float[bufSize];
 #else
-    _sampleBuffer = new uint_least8_t[bufSize];
+    _sampleBuffer = new float[bufSize];
 #endif
     if (!_sampleBuffer)
         return NULL;
@@ -149,7 +144,7 @@ void* WavFile::open(AudioConfig &cfg, const char* name,
     return _sampleBuffer;
 }
 
-void* WavFile::write()
+float* WavFile::write()
 {
     if (isOpen && !file.fail())
     {
@@ -161,15 +156,7 @@ void* WavFile::write()
         }
 
         byteCount += bytes;
-
-#if defined(WAV_WORDS_BIGENDIAN)
-        if (_settings.precision == 16)
-        {
-            int_least8_t *pBuffer = (int_least8_t *) _sampleBuffer;
-            for (uint_least32_t n = 0; n < _settings.bufSize; n += 2)
-                SWAP (pBuffer[n + 0], pBuffer[n + 1]);
-        }
-#endif
+        /* XXX endianness... */
         file.write((char*)_sampleBuffer,bytes);
     }
     return _sampleBuffer;

@@ -45,9 +45,6 @@
 #include "pulse/audiodrv.h"
 #include "alsa/audiodrv.h"
 #include "oss/audiodrv.h"
-#include "hpux/audiodrv.h"
-#include "irix/audiodrv.h"
-#include "sunos/audiodrv.h"
 
 // Windows Sound Drivers
 #include "directx/directx.h"

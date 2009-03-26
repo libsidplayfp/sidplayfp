@@ -45,8 +45,8 @@
 // Configuration constants.
 enum
 {
+    AUDIO_UNSIGNED_PCM = 0x04,
     AUDIO_SIGNED_PCM   = 0x7f,
-    AUDIO_UNSIGNED_PCM = 0x80
 };
 
 
