@@ -81,7 +81,7 @@ void Audio_OSS::outOfOrder ()
     _audiofd     = -1;
 }
 
-void *Audio_OSS::open (AudioConfig &cfg, const char *)
+float *Audio_OSS::open (AudioConfig &cfg, const char *)
 {
     int mask, format;
     int wantedFormat = 0;
@@ -105,104 +105,10 @@ void *Audio_OSS::open (AudioConfig &cfg, const char *)
         goto open_error;
     }
 
-    // Query supported sample formats.
-    if (ioctl (_audiofd, SNDCTL_DSP_GETFMTS, &mask) == (-1))
-    {
-        _errorString = "AUDIO: Could not get sample formats.";
-        goto open_error;
-    }
-
-    // Assume CPU and soundcard have same endianess.
-    _swapEndian = false;
-
-    // Set sample precision and type of encoding.
-    if (cfg.precision == 16)
-    {
-#if defined(WORDS_BIGENDIAN)
-        if (mask & AFMT_S16_BE)
-        {
-            wantedFormat = AFMT_S16_BE;
-            cfg.encoding = AUDIO_SIGNED_PCM;
-        }
-        else if (mask & AFMT_U16_BE)
-        {
-            wantedFormat = AFMT_U16_BE;
-            cfg.encoding = AUDIO_UNSIGNED_PCM;
-        }
-        else if (mask & AFMT_S16_LE)
-        {
-            wantedFormat = AFMT_S16_LE;
-            cfg.encoding = AUDIO_SIGNED_PCM;
-        }
-        else if (mask & AFMT_U16_LE)
-        {
-            wantedFormat = AFMT_U16_LE;
-            cfg.encoding = AUDIO_UNSIGNED_PCM;
-            _swapEndian  = true;
-        }
-#else
-        if (mask & AFMT_S16_LE)
-        {
-            wantedFormat = AFMT_S16_LE;
-            cfg.encoding = AUDIO_SIGNED_PCM;
-        }
-        else if (mask & AFMT_U16_LE)
-        {
-            wantedFormat = AFMT_U16_LE;
-            cfg.encoding = AUDIO_UNSIGNED_PCM;
-        }
-        else if (mask & AFMT_S16_BE)
-        {
-            wantedFormat = AFMT_S16_BE;
-            cfg.encoding = AUDIO_SIGNED_PCM;
-            _swapEndian  = true;
-        }
-        else if (mask & AFMT_U16_BE)
-        {
-            wantedFormat = AFMT_U16_BE;
-            cfg.encoding = AUDIO_UNSIGNED_PCM;
-            _swapEndian  = true;
-        }
-#endif // WORDS_BIGENDIAN
-        else // 16-bit not supported
-        {   // Try 8 bit
-            cfg.precision = 8;
-        }
-    }
-
-    if (cfg.precision == 8)
-    {
-        if (mask & AFMT_U8)
-        {   // SoundBlaster format
-            wantedFormat = AFMT_U8;
-            cfg.encoding = AUDIO_UNSIGNED_PCM;
-        }
-        else if (mask & AFMT_S8)
-        {
-            wantedFormat = AFMT_S8;
-            cfg.encoding = AUDIO_SIGNED_PCM;
-        }
-        else
-        {   // Supports None...A new 24bit soundcard?
-            _errorString = "AUDIO: Unable to find a supported sample format.";
-            goto open_error;
-        }   
-    }
-
-    if ( !(mask & wantedFormat) )
-    {
-        _errorString = "AUDIO: Desired sample encoding not supported.";
-    }
-    
-    format = wantedFormat;
+    format = AFMT_S16_NE;
     if (ioctl (_audiofd, SNDCTL_DSP_SETFMT, &format) == (-1))
     {
         _errorString = "AUDIO: Could not set sample format.";
-        goto open_error;
-    }
-    if (format != wantedFormat)  
-    {
-        _errorString = "AUDIO: Audio driver did not accept sample format.";
         goto open_error;
     }
     
@@ -235,9 +141,9 @@ void *Audio_OSS::open (AudioConfig &cfg, const char *)
     ioctl (_audiofd, SNDCTL_DSP_GETBLKSIZE, &temp);
     cfg.bufSize = (unsigned) temp;
 #ifdef HAVE_EXCEPTIONS
-    _sampleBuffer = new(std::nothrow) int_least8_t[cfg.bufSize];
+    _sampleBuffer = new(std::nothrow) float[cfg.bufSize];
 #else
-    _sampleBuffer = new int_least8_t[cfg.bufSize];
+    _sampleBuffer = new float[cfg.bufSize];
 #endif
 
     if (!_sampleBuffer)
@@ -268,30 +174,26 @@ void Audio_OSS::close ()
     if (_audiofd != (-1))
     {
         ::close (_audiofd);
-        delete [] (int_least32_t *) _sampleBuffer;
+        delete [] _sampleBuffer;
         outOfOrder ();
     }
 }
 
-void *Audio_OSS::write ()
+float *Audio_OSS::write ()
 {
+    short tmp[_settings.bufSize];
+
     if (_audiofd == (-1))
     {
         _errorString = "ERROR: Device not open.";
         return NULL;
     }
 
-    if (_swapEndian)
-    {
-        int_least8_t *pBuffer = (int_least8_t *) _sampleBuffer;
-        for (uint_least32_t n = 0; n < _settings.bufSize; n += 2)
-        {
-            SWAP (pBuffer[n + 0], pBuffer[n + 1]);
-        }
-
+    for (uint_least32_t n = 0; n < _settings.bufSize; n ++) {
+            tmp[n] = _sampleBuffer[n] * (1 << 15);
     }
 
-    ::write (_audiofd, _sampleBuffer, (size_t) _settings.bufSize);
+    ::write (_audiofd, tmp, 2 * _settings.bufSize);
     return _sampleBuffer;
 }
 
