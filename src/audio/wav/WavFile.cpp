@@ -150,7 +150,7 @@ float* WavFile::write()
 {
     if (isOpen && !file.fail())
     {
-        unsigned long int bytes = _settings.bufSize;
+        unsigned long int bytes = _settings.bufSize * 4;
         if (!headerWritten)
         {
             file.write((char*)&wavHdr,sizeof(wavHeader));
