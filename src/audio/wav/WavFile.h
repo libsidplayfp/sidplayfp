@@ -58,7 +58,7 @@ struct wavHeader                        // little endian format
     char chunkID[4];                    // 'WAVE' (ASCII)
     char subChunkID[4];                    // 'fmt ' (ASCII)
     char subChunkLen[4];                // length of subChunk, always 16 bytes
-    char format[2];                        // currently always = 1 = PCM-Code
+    unsigned char format[2];            // currently always = 1 = PCM-Code
 
     unsigned char channels[2];            // 1 = mono, 2 = stereo
     unsigned char sampleFreq[4];        // sample-frequency

@@ -90,11 +90,12 @@ float* WavFile::open(AudioConfig &cfg, const char* name,
                     const bool overWrite)
 {
     unsigned long  int freq;
-    unsigned short int channels, bits;
+    unsigned short int channels, bits, format;
     unsigned short int blockAlign;
     unsigned long  int bufSize;
 
     bits        = 32;
+    format      = 3;
     channels    = cfg.channels;
     freq        = cfg.frequency;
     blockAlign  = (bits>>3)*channels;
@@ -121,6 +122,7 @@ float* WavFile::open(AudioConfig &cfg, const char* name,
     // Fill in header with parameters and expected file size.
     endian_little32(wavHdr.length,sizeof(wavHeader)-8);
     endian_little16(wavHdr.channels,channels);
+    endian_little16(wavHdr.format,format);
     endian_little32(wavHdr.sampleFreq,freq);
     endian_little32(wavHdr.bytesPerSec,freq*blockAlign);
     endian_little16(wavHdr.blockAlign,blockAlign);

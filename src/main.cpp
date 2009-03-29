@@ -163,8 +163,7 @@ main_restart:
 #endif // HAVE_UNIX
 
     // Play loop
-    FOREVER
-    {
+    for (;;) {
         if (!player.play ())
             break;
     }

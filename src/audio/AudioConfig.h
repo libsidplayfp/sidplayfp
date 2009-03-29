@@ -33,22 +33,7 @@
 #ifndef _AudioConfig_h_
 #define _AudioConfig_h_
 
-#include <headers/sidtypes.h>
-//typedef SID2::uint uint;
-#define FOREVER SID_FOREVER
-#define SWAP    SID_SWAP
-/*
-#ifdef SIDPLAY2_NAMESPACE
-    using namespace SIDPLAY2_NAMESPACE;
-#endif
-*/
-// Configuration constants.
-enum
-{
-    AUDIO_UNSIGNED_PCM = 0x04,
-    AUDIO_SIGNED_PCM   = 0x7f,
-};
-
+#include <stdint.h>
 
 class AudioConfig
 {
@@ -56,15 +41,13 @@ public:
     uint_least32_t frequency;
     int            precision;
     int            channels;
-    int            encoding;
     uint_least32_t bufSize;       // sample buffer size
     
     AudioConfig()
     {
-        frequency = 22050;
-        precision = 8;
+        frequency = 48000;
+        precision = 16;
         channels  = 1;
-        encoding  = AUDIO_UNSIGNED_PCM;
         bufSize   = 0;
     }
 };
