@@ -82,12 +82,12 @@ public:  // --------------------------------------------------------- public
 
     // This first one assumes progrm is built as a
     // console application
-    void *open  (AudioConfig &cfg, const char *name);
-    void *open  (AudioConfig &cfg, const char *name, HWND hwnd);
+    float *open  (AudioConfig &cfg, const char *name);
+    float *open  (AudioConfig &cfg, const char *name, HWND hwnd);
     void  close ();    
     // Rev 1.3 (saw) - Changed
-    void *reset ();
-    void *write ();
+    float *reset ();
+    float *write ();
     void  pause ();
 };
 

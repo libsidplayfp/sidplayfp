@@ -93,7 +93,7 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     return (hwndFound);
 }
 
-void *Audio_DirectX::open (AudioConfig &cfg, const char *name)
+float *Audio_DirectX::open (AudioConfig &cfg, const char *name)
 {
     HWND hwnd;
     // Assume we have a console.  Use other other
@@ -102,7 +102,7 @@ void *Audio_DirectX::open (AudioConfig &cfg, const char *name)
     return open (cfg, name, hwnd);
 }
 
-void *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
+float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
 { 
     DSBUFFERDESC        dsbdesc; 
     LPDIRECTSOUNDBUFFER lpDsbPrimary = 0;
@@ -142,10 +142,10 @@ void *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
 
     // Format
     memset (&wfm, 0, sizeof(WAVEFORMATEX));
-    wfm.wFormatTag      = WAVE_FORMAT_PCM;
+    wfm.wFormatTag      = WAVE_FORMAT_IEEE_FLOAT;
     wfm.nChannels       = cfg.channels;
     wfm.nSamplesPerSec  = cfg.frequency;
-    wfm.wBitsPerSample  = cfg.precision;
+    wfm.wBitsPerSample  = 32;
     wfm.nBlockAlign     = wfm.wBitsPerSample / 8 * wfm.nChannels;
     wfm.nAvgBytesPerSec = wfm.nSamplesPerSec * wfm.nBlockAlign;
 
@@ -216,11 +216,7 @@ void *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     }
 
     // Update the users settings
-    cfg.bufSize   = bufSize;
-    // Setup the required sample format encoding.
-    cfg.encoding  = AUDIO_SIGNED_PCM;
-    if (cfg.precision == 8)
-        cfg.encoding = AUDIO_UNSIGNED_PCM;
+    cfg.bufSize   = bufSize / 4;
     _settings     = cfg;
     isPlaying     = false;
     _sampleBuffer = lpvData;
@@ -232,7 +228,7 @@ Audio_DirectX_openError:
     return NULL;
 }
 
-void *Audio_DirectX::write ()
+float *Audio_DirectX::write ()
 {
     DWORD dwEvt; 
     DWORD dwBytes;
@@ -277,7 +273,7 @@ void *Audio_DirectX::write ()
     return _sampleBuffer;
 }
 
-void *Audio_DirectX::reset (void)
+float *Audio_DirectX::reset (void)
 {
     DWORD dwBytes;
     if (!isOpen)
