@@ -45,6 +45,8 @@
 #ifdef   HAVE_MMSYSTEM
 
 #include <stdio.h>
+#include <mmreg.h>
+
 #ifdef HAVE_EXCEPTIONS
 #   include <new>
 #endif
@@ -67,7 +69,7 @@ Audio_MMSystem::~Audio_MMSystem()
     close();
 }
 
-void *Audio_MMSystem::open (AudioConfig &cfg, const char *)
+float *Audio_MMSystem::open (AudioConfig &cfg, const char *)
 {
     WAVEFORMATEX  wfm;
 
@@ -85,10 +87,10 @@ void *Audio_MMSystem::open (AudioConfig &cfg, const char *)
 
     // Format
     memset (&wfm, 0, sizeof(WAVEFORMATEX));
-    wfm.wFormatTag      = WAVE_FORMAT_PCM;
+    wfm.wFormatTag      = WAVE_FORMAT_IEEE_FLOAT;
     wfm.nChannels       = cfg.channels;
     wfm.nSamplesPerSec  = cfg.frequency;
-    wfm.wBitsPerSample  = cfg.precision;
+    wfm.wBitsPerSample  = 32;
     wfm.nBlockAlign     = wfm.wBitsPerSample / 8 * wfm.nChannels;
     wfm.nAvgBytesPerSec = wfm.nSamplesPerSec * wfm.nBlockAlign;
     wfm.cbSize          = 0;
@@ -96,16 +98,13 @@ void *Audio_MMSystem::open (AudioConfig &cfg, const char *)
     // Rev 1.3 (saw) - Calculate buffer to hold 250ms of data
     bufSize = wfm.nSamplesPerSec / 4 * wfm.nBlockAlign;
 
-    cfg.bufSize = bufSize;
+    cfg.bufSize = bufSize / 4;
     waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
-    if ( !waveHandle )
-    {
+    if ( !waveHandle ) {
         _errorString = "MMSYSTEM ERROR: Can't open wave out device.";
         goto Audio_MMSystem_openError;
     }
 
-    // Update the users settings
-    cfg.encoding = AUDIO_UNSIGNED_PCM; // IS this write?
     _settings    = cfg;
 
     {
@@ -122,7 +121,7 @@ void *Audio_MMSystem::open (AudioConfig &cfg, const char *)
             }
 
             /* Lock mixing block memory: */
-            if ( (blocks[i] = (BYTE*)GlobalLock(blockHandles[i])) == NULL )
+            if ( (blocks[i] = (float *)GlobalLock(blockHandles[i])) == NULL )
             {
                 _errorString = "MMSYSTEM ERROR: Can't lock global memory.";
                 goto Audio_MMSystem_openError;
@@ -153,10 +152,6 @@ void *Audio_MMSystem::open (AudioConfig &cfg, const char *)
         }
     }
 
-    // Setup the required sample format encoding.
-    cfg.encoding = AUDIO_SIGNED_PCM;
-    if (cfg.precision == 8)
-        cfg.encoding = AUDIO_UNSIGNED_PCM;
     blockNum = 0;
     _sampleBuffer = blocks[blockNum];
 return _sampleBuffer;
@@ -166,7 +161,7 @@ Audio_MMSystem_openError:
     return NULL;
 }
 
-void *Audio_MMSystem::write ()
+float*Audio_MMSystem::write ()
 {
     if (!isOpen)
     {
@@ -212,7 +207,7 @@ void *Audio_MMSystem::write ()
 }
 
 // Rev 1.2 (saw) - Changed, see AudioBase.h    
-void *Audio_MMSystem::reset (void)
+float *Audio_MMSystem::reset (void)
 {
     if (!isOpen)
         return NULL;
@@ -248,11 +243,9 @@ void Audio_MMSystem::close (void)
         int allDone;
         int i;
 
-        FOREVER
-        {
+        for (;;) {
             allDone = 1;
-            for ( i = 0; i < MAXBUFBLOCKS; i++ )
-            {
+            for ( i = 0; i < MAXBUFBLOCKS; i++ ) {
                 if ( blockHeaders[i] && (blockHeaders[i]->dwFlags & WHDR_DONE) == 0 )
                     allDone = 0;
             }

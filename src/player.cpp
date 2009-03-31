@@ -307,8 +307,10 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         }
         if (name != NULL)
             delete [] name;
-        if (err)
+        if (err) {
+            displayError(m_driver.device->getErrorString());
             return false;
+        }
     }
 
     // See what we got

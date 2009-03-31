@@ -58,7 +58,7 @@ private:  // ------------------------------------------------------- private
     // Rev 1.3 (saw) - Buffer sizes adjusted to get a
     // correct playtimes
     #define  MAXBUFBLOCKS 3
-    BYTE    *blocks[MAXBUFBLOCKS];
+    float   *blocks[MAXBUFBLOCKS];
     HGLOBAL  blockHandles[MAXBUFBLOCKS];
     WAVEHDR *blockHeaders[MAXBUFBLOCKS];
     HGLOBAL  blockHeaderHandles[MAXBUFBLOCKS];
@@ -70,11 +70,11 @@ public:  // --------------------------------------------------------- public
     Audio_MMSystem();
     ~Audio_MMSystem();
 
-    void *open  (AudioConfig &cfg, const char *name);
+    float *open  (AudioConfig &cfg, const char *name);
     void  close ();
     // Rev 1.2 (saw) - Changed, see AudioBase.h    
-    void *reset ();
-    void *write ();
+    float *reset ();
+    float *write ();
     void  pause () {;}
 };
 
