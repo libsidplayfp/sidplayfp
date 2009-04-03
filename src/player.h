@@ -54,12 +54,7 @@
 
 #include "config.h"
 
-#ifdef WITH_SIDPLAY
-#   include <sidplay/sidplay.h>
-#   define  sidplay2 sidplay
-#else
-#   include <headers/sidplay2.h>
-#endif
+#include <sidplay/sidplay2.h>
 
 #include <sidplay/utils/SidDatabase.h>
 #include "audio/AudioDrv.h"

@@ -35,7 +35,7 @@
 #ifndef _IniConfig_h_
 #define _IniConfig_h_
 
-#include <headers/sidtypes.h>
+#include <sidplay/sidtypes.h>
 #include <sidplay/utils/libini.h>
 #include <sidplay/utils/SidFilter.h>
 
