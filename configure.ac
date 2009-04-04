@@ -31,13 +31,9 @@ AH_TOP(
 [/* Define supported audio driver */
 #undef HAVE_HARDSID
 #undef HAVE_ALSA
-#undef HAVE_IRIX
-#undef HAVE_HPUX
 #undef HAVE_MMSYSTEM
 #undef HAVE_OSS
 #undef HAVE_PULSE
-#undef HAVE_SGI
-#undef HAVE_SUNOS
 ])
 
 dnl Audio Subsystem Test
@@ -47,15 +43,6 @@ case "$host" in
     *freebsd*) AC_DEFINE(HAVE_OSS)
         audiodrv_libadd="./audio/oss/liboss.a"
         AC_MSG_RESULT(oss)
-        ;;
-    *hpux*) AC_DEFINE(HAVE_HPUX)
-        audiodrv_libadd="./audio/hpux/libhpux.a"
-        AC_MSG_RESULT(hpux)
-        ;;
-    *irix*) AC_DEFINE(HAVE_IRIX)
-        audiodrv_libadd="./audio/irix/libirix.a"
-        AC_MSG_RESULT(irix)
-        AC_CHECK_LIB(audio, main, [AUDIO_LDFLAGS=-laudio AC_SUBST(AUDIO_LDFLAGS)])
         ;;
     *linux*)
         # pulse / alsa / OSS -- we should really throw most of this
@@ -87,13 +74,6 @@ case "$host" in
         audiodrv_libadd="./audio/alsa/libalsa.a"
         AC_MSG_RESULT(alsa)
         AC_CHECK_LIB(asound, main, [AUDIO_LDFLAGS=-lasound AC_SUBST(AUDIO_LDFLAGS)])
-        ;;
-    *sgi*) AC_DEFINE(HAVE_SGI)
-        AC_MSG_RESULT(sgi)
-        ;;
-    *{solaris,sunos}*) AC_DEFINE(HAVE_SUNOS)
-        audiodrv_libadd="./audio/sunos/libsunos.a"
-        AC_MSG_RESULT(sparc)
         ;;
     *cygwin*) AC_DEFINE(HAVE_MMSYSTEM)
         audiodrv_libadd="./audio/mmsystem/libmmsystem.a"
