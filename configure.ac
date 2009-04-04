@@ -141,15 +141,11 @@ doc/en/Makefile \
 src/Makefile \
 src/audio/Makefile \
 src/audio/alsa/Makefile \
-src/audio/hpux/Makefile \
-src/audio/irix/Makefile \
 src/audio/mmsystem/Makefile \
 src/audio/null/Makefile \
 src/audio/oss/Makefile \
 src/audio/pulse/Makefile \
-src/audio/sunos/Makefile \
 src/audio/wav/Makefile \
-src/audio/raw/Makefile \
 unix/Makefile \
 unix/sidplay2.spec \
 )
