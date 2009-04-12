@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="sidplay"
+	Name="sidplay-client"
 	ProjectGUID="{0ACEC72B-89F1-4098-A71F-94121D88362A}"
 	RootNamespace="sidplay"
 	TargetFrameworkVersion="131072"
@@ -140,8 +140,8 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				WholeProgramOptimization="true"
-				AdditionalIncludeDirectories="../../include;&quot;../../../sidplay-libs-2.1.1/libsidplay/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidutils/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/resid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/builders/hardsid-builder/include&quot;;&quot;../../../sidplay-libs-2.1.1/libsidplay/win/VC&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MSWINDOWS"
+				AdditionalIncludeDirectories=".;&quot;../../../sidplay-libs-2.1.1&quot;;&quot;../../../sidplay-libs-2.1.1/sidplay/win/VC&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MSWINDOWS;MSVC_HEADER_LOCATIONS"
 				StringPooling="true"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -216,19 +216,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\audio\alsa\audiodrv.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\src\audio\AudioDrv.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\audio\hpux\audiodrv.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\src\audio\irix\audiodrv.h"
 				>
 			</File>
 			<File
@@ -236,7 +224,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\audio\sunos\audiodrv.h"
+				RelativePath="..\..\src\audio\alsa\audiodrv.h"
 				>
 			</File>
 			<File
@@ -385,11 +373,11 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="config.h"
+			RelativePath="..\..\include\config.h"
 			>
 		</File>
 		<File
-			RelativePath="..\..\include\config.h"
+			RelativePath="config.h"
 			>
 		</File>
 		<File

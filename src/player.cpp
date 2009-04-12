@@ -132,11 +132,19 @@ using std::endl;
 #define SID2_PREV_SONG_TIMEOUT 4
 
 #ifdef HAVE_LIBRESID_BUILDER
+#  ifdef MSVC_HEADER_LOCATIONS
+#   include <builders/resid-builder/resid.h>
+#  else
 #   include <sidplay/builders/resid.h>
+#  endif
 const char ConsolePlayer::RESID_ID[]   = "ReSID";
 #endif
 #ifdef HAVE_LIBHARDSID_BUILDER
-#   include <sidplay/builders/hardsid.h>
+#  ifdef MSVC_HEADER_LOCATIONS
+#    include <builders/hardsid-builder/hardsid.h>
+#  else
+#    include <sidplay/builders/hardsid.h>
+#  endif
 const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 

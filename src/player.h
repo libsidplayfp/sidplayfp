@@ -55,8 +55,11 @@
 #include "config.h"
 
 #include <sidplay/sidplay2.h>
-
+#ifdef MSVC_HEADER_LOCATIONS
+#include <utils/SidDatabase.h>
+#else
 #include <sidplay/utils/SidDatabase.h>
+#endif
 #include "audio/AudioDrv.h"
 #include "IniConfig.h"
 
