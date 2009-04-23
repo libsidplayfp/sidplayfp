@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = doc unix src
 
-EXTRA_DIST = include win
+EXTRA_DIST = win
 
 
 # Remove CVS directories from any subdirs that get
