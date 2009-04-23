@@ -165,10 +165,8 @@ float *Audio_ALSA::open (AudioConfig &cfg, const char *)
     return _sampleBuffer;
 
 open_error:
-#ifdef HAVE_ALSA_ASOUNDLIB_H
     if (hw_params)
         snd_pcm_hw_params_free (hw_params);
-#endif
     if (_audioHandle != NULL)
         close ();
     perror ("ALSA");
@@ -182,7 +180,7 @@ void Audio_ALSA::close ()
     if (_audioHandle != NULL )
     {
         snd_pcm_close(_audioHandle);
-        delete[] ((float *) _sampleBuffer);
+        delete[] _sampleBuffer;
         outOfOrder ();
     }
 }
