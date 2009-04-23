@@ -39,11 +39,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
-#ifdef HAVE_ALSA_ASOUNDLIB_H
-#   include <alsa/asoundlib.h>
-#else
-#   include <sys/asoundlib.h>
-#endif
+#include <alsa/asoundlib.h>
 #include "../AudioBase.h"
 
 
@@ -51,9 +47,7 @@ class Audio_ALSA: public AudioBase
 {	
 private:  // ------------------------------------------------------- private
     snd_pcm_t * _audioHandle;
-#ifdef HAVE_ALSA_ASOUNDLIB_H
     int _alsa_to_frames_divisor;
-#endif
 
     void outOfOrder ();
 
@@ -61,11 +55,11 @@ public:  // --------------------------------------------------------- public
     Audio_ALSA();
     ~Audio_ALSA();
 
-    void *open  (AudioConfig &cfg, const char *name);
+    float *open  (AudioConfig &cfg, const char *name);
     void  close ();
     // Rev 1.2 (saw) - Changed, see AudioBase.h	
-    void *reset ();
-    void *write ();
+    float *reset ();
+    float *write ();
     void  pause () {;}
 };
 

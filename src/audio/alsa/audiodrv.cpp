@@ -65,7 +65,7 @@ void Audio_ALSA::outOfOrder ()
     _audioHandle = NULL;
 }
 
-void *Audio_ALSA::open (AudioConfig &cfg, const char *)
+float *Audio_ALSA::open (AudioConfig &cfg, const char *)
 {
     AudioConfig tmpCfg;
 
@@ -75,7 +75,6 @@ void *Audio_ALSA::open (AudioConfig &cfg, const char *)
         return NULL;
      }
 
-#ifdef HAVE_ALSA_ASOUNDLIB_H
     snd_pcm_uframes_t    buffer_frames;
     snd_pcm_hw_params_t *hw_params = 0;
 
@@ -105,24 +104,8 @@ void *Audio_ALSA::open (AudioConfig &cfg, const char *)
         _errorString = "ERROR: could not set access type";
         goto open_error;
     }
-
-    snd_pcm_format_t alsamode;
-    switch (tmpCfg.precision)
-    {
-    case 8:
-        tmpCfg.encoding = AUDIO_UNSIGNED_PCM;
-        alsamode = SND_PCM_FORMAT_U8;
-        break;
-    case 16:
-        tmpCfg.encoding = AUDIO_SIGNED_PCM;
-        alsamode = SND_PCM_FORMAT_S16;
-        break;
-    default:
-        _errorString = "ERROR: set desired number of bits for audio device.";
-        goto open_error;
-    }
-
-    if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, alsamode))
+    
+    if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_FLOAT))
     {
         _errorString = "ERROR: could not set sample format";
         goto open_error;
@@ -143,7 +126,7 @@ void *Audio_ALSA::open (AudioConfig &cfg, const char *)
         }
     }
 
-    _alsa_to_frames_divisor = tmpCfg.channels * tmpCfg.precision / 8;
+    _alsa_to_frames_divisor = tmpCfg.channels;
     buffer_frames = 4096;
     snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &buffer_frames, 0);
 
@@ -163,90 +146,10 @@ void *Audio_ALSA::open (AudioConfig &cfg, const char *)
     }
 
     tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;					
-#else // HAVE_ALSA_ASOUNDLIB_H
-    // Obsolete interface
-    int mask, wantedFormat, format;
-    int rtn;
-    int card = -1, dev = 0;
-   
-    if ((rtn = snd_pcm_open_preferred (&_audioHandle, &card, &dev, SND_PCM_OPEN_PLAYBACK)))
-    {
-        _errorString = "ERROR: Could not open audio device.";
-        goto open_error;
-    }
-    
-    // Transfer input parameters to this object.
-    // May later be replaced with driver defaults.
-    tmpCfg = cfg;
-
-    snd_pcm_channel_params_t pp;
-    snd_pcm_channel_setup_t setup;
- 
-    snd_pcm_channel_info_t pi;
-   
-    memset (&pi, 0, sizeof (pi));
-    pi.channel = SND_PCM_CHANNEL_PLAYBACK;
-    if ((rtn = snd_pcm_plugin_info (_audioHandle, &pi)))
-    {
-        _errorString = "ALSA: snd_pcm_plugin_info failed.";
-        goto open_error;
-    }
-			
-    memset(&pp, 0, sizeof (pp));
-	
-    pp.mode = SND_PCM_MODE_BLOCK;
-    pp.channel = SND_PCM_CHANNEL_PLAYBACK;
-    pp.start_mode = SND_PCM_START_FULL;
-    pp.stop_mode = SND_PCM_STOP_STOP;
-				     
-    pp.buf.block.frag_size = pi.max_fragment_size;
-
-    pp.buf.block.frags_max = 1;
-    pp.buf.block.frags_min = 1;
-   
-    pp.format.interleave = 1;
-    pp.format.rate = tmpCfg.frequency;
-    pp.format.voices = tmpCfg.channels;
-   
-    // Set sample precision and type of encoding.
-    if ( tmpCfg.precision == 8 )
-    {
-        tmpCfg.encoding = AUDIO_UNSIGNED_PCM;
-        pp.format.format = SND_PCM_SFMT_U8;
-    }
-    if ( tmpCfg.precision == 16 )
-    {
-        tmpCfg.encoding = AUDIO_SIGNED_PCM;
-        pp.format.format = SND_PCM_SFMT_S16_LE;
-    }
-
-    if ((rtn = snd_pcm_plugin_params (_audioHandle, &pp)) < 0)
-    {
-        _errorString = "ALSA: snd_pcm_plugin_params failed.";
-        goto open_error;
-    }
-   
-    if ((rtn = snd_pcm_plugin_prepare (_audioHandle, SND_PCM_CHANNEL_PLAYBACK)) < 0)
-    {
-        _errorString = "ALSA: snd_pcm_plugin_prepare failed.";
-        goto open_error;
-    }
-   
-    memset (&setup, 0, sizeof (setup));
-    setup.channel = SND_PCM_CHANNEL_PLAYBACK;
-    if ((rtn = snd_pcm_plugin_setup (_audioHandle, &setup)) < 0)
-    {
-        _errorString = "ALSA: snd_pcm_plugin_setup failed.";
-        goto open_error;
-    }
-
-    tmpCfg.bufSize = setup.buf.block.frag_size;
-#endif
-    
 #ifdef HAVE_EXCEPTIONS
-    _sampleBuffer = new(std::nothrow) int_least8_t[tmpCfg.bufSize];
+    _sampleBuffer = new(std::nothrow) float[tmpCfg.bufSize];
 #else
-    _sampleBuffer = new int_least8_t[tmpCfg.bufSize];
+    _sampleBuffer = new float[tmpCfg.bufSize];
 #endif
 
     if (!_sampleBuffer)
@@ -279,17 +182,17 @@ void Audio_ALSA::close ()
     if (_audioHandle != NULL )
     {
         snd_pcm_close(_audioHandle);
-        delete [] ((int_least8_t *) _sampleBuffer);
+        delete[] ((float *) _sampleBuffer);
         outOfOrder ();
     }
 }
 
-void *Audio_ALSA::reset ()
+float *Audio_ALSA::reset ()
 {
-    return (void *) _sampleBuffer;   
+    return _sampleBuffer;   
 }
 
-void *Audio_ALSA::write ()
+float *Audio_ALSA::write ()
 {
     if (_audioHandle == NULL)
     {
@@ -297,13 +200,9 @@ void *Audio_ALSA::write ()
         return NULL;
     }
 
-#ifdef HAVE_ALSA_ASOUNDLIB_H
     if (snd_pcm_writei  (_audioHandle, _sampleBuffer, _settings.bufSize / _alsa_to_frames_divisor) == -EPIPE)
         snd_pcm_prepare (_audioHandle); // Underrun
-#else // Obsolete interface
-    snd_pcm_plugin_write (_audioHandle, _sampleBuffer, _settings.bufSize);
-#endif
-    return (void *) _sampleBuffer;
+    return _sampleBuffer;
 }
 
 #endif // HAVE_ALSA
