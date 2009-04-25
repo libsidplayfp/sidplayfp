@@ -81,13 +81,13 @@ const wavHeader WavFile::defaultWavHdr = {
 };
 
 WavFile::WavFile()
-: wavHdr(defaultWavHdr)
+: wavHdr(defaultWavHdr),
+  file(0)
 {
-    isOpen = headerWritten = false;
+    headerWritten = false;
 }
 
-float* WavFile::open(AudioConfig &cfg, const char* name,
-                    const bool overWrite)
+float* WavFile::open(AudioConfig &cfg, const char* name)
 {
     unsigned long  int freq;
     unsigned short int channels, bits, format;
@@ -105,7 +105,7 @@ float* WavFile::open(AudioConfig &cfg, const char* name,
     if (name == NULL)
         return NULL;
 
-    if (isOpen && !file.fail())
+    if (file && !file->fail())
         close();
    
     byteCount = 0;
@@ -136,44 +136,43 @@ float* WavFile::open(AudioConfig &cfg, const char* name,
     createAttr |= std::ios::binary;
 #endif
 
-    if (overWrite)
-        file.open( name, createAttr|std::ios::trunc );
-    else
-        file.open( name, createAttr|std::ios::app );
+    if (strncmp("-", name, 2) == 0) {
+        file = &std::cout;
+    } else {
+        file = new std::ofstream(name, createAttr|std::ios::trunc);
+    }
 
-    isOpen = !(file.fail() || file.tellp());
     _settings = cfg;
     return _sampleBuffer;
 }
 
 float* WavFile::write()
 {
-    if (isOpen && !file.fail())
-    {
+    if (file && !file->fail()) {
         unsigned long int bytes = _settings.bufSize * 4;
-        if (!headerWritten)
-        {
-            file.write((char*)&wavHdr,sizeof(wavHeader));
+        if (!headerWritten) {
+            file->write((char*)&wavHdr,sizeof(wavHeader));
             headerWritten = true;
         }
 
         byteCount += bytes;
         /* XXX endianness... */
-        file.write((char*)_sampleBuffer,bytes);
+        file->write((char*)_sampleBuffer,bytes);
     }
     return _sampleBuffer;
 }
 
 void WavFile::close()
 {
-    if (isOpen && !file.fail())
-    {
+    if (file && !file->fail()) {
         endian_little32(wavHdr.length,byteCount+sizeof(wavHeader)-8);
         endian_little32(wavHdr.dataChunkLen,byteCount);
-        file.seekp(0,std::ios::beg);
-        file.write((char*)&wavHdr,sizeof(wavHeader));
-        file.close();
-        isOpen = false;
-        delete [] (int_least8_t *) _sampleBuffer;
+        if (file != &std::cout) {
+            file->seekp(0, std::ios::beg);
+            file->write((char*)&wavHdr,sizeof(wavHeader));
+            delete file;
+        }
+        file = 0;
+        delete[] _sampleBuffer;
     }
 }

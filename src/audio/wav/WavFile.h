@@ -79,8 +79,7 @@ private:
     static const wavHeader defaultWavHdr;
     wavHeader wavHdr;
 
-    std::fstream file;
-    bool isOpen;         // whether file has been opened
+    std::ostream *file;
     bool headerWritten;  // whether final header has been written
 
 public:
@@ -93,10 +92,7 @@ public:
     // If number of sample bytes is given, this can speed up the
     // process of closing a huge file on slow storage media.
 
-    float *open(AudioConfig &cfg, const char *name)
-    { return open (cfg, name, true); }
-    float *open(AudioConfig &cfg, const char *name,
-                const bool overWrite);
+    float *open(AudioConfig &cfg, const char *name);
     
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
@@ -109,17 +105,17 @@ public:
     // Rev 1.3 (saw) - Changed, see AudioBase.h
     float *reset ()
     {
-        if (isOpen)
+        if (file != 0)
             return _sampleBuffer;
         return NULL;
     }
 
     // Stream state.
-    bool fail() const { return (file.fail() != 0); }
-    bool bad()  const { return (file.bad()  != 0); }
+    bool fail() const { return (file->fail() != 0); }
+    bool bad()  const { return (file->bad()  != 0); }
 
-    operator bool()  const { return (file.good() != 0); }
-    bool operator!() const { return (file.fail() != 0); }
+    operator bool()  const { return (file->good() != 0); }
+    bool operator!() const { return (file->fail() != 0); }
 };
 
 #endif /* WAVE_FILE_HEADER_H */
