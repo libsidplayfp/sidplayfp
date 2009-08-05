@@ -81,6 +81,7 @@ private:
 
     std::ostream *file;
     bool headerWritten;  // whether final header has been written
+    int precision;
 
 public:
 

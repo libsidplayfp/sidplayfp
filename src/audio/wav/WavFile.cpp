@@ -84,6 +84,7 @@ WavFile::WavFile()
 : wavHdr(defaultWavHdr),
   file(0)
 {
+    precision = 32;
     headerWritten = false;
 }
 
@@ -94,8 +95,10 @@ float* WavFile::open(AudioConfig &cfg, const char* name)
     unsigned short int blockAlign;
     unsigned long  int bufSize;
 
-    bits        = 32;
-    format      = 3;
+    precision = cfg.precision;
+
+    bits        = precision;
+    format      = (precision == 16 ) ? 1 : 3;
     channels    = cfg.channels;
     freq        = cfg.frequency;
     blockAlign  = (bits>>3)*channels;
@@ -148,16 +151,28 @@ float* WavFile::open(AudioConfig &cfg, const char* name)
 
 float* WavFile::write()
 {
+    short int buf16[_settings.bufSize];
+    unsigned long i;
     if (file && !file->fail()) {
-        unsigned long int bytes = _settings.bufSize * 4;
+        unsigned long int bytes = _settings.bufSize;
         if (!headerWritten) {
             file->write((char*)&wavHdr,sizeof(wavHeader));
             headerWritten = true;
         }
 
-        byteCount += bytes;
         /* XXX endianness... */
-        file->write((char*)_sampleBuffer,bytes);
+        if (precision == 16) {
+            bytes *= 2;
+            for (i=0;i<_settings.bufSize;i++) {
+                buf16[i] =  (_sampleBuffer[i] * 32768);
+            }
+            file->write((char*)&buf16, bytes);
+        } else {
+            bytes *= 4;
+            file->write((char*)_sampleBuffer, bytes);
+        }
+        byteCount += bytes;
+
     }
     return _sampleBuffer;
 }

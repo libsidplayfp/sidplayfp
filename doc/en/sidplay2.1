@@ -68,7 +68,7 @@ Mode switch (default -mr).  Currently supported modes are:
 New SID filter definition.  This will redefine ReSIDs internal filter (see the sidplay2 homepage for the file format).
 .TP
 \fB\-p<num>\fR
-Set bit precision for samples. The default is 16, but this value will be affected by the hardware available on the platform you are running.
+Set bit precision for wav saving. The default is 32 (32 bit float), but can be set to 16 to create 16 bit little endian wavs.
 .TP
 \fB\-O<num>\fR
 Optimisation level (default: 0).  Increasing the optimisation level will improve the performance of sidplay2 at the cost of accuracy.  The maximum optimisation level can be found using \"sidplay2 --help\".  Any optimisation level greater than this will not cause an error and will be clipped to the maximum level.

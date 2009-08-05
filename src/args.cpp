@@ -264,12 +264,10 @@ int ConsolePlayer::args (int argc, const char *argv[])
                     err = true;
                 {
                     uint_least8_t precision = atoi(&argv[i][2]);
-                    if (precision <= 8)
-                        precision = 8;
-                    else if (precision <= 16)
+                    if (precision <= 16)
                         precision = 16;
                     else
-                        precision = 24;
+                        precision = 32;
 
                     if (precision > SID2_MAX_PRECISION)
                         precision = SID2_MAX_PRECISION;
@@ -515,7 +513,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -o<l|s>      looping and/or single track" << endl
         << " -o<num>      start track (default: preset)" << endl
 
-        << " -p<num>      set bit precision for samples. "
+        << " -p<num>      set format for wav output (16 = signed 16 bit, 32 = 32 bit float)"
         << "(default: " << (uint) SID2_DEFAULT_PRECISION << ")" << endl
 
 #if !defined(DISALLOW_STEREO_SOUND)
