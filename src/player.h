@@ -115,12 +115,12 @@ void displayError (const char *arg0, uint num);
 class ConsolePlayer: private Event
 {
 private:
-#ifdef HAVE_LIBRESID_BUILDER
+//#ifdef HAVE_LIBRESID_BUILDER
     static const char  RESID_ID[];
-#endif
-#ifdef HAVE_LIBHARDSID_BUILDER
+//#endif
+//#ifdef HAVE_LIBHARDSID_BUILDER
     static const char  HARDSID_ID[];
-#endif
+//#endif
 #ifdef HAVE_TSID
     TSID               m_tsid;
 #endif
