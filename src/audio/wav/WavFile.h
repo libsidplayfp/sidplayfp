@@ -93,18 +93,18 @@ public:
     // If number of sample bytes is given, this can speed up the
     // process of closing a huge file on slow storage media.
 
-    float *open(AudioConfig &cfg, const char *name);
+    short *open(AudioConfig &cfg, const char *name);
     
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
-    float *write();
+    short *write();
     void  close();
     void  pause() {;}
     const char *extension () const { return ".wav"; }
     ~WavFile() { close(); }
     
     // Rev 1.3 (saw) - Changed, see AudioBase.h
-    float *reset ()
+    short *reset ()
     {
         if (file != 0)
             return _sampleBuffer;

@@ -65,7 +65,7 @@ void Audio_ALSA::outOfOrder ()
     _audioHandle = NULL;
 }
 
-float *Audio_ALSA::open (AudioConfig &cfg, const char *)
+short *Audio_ALSA::open (AudioConfig &cfg, const char *)
 {
     AudioConfig tmpCfg;
 
@@ -105,7 +105,7 @@ float *Audio_ALSA::open (AudioConfig &cfg, const char *)
         goto open_error;
     }
     
-    if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_FLOAT))
+    if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE))
     {
         _errorString = "ERROR: could not set sample format";
         goto open_error;
@@ -147,9 +147,9 @@ float *Audio_ALSA::open (AudioConfig &cfg, const char *)
 
     tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;					
 #ifdef HAVE_EXCEPTIONS
-    _sampleBuffer = new(std::nothrow) float[tmpCfg.bufSize];
+    _sampleBuffer = new(std::nothrow) short[tmpCfg.bufSize];
 #else
-    _sampleBuffer = new float[tmpCfg.bufSize];
+    _sampleBuffer = new short[tmpCfg.bufSize];
 #endif
 
     if (!_sampleBuffer)
@@ -185,12 +185,12 @@ void Audio_ALSA::close ()
     }
 }
 
-float *Audio_ALSA::reset ()
+short *Audio_ALSA::reset ()
 {
     return _sampleBuffer;   
 }
 
-float *Audio_ALSA::write ()
+short *Audio_ALSA::write ()
 {
     if (_audioHandle == NULL)
     {

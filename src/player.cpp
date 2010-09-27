@@ -585,7 +585,7 @@ void ConsolePlayer::emuflush ()
 // Out play loop to be externally called
 bool ConsolePlayer::play ()
 {
-    float *buffer = m_driver.selected->buffer ();
+    short *buffer = m_driver.selected->buffer ();
     uint_least32_t length = m_driver.cfg.bufSize;
 
     if (m_state == playerRunning)

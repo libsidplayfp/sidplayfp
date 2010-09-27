@@ -81,7 +81,7 @@ void Audio_OSS::outOfOrder ()
     _audiofd     = -1;
 }
 
-float *Audio_OSS::open (AudioConfig &cfg, const char *)
+short *Audio_OSS::open (AudioConfig &cfg, const char *)
 {
     int mask, format;
     int wantedFormat = 0;
@@ -105,7 +105,7 @@ float *Audio_OSS::open (AudioConfig &cfg, const char *)
         goto open_error;
     }
 
-    format = AFMT_S16_NE;
+    format = AFMT_S16_LE;
     if (ioctl (_audiofd, SNDCTL_DSP_SETFMT, &format) == (-1))
     {
         _errorString = "AUDIO: Could not set sample format.";
@@ -179,9 +179,9 @@ void Audio_OSS::close ()
     }
 }
 
-float *Audio_OSS::write ()
+short *Audio_OSS::write ()
 {
-    short tmp[_settings.bufSize];
+    //short tmp[_settings.bufSize];
 
     if (_audiofd == (-1))
     {
@@ -189,11 +189,11 @@ float *Audio_OSS::write ()
         return NULL;
     }
 
-    for (uint_least32_t n = 0; n < _settings.bufSize; n ++) {
+   /* for (uint_least32_t n = 0; n < _settings.bufSize; n ++) {
             tmp[n] = _sampleBuffer[n] * (1 << 15);
-    }
+    }*/
 
-    ::write (_audiofd, tmp, 2 * _settings.bufSize);
+    ::write (_audiofd, _sampleBuffer, 2 * _settings.bufSize);
     return _sampleBuffer;
 }
 

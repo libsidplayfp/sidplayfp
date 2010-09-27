@@ -88,7 +88,7 @@ WavFile::WavFile()
     headerWritten = false;
 }
 
-float* WavFile::open(AudioConfig &cfg, const char* name)
+short* WavFile::open(AudioConfig &cfg, const char* name)
 {
     unsigned long  int freq;
     unsigned short int channels, bits, format;
@@ -115,9 +115,9 @@ float* WavFile::open(AudioConfig &cfg, const char* name)
 
     // We need to make a buffer for the user
 #if defined(WAV_HAVE_EXCEPTIONS)
-    _sampleBuffer = new(std::nothrow) float[bufSize];
+    _sampleBuffer = new(std::nothrow) short[bufSize];
 #else
-    _sampleBuffer = new float[bufSize];
+    _sampleBuffer = new short[bufSize];
 #endif
     if (!_sampleBuffer)
         return NULL;
@@ -149,7 +149,7 @@ float* WavFile::open(AudioConfig &cfg, const char* name)
     return _sampleBuffer;
 }
 
-float* WavFile::write()
+short* WavFile::write()
 {
     short int buf16[_settings.bufSize];
     unsigned long i;
@@ -164,7 +164,7 @@ float* WavFile::write()
         if (precision == 16) {
             bytes *= 2;
             for (i=0;i<_settings.bufSize;i++) {
-                buf16[i] =  (_sampleBuffer[i] * 32768);
+                buf16[i] = _sampleBuffer[i];
             }
             file->write((char*)&buf16, bytes);
         } else {

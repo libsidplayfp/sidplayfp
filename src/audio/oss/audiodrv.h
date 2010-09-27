@@ -85,10 +85,10 @@ public:  // --------------------------------------------------------- public
     Audio_OSS();
     ~Audio_OSS();
 
-    float *open  (AudioConfig &cfg, const char *name);
+    short *open  (AudioConfig &cfg, const char *name);
     void  close ();
     // Rev 1.2 (saw) - Changed, see AudioBase.h	
-    float *reset ()
+    short *reset ()
     {
         if (_audiofd != (-1))
         {
@@ -97,7 +97,7 @@ public:  // --------------------------------------------------------- public
         }
         return NULL;
     }
-    float *write ();
+    short *write ();
     void  pause () {;}
 };
 

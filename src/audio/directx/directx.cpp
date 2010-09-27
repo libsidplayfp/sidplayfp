@@ -142,10 +142,10 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
 
     // Format
     memset (&wfm, 0, sizeof(WAVEFORMATEX));
-    wfm.wFormatTag      = WAVE_FORMAT_IEEE_FLOAT;
+    wfm.wFormatTag      = WAVE_FORMAT_PCM;
     wfm.nChannels       = cfg.channels;
     wfm.nSamplesPerSec  = cfg.frequency;
-    wfm.wBitsPerSample  = 32;
+    wfm.wBitsPerSample  = 16;
     wfm.nBlockAlign     = wfm.wBitsPerSample / 8 * wfm.nChannels;
     wfm.nAvgBytesPerSec = wfm.nSamplesPerSec * wfm.nBlockAlign;
 

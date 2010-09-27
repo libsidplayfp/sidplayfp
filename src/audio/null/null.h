@@ -53,10 +53,10 @@ public:  // --------------------------------------------------------- public
     Audio_Null();
     ~Audio_Null();
 
-    float *open  (AudioConfig &cfg, const char *);
+    short *open  (AudioConfig &cfg, const char *);
     void  close ();    
-    float *reset ();
-    float *write ();
+    short *reset ();
+    short *write ();
     void  pause () {;}
 };
 

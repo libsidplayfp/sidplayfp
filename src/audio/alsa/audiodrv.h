@@ -55,11 +55,11 @@ public:  // --------------------------------------------------------- public
     Audio_ALSA();
     ~Audio_ALSA();
 
-    float *open  (AudioConfig &cfg, const char *name);
+    short *open  (AudioConfig &cfg, const char *name);
     void  close ();
     // Rev 1.2 (saw) - Changed, see AudioBase.h	
-    float *reset ();
-    float *write ();
+    short *reset ();
+    short *write ();
     void  pause () {;}
 };
 

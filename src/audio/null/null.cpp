@@ -60,7 +60,7 @@ Audio_Null::~Audio_Null ()
     close();
 }
 
-float *Audio_Null::open (AudioConfig &cfg, const char *)
+short *Audio_Null::open (AudioConfig &cfg, const char *)
 { 
     uint_least32_t bufSize = cfg.bufSize;
 
@@ -77,9 +77,9 @@ float *Audio_Null::open (AudioConfig &cfg, const char *)
 
     // We need to make a buffer for the user
 #if defined(HAVE_EXCEPTIONS)
-    _sampleBuffer = new(std::nothrow) float[bufSize];
+    _sampleBuffer = new(std::nothrow) short[bufSize];
 #else
-    _sampleBuffer = new float[bufSize];
+    _sampleBuffer = new short[bufSize];
 #endif
     if (!_sampleBuffer)
         return NULL;
@@ -90,7 +90,7 @@ float *Audio_Null::open (AudioConfig &cfg, const char *)
     return _sampleBuffer;
 }
 
-float *Audio_Null::write ()
+short *Audio_Null::write ()
 {
     if (!isOpen)
     {
@@ -100,7 +100,7 @@ float *Audio_Null::write ()
     return _sampleBuffer;
 }
 
-float *Audio_Null::reset (void)
+short *Audio_Null::reset (void)
 {
     if (!isOpen)
          return NULL;
