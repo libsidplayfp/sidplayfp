@@ -1,3 +1,4 @@
+AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix
 
 noinst_LIBRARIES = libwav.a
 

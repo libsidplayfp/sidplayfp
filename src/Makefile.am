@@ -1,6 +1,10 @@
 
 SUBDIRS = audio
 
+AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix \
+$(SIDPLAY2_CFLAGS) \
+$(SIDUTILS_CFLAGS)
+
 # The console user interface.
 
 bin_PROGRAMS = sidplay2
@@ -12,7 +16,8 @@ player.cpp player.h
 sidplay2_LDADD = ./audio/null/libnull.a \
 ./audio/wav/libwav.a \
 $(AUDIO_DRV) $(AUDIO_LDFLAGS) \
-$(LIBSIDPLAY2_LDFLAGS) $(LIBSIDUTILS_LDFLAGS) \
+$(SIDPLAY2_LIBS) \
+$(SIDUTILS_LIBS) \
 $(BUILDERS_LDFLAGS)
 # $(LIBLTDL_LDFLAGS)
 

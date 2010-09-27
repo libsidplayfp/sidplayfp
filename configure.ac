@@ -106,13 +106,8 @@ dnl Check ANSI C++ ios features
 MY_CHECK_IOS_BIN
 MY_CHECK_IOS_OPENMODE
 
-AC_CHECK_LIB(sidplay2, main)
-AC_CHECK_LIB(sidutils, main)
-AC_CHECK_LIB(resid-builder, main)
-AC_CHECK_LIB(hardsid-builder, main)
-
-dnl Add absolute directory for header files
-CXXFLAGS="$CXXFLAGS -DHAVE_UNIX -I\$(top_srcdir)/unix -I/usr/include/sidplay"
+PKG_CHECK_MODULES(SIDPLAY2,[libsidplay2 >= 2.1])
+PKG_CHECK_MODULES(SIDUTILS,[libsidutils >= 1.0])
 
 AC_OUTPUT(
 Makefile \
