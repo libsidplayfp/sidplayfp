@@ -104,7 +104,7 @@ short *Audio_ALSA::open (AudioConfig &cfg, const char *)
         _errorString = "ERROR: could not set access type";
         goto open_error;
     }
-    
+
     if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE))
     {
         _errorString = "ERROR: could not set sample format";
@@ -145,7 +145,7 @@ short *Audio_ALSA::open (AudioConfig &cfg, const char *)
         goto open_error;
     }
 
-    tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;					
+    tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;
 #ifdef HAVE_EXCEPTIONS
     _sampleBuffer = new(std::nothrow) short[tmpCfg.bufSize];
 #else

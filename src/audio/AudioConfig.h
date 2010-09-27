@@ -42,7 +42,7 @@ public:
     int            precision;
     int            channels;
     uint_least32_t bufSize;       // sample buffer size
-    
+
     AudioConfig()
     {
         frequency = 48000;

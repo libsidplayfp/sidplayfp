@@ -292,7 +292,7 @@ float *Audio_DirectX::reset (void)
     {
         _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
         return NULL;
-    }        
+    }
     _sampleBuffer = lpvData;
     return _sampleBuffer;
 }
@@ -313,7 +313,7 @@ void Audio_DirectX::close (void)
         if (lpvData)
         {
             // Rev 1.4 (iv) - Unlock before we release buffer.
-            lpDsb->Unlock (lpvData, bufSize, NULL, 0);      
+            lpDsb->Unlock (lpvData, bufSize, NULL, 0);
         }
     }
 

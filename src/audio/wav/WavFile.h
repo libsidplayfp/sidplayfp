@@ -65,7 +65,7 @@ struct wavHeader                        // little endian format
     unsigned char bytesPerSec[4];        // sampleFreq * blockAlign
     unsigned char blockAlign[2];        // bytes per sample * channels
     unsigned char bitsPerSample[2];
-    
+
     char dataChunkID[4];                // keyword, begin of data chunk; = 'data' (ASCII)
 
     unsigned char dataChunkLen[4];        // length of data
@@ -86,7 +86,7 @@ private:
 public:
 
     WavFile();
-    
+
     // Only unsigned 8-bit, and signed 16-bit, samples are supported.
     // Endian-ess is adjusted if necessary.
     //
@@ -94,7 +94,7 @@ public:
     // process of closing a huge file on slow storage media.
 
     short *open(AudioConfig &cfg, const char *name);
-    
+
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
     short *write();
@@ -102,7 +102,7 @@ public:
     void  pause() {;}
     const char *extension () const { return ".wav"; }
     ~WavFile() { close(); }
-    
+
     // Rev 1.3 (saw) - Changed, see AudioBase.h
     short *reset ()
     {

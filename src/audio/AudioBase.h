@@ -66,7 +66,7 @@ public:
     void getConfig (AudioConfig &cfg) const {
         cfg = _settings;
     }
-    
+
     const char *getErrorString () const {
         return _errorString;
     }

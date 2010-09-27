@@ -110,7 +110,7 @@ short* WavFile::open(AudioConfig &cfg, const char* name)
 
     if (file && !file->fail())
         close();
-   
+
     byteCount = 0;
 
     // We need to make a buffer for the user

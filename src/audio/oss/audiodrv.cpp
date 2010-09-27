@@ -111,7 +111,7 @@ short *Audio_OSS::open (AudioConfig &cfg, const char *)
         _errorString = "AUDIO: Could not set sample format.";
         goto open_error;
     }
-    
+
     // Set mono/stereo.
     if (ioctl (_audiofd, SNDCTL_DSP_CHANNELS, &cfg.channels) == (-1))
     {
@@ -130,7 +130,7 @@ short *Audio_OSS::open (AudioConfig &cfg, const char *)
         goto open_error;
     break;
     }
-        
+
     // Set frequency.
     if (ioctl (_audiofd, SNDCTL_DSP_SPEED, &cfg.frequency) == (-1))
     {

@@ -206,7 +206,7 @@ float*Audio_MMSystem::write ()
     return _sampleBuffer;
 }
 
-// Rev 1.2 (saw) - Changed, see AudioBase.h    
+// Rev 1.2 (saw) - Changed, see AudioBase.h
 float *Audio_MMSystem::reset (void)
 {
     if (!isOpen)

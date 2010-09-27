@@ -57,7 +57,7 @@
 #define AUDIO_DIRECTX_BUFFERS 2
 
 class Audio_DirectX: public AudioBase
-{    
+{
 private:  // ------------------------------------------------------- private
     HWND   hwnd;
 
@@ -84,7 +84,7 @@ public:  // --------------------------------------------------------- public
     // console application
     short *open  (AudioConfig &cfg, const char *name);
     short *open  (AudioConfig &cfg, const char *name, HWND hwnd);
-    void  close ();    
+    void  close ();
     // Rev 1.3 (saw) - Changed
     short *reset ();
     short *write ();

@@ -45,7 +45,7 @@
 #include "../AudioBase.h"
 
 class Audio_Null: public AudioBase
-{    
+{
 private:  // ------------------------------------------------------- private
     bool isOpen;
 
