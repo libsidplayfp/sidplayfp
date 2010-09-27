@@ -151,7 +151,7 @@ short* WavFile::open(AudioConfig &cfg, const char* name)
 
 short* WavFile::write()
 {
-    short int buf16[_settings.bufSize];
+    float buf16[_settings.bufSize];
     unsigned long i;
     if (file && !file->fail()) {
         unsigned long int bytes = _settings.bufSize;
@@ -163,13 +163,13 @@ short* WavFile::write()
         /* XXX endianness... */
         if (precision == 16) {
             bytes *= 2;
-            for (i=0;i<_settings.bufSize;i++) {
-                buf16[i] = _sampleBuffer[i];
-            }
-            file->write((char*)&buf16, bytes);
+            file->write((char*)&_sampleBuffer, bytes);
         } else {
             bytes *= 4;
-            file->write((char*)_sampleBuffer, bytes);
+            for (i=0;i<_settings.bufSize;i++) {
+                buf16[i] = ((float)_sampleBuffer[i])/32768.;
+            }
+            file->write((char*)&buf16, bytes);
         }
         byteCount += bytes;
 
