@@ -220,7 +220,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     {
         if (m_driver.device != &m_driver.null)
             delete m_driver.device;
-        m_driver.device = NULL;         
+        m_driver.device = NULL;
     }
 
     // Create audio driver
@@ -272,7 +272,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
                 break;
         }
         if (!i) i = length;
-    
+
 #ifdef HAVE_EXCEPTIONS
         name = new(std::nothrow) char[i + 10];
 #else
@@ -446,7 +446,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 		goto createSidEmu_error;
 	}
     }
-    
+
     return true;
 
 createSidEmu_error:
@@ -469,7 +469,7 @@ bool ConsolePlayer::open (void)
             m_driver.selected->reset ();
         m_state = playerStopped;
     }
-    
+
     // Select the required song
     m_track.selected = m_tune.selectSong (m_track.selected);
     if (m_engine.load (&m_tune) < 0)
@@ -493,7 +493,7 @@ bool ConsolePlayer::open (void)
         displayError (m_engine.error ());
         return false;
     }
-    
+
     // Start the player.  Do this by fast
     // forwarding to the start position
     m_driver.selected = &m_driver.null;
@@ -707,9 +707,9 @@ void ConsolePlayer::event (void)
             }
             if (m_track.loop)
                 m_state = playerRestart;
-        }            
+        }
     }
-    
+
     // Units in C64 clock cycles
     schedule ((EventContext&) *m_context, 900000, EVENT_CLOCK_PHI1);
 }
@@ -801,12 +801,12 @@ void ConsolePlayer::decodeKeys ()
             v1mute = !v1mute;
             m_engine.mute(0, v1mute);
         break;
-        
+
         case A_TOGGLE_VOICE2:
             v2mute = !v2mute;
             m_engine.mute(1, v2mute);
         break;
-        
+
         case A_TOGGLE_VOICE3:
             v3mute = !v3mute;
             m_engine.mute(2, v3mute);

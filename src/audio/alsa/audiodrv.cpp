@@ -187,7 +187,7 @@ void Audio_ALSA::close ()
 
 short *Audio_ALSA::reset ()
 {
-    return _sampleBuffer;   
+    return _sampleBuffer;
 }
 
 short *Audio_ALSA::write ()

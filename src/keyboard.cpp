@@ -179,7 +179,7 @@ static int keyboard_search (char *cmd)
             if (*p == '\0' && p[1] == A_END_LIST)
             {
                 /*
-                 * A_END_LIST is a special marker that tells 
+                 * A_END_LIST is a special marker that tells
                  * us to abort the cmd search.
                  */
                 break;

@@ -79,7 +79,7 @@ public:
     {   // INI Section - [Emulation]
         sid2_clock_t  clockSpeed;
         bool          clockForced;
-        sid2_model_t  sidModel; 
+        sid2_model_t  sidModel;
         bool          filter;
         char         *filter6581;
         char         *filter8580;

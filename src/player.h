@@ -125,7 +125,7 @@ private:
     TSID               m_tsid;
 #endif
 
-    const char* const  m_name; 
+    const char* const  m_name;
     sidplay2           m_engine;
     sid2_config_t      m_engCfg;
     SidTuneMod         m_tune;

@@ -61,7 +61,7 @@ Audio_Null::~Audio_Null ()
 }
 
 short *Audio_Null::open (AudioConfig &cfg, const char *)
-{ 
+{
     uint_least32_t bufSize = cfg.bufSize;
 
     if (isOpen)

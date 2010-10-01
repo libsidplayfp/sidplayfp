@@ -72,7 +72,7 @@ public:  // --------------------------------------------------------- public
 
     short *open  (AudioConfig &cfg, const char *name);
     void  close ();
-    // Rev 1.2 (saw) - Changed, see AudioBase.h    
+    // Rev 1.2 (saw) - Changed, see AudioBase.h
     short *reset ();
     short *write ();
     void  pause () {;}

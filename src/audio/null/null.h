@@ -54,7 +54,7 @@ public:  // --------------------------------------------------------- public
     ~Audio_Null();
 
     short *open  (AudioConfig &cfg, const char *);
-    void  close ();    
+    void  close ();
     short *reset ();
     short *write ();
     void  pause () {;}

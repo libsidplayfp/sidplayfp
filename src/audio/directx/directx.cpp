@@ -103,8 +103,8 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *name)
 }
 
 float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
-{ 
-    DSBUFFERDESC        dsbdesc; 
+{
+    DSBUFFERDESC        dsbdesc;
     LPDIRECTSOUNDBUFFER lpDsbPrimary = 0;
     WAVEFORMATEX        wfm;
     DWORD               dwBytes;
@@ -119,7 +119,7 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     lpvData = 0;
     isOpen  = true;
 
-    for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++) 
+    for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
         rghEvent[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
 
     if (FAILED (DirectSoundCreate (NULL, &lpds, NULL)))
@@ -136,7 +136,7 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     // Primary Buffer Setup
     memset (&dsbdesc, 0, sizeof(DSBUFFERDESC));
     dsbdesc.dwSize        = sizeof(DSBUFFERDESC);
-    dsbdesc.dwFlags       = DSBCAPS_PRIMARYBUFFER; 
+    dsbdesc.dwFlags       = DSBCAPS_PRIMARYBUFFER;
     dsbdesc.dwBufferBytes = 0;
     dsbdesc.lpwfxFormat   = NULL;
 
@@ -183,7 +183,7 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     DSBPOSITIONNOTIFY rgdscbpn[AUDIO_DIRECTX_BUFFERS];
     // Buffer Start Notification
     // Rev 2.0.4 (saw) - On starting to play a buffer
-    for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++) 
+    for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
     {   // Track one buffer ahead
         rgdscbpn[i].dwOffset     = bufSize * ((i + 1) % AUDIO_DIRECTX_BUFFERS);
         rgdscbpn[i].hEventNotify = rghEvent[i];
@@ -230,7 +230,7 @@ Audio_DirectX_openError:
 
 float *Audio_DirectX::write ()
 {
-    DWORD dwEvt; 
+    DWORD dwEvt;
     DWORD dwBytes;
 
     if (!isOpen)
@@ -258,7 +258,7 @@ float *Audio_DirectX::write ()
     do
     {
         dwEvt  = MsgWaitForMultipleObjects (AUDIO_DIRECTX_BUFFERS, rghEvent, FALSE, INFINITE, QS_ALLINPUT);
-        dwEvt -= WAIT_OBJECT_0; 
+        dwEvt -= WAIT_OBJECT_0;
     } while (dwEvt >= AUDIO_DIRECTX_BUFFERS);
 
 //    printf ("Event - %lu\n", dwEvt);
@@ -323,7 +323,7 @@ void Audio_DirectX::close (void)
 
     // Rev 1.3 (Ingve Vormestrand) - Changed "<=" to "<"
     // as closing invalid handle.
-    for (int i=0;i < AUDIO_DIRECTX_BUFFERS; i++) 
+    for (int i=0;i < AUDIO_DIRECTX_BUFFERS; i++)
         CloseHandle (rghEvent[i]);
 }
 

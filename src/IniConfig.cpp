@@ -153,7 +153,7 @@ bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
     ret = (char *) malloc (++length);
     if (!ret)
         return false;
-    
+
     if (ini_readString (ini, ret, (uint) length) < 0)
         goto IniCofig_readString_error;
 

@@ -73,7 +73,7 @@
 
 
 class Audio_OSS: public AudioBase
-{	
+{
 private:  // ------------------------------------------------------- private
     static   const char AUDIODEVICE[];
     volatile int   _audiofd;
@@ -87,7 +87,7 @@ public:  // --------------------------------------------------------- public
 
     short *open  (AudioConfig &cfg, const char *name);
     void  close ();
-    // Rev 1.2 (saw) - Changed, see AudioBase.h	
+    // Rev 1.2 (saw) - Changed, see AudioBase.h
     short *reset ()
     {
         if (_audiofd != (-1))

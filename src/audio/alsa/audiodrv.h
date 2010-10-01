@@ -44,7 +44,7 @@
 
 
 class Audio_ALSA: public AudioBase
-{	
+{
 private:  // ------------------------------------------------------- private
     snd_pcm_t * _audioHandle;
     int _alsa_to_frames_divisor;
@@ -57,7 +57,7 @@ public:  // --------------------------------------------------------- public
 
     short *open  (AudioConfig &cfg, const char *name);
     void  close ();
-    // Rev 1.2 (saw) - Changed, see AudioBase.h	
+    // Rev 1.2 (saw) - Changed, see AudioBase.h
     short *reset ();
     short *write ();
     void  pause () {;}

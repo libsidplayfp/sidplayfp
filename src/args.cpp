@@ -430,7 +430,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
         displayError ("ERROR: Cannot generate audio files using hardware emulations");
         return -1;
     }
-    
+
     // Select the desired track
     m_track.first    = m_tune.selectSong (m_track.first);
     m_track.selected = m_track.first;
@@ -468,7 +468,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
             }
         }
     }
-    
+
 #if HAVE_TSID == 1
     // Set TSIDs base directory
     if (!m_tsid.setBaseDir(true))

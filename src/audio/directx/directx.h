@@ -47,7 +47,7 @@
 
 #if DIRECTSOUND_VERSION < 0x0500
 #   undef  DIRECTSOUND_VERSION
-#   define DIRECTSOUND_VERSION 0x0500       /* version 5.0 */ 
+#   define DIRECTSOUND_VERSION 0x0500       /* version 5.0 */
 #endif
 
 #include <DSound.h>

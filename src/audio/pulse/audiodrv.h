@@ -61,7 +61,7 @@
 #include "../AudioBase.h"
 
 class Audio_Pulse: public AudioBase
-{	
+{
 private:  // ------------------------------------------------------- private
     pa_simple *_audioHandle;
     void outOfOrder ();

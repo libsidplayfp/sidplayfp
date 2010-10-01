@@ -189,7 +189,7 @@ void ConsolePlayer::menu ()
     consoleColour (white, true);
 
     {   // This will be the format used for playlists
-        int i = 1;        
+        int i = 1;
         if (!m_track.single)
         {
             i  = m_track.selected;
