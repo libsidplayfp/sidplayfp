@@ -163,13 +163,13 @@ short* WavFile::write()
         /* XXX endianness... */
         if (precision == 16) {
             bytes *= 2;
-            file->write((char*)&_sampleBuffer, bytes);
+            file->write((char*)_sampleBuffer, bytes);
         } else {
             bytes *= 4;
             for (i=0;i<_settings.bufSize;i++) {
                 buf16[i] = ((float)_sampleBuffer[i])/32768.;
             }
-            file->write((char*)&buf16, bytes);
+            file->write((char*)buf16, bytes);
         }
         byteCount += bytes;
 
