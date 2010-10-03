@@ -1,12 +1,12 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(Makefile.am)
+AC_INIT([Makefile.am])
 AC_CONFIG_AUX_DIR(unix)
 AC_CONFIG_MACRO_DIR(unix)
-AM_CONFIG_HEADER(unix/config.h)
+AM_CONFIG_HEADER([unix/config.h])
 LT_INIT
 
 dnl Setup library CURRENT, REVISION and AGE
-AM_INIT_AUTOMAKE(sidplay,2.0.9)
+AM_INIT_AUTOMAKE(sidplay,[2.0.9])
 
 AC_CANONICAL_HOST
 
@@ -22,10 +22,10 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN
 
 dnl Checks what version of Unix we have and soundcard support
-AC_CHECK_HEADERS(sys/ioctl.h linux/soundcard.h machine/soundcard.h  \
+AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h  \
 soundcard.h sys/audio.h sun/audioio.h sun/dbriio.h sys/audioio.h  \
 audio.h dmedia/audio.h sys/soundcard.h sys/asoundlib.h alsa/asoundlib.h \
-pulse/simple.h)
+pulse/simple.h])
 
 AH_TOP(
 [/* Define supported audio driver */
@@ -109,7 +109,7 @@ MY_CHECK_IOS_OPENMODE
 PKG_CHECK_MODULES(SIDPLAY2,[libsidplay2 >= 2.1])
 PKG_CHECK_MODULES(SIDUTILS,[libsidutils >= 1.0])
 
-AC_OUTPUT(
+AC_CONFIG_FILES([
 Makefile \
 doc/Makefile \
 doc/en/Makefile \
@@ -123,4 +123,6 @@ src/audio/pulse/Makefile \
 src/audio/wav/Makefile \
 unix/Makefile \
 unix/sidplay2.spec \
-)
+])
+
+AC_OUTPUT
