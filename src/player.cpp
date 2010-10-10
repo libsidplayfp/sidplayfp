@@ -188,7 +188,7 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         m_engCfg.clockDefault = SID2_CLOCK_PAL;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.playback     = audio.playback;
-        m_engCfg.precision    = audio.precision;
+        m_precision           = audio.precision;
         m_engCfg.sidModel     = emulation.sidModel;
         m_engCfg.sidDefault   = SID2_MOS6581;
         m_engCfg.sidSamples   = emulation.sidSamples;
@@ -200,7 +200,7 @@ ConsolePlayer::ConsolePlayer (const char * const name)
     if (m_engCfg.playback == sid2_stereo)
         m_driver.cfg.channels = 2;
     m_driver.cfg.frequency = m_engCfg.frequency;
-    m_driver.cfg.precision = m_engCfg.precision;
+    m_driver.cfg.precision = m_precision;
 
     createOutput (OUT_NULL, NULL);
     createSidEmu (EMU_NONE);
@@ -297,7 +297,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
     // Configure with user settings
     m_driver.cfg.frequency = m_engCfg.frequency;
-    m_driver.cfg.precision = m_engCfg.precision;
+    m_driver.cfg.precision = m_precision;
     m_driver.cfg.channels  = 1; // Mono
     m_driver.cfg.bufSize   = 0; // Recalculate
     if (m_engCfg.playback == sid2_stereo)
@@ -323,7 +323,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
     // See what we got
     m_engCfg.frequency = m_driver.cfg.frequency;
-    m_engCfg.precision = m_driver.cfg.precision;
+    m_precision = m_driver.cfg.precision;
     switch (m_driver.cfg.channels)
     {
     case 1:

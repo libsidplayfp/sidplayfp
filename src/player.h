@@ -146,6 +146,8 @@ private:
 
     bool    v1mute, v2mute, v3mute;
 
+    int     m_precision;
+
     struct m_filter_t
     {
         SidFilter      definition;

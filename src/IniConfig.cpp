@@ -109,7 +109,7 @@ void IniConfig::clear ()
 
     audio_s.frequency = SID2_DEFAULT_SAMPLING_FREQ;
     audio_s.playback  = sid2_mono;
-    audio_s.precision = SID2_DEFAULT_PRECISION;
+    audio_s.precision = 16;
 
     emulation_s.clockSpeed    = SID2_CLOCK_CORRECT;
     emulation_s.clockForced   = false;
