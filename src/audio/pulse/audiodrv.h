@@ -70,13 +70,13 @@ public:  // --------------------------------------------------------- public
     Audio_Pulse();
     ~Audio_Pulse();
 
-    float *open  (AudioConfig &cfg, const char *name);
+    short *open  (AudioConfig &cfg, const char *name);
     void  close ();
-    float *reset ()
+    short *reset ()
     {
         return _sampleBuffer;
     }
-    float *write ();
+    short *write ();
     void  pause () {;}
 };
 

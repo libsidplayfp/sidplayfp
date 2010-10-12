@@ -26,13 +26,13 @@ void Audio_Pulse::outOfOrder ()
     _errorString = "None";
 }
 
-float *Audio_Pulse::open (AudioConfig &cfg, const char *)
+short *Audio_Pulse::open (AudioConfig &cfg, const char *)
 {
     pa_sample_spec pacfg = {};
 
     pacfg.channels = cfg.channels;
     pacfg.rate = cfg.frequency;
-    pacfg.format = PA_SAMPLE_FLOAT32NE;
+    pacfg.format = PA_SAMPLE_S16NE;
 
     // Set sample precision and type of encoding.
     _audioHandle = pa_simple_new(
@@ -55,9 +55,9 @@ float *Audio_Pulse::open (AudioConfig &cfg, const char *)
     cfg.bufSize = 4096;
 
 #ifdef HAVE_EXCEPTIONS
-    _sampleBuffer = new(std::nothrow) float[cfg.bufSize];
+    _sampleBuffer = new(std::nothrow) short[cfg.bufSize];
 #else
-    _sampleBuffer = new float[cfg.bufSize];
+    _sampleBuffer = new short[cfg.bufSize];
 #endif
 
     if (!_sampleBuffer) {
@@ -92,7 +92,7 @@ void Audio_Pulse::close ()
     }
 }
 
-float *Audio_Pulse::write ()
+short *Audio_Pulse::write ()
 {
     if (_audioHandle == NULL)
     {
@@ -100,7 +100,7 @@ float *Audio_Pulse::write ()
         return NULL;
     }
 
-    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 4, NULL) < 0) {
+    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, NULL) < 0) {
         _errorString = "Error writing to PA.";
     }
     return _sampleBuffer;
