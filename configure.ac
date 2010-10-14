@@ -109,6 +109,10 @@ MY_CHECK_IOS_OPENMODE
 PKG_CHECK_MODULES(SIDPLAY2,[libsidplay2 >= 2.1])
 PKG_CHECK_MODULES(SIDUTILS,[libsidutils >= 1.0])
 
+AC_CHECK_HEADERS([sidplay/builders/resid.h])
+
+AC_CHECK_HEADERS([sidplay/builders/hardsid.h])
+
 AC_CONFIG_FILES([
 Makefile \
 doc/Makefile \
