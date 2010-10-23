@@ -106,6 +106,8 @@ dnl Check ANSI C++ ios features
 MY_CHECK_IOS_BIN
 MY_CHECK_IOS_OPENMODE
 
+AC_CHECK_FUNCS([strncasecmp strcasecmp])
+
 PKG_CHECK_MODULES(SIDPLAY2,[libsidplay2 >= 2.1])
 PKG_CHECK_MODULES(SIDUTILS,[libsidutils >= 1.0])
 

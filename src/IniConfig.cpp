@@ -351,26 +351,28 @@ bool IniConfig::readEmulation (ini_fd_t ini)
     ret &= readString (ini, "Filter8580", emulation_s.filter8580);
     ret &= readBool   (ini, "SidSamples", emulation_s.sidSamples);
 
-    // These next two change the ini section!
+    return ret;
+}
+
+
+bool IniConfig::readFilters (const char *ini_file)
+{
+    bool ret = true;
     if (emulation_s.filter6581)
     {   // Try to load the filter
-        filter6581.read (ini, emulation_s.filter6581);
+        filter6581.read (ini_file, emulation_s.filter6581);
         if (!filter6581)
         {
-            filter6581.read (emulation_s.filter6581);
-            if (!filter6581)
-                ret = false;
+            ret = false;
         }
     }
 
     if (emulation_s.filter8580)
     {   // Try to load the filter
-        filter8580.read (ini, emulation_s.filter8580);
+        filter8580.read (ini_file, emulation_s.filter8580);
         if (!filter8580)
         {
-            filter8580.read (emulation_s.filter8580);
-            if (!filter8580)
-                ret = false;
+            ret = false;
         }
     }
 
@@ -430,6 +432,9 @@ void IniConfig::read ()
     status &= readAudio     (ini);
     status &= readEmulation (ini);
     ini_close (ini);
+
+    status &= readFilters (configPath);
+
 return;
 
 IniConfig_read_error:

@@ -9,9 +9,22 @@ $(SIDUTILS_CFLAGS)
 
 bin_PROGRAMS = sidplay2
 
-sidplay2_SOURCES = IniConfig.cpp IniConfig.h \
-args.cpp keyboard.cpp keyboard.h main.cpp menu.cpp \
-player.cpp player.h
+sidplay2_SOURCES = \
+IniConfig.cpp \
+IniConfig.h \
+args.cpp \
+keyboard.cpp \
+keyboard.h \
+main.cpp \
+menu.cpp \
+player.cpp \
+player.h \
+libini.h \
+ini/headings.h \
+ini/ini.cpp \
+ini/ini.h \
+ini/keys.h \
+ini/list.h
 
 sidplay2_LDADD = ./audio/null/libnull.a \
 ./audio/wav/libwav.a \

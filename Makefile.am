@@ -4,7 +4,10 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = doc unix src
 
-EXTRA_DIST = win
+EXTRA_DIST = win \
+src/ini/AUTHORS \
+src/ini/COPYING \
+src/ini/README
 
 AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix
 

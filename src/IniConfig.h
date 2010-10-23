@@ -35,12 +35,12 @@
 #ifndef _IniConfig_h_
 #define _IniConfig_h_
 
+#include "ini/libini.h"
+
 #include <sidplay/sidtypes.h>
 #ifdef MSVC_HEADER_LOCATIONS
-#include <utils/libini.h>
 #include <utils/SidFilter.h>
 #else
-#include <sidplay/utils/libini.h>
 #include <sidplay/utils/SidFilter.h>
 #endif
 
@@ -112,6 +112,7 @@ protected:
     bool  readConsole   (ini_fd_t ini);
     bool  readAudio     (ini_fd_t ini);
     bool  readEmulation (ini_fd_t ini);
+    bool  readFilters   (const char *ini_file);
 
 public:
     IniConfig  ();
