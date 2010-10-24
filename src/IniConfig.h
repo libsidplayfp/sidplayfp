@@ -37,11 +37,11 @@
 
 #include "ini/libini.h"
 
-#include <sidplay/sidtypes.h>
+#include <sidplayfp/sidtypes.h>
 #ifdef MSVC_HEADER_LOCATIONS
-#include <utils/SidFilter.h>
+#include <SidFilter.h>
 #else
-#include <sidplay/utils/SidFilter.h>
+#include <sidplayfp/SidFilter.h>
 #endif
 
 class IniConfig

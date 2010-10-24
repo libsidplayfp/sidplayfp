@@ -54,12 +54,12 @@
 
 #include "config.h"
 
-#include <sidplay/sidplay2.h>
-#include <sidplay/event.h>
+#include <sidplayfp/sidplay2.h>
+#include <sidplayfp/event.h>
 #ifdef MSVC_HEADER_LOCATIONS
-#include <utils/SidDatabase.h>
+#include <SidDatabase.h>
 #else
-#include <sidplay/utils/SidDatabase.h>
+#include <sidplayfp/SidDatabase.h>
 #endif
 #include "audio/AudioDrv.h"
 #include "IniConfig.h"
@@ -116,10 +116,10 @@ void displayError (const char *arg0, uint num);
 class ConsolePlayer: private Event
 {
 private:
-#ifdef HAVE_SIDPLAY_BUILDERS_RESID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     static const char  RESID_ID[];
 #endif
-#ifdef HAVE_SIDPLAY_BUILDERS_HARDSID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     static const char  HARDSID_ID[];
 #endif
 #ifdef HAVE_TSID

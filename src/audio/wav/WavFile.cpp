@@ -57,7 +57,7 @@
  ***************************************************************************/
 
 #include <stdlib.h>
-#include <sidplay/sidendian.h>
+#include <sidplayfp/sidendian.h>
 #include "WavFile.h"
 #include "WavFileDefs.h"
 

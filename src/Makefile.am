@@ -2,8 +2,7 @@
 SUBDIRS = audio
 
 AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix \
-$(SIDPLAY2_CFLAGS) \
-$(SIDUTILS_CFLAGS)
+$(SIDPLAY2_CFLAGS)
 
 # The console user interface.
 
@@ -30,7 +29,6 @@ sidplay2_LDADD = ./audio/null/libnull.a \
 ./audio/wav/libwav.a \
 $(AUDIO_DRV) $(AUDIO_LDFLAGS) \
 $(SIDPLAY2_LIBS) \
-$(SIDUTILS_LIBS) \
 $(BUILDERS_LDFLAGS)
 # $(LIBLTDL_LDFLAGS)
 

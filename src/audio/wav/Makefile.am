@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix
+AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix $(SIDPLAY2_CFLAGS)
 
 noinst_LIBRARIES = libwav.a
 

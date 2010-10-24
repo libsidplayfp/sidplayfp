@@ -6,7 +6,7 @@ AM_CONFIG_HEADER([unix/config.h])
 LT_INIT
 
 dnl Setup library CURRENT, REVISION and AGE
-AM_INIT_AUTOMAKE(sidplay,[2.0.9])
+AM_INIT_AUTOMAKE(sidplayfp,[0.1.0])
 
 AC_CANONICAL_HOST
 
@@ -108,12 +108,11 @@ MY_CHECK_IOS_OPENMODE
 
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
-PKG_CHECK_MODULES(SIDPLAY2,[libsidplay2 >= 2.1])
-PKG_CHECK_MODULES(SIDUTILS,[libsidutils >= 1.0])
+PKG_CHECK_MODULES(SIDPLAY2,[libsidplayfp >= 0.1])
 
-AC_CHECK_HEADERS([sidplay/builders/resid.h])
+AC_CHECK_HEADERS([sidplayfp/builders/resid.h])
 
-AC_CHECK_HEADERS([sidplay/builders/hardsid.h])
+AC_CHECK_HEADERS([sidplayfp/builders/hardsid.h])
 
 AC_CONFIG_FILES([
 Makefile \
@@ -128,7 +127,7 @@ src/audio/oss/Makefile \
 src/audio/pulse/Makefile \
 src/audio/wav/Makefile \
 unix/Makefile \
-unix/sidplay2.spec \
+unix/sidplayfp.spec \
 ])
 
 AC_OUTPUT

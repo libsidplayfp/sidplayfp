@@ -82,8 +82,8 @@ using std::cerr;
 using std::endl;
 #include "player.h"
 
-#ifdef HAVE_HARDSID_BUILDER
-#   include <sidplay/builders/hardsid.h>
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
+#   include <sidplayfp/builders/hardsid.h>
 #endif
 
 #if defined(HAVE_SGI)

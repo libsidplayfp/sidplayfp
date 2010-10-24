@@ -128,22 +128,28 @@ using std::endl;
 #include "player.h"
 #include "keyboard.h"
 
+#ifdef MSVC_HEADER_LOCATIONS
+# include <sidbuilder.h>
+#else
+# include <sidplayfp/sidbuilder.h>
+#endif
+
 // Previous song select timeout (3 secs)
 #define SID2_PREV_SONG_TIMEOUT 4
 
-#ifdef HAVE_SIDPLAY_BUILDERS_RESID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
 #  ifdef MSVC_HEADER_LOCATIONS
 #   include <builders/resid-builder/resid.h>
 #  else
-#   include <sidplay/builders/resid.h>
+#   include <sidplayfp/builders/resid.h>
 #  endif
 const char ConsolePlayer::RESID_ID[]   = "ReSID";
 #endif
-#ifdef HAVE_SIDPLAY_BUILDERS_HARDSID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #  ifdef MSVC_HEADER_LOCATIONS
 #    include <builders/hardsid-builder/hardsid.h>
 #  else
-#    include <sidplay/builders/hardsid.h>
+#    include <sidplayfp/builders/hardsid.h>
 #  endif
 const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
@@ -358,7 +364,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     // Now setup the sid emulation
     switch (emu)
     {
-#ifdef HAVE_SIDPLAY_BUILDERS_RESID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     case EMU_RESID:
     {
 #ifdef HAVE_EXCEPTIONS
@@ -377,7 +383,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     }
 #endif // HAVE_LIBRESID_BUILDER
 
-#ifdef HAVE_SIDPLAY_BUILDERS_HARDSID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     case EMU_HARDSID:
     {
 #ifdef HAVE_EXCEPTIONS
@@ -571,7 +577,7 @@ void ConsolePlayer::emuflush ()
 {
     switch (m_driver.sid)
     {
-#ifdef HAVE_SIDPLAY_BUILDERS_HARDSID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     case EMU_HARDSID:
         ((HardSIDBuilder *)m_engCfg.sidEmulation)->flush ();
         break;
