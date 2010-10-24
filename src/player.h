@@ -55,6 +55,7 @@
 #include "config.h"
 
 #include <sidplay/sidplay2.h>
+#include <sidplay/event.h>
 #ifdef MSVC_HEADER_LOCATIONS
 #include <utils/SidDatabase.h>
 #else
