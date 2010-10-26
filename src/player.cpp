@@ -137,11 +137,11 @@ using std::endl;
 // Previous song select timeout (3 secs)
 #define SID2_PREV_SONG_TIMEOUT 4
 
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 #  ifdef MSVC_HEADER_LOCATIONS
-#   include <builders/resid-builder/resid.h>
+#   include <builders/resid-builder/residfp.h>
 #  else
-#   include <sidplayfp/builders/resid.h>
+#   include <sidplayfp/builders/residfp.h>
 #  endif
 const char ConsolePlayer::RESID_ID[]   = "ReSID";
 #endif
@@ -364,13 +364,13 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     // Now setup the sid emulation
     switch (emu)
     {
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     case EMU_RESID:
     {
 #ifdef HAVE_EXCEPTIONS
-        ReSIDBuilder *rs = new(std::nothrow) ReSIDBuilder( RESID_ID );
+        ReSIDfpBuilder *rs = new(std::nothrow) ReSIDfpBuilder( RESID_ID );
 #else
-        ReSIDBuilder *rs = new ReSIDBuilder( RESID_ID );
+        ReSIDfpBuilder *rs = new ReSIDfpBuilder( RESID_ID );
 #endif
         if (rs)
         {

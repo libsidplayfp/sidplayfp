@@ -1,12 +1,11 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([Makefile.am])
+AC_INIT(sidplayfp,[0.1.0])
+AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR(unix)
 AC_CONFIG_MACRO_DIR(unix)
 AM_CONFIG_HEADER([unix/config.h])
-LT_INIT
+AM_INIT_AUTOMAKE
 
-dnl Setup library CURRENT, REVISION and AGE
-AM_INIT_AUTOMAKE(sidplayfp,[0.1.0])
 
 AC_CANONICAL_HOST
 
@@ -15,6 +14,7 @@ AC_PROG_CC
 AC_PROG_CXX
 
 dnl Initialise Libtool.
+#LT_INIT
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
@@ -110,9 +110,16 @@ AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
 PKG_CHECK_MODULES(SIDPLAY2,[libsidplayfp >= 0.1])
 
-AC_CHECK_HEADERS([sidplayfp/builders/resid.h])
+# hack?
+saveCPPFLAGS=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $SIDPLAY2_CFLAGS"
+
+AC_CHECK_HEADERS([sidplayfp/builders/residfp.h])
 
 AC_CHECK_HEADERS([sidplayfp/builders/hardsid.h])
+
+CPPFLAGS=$saveCPPFLAGS
+
 
 AC_CONFIG_FILES([
 Makefile \

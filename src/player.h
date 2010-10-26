@@ -116,7 +116,7 @@ void displayError (const char *arg0, uint num);
 class ConsolePlayer: private Event
 {
 private:
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     static const char  RESID_ID[];
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
