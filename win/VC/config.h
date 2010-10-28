@@ -3,8 +3,8 @@
 #define _config_h_
 
 /* Define the sidbuilder modules at appropriate */
-#define HAVE_LIBRESID_BUILDER
-#define HAVE_LIBHARDSID_BUILDER
+#define HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+#define HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
 /* Define if your C++ compiler implements exception-handling.  */
 /* #define HAVE_EXCEPTIONS 1 */
@@ -24,9 +24,9 @@
 #define HAVE_MMSYSTEM
 
 /* Name of package */
-#define PACKAGE "sidplay"
+#define PACKAGE "sidplayfp"
 
 /* Version number of package */
-#define VERSION "2.0.8"
+#define VERSION "0.1.0"
 
 #endif // _config_h_

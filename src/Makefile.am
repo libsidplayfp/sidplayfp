@@ -1,14 +1,14 @@
 
 SUBDIRS = audio
 
-AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)/unix \
-$(SIDPLAY2_CFLAGS)
+AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir) \
+$(SIDPLAYFP_CFLAGS)
 
 # The console user interface.
 
-bin_PROGRAMS = sidplay2
+bin_PROGRAMS = sidplayfp
 
-sidplay2_SOURCES = \
+sidplayfp_SOURCES = \
 IniConfig.cpp \
 IniConfig.h \
 args.cpp \
@@ -18,17 +18,21 @@ main.cpp \
 menu.cpp \
 player.cpp \
 player.h \
-libini.h \
+ini/libini.h \
 ini/headings.h \
+ini/headings.i \
 ini/ini.cpp \
 ini/ini.h \
 ini/keys.h \
-ini/list.h
+ini/keys.i \
+ini/list.h \
+ini/list.i \
+ini/types.i
 
-sidplay2_LDADD = ./audio/null/libnull.a \
+sidplayfp_LDADD = ./audio/null/libnull.a \
 ./audio/wav/libwav.a \
 $(AUDIO_DRV) $(AUDIO_LDFLAGS) \
-$(SIDPLAY2_LIBS) \
+$(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS)
 # $(LIBLTDL_LDFLAGS)
 

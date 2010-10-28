@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(sidplayfp,[0.1.0])
 AC_CONFIG_SRCDIR([src/main.cpp])
-AC_CONFIG_AUX_DIR(unix)
-AC_CONFIG_MACRO_DIR(unix)
-AM_CONFIG_HEADER([unix/config.h])
+AC_CONFIG_AUX_DIR([build-aux])
+AC_CONFIG_MACRO_DIR([m4])
+AM_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE
 
 
@@ -108,11 +108,11 @@ MY_CHECK_IOS_OPENMODE
 
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
-PKG_CHECK_MODULES(SIDPLAY2,[libsidplayfp >= 0.1])
+PKG_CHECK_MODULES(SIDPLAYFP,[libsidplayfp >= 0.1])
 
 # hack?
 saveCPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $SIDPLAY2_CFLAGS"
+CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"
 
 AC_CHECK_HEADERS([sidplayfp/builders/residfp.h])
 
@@ -133,8 +133,7 @@ src/audio/null/Makefile \
 src/audio/oss/Makefile \
 src/audio/pulse/Makefile \
 src/audio/wav/Makefile \
-unix/Makefile \
-unix/sidplayfp.spec \
+sidplayfp.spec \
 ])
 
 AC_OUTPUT

@@ -4,8 +4,7 @@
 %define version  @VERSION@
 %define frelease 1
 %define release  %{frelease}
-%define libsidplay2 2.1.0
-%define libsidutils 1.0.2
+%define libsidplayfp 0.1.0
 
 Summary:        A Commodore 64 music player and SID chip emulator.
 Name:           %{name}
@@ -14,15 +13,15 @@ Release:        %{release}
 Source:         %{oname}-%{version}-%{frelease}.tar.bz2
 Copyright:      GPL
 Group:          Applications/Multimedia
-URL:            http://sidplay2.sourceforge.net/
+URL:            http://sourceforge.net/projects/sidplay-residfp/
 BuildRoot:      %{_tmppath}/%{name}-buildroot
 Prefix:         %{_prefix}
-Requires:       libsidplay >= %{libsidplay2} libsidutils >= %{libsidutils}
-BuildRequires:  libsidplay2-devel >= %{libsidplay2} libsidutils-devel >= %{libsidutils}
+Requires:       libsidplayfp >= %{libsidplayfp}
+BuildRequires:  libsidplayfp-devel >= %{libsidplayfp}
 
 %description
-Sidplay2 is the second in the Sidplay series and provides a console front end for the
-libsidplay2 library.  This library is cycle accurate for improved sound reproduction
+Sidplayfp is a fork of Sidplay2 and provides a console front end for the
+libsidplayfp library.  This library is cycle accurate for improved sound reproduction
 and is capable of playing all C64 mono and stereo file formats.  Also supported is a
 full C64 emulation environment, which allows tunes to be taken directly from the C64
 without the need for special modifications.

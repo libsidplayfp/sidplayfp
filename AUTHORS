@@ -1,8 +1,8 @@
-LIBSIDPLAY2 is a C64 music player library which integrates the
-reSID SID chip emulation into a cycle-based emulator environment.
-Copyright (c) 2000 Simon White <sidplay2@email.com>
+SIDPLAYFP is a C64 music player forked from SIDPLAY2.
+Copyright (c) 2000 Simon White
+Copyright (c) 2007-2010 Antti Lankila
 
-This version of the freely available LIBSIDPLAY2 emulator engine source code
+This version of the freely available SIDPLAYFP emulator engine source code
 contains the following contributed or derived work.  In the order they first
 supplied contributions or code was derived from their work:
 
@@ -12,6 +12,8 @@ supplied contributions or code was derived from their work:
     Rainer Sinsch     - For help with the DirectX drivers
     Jarno Paananen    - 16 bit mixer code, Windows
                         MMSYSTEM Drivers
+    Antti Lankila     - Pulse Audio driver
+    Leandro Nini      - build system changes and packaging
 
 Credit where credit is due, so if I missed anyone please let me know.
 
