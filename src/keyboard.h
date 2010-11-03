@@ -29,11 +29,9 @@
 
 #include "config.h"
 
-#ifdef HAVE_MSWINDOWS
+#ifdef _WIN32
 #   include <conio.h>
-#endif
-
-#ifdef HAVE_UNIX
+#else
     int _kbhit (void);
 #endif
 

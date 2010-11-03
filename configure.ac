@@ -25,12 +25,13 @@ dnl Checks what version of Unix we have and soundcard support
 AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h  \
 soundcard.h sys/audio.h sun/audioio.h sun/dbriio.h sys/audioio.h  \
 audio.h dmedia/audio.h sys/soundcard.h sys/asoundlib.h alsa/asoundlib.h \
-pulse/simple.h])
+pulse/simple.h dsound.h])
 
 AH_TOP(
 [/* Define supported audio driver */
 #undef HAVE_HARDSID
 #undef HAVE_ALSA
+#undef HAVE_DIRECTX
 #undef HAVE_MMSYSTEM
 #undef HAVE_OSS
 #undef HAVE_PULSE
@@ -81,15 +82,21 @@ case "$host" in
         AUDIO_LDFLAGS=-lwinmm
         AC_SUBST(AUDIO_LDFLAGS)
         ;;
-    *mingw*) AC_DEFINE(HAVE_MMSYSTEM)
-        # is this -DHAVE_MINGW really necessary? nothing references it locally
-        CXXFLAGS="$CXXFLAGS -DHAVE_MINGW"
-        audiodrv_libadd="./audio/mmsystem/libmmsystem.a"
-        AC_MSG_RESULT(mmsystem)
-        AUDIO_LDFLAGS=-lwinmm
+    *mingw*)
+        if test "$ac_cv_header_dsound_h" == "yes"; then
+            AC_DEFINE(HAVE_DIRECTX)
+            audiodrv_libadd="./audio/directx/libdirectx.a"
+            AC_MSG_RESULT(directx)
+            AUDIO_LDFLAGS="-ldsound -ldxguid"
+        else
+            AC_DEFINE(HAVE_MMSYSTEM)
+            audiodrv_libadd="./audio/mmsystem/libmmsystem.a"
+            AC_MSG_RESULT(mmsystem)
+            AUDIO_LDFLAGS=-lwinmm
+        fi
         AC_SUBST(AUDIO_LDFLAGS)
         ;;
-    *)  AC_MSG_RESULT(wav only)
+    *)  AC_MSG_RESULT([wav only])
         ;;
 esac
 
@@ -128,6 +135,7 @@ doc/en/Makefile \
 src/Makefile \
 src/audio/Makefile \
 src/audio/alsa/Makefile \
+src/audio/directx/Makefile \
 src/audio/mmsystem/Makefile \
 src/audio/null/Makefile \
 src/audio/oss/Makefile \

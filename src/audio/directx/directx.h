@@ -50,7 +50,7 @@
 #   define DIRECTSOUND_VERSION 0x0500       /* version 5.0 */
 #endif
 
-#include <DSound.h>
+#include <dsound.h>
 #include <mmsystem.h>
 
 #include "../AudioBase.h"

@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)
+AM_CPPFLAGS = -I $(top_builddir)
 
 noinst_LIBRARIES = liboss.a
 

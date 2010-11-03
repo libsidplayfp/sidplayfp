@@ -69,7 +69,7 @@ Audio_MMSystem::~Audio_MMSystem()
     close();
 }
 
-float *Audio_MMSystem::open (AudioConfig &cfg, const char *)
+short *Audio_MMSystem::open (AudioConfig &cfg, const char *)
 {
     WAVEFORMATEX  wfm;
 
@@ -161,7 +161,7 @@ Audio_MMSystem_openError:
     return NULL;
 }
 
-float*Audio_MMSystem::write ()
+short*Audio_MMSystem::write ()
 {
     if (!isOpen)
     {
@@ -207,7 +207,7 @@ float*Audio_MMSystem::write ()
 }
 
 // Rev 1.2 (saw) - Changed, see AudioBase.h
-float *Audio_MMSystem::reset (void)
+short *Audio_MMSystem::reset (void)
 {
     if (!isOpen)
         return NULL;

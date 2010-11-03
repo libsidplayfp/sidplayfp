@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir)
+AM_CPPFLAGS = -I $(top_builddir)
 
-SUBDIRS = alsa mmsystem null oss pulse wav
-EXTRA_DIST = directx AudioBase.h AudioConfig.h AudioDrv.h
+SUBDIRS = alsa directx mmsystem null oss pulse wav
+EXTRA_DIST = AudioBase.h AudioConfig.h AudioDrv.h

@@ -1,7 +1,7 @@
 
 SUBDIRS = audio
 
-AM_CPPFLAGS = -DHAVE_UNIX -I $(top_builddir) \
+AM_CPPFLAGS = -I $(top_builddir) \
 $(SIDPLAYFP_CFLAGS)
 
 # The console user interface.

@@ -157,10 +157,10 @@ main_restart:
         goto main_error;
     }
 
-#ifdef HAVE_UNIX
+#ifndef _WIN32
     // Configure terminal to allow direct access to key events
     keyboard_enable_raw ();
-#endif // HAVE_UNIX
+#endif
 
     // Play loop
     for (;;) {
@@ -168,7 +168,7 @@ main_restart:
             break;
     }
 
-#ifdef HAVE_UNIX
+#ifndef _WIN32
     keyboard_disable_raw ();
 #endif
 

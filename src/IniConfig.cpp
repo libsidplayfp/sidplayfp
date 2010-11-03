@@ -60,13 +60,12 @@
 #include "config.h"
 #include "IniConfig.h"
 
-#ifdef HAVE_UNIX
+#ifndef _WIN32
 #   include <sys/types.h>
 #   include <sys/stat.h>  /* mkdir */
 #   include <dirent.h>    /* opendir */
     const char *IniConfig::DIR_NAME  = ".sidplay";
-#endif
-#ifdef _WIN32
+#else
 #   include <windows.h>
     const char *IniConfig::DIR_NAME  = "Application Data/sidplay2";
 #endif
@@ -389,8 +388,7 @@ void IniConfig::read ()
 
 #ifdef _WIN32
     path = (char *) getenv("USERPROFILE");
-#endif
-#ifdef HAVE_UNIX
+#else
     path = (char *) getenv("HOME");
 #endif
 
@@ -404,13 +402,12 @@ void IniConfig::read ()
 
     sprintf(configPath, "%s/%s", path, DIR_NAME);
 
-#ifdef HAVE_UNIX
+#ifndef _WIN32
     // Make sure the config path exists
     if (!opendir(configPath))
         mkdir(configPath, 0755);
-#endif
-#ifdef _WIN32
-    CreateDirectory(configPath, NULL);
+#else
+    CreateDirectoryA(configPath, NULL);
 #endif
 
     /* sprintf on top of itself fails nowadays. */

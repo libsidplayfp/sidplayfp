@@ -45,7 +45,7 @@
 
 #include "keyboard.h"
 
-#ifdef HAVE_UNIX
+#ifndef _WIN32
 // Unix console headers
 #   include <ctype.h>
 // bzero requires memset on some platforms
@@ -77,16 +77,14 @@ enum
 static char keytable[] =
 {
     // Windows Special Cursors
-#ifdef HAVE_MSWINDOWS
+#ifdef _WIN32
     PCK_EXTENDED, PCK_RIGHT,0,    A_RIGHT_ARROW,
     PCK_EXTENDED, PCK_LEFT,0,     A_LEFT_ARROW,
     PCK_EXTENDED, PCK_UP,0,       A_UP_ARROW,
     PCK_EXTENDED, PCK_DOWN,0,     A_DOWN_ARROW,
     PCK_EXTENDED, PCK_HOME,0,     A_HOME,
     PCK_EXTENDED, PCK_END,0,      A_END,
-#endif
-
-#ifdef HAVE_UNIX
+#else
     // Linux Special Keys
     ESC,'[','C',0,          A_RIGHT_ARROW,
     ESC,'[','D',0,          A_LEFT_ARROW,
@@ -234,7 +232,7 @@ int keyboard_decode ()
 }
 
 // Simulate Standard Microsoft Extensions under Unix
-#ifdef HAVE_UNIX
+#ifndef _WIN32
 
 static int infd = -1;
 

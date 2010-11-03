@@ -69,14 +69,19 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     // Article ID: Q124103
     #define MY_bufSize 1024 // buffer size for console window totles
     HWND hwndFound;         // this is whta is returned to the caller
+#ifdef UNICODE
+    WCHAR pszNewWindowTitle[MY_bufSize]; // contains fabricated WindowTitle
+    WCHAR pszOldWindowTitle[MY_bufSize]; // contains original WindowTitle
+#else
     char pszNewWindowTitle[MY_bufSize]; // contains fabricated WindowTitle
     char pszOldWindowTitle[MY_bufSize]; // contains original WindowTitle
+#endif
 
     // fetch curent window title
     GetConsoleTitle (pszOldWindowTitle, MY_bufSize);
 
     // format a "unique" NewWindowTitle
-    wsprintf (pszNewWindowTitle, "%d/%d", GetTickCount (),
+    wsprintf (pszNewWindowTitle, TEXT("%d/%d"), GetTickCount (),
         GetCurrentProcessId ());
 
     // change the window title
@@ -93,7 +98,7 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     return (hwndFound);
 }
 
-float *Audio_DirectX::open (AudioConfig &cfg, const char *name)
+short *Audio_DirectX::open (AudioConfig &cfg, const char *name)
 {
     HWND hwnd;
     // Assume we have a console.  Use other other
@@ -102,7 +107,7 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *name)
     return open (cfg, name, hwnd);
 }
 
-float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
+short *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
 {
     DSBUFFERDESC        dsbdesc;
     LPDIRECTSOUNDBUFFER lpDsbPrimary = 0;
@@ -219,7 +224,7 @@ float *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     cfg.bufSize   = bufSize / 4;
     _settings     = cfg;
     isPlaying     = false;
-    _sampleBuffer = lpvData;
+    _sampleBuffer = (short*)lpvData;
 return _sampleBuffer;
 
 Audio_DirectX_openError:
@@ -228,7 +233,7 @@ Audio_DirectX_openError:
     return NULL;
 }
 
-float *Audio_DirectX::write ()
+short *Audio_DirectX::write ()
 {
     DWORD dwEvt;
     DWORD dwBytes;
@@ -269,11 +274,11 @@ float *Audio_DirectX::write ()
         _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
         return NULL;
     }
-    _sampleBuffer = lpvData;
+    _sampleBuffer = (short*)lpvData;
     return _sampleBuffer;
 }
 
-float *Audio_DirectX::reset (void)
+short *Audio_DirectX::reset (void)
 {
     DWORD dwBytes;
     if (!isOpen)
@@ -293,7 +298,7 @@ float *Audio_DirectX::reset (void)
         _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
         return NULL;
     }
-    _sampleBuffer = lpvData;
+    _sampleBuffer = (short*)lpvData;
     return _sampleBuffer;
 }
 
