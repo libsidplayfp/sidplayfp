@@ -126,7 +126,7 @@ public:
     const console_section&   console      () { return console_s; }
     const audio_section&     audio        () { return audio_s; }
     const emulation_section& emulation    () { return emulation_s; }
-    const sid_filter_t*      filter       (sid2_model_t model);
+    const sid_filterfp_t*      filter       (sid2_model_t model);
 };
 
 #endif // _IniConfig_h_

@@ -441,9 +441,9 @@ IniConfig_read_error:
     status = false;
 }
 
-const sid_filter_t* IniConfig::filter (sid2_model_t model)
+const sid_filterfp_t* IniConfig::filter (sid2_model_t model)
 {
     if (model == SID2_MOS8580)
-        return filter8580.provide ();
-    return filter6581.provide ();
+        return filter8580.providefp ();
+    return filter6581.providefp ();
 }

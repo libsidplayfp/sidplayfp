@@ -121,7 +121,7 @@ short *Audio_MMSystem::open (AudioConfig &cfg, const char *)
             }
 
             /* Lock mixing block memory: */
-            if ( (blocks[i] = (float *)GlobalLock(blockHandles[i])) == NULL )
+            if ( (blocks[i] = (short *)GlobalLock(blockHandles[i])) == NULL )
             {
                 _errorString = "MMSYSTEM ERROR: Can't lock global memory.";
                 goto Audio_MMSystem_openError;

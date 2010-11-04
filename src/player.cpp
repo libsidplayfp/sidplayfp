@@ -378,10 +378,44 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             if (!*rs) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids);
             if (!*rs) goto createSidEmu_error;
+
+            if (m_filter.definition)
+            {
+                rs->filter(m_filter.definition.providefp());
+            }
+            else
+            {
+                /* figure out the model from settings and tuneinfo */
+                sid2_model_t model = m_engCfg.sidModel;
+                if (model == SID2_MODEL_CORRECT)
+                {
+                    switch (m_tune.getInfo().sidModel)
+                    {
+                        case SIDTUNE_SIDMODEL_6581:
+                            model = SID2_MOS6581;
+                            break;
+                        case SIDTUNE_SIDMODEL_8580:
+                            model = SID2_MOS8580;
+                            break;
+                        default:
+                            /* Fuck, libsidplay should tell me which chip it chose
+                            * as I see the code setting it up into tuneinfo, but
+                            * it doesn't seem to work! I'll debug it; for now... */
+                            model = SID2_MOS6581;
+                            break;
+                    }
+                }
+
+                /* NB: NULL means default */
+                const sid_filterfp_t *filter = m_iniCfg.filter(model);
+                rs->filter(filter);
+                if (! *m_engCfg.sidEmulation)
+                    goto createSidEmu_error;
+            }
         }
         break;
     }
-#endif // HAVE_LIBRESID_BUILDER
+#endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     case EMU_HARDSID:
@@ -400,7 +434,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         }
         break;
     }
-#endif // HAVE_LIBHARDSID_BUILDER
+#endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
     default:
         // Emulation Not yet handled
@@ -419,38 +453,8 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     }
 
     if (m_engCfg.sidEmulation) {
-	/* set up SID filter. HardSID just ignores call with def. */
-	m_engCfg.sidEmulation->filter(m_filter.enabled);
-
-	/* if user provided working cmd line definition, use that */
-	if (m_filter.definition) {
-	    m_engCfg.sidEmulation->filter(m_filter.definition.provide());
-	} else {
-	    /* figure out the model from settings and tuneinfo */
-	    sid2_model_t model = m_engCfg.sidModel;
-	    if (model == SID2_MODEL_CORRECT) {
-		switch (m_tune.getInfo().sidModel) {
-		    case SIDTUNE_SIDMODEL_6581:
-			model = SID2_MOS6581;
-			break;
-		    case SIDTUNE_SIDMODEL_8580:
-			model = SID2_MOS8580;
-			break;
-		    default:
-			/* Fuck, libsidplay should tell me which chip it chose
-			 * as I see the code setting it up into tuneinfo, but
-			 * it doesn't seem to work! I'll debug it; for now... */
-			model = SID2_MOS6581;
-			break;
-		}
-	    }
-
-	    /* NB: NULL means default */
-	    const sid_filter_t *filter = m_iniCfg.filter(model);
-	    m_engCfg.sidEmulation->filter(filter);
-	    if (! *m_engCfg.sidEmulation)
-		goto createSidEmu_error;
-	}
+        /* set up SID filter. HardSID just ignores call with def. */
+        m_engCfg.sidEmulation->filter(m_filter.enabled);
     }
 
     return true;
