@@ -98,7 +98,7 @@ short *Audio_MMSystem::open (AudioConfig &cfg, const char *)
     // Rev 1.3 (saw) - Calculate buffer to hold 250ms of data
     bufSize = wfm.nSamplesPerSec / 4 * wfm.nBlockAlign;
 
-    cfg.bufSize = bufSize / 4;
+    cfg.bufSize = bufSize / 2;
     waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
     if ( !waveHandle ) {
         _errorString = "MMSYSTEM ERROR: Can't open wave out device.";

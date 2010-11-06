@@ -221,7 +221,7 @@ short *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     }
 
     // Update the users settings
-    cfg.bufSize   = bufSize / 4;
+    cfg.bufSize   = bufSize / 2;
     _settings     = cfg;
     isPlaying     = false;
     _sampleBuffer = (short*)lpvData;
