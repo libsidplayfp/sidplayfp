@@ -9,14 +9,15 @@ AM_INIT_AUTOMAKE
 
 AC_CANONICAL_HOST
 
+dnl Initialize libtool.
+LT_INIT
+
 dnl Checks for programs.
-AC_PROG_CC
 AC_PROG_CXX
 
-dnl Initialise Libtool.
-#LT_INIT
-AC_LIBTOOL_WIN32_DLL
-AC_PROG_LIBTOOL
+dnl Use C++ for tests.
+AC_LANG([C++])
+
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN
