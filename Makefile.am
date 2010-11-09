@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = foreign
 
 SUBDIRS = doc src
 
-EXTRA_DIST = win \
+EXTRA_DIST = \
 src/ini/AUTHORS \
 src/ini/COPYING \
 src/ini/README

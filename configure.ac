@@ -130,19 +130,18 @@ CPPFLAGS=$saveCPPFLAGS
 
 
 AC_CONFIG_FILES([
-Makefile \
-doc/Makefile \
-doc/en/Makefile \
-src/Makefile \
-src/audio/Makefile \
-src/audio/alsa/Makefile \
-src/audio/directx/Makefile \
-src/audio/mmsystem/Makefile \
-src/audio/null/Makefile \
-src/audio/oss/Makefile \
-src/audio/pulse/Makefile \
-src/audio/wav/Makefile \
-sidplayfp.spec \
+Makefile
+doc/Makefile
+doc/en/Makefile
+src/Makefile
+src/audio/Makefile
+src/audio/alsa/Makefile
+src/audio/directx/Makefile
+src/audio/mmsystem/Makefile
+src/audio/null/Makefile
+src/audio/oss/Makefile
+src/audio/pulse/Makefile
+src/audio/wav/Makefile
 ])
 
 AC_OUTPUT
