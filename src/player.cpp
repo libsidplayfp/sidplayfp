@@ -389,7 +389,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
                 sid2_model_t model = m_engCfg.sidModel;
                 if (model == SID2_MODEL_CORRECT)
                 {
-                    switch (m_tune.getInfo().sidModel)
+                    switch (m_tune.getInfo().sidModel1)
                     {
                         case SIDTUNE_SIDMODEL_6581:
                             model = SID2_MOS6581;

@@ -276,7 +276,7 @@ void ConsolePlayer::menu ()
         cerr << "Filter = "
              << ((m_filter.enabled == true) ? "Yes" : "No");
         cerr << ", Model = "
-             << (info.tuneInfo->sidModel == SID2_MOS8580 ? "8580" : "6581")
+             << (info.tuneInfo->sidModel1 == SID2_MOS8580 ? "8580" : "6581")
              << endl;
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
