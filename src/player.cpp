@@ -139,7 +139,7 @@ using std::endl;
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 #  ifdef MSVC_HEADER_LOCATIONS
-#   include <builders/resid-builder/residfp.h>
+#   include <builders/residfp-builder/residfp.h>
 #  else
 #   include <sidplayfp/builders/residfp.h>
 #  endif
