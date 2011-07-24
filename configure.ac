@@ -38,67 +38,76 @@ AH_TOP(
 #undef HAVE_PULSE
 ])
 
-dnl Audio Subsystem Test
-AC_MSG_CHECKING([which audio subsystem is available])
-audiodrv_libadd=""
-case "$host" in
-    *freebsd*) AC_DEFINE(HAVE_OSS)
-        audiodrv_libadd="./audio/oss/liboss.a"
-        AC_MSG_RESULT(oss)
-        ;;
-    *linux*)
-        # pulse / alsa / OSS -- we should really throw most of this
-        # machine-dependency check away, and just look for the headers and
-        # decide what to compile in based on availability.
-        if test "$ac_cv_header_pulse_simple_h" == "yes"; then
-            AC_DEFINE(HAVE_PULSE)
-            audiodrv_libadd="./audio/pulse/libpulse.a"
-            AC_MSG_RESULT(pulse)
-            AC_CHECK_LIB(pulse, main, [AUDIO_LDFLAGS=-lpulse-simple AC_SUBST(AUDIO_LDFLAGS)])
-        elif test "$ac_cv_header_sys_asoundlib_h" == "yes" ||
+dnl Audio subsystem
+AC_ARG_ENABLE(driver,
+    [AS_HELP_STRING(
+	    [--enable-driver=pulse|alsa|oss|directx|mmsystem|wav],
+	    [which audio driver to use (default is autodetect)])],
+    [
+    ],
+    [enable_driver=autodetect])
+
+if test "$enable_driver" == "autodetect"; then
+    AC_MSG_CHECKING([which audio subsystem to use])
+    case "$host" in
+	*netbsd*|*freebsd*)
+	    enable_driver=oss;;
+	*qnx*)
+	    enable_driver=alsa;;
+	*cygwin*)
+	    enable_driver=mmsystem;;
+	*linux*)
+	    if test "$ac_cv_header_pulse_simple_h" == "yes"; then
+		enable_driver=pulse
+            elif test "$ac_cv_header_sys_asoundlib_h" == "yes" ||
                 test "$ac_cv_header_alsa_asoundlib_h" == "yes"; then
-            AC_DEFINE(HAVE_ALSA)
-            audiodrv_libadd="./audio/alsa/libalsa.a"
-            AC_MSG_RESULT(alsa)
-            AC_CHECK_LIB(asound, main, [AUDIO_LDFLAGS=-lasound AC_SUBST(AUDIO_LDFLAGS)])
-        else
-            AC_DEFINE(HAVE_OSS)
-            audiodrv_libadd="./audio/oss/liboss.a"
-            AC_MSG_RESULT(oss)
-        fi
-        ;;
-    *netbsd*) AC_DEFINE(HAVE_OSS)
-        audiodrv_libadd="./audio/oss/liboss.a"
-        AC_MSG_RESULT(oss)
-        AC_CHECK_LIB(ossaudio, main, [AUDIO_LDFLAGS=-lossaudio AC_SUBST(AUDIO_LDFLAGS)]) 
-        ;;
-    *qnx*) AC_DEFINE(HAVE_ALSA)
+		enable_driver=alsa
+            else
+		enable_driver=oss
+	    fi
+	    ;;
+	*mingw*)
+	    if test "$ac_cv_header_dsound_h" == "yes"; then
+		enable_driver=directx
+            else
+		enable_driver=mmsystem
+            fi
+	    ;;
+	*)
+	    enable_driver="wav"
+	    ;;
+    esac
+    AC_MSG_RESULT($enable_driver (autodetected, use --enable-driver to override))
+fi
+
+case $enable_driver in
+    pulse)
+        AC_DEFINE(HAVE_PULSE)
+        audiodrv_libadd="./audio/pulse/libpulse.a"
+        AC_CHECK_LIB(pulse, main, [AUDIO_LDFLAGS=-lpulse-simple AC_SUBST(AUDIO_LDFLAGS)], [exit 1])
+	;;
+    alsa)
+        AC_DEFINE(HAVE_ALSA)
         audiodrv_libadd="./audio/alsa/libalsa.a"
-        AC_MSG_RESULT(alsa)
-        AC_CHECK_LIB(asound, main, [AUDIO_LDFLAGS=-lasound AC_SUBST(AUDIO_LDFLAGS)])
-        ;;
-    *cygwin*) AC_DEFINE(HAVE_MMSYSTEM)
-        audiodrv_libadd="./audio/mmsystem/libmmsystem.a"
-        AC_MSG_RESULT(mmsystem)
-        AUDIO_LDFLAGS=-lwinmm
-        AC_SUBST(AUDIO_LDFLAGS)
-        ;;
-    *mingw*)
-        if test "$ac_cv_header_dsound_h" == "yes"; then
-            AC_DEFINE(HAVE_DIRECTX)
-            audiodrv_libadd="./audio/directx/libdirectx.a"
-            AC_MSG_RESULT(directx)
-            AUDIO_LDFLAGS="-ldsound -ldxguid"
-        else
-            AC_DEFINE(HAVE_MMSYSTEM)
-            audiodrv_libadd="./audio/mmsystem/libmmsystem.a"
-            AC_MSG_RESULT(mmsystem)
-            AUDIO_LDFLAGS=-lwinmm
-        fi
-        AC_SUBST(AUDIO_LDFLAGS)
-        ;;
-    *)  AC_MSG_RESULT([wav only])
-        ;;
+        AC_CHECK_LIB(asound, main, [AUDIO_LDFLAGS=-lasound AC_SUBST(AUDIO_LDFLAGS)], [exit 1])
+	;;
+    oss)
+	AC_DEFINE(HAVE_OSS)
+        audiodrv_libadd="./audio/oss/liboss.a"
+	AC_CHECK_LIB(ossaudio, main, [AUDIO_LDFLAGS=-lossaudio AC_SUBST(AUDIO_LDFLAGS)], [exit 1])
+	;;
+    directx)
+        AC_DEFINE(HAVE_DIRECTX)
+        audiodrv_libadd="./audio/directx/libdirectx.a"
+        AC_MSG_RESULT(directx)
+        AUDIO_LDFLAGS="-ldsound -ldxguid"
+	;;
+    mmsystem)
+	AC_DEFINE(HAVE_MMSYSTEM)
+	audiodrv_libadd="./audio/mmsystem/libmmsystem.a"
+	AC_MSG_RESULT(mmsystem)
+	AUDIO_LDFLAGS=-lwinmm
+	;;
 esac
 
 AUDIO_DRV="$audiodrv_libadd"
