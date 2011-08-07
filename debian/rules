@@ -48,21 +48,15 @@ clean:
 
 	dh_clean
 
-maintainerclean: clean
-	libtoolize --force --copy
-	aclocal -I unix
-	automake --copy --add-missing
-	autoconf
-
 install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
 
-	# Add here commands to install the package into debian/sidplay.
-	$(MAKE) install prefix=$(CURDIR)/debian/sidplay/usr
-	chrpath -d $(CURDIR)/debian/sidplay/usr/bin/sidplay2
+	# Add here commands to install the package into debian/sidplayfp.
+	$(MAKE) install prefix=$(CURDIR)/debian/sidplayfp/usr
+	chrpath -d $(CURDIR)/debian/sidplayfp/usr/bin/sidplayfp
 
 
 # Build architecture-independent files here.
