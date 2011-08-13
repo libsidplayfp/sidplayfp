@@ -198,11 +198,12 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 m_engCfg.environment = sid2_envPS;
             }
 
-            // New/No filter options
+            // No filter options
             else if (strncmp (&argv[i][1], "nf", 2) == 0)
             {
                 if (argv[i][3] == '\0')
                     m_filter.enabled = false;
+#if 0
                 else
                 {   // New filter
                     // This line will open an existing file
@@ -214,6 +215,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
                         return -1;
                     }
                 }
+#endif
             }
 
             // Newer sid (8580)
@@ -503,7 +505,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -fd          force dual sid environment" << endl
         << " -fs          force samples to a channel (default: uses sid)" << endl
 
-        << " -nf[filter]  no/new SID filter emulation" << endl
+        << " -nf          no SID filter emulation" << endl
         << " -ns[0|1]     (no) MOS 8580 waveforms (default: from tune or cfg)" << endl
 
         << " -o<l|s>      looping and/or single track" << endl

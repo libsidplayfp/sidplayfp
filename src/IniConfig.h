@@ -81,8 +81,10 @@ public:
         bool          clockForced;
         sid2_model_t  sidModel;
         bool          filter;
-        char         *filter6581;
-        char         *filter8580;
+        //char         *filter6581;
+        //char         *filter8580;
+        double        filterCurve6581;
+        int           filterCurve8580;
         uint_least8_t optimiseLevel;
         bool          sidSamples;
     };
@@ -103,6 +105,7 @@ protected:
     void  clear ();
 
     bool  readInt    (ini_fd_t ini, const char *key, int &value);
+    bool  readDouble (ini_fd_t ini, const char *key, double &value);
     bool  readString (ini_fd_t ini, const char *key, char *&str);
     bool  readBool   (ini_fd_t ini, const char *key, bool &boolean);
     bool  readChar   (ini_fd_t ini, const char *key, char &ch);
@@ -112,7 +115,7 @@ protected:
     bool  readConsole   (ini_fd_t ini);
     bool  readAudio     (ini_fd_t ini);
     bool  readEmulation (ini_fd_t ini);
-    bool  readFilters   (const char *ini_file);
+//     bool  readFilters   (const char *ini_file);
 
 public:
     IniConfig  ();
@@ -126,7 +129,7 @@ public:
     const console_section&   console      () { return console_s; }
     const audio_section&     audio        () { return audio_s; }
     const emulation_section& emulation    () { return emulation_s; }
-    const sid_filterfp_t*      filter       (sid2_model_t model);
+//     const sid_filterfp_t*      filter       (sid2_model_t model);
 };
 
 #endif // _IniConfig_h_

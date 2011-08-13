@@ -199,6 +199,8 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         m_engCfg.sidDefault   = SID2_MOS6581;
         m_engCfg.sidSamples   = emulation.sidSamples;
         m_filter.enabled      = emulation.filter;
+        m_filter.filterCurve6581 = emulation.filterCurve6581;
+        m_filter.filterCurve8580 = emulation.filterCurve8580;
     }
 
     // Copy default setting to audio configuration
@@ -378,7 +380,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             if (!*rs) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids);
             if (!*rs) goto createSidEmu_error;
-
+#if 0
             if (m_filter.definition)
             {
                 rs->filter(m_filter.definition.providefp());
@@ -412,6 +414,11 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
                 if (! *m_engCfg.sidEmulation)
                     goto createSidEmu_error;
             }
+#endif
+            if (m_filter.filterCurve6581)
+                rs->filter6581Curve(m_filter.filterCurve6581);
+            if (m_filter.filterCurve8580)
+                rs->filter8580Curve((double)m_filter.filterCurve8580);
         }
         break;
     }

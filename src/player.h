@@ -152,7 +152,9 @@ private:
 
     struct m_filter_t
     {
-        SidFilter      definition;
+//         SidFilter      definition;
+        double         filterCurve6581;
+        int            filterCurve8580;
         bool           enabled;
     } m_filter;
 

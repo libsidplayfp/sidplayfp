@@ -77,8 +77,8 @@ IniConfig::IniConfig ()
 :status(true)
 {   // Initialise everything else
     sidplay2_s.database    = NULL;
-    emulation_s.filter6581 = NULL;
-    emulation_s.filter8580 = NULL;
+//     emulation_s.filter6581 = NULL;
+//     emulation_s.filter8580 = NULL;
     clear ();
 }
 
@@ -116,8 +116,22 @@ void IniConfig::clear ()
     emulation_s.filter        = true;
     emulation_s.sidSamples    = true;
 
-    SAFE_FREE (emulation_s.filter6581);
-    SAFE_FREE (emulation_s.filter8580);
+//     SAFE_FREE (emulation_s.filter6581);
+//     SAFE_FREE (emulation_s.filter8580);
+}
+
+
+bool  IniConfig::readDouble (ini_fd_t ini, const char *key, double &value)
+{
+    double d = value;
+    if (ini_locateKey (ini, key) < 0)
+    {   // Dosen't exist, add it
+        (void) ini_writeString (ini, "");
+    }
+    if (ini_readDouble (ini, &d) < 0)
+        return false;
+    value = d;
+    return true;
 }
 
 
@@ -346,14 +360,16 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
     ret &= readBool (ini, "UseFilter", emulation_s.filter);
 
-    ret &= readString (ini, "Filter6581", emulation_s.filter6581);
-    ret &= readString (ini, "Filter8580", emulation_s.filter8580);
+//     ret &= readString (ini, "Filter6581", emulation_s.filter6581);
+//     ret &= readString (ini, "Filter8580", emulation_s.filter8580);
+    ret &= readDouble (ini, "FilterCurve6581", emulation_s.filterCurve6581);
+    ret &= readInt (ini, "FilterCurve8580", emulation_s.filterCurve8580);
     ret &= readBool   (ini, "SidSamples", emulation_s.sidSamples);
 
     return ret;
 }
 
-
+/*
 bool IniConfig::readFilters (const char *ini_file)
 {
     bool ret = true;
@@ -377,7 +393,7 @@ bool IniConfig::readFilters (const char *ini_file)
 
     return ret;
 }
-
+*/
 
 void IniConfig::read ()
 {
@@ -430,7 +446,7 @@ void IniConfig::read ()
     status &= readEmulation (ini);
     ini_close (ini);
 
-    status &= readFilters (configPath);
+//     status &= readFilters (configPath);
 
 return;
 
@@ -440,10 +456,11 @@ IniConfig_read_error:
     clear ();
     status = false;
 }
-
+/*
 const sid_filterfp_t* IniConfig::filter (sid2_model_t model)
 {
     if (model == SID2_MOS8580)
         return filter8580.providefp ();
     return filter6581.providefp ();
 }
+*/
