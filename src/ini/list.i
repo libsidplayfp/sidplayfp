@@ -129,9 +129,9 @@ int __ini_listEval (ini_t *ini)
  *  Rev   |   Date   |  By   | Comment
  * ----------------------------------------------------------------------------------------------------------------
  ********************************************************************************************************************/
-char *__ini_listRead (ini_t *ini)
+const char *__ini_listRead (ini_t *ini)
 {
-    char *p;
+    const char *p;
 
     // we must read an element from the list
     // Rev 1.2 Changed order of these two ifs as test was performed
