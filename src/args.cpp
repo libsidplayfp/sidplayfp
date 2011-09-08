@@ -358,13 +358,13 @@ int ConsolePlayer::args (int argc, const char *argv[])
             }
 
             // Hardware selection
-#ifdef HAVE_HARDSID_BUILDER
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
             else if (strcmp (&argv[i][1], "-hardsid") == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
                 m_driver.output = OUT_NULL;
             }
-#endif // HAVE_HARDSID_BUILDER
+#endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
             // These are for debug
             else if (strcmp (&argv[i][1], "-none") == 0)
@@ -525,7 +525,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << "              Use 'f' to force the clock by preventing speed fixing" << endl
 
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl;
-#ifdef HAVE_HARDSID_BUILDER
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     {
         HardSIDBuilder hs("");
         if (hs.devices (false))
