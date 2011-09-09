@@ -713,7 +713,7 @@ void ConsolePlayer::stop ()
 // External Timer Event
 void ConsolePlayer::event (void)
 {
-    uint_least32_t seconds = m_engine.time() / m_engine.timebase();
+    uint_least32_t seconds = m_engine.time();
     if ( !m_quietLevel )
     {
         cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
@@ -760,7 +760,7 @@ void ConsolePlayer::event (void)
     }
 
     // Units in C64 clock cycles
-    schedule ((EventContext&) *m_context, 900000, EVENT_CLOCK_PHI1);
+    m_context->schedule (*this, 900000, EVENT_CLOCK_PHI1);
 }
 
 
@@ -798,7 +798,7 @@ void ConsolePlayer::decodeKeys ()
             if (!m_track.single)
             {   // Only select previous song if less than timeout
                 // else restart current song
-                if ((m_engine.time() / m_engine.timebase()) < SID2_PREV_SONG_TIMEOUT)
+                if ((m_engine.time()) < SID2_PREV_SONG_TIMEOUT)
                 {
                     m_track.selected--;
                     if (m_track.selected < 1)
