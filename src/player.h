@@ -156,8 +156,12 @@ private:
     struct m_filter_t
     {
 //         SidFilter      definition;
+        // Filter parameter for reSID
+        double         bias;
+        // Filter parameters for reSIDfp
         double         filterCurve6581;
         int            filterCurve8580;
+
         bool           enabled;
     } m_filter;
 

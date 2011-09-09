@@ -83,6 +83,7 @@ public:
         bool          filter;
         //char         *filter6581;
         //char         *filter8580;
+        double        bias;
         double        filterCurve6581;
         int           filterCurve8580;
         uint_least8_t optimiseLevel;

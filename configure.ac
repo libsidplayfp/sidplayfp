@@ -131,9 +131,7 @@ PKG_CHECK_MODULES(SIDPLAYFP,[libsidplayfp >= 0.3])
 saveCPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"
 
-AC_CHECK_HEADERS([sidplayfp/builders/residfp.h])
-
-AC_CHECK_HEADERS([sidplayfp/builders/hardsid.h])
+AC_CHECK_HEADERS([sidplayfp/builders/residfp.h sidplayfp/builders/resid.h sidplayfp/builders/hardsid.h])
 
 CPPFLAGS=$saveCPPFLAGS
 

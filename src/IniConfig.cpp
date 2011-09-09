@@ -362,6 +362,7 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
 //     ret &= readString (ini, "Filter6581", emulation_s.filter6581);
 //     ret &= readString (ini, "Filter8580", emulation_s.filter8580);
+    ret &= readDouble (ini, "FilterBias", emulation_s.bias);
     ret &= readDouble (ini, "FilterCurve6581", emulation_s.filterCurve6581);
     ret &= readInt (ini, "FilterCurve8580", emulation_s.filterCurve8580);
     ret &= readBool   (ini, "SidSamples", emulation_s.sidSamples);

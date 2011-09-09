@@ -357,6 +357,20 @@ int ConsolePlayer::args (int argc, const char *argv[])
                     m_outfile = &argv[i][4];
             }
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+            else if (strcmp (&argv[i][1], "-residfp") == 0)
+            {
+                m_driver.sid    = EMU_RESIDFP;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+            else if (strcmp (&argv[i][1], "-resid") == 0)
+            {
+                m_driver.sid    = EMU_RESID;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_RESID_H
+
             // Hardware selection
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
             else if (strcmp (&argv[i][1], "-hardsid") == 0)
