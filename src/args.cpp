@@ -141,7 +141,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
     // default arg options
     m_driver.output = OUT_SOUNDCARD;
     m_driver.file   = false;
-    m_driver.sid    = EMU_RESID;
+    m_driver.sid    = EMU_RESIDFP;
 
     // parse command line arguments
     while ((i < argc) && (argv[i] != NULL))

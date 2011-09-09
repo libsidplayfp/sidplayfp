@@ -89,7 +89,7 @@ typedef enum {/* Same as EMU_DEFAULT except no soundcard.
                  Still allows wav generation */
               EMU_NONE = 0,
               /* The following require a soundcard */
-              EMU_DEFAULT, EMU_RESID, EMU_SIDPLAY1,
+              EMU_DEFAULT, EMU_RESIDFP, EMU_RESID,
               /* The following should disable the soundcard */
               EMU_HARDSID, EMU_SIDSTATION, EMU_COMMODORE,
               EMU_SIDSYN, EMU_END} SIDEMUS;
@@ -118,6 +118,9 @@ class ConsolePlayer: private Event
 {
 private:
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+    static const char  RESIDFP_ID[];
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     static const char  RESID_ID[];
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H

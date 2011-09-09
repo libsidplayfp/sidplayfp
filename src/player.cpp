@@ -143,8 +143,18 @@ using std::endl;
 #  else
 #   include <sidplayfp/builders/residfp.h>
 #  endif
+const char ConsolePlayer::RESIDFP_ID[]   = "ReSIDfp";
+#endif
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+#  ifdef MSVC_HEADER_LOCATIONS
+#   include <builders/resid-builder/resid.h>
+#  else
+#   include <sidplayfp/builders/resid.h>
+#  endif
 const char ConsolePlayer::RESID_ID[]   = "ReSID";
 #endif
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #  ifdef MSVC_HEADER_LOCATIONS
 #    include <builders/hardsid-builder/hardsid.h>
@@ -367,12 +377,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     switch (emu)
     {
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
-    case EMU_RESID:
+    case EMU_RESIDFP:
     {
 #ifdef HAVE_EXCEPTIONS
-        ReSIDfpBuilder *rs = new(std::nothrow) ReSIDfpBuilder( RESID_ID );
+        ReSIDfpBuilder *rs = new(std::nothrow) ReSIDfpBuilder( RESIDFP_ID );
 #else
-        ReSIDfpBuilder *rs = new ReSIDfpBuilder( RESID_ID );
+        ReSIDfpBuilder *rs = new ReSIDfpBuilder( RESIDFP_ID );
 #endif
         if (rs)
         {
@@ -423,6 +433,28 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+    case EMU_RESID:
+    {
+#ifdef HAVE_EXCEPTIONS
+        ReSIDBuilder *rs = new(std::nothrow) ReSIDBuilder( RESID_ID );
+#else
+        ReSIDBuilder *rs = new ReSIDfpBuilder( RESID_ID );
+#endif
+        if (rs)
+        {
+            m_engCfg.sidEmulation = rs;
+            if (!*rs) goto createSidEmu_error;
+            rs->create ((m_engine.info ()).maxsids);
+            if (!*rs) goto createSidEmu_error;
+
+            if (m_filter.bias)
+                rs->bias(m_filter.bias);
+        }
+        break;
+    }
+#endif // HAVE_SIDPLAYFP_BUILDERS_RESID_H
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     case EMU_HARDSID:
