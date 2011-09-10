@@ -8,8 +8,8 @@ SIDPLAYFP \- Sidplay is SID-chip emulator for playing Commodore 64 music.
 .I [ OPTIONS... ]
 .B <datafile>
 .SH DESCRIPTION
-Sidplay is a music player that emulates various components from a Commodore 64 (C64) computer.  The result is a program which can load and execute C64 machine code programs which produce music and sound.  This page covers both Sidplay versions 1 and 2, Sidplay being an frame based emulation capable of playback on low  specification PCs.  Sidplayfp on the other hand has been designed for accuracy which results in a much higher cpu usage.  Additional playback modes have however been provided to allow playback on low specification machines at the cost of accuracy, but it still has a higher cpu demand than Sidplay.
-.SH COMMON OPTIONS
+Sidplayfp is a music player that emulates various components from a Commodore 64 (C64) computer.  The result is a program which can load and execute C64 machine code programs which produce music and sound.  Sidplayfp has been designed for accuracy which results in a much higher cpu usage.  Additional playback modes have however been provided to allow playback on low specification machines at the cost of accuracy, but it still has a higher cpu demand than Sidplay.
+.SH SIDPLAYFP OPTIONS
 .TP
 \fB\--help|-h\fR
 Display help.
@@ -31,9 +31,6 @@ Stereo Hardware support.  For Sidplay the channels for the sid will be split int
 .TP
 \fB\-v\fR
 Verbose output while playing.
-
-
-.SH SIDPLAYFP OPTIONS
 .TP
 \fB\-b<num>\fR
 Set start time in [mins]:secs format (compatible with sid2wav).
@@ -80,8 +77,20 @@ Set play length in [mins]:secs format (0 is endless).
 \fB\-v<n|p>[f]\fR
 Set VIC clock speed.  'n' is NTSC (America, 60Hz) and 'p' is PAL (Europe, 50Hz).  Providing an 'f' will prevent speed fixing that tries to compensate automatically for the speed difference.  Removing speed speed fixing simulates what happens on a real C64.  Options can be written as: -vnf or -vn -vf.
 .TP
+\fB\-r<i|r>[f]\fR
+Set resampling mode.  'i' is interpolation (less expensive) and 'r' resampling (accurate).  Providing an 'f' will provide faster resampling sacrificing quality.  Fast resampling is available only for reSID emulation.  Options can be written as: -rif or -ri -rf.
+.TP
 \fB\-w[name]|--wav[name]\fR
 Create WAV-file.  The default output filename is <datafile>[n].wav where [n] is the tune number should there be more than one in the sid.  This allows batch conversion of sid tunes without them overwriting each other.  By providing a name you override this default behavior.  The output file will be <name> with no tune number is added and <name> IS NOT checked for or appended with a legal wav file extension.
+.TP
+\fB\--resid\fR
+Use Dag Lem's reSID emulation engine.
+.TP
+\fB\--residfp\fR
+Use Antti Lankila's reSIDfp emulation engine.
+.TP
+\fB\--hardsid\fR
+Use HardSID device.
 
 .RS
 .SH NOTES
