@@ -116,6 +116,10 @@ void IniConfig::clear ()
     emulation_s.filter        = true;
     emulation_s.sidSamples    = true;
 
+    emulation_s.bias            = 0.0;
+    emulation_s.filterCurve6581 = 0.0;
+    emulation_s.filterCurve8580 = 0;
+
 //     SAFE_FREE (emulation_s.filter6581);
 //     SAFE_FREE (emulation_s.filter8580);
 }
