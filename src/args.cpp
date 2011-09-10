@@ -293,6 +293,26 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 m_timer.valid = true;
             }
 
+            // Resampling Options ----------
+            else if (strcmp (&argv[i][1], "rif") == 0)
+            {
+                m_engCfg.samplingMethod = SID2_INTERPOLATE;
+                m_engCfg.fastSampling = true;
+            }
+            else if (strcmp (&argv[i][1], "rrf") == 0)
+            {
+                m_engCfg.samplingMethod = SID2_RESAMPLE_INTERPOLATE;
+                m_engCfg.fastSampling = true;
+            }
+            else if (strcmp (&argv[i][1], "ri") == 0)
+            {
+                m_engCfg.samplingMethod = SID2_INTERPOLATE;
+            }
+            else if (strcmp (&argv[i][1], "rr") == 0)
+            {
+                m_engCfg.samplingMethod = SID2_RESAMPLE_INTERPOLATE;
+            }
+
             // Video/Verbose Options
             else if (strcmp (&argv[i][1], "vnf") == 0)
             {
@@ -537,6 +557,9 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -<v|q>       verbose or quiet (no time display) output" << endl
         << " -v[p|n][f]   set VIC PAL/NTSC clock speed (default: defined by song)" << endl
         << "              Use 'f' to force the clock by preventing speed fixing" << endl
+
+        << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
+        << "              Use 'f' to enable fast resampling (only for reSID)" << endl
 
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl;
 
