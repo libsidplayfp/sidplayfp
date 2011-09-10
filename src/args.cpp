@@ -539,6 +539,15 @@ void ConsolePlayer::displayArgs (const char *arg)
         << "              Use 'f' to force the clock by preventing speed fixing" << endl
 
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl;
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+    out << " --residfp    use reSIDfp emulation (default)" << endl;
+#endif
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+    out << " --resid      use reSID emulation" << endl;
+#endif
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     {
         HardSIDBuilder hs("");
