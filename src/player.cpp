@@ -450,8 +450,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             rs->create ((m_engine.info ()).maxsids);
             if (!*rs) goto createSidEmu_error;
 
-            if (m_filter.bias)
-                rs->bias(m_filter.bias);
+            rs->bias(m_filter.bias);
         }
         break;
     }
