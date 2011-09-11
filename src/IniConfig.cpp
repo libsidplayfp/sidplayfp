@@ -172,15 +172,13 @@ bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
         return false;
 
     if (ini_readString (ini, ret, (uint) length) < 0)
-        goto IniCofig_readString_error;
+    {
+        free (ret);
+        return false;
+    }
 
     str = ret;
 return true;
-
-IniCofig_readString_error:
-    if (str)
-        free (str);
-    return false;
 }
 
 
@@ -404,7 +402,7 @@ void IniConfig::read ()
 {
     char *path = NULL;
     ini_fd_t ini  = 0;
-    char   *configPath;
+    char   *configPath = 0;
     size_t  length;
 
 #ifdef _WIN32
@@ -456,6 +454,7 @@ void IniConfig::read ()
 return;
 
 IniConfig_read_error:
+    free(configPath);
     if (ini)
         ini_close (ini);
     clear ();
