@@ -64,12 +64,12 @@
 #   include <sys/types.h>
 #   include <sys/stat.h>  /* mkdir */
 #   include <dirent.h>    /* opendir */
-    const char *IniConfig::DIR_NAME  = ".sidplay";
+    const char *IniConfig::DIR_NAME  = ".config/sidplayfp";
 #else
 #   include <windows.h>
-    const char *IniConfig::DIR_NAME  = "Application Data/sidplay2";
+    const char *IniConfig::DIR_NAME  = "Application Data/sidplayfp";
 #endif
-const char *IniConfig::FILE_NAME = "sidplay2.ini";
+const char *IniConfig::FILE_NAME = "sidplayfp.ini";
 
 #define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
 
