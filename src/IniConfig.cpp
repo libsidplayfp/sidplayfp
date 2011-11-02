@@ -54,6 +54,7 @@
  *
  ***************************************************************************/
 
+#include <string>
 #include <stdlib.h>
 #include <string.h>
 #include <sidplayfp/sidplay2.h>
@@ -64,7 +65,7 @@
 #   include <sys/types.h>
 #   include <sys/stat.h>  /* mkdir */
 #   include <dirent.h>    /* opendir */
-    const char *IniConfig::DIR_NAME  = ".config/sidplayfp";
+    const char *IniConfig::DIR_NAME  = "sidplayfp";
 #else
 #   include <windows.h>
     const char *IniConfig::DIR_NAME  = "Application Data/sidplayfp";
@@ -402,39 +403,40 @@ void IniConfig::read ()
 {
     char *path = NULL;
     ini_fd_t ini  = 0;
-    char   *configPath = 0;
     size_t  length;
+    std::string configPath;
 
 #ifdef _WIN32
-    path = (char *) getenv("USERPROFILE");
-#else
-    path = (char *) getenv("HOME");
-#endif
-
+    path = getenv("USERPROFILE");
     if (!path)
         goto IniConfig_read_error;
+    configPath.append(path);
+#else
+    path = getenv("XDG_CONFIG_HOME");
+    if (!path) {
+        path = getenv("HOME");
+        if (!path)
+            goto IniConfig_read_error;
+        configPath.append(path).append("/.config");
+    } else
+        configPath.append(path);
+#endif
 
-    length = strlen(path) + strlen(DIR_NAME) + strlen(FILE_NAME) + 3;
-    configPath = (char *) malloc(length);
-    if (! configPath)
-        goto IniConfig_read_error;
-
-    sprintf(configPath, "%s/%s", path, DIR_NAME);
+    configPath.append("/").append(DIR_NAME);
 
 #ifndef _WIN32
     // Make sure the config path exists
-    if (!opendir(configPath))
-        mkdir(configPath, 0755);
+    if (!opendir(configPath.c_str()))
+        mkdir(configPath.c_str(), 0755);
 #else
-    CreateDirectoryA(configPath, NULL);
+    CreateDirectoryA(configPath.c_str(), NULL);
 #endif
 
     /* sprintf on top of itself fails nowadays. */
-    strcat(configPath, "/");
-    strcat(configPath, FILE_NAME);
+    configPath.append("/").append(FILE_NAME);
 
     // Opens an existing file or creates a new one
-    ini = ini_open (configPath, "w", ";");
+    ini = ini_open (configPath.c_str(), "w", ";");
 
     // Unable to open file?
     if (!ini)
@@ -451,10 +453,9 @@ void IniConfig::read ()
 
 //     status &= readFilters (configPath);
 
-return;
+    return;
 
 IniConfig_read_error:
-    free(configPath);
     if (ini)
         ini_close (ini);
     clear ();
