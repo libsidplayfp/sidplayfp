@@ -65,11 +65,11 @@
 #   include <sys/types.h>
 #   include <sys/stat.h>  /* mkdir */
 #   include <dirent.h>    /* opendir */
-    const char *IniConfig::DIR_NAME  = "sidplayfp";
 #else
 #   include <windows.h>
-    const char *IniConfig::DIR_NAME  = "Application Data/sidplayfp";
+#   include <shlobj.h>
 #endif
+const char *IniConfig::DIR_NAME  = "sidplayfp";
 const char *IniConfig::FILE_NAME = "sidplayfp.ini";
 
 #define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
@@ -407,18 +407,27 @@ void IniConfig::read ()
     std::string configPath;
 
 #ifdef _WIN32
-    path = getenv("USERPROFILE");
-    if (!path)
-        goto IniConfig_read_error;
-    configPath.append(path);
+    char szPath[MAX_PATH];
+
+    if (SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, szPath)!=S_OK)
+    {
+        path = getenv("USERPROFILE");
+        if (!path)
+            goto IniConfig_read_error;
+        configPath.append(path).append("\\Application Data");
+    }
+    else
+        configPath.append(szPath);
 #else
     path = getenv("XDG_CONFIG_HOME");
-    if (!path) {
+    if (!path)
+    {
         path = getenv("HOME");
         if (!path)
             goto IniConfig_read_error;
         configPath.append(path).append("/.config");
-    } else
+    }
+    else
         configPath.append(path);
 #endif
 
