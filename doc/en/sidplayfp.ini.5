@@ -1,0 +1,125 @@
+.\" Copyright 2012 Leandro Nini (drfiemost@users.sourceforge.net)
+.TH SIDPLAYFP.INI 5 "18 March 2012" "SID Player Application"
+.SH NAME
+\fBsindplayfp.ini\fR \- Configuration file for \fBsidplayfp\fR(1).
+.SH DESCRIPTION
+This page describes the options available for the configuration file of Sidplayfp.
+It is composed by a number of sections, each one composed by a section name, enclosed by square brackets, folowed by a list of \fI<parameter>\fR=\fI<value>\fR lines.
+.TP
+\fBsidplayfp.ini\fR supports the following sections:
+.TP
+\fB[SIDPlay2]\fR \- Generic configuration
+.TP
+\fB[Console]\fR \-
+.TP
+\fB[Audio]\fR \- Audio output configuration
+.TP
+\fB[Emulation]\fR \- Emulation engine parameters
+
+.LP
+All options and values (except for file names and paths) are case insensitive, and are described in detail below.
+.LP
+For any of the following parameter, if it's specified more than one time the last entry encountered will be used.
+.LP
+\fBNOTE\fR: if any of these options is specified outside its section, it will be \fIignored\fR.
+.SH SIDPlay2
+.br
+
+.TP
+\fBVersion\fR=\fIversion\fR
+Configuration version
+.br
+
+.TP
+\fBSonglength Database\fR=\fISonglength DB path\fR
+Path for the Songlength DB
+.br
+
+.TP
+\fBDefault Play Length\fR=\fIseconds\fR
+.br
+
+.TP
+\fBDefault Record Length\fR=\fIseconds\fR
+.br
+.SH Console
+
+.SH Audio
+.TP
+\fBFrequency\fR=
+Playback frequency expressed in Hertz
+.br
+
+.TP
+\fBChannels\fR=
+Number of channels 1 for mono and 2 for stereo playback
+.br
+
+.TP
+\fBBitsPerSample\fR=
+.br
+.SH Emulation
+\fBClockSpeed\fR=
+.br
+
+.TP
+\fBForceSongSpeed\fR=
+.br
+
+.TP
+\fBMOS8580\fR=
+.br
+
+.TP
+\fBUseFilter\fR=
+.br
+
+.TP
+\fBSidSamples\fR=
+.br
+
+.TP
+\fBOptimiseLevel\fR=
+.br
+
+.TP
+\fBFilterBias\fR=<number>
+Controls the filter bias in the ReSID emulation.
+The bias is given in millivolts, and a maximum reasonable control range is approximately -500 to 500
+.br
+
+.TP
+\fBFilterCurve6581\fR=<number>
+Controls the filter curve for the 6581 model in the ReSIDfp emulation.
+Ranges from 0.0 (light) to 1.0 (dark), the default value is 0.5
+.br
+
+.TP
+\fBFilterCurve8580\fR=<number>
+Controls the filter curve for the 8580 model in the ReSIDfp emulation.
+Value is expressed in Hertz and the default is 12500
+.br
+
+.SH "SEE ALSO"
+sidplayfp(1)
+
+.RS
+.SH OTHER INFORMATION
+Sidplayfp Homepage:
+    http://sourceforge.net/projects/sidplay-residfp/
+.br
+Sidplay2 homepage:
+    http://sidplay2.sourceforge.net/
+.br
+High Voltage Sid Collection (HVSC):
+    http://hvsc.c64.org/
+.SH AUTHORS
+sidplay2     - Simon White <sidplay2@yahoo.com>
+.br
+sidplay      - Michael Schwendt <sidplay@geocities.com>
+.br
+reSID engine - Dag Lem <resid@nimrod.no>
+.br
+reSIDfp engine - Antti Lankila <alankila@bel.fi>
+.br
+man-page     - Mikko Kilponen <mikil@uni.kaapeli.net>
