@@ -26,60 +26,75 @@ For any of the following parameter, if it's specified more than one time the las
 .br
 
 .TP
-\fBVersion\fR=\fIversion\fR
+\fBVersion\fR=\fI<number>\fR
 Configuration version
 .br
 
 .TP
-\fBSonglength Database\fR=\fISonglength DB path\fR
+\fBSonglength Database\fR=\fI<path>\fR
 Path for the Songlength DB
 .br
 
 .TP
-\fBDefault Play Length\fR=\fIseconds\fR
+\fBDefault Play Length\fR=\fImm:ss\fR
 .br
 
 .TP
-\fBDefault Record Length\fR=\fIseconds\fR
+\fBDefault Record Length\fR=\fImm:ss\fR
 .br
+
+.TP
+\fBKernal Rom\fR=\fI<path>\fR
+Path for the Kernal Rom file.
+.br
+
+.TP
+\fBBasic Rom\fR=\fI<path>\fR
+Path for the Basic Rom file.
+.br
+
+.TP
+\fBChargen Rom\fR=\fI<path>\fR
+Path for the Character generator Rom file.
+.br
+
 .SH Console
+.TP
+\fBAnsi\fR=\fItrue|false\fR
+Use ANSI escape sequences to provide colored output.
+.br
 
 .SH Audio
 .TP
-\fBFrequency\fR=
+\fBFrequency\fR=\fI<number>\fR
 Playback frequency expressed in Hertz
 .br
 
 .TP
-\fBChannels\fR=
-Number of channels 1 for mono and 2 for stereo playback
+\fBChannels\fR=\fI<number>\fR
+Number of channels, 1 for mono and 2 for stereo playback
 .br
 
 .TP
-\fBBitsPerSample\fR=
+\fBBitsPerSample\fR=\fI<number>\fR
 .br
 .SH Emulation
-\fBClockSpeed\fR=
+\fBClockSpeed\fR=\fI<number>\fR
+Default clock speed, 0 for PAL and 1 for NTSC
 .br
 
 .TP
-\fBForceSongSpeed\fR=
+\fBForceSongSpeed\fR=\fItrue|false\fR
 .br
 
 .TP
-\fBMOS8580\fR=
+\fBMOS8580\fR=\fI<number>\fR
+Default SID chip model, 0 for MOS6581 and 1 for MOS8580
 .br
 
 .TP
-\fBUseFilter\fR=
-.br
-
-.TP
-\fBSidSamples\fR=
-.br
-
-.TP
-\fBOptimiseLevel\fR=
+\fBUseFilter\fR=\fItrue|false\fR
+Enable/disable the emulation of the SID filter
 .br
 
 .TP
