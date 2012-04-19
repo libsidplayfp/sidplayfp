@@ -38,11 +38,11 @@
 #include "ini/libini.h"
 
 #include <sidplayfp/sidtypes.h>
-#ifdef MSVC_HEADER_LOCATIONS
+/*#ifdef MSVC_HEADER_LOCATIONS
 #include <SidFilter.h>
 #else
 #include <sidplayfp/SidFilter.h>
-#endif
+#endif*/
 
 class IniConfig
 {
@@ -99,8 +99,8 @@ protected:
     struct    console_section   console_s;
     struct    audio_section     audio_s;
     struct    emulation_section emulation_s;
-    SidFilter filter6581;
-    SidFilter filter8580;
+    //SidFilter filter6581;
+    //SidFilter filter8580;
 
 protected:
     void  clear ();
