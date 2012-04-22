@@ -214,13 +214,6 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         m_filter.filterCurve8580 = emulation.filterCurve8580;
     }
 
-    // Copy default setting to audio configuration
-    m_driver.cfg.channels = 1; // Mono
-    if (m_engCfg.playback == sid2_stereo)
-        m_driver.cfg.channels = 2;
-    m_driver.cfg.frequency = m_engCfg.frequency;
-    m_driver.cfg.precision = m_precision;
-
     createOutput (OUT_NULL, NULL);
     createSidEmu (EMU_NONE);
 }
