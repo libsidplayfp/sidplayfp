@@ -37,7 +37,6 @@
 
 #include "ini/libini.h"
 
-#include <sidplayfp/sidtypes.h>
 /*#ifdef MSVC_HEADER_LOCATIONS
 #include <SidFilter.h>
 #else
