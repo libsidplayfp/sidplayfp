@@ -225,9 +225,23 @@ void ConsolePlayer::menu ()
         consoleColour (white, false);
         cerr << "Filter = "
              << ((m_filter.enabled == true) ? "Yes" : "No");
-        cerr << ", Model = "
-             << (tuneInfo->sidModel1() == SID2_MOS8580 ? "8580" : "6581")
-             << endl;
+        cerr << ", Model = ";
+        switch (tuneInfo->sidModel1())
+        {
+        case SidTuneInfo::SIDMODEL_UNKNOWN:
+            cerr << "UNKNOWN";
+            break;
+        case SidTuneInfo::SIDMODEL_6581:
+            cerr << "6581";
+            break;
+        case SidTuneInfo::SIDMODEL_8580:
+            cerr << "8580";
+            break;
+        case SidTuneInfo::SIDMODEL_ANY:
+            cerr << "ANY";
+            break;
+        }
+        cerr << endl;
 
         if (m_verboseLevel > 1)
         {
