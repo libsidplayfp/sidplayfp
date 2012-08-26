@@ -14,45 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: IniConfig.cpp,v $
- *  Revision 1.12  2004/02/26 18:17:27  s_a_white
- *  Use ini_readBool for boolean parameters rather than ini_readInt.
- *
- *  Revision 1.11  2002/02/18 20:05:52  s_a_white
- *  Fixed for new libini ini_open call.
- *
- *  Revision 1.10  2001/11/16 19:30:45  s_a_white
- *  Libsidutils support update.
- *
- *  Revision 1.9  2001/08/30 21:40:51  s_a_white
- *  libini-1.1.7 update.
- *
- *  Revision 1.8  2001/08/20 18:28:55  s_a_white
- *  MOS8580 fixed so that nothing means correct revision, 0 is 6581 and
- *  1 is 8580.
- *
- *  Revision 1.7  2001/07/14 16:52:56  s_a_white
- *  Removed warning.
- *
- *  Revision 1.6  2001/07/03 17:50:14  s_a_white
- *  External filter no longer supported.  This filter is needed internally by the
- *  library.
- *
- *  Revision 1.5  2001/04/09 17:11:03  s_a_white
- *  Added INI file version number so theres a possibility for automated updates
- *  should the keys/sections change names (or meaning).
- *
- *  Revision 1.4  2001/03/27 19:35:33  s_a_white
- *  Moved default record length for wav files from main.cpp to IniConfig.cpp.
- *
- *  Revision 1.3  2001/03/27 19:00:49  s_a_white
- *  Default record and play lengths can now be set in the sidplay2.ini file.
- *
- *  Revision 1.2  2001/03/26 18:13:07  s_a_white
- *  Support individual filters for 6581 and 8580.
- *
- ***************************************************************************/
 
 #include <string>
 #include <stdlib.h>
@@ -78,8 +39,6 @@ IniConfig::IniConfig ()
 :status(true)
 {   // Initialise everything else
     sidplay2_s.database    = NULL;
-//     emulation_s.filter6581 = NULL;
-//     emulation_s.filter8580 = NULL;
     sidplay2_s.kernalRom   = NULL;
     sidplay2_s.basicRom    = NULL;
     sidplay2_s.chargenRom  = NULL;
@@ -126,9 +85,6 @@ void IniConfig::clear ()
     emulation_s.bias            = 0.0;
     emulation_s.filterCurve6581 = 0.0;
     emulation_s.filterCurve8580 = 0;
-
-//     SAFE_FREE (emulation_s.filter6581);
-//     SAFE_FREE (emulation_s.filter8580);
 }
 
 
@@ -373,40 +329,12 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
     ret &= readBool (ini, "UseFilter", emulation_s.filter);
 
-//     ret &= readString (ini, "Filter6581", emulation_s.filter6581);
-//     ret &= readString (ini, "Filter8580", emulation_s.filter8580);
     ret &= readDouble (ini, "FilterBias", emulation_s.bias);
     ret &= readDouble (ini, "FilterCurve6581", emulation_s.filterCurve6581);
     ret &= readInt (ini, "FilterCurve8580", emulation_s.filterCurve8580);
 
     return ret;
 }
-
-/*
-bool IniConfig::readFilters (const char *ini_file)
-{
-    bool ret = true;
-    if (emulation_s.filter6581)
-    {   // Try to load the filter
-        filter6581.read (ini_file, emulation_s.filter6581);
-        if (!filter6581)
-        {
-            ret = false;
-        }
-    }
-
-    if (emulation_s.filter8580)
-    {   // Try to load the filter
-        filter8580.read (ini_file, emulation_s.filter8580);
-        if (!filter8580)
-        {
-            ret = false;
-        }
-    }
-
-    return ret;
-}
-*/
 
 void IniConfig::read ()
 {
@@ -469,8 +397,6 @@ void IniConfig::read ()
     status &= readEmulation (ini);
     ini_close (ini);
 
-//     status &= readFilters (configPath);
-
     return;
 
 IniConfig_read_error:
@@ -479,11 +405,3 @@ IniConfig_read_error:
     clear ();
     status = false;
 }
-/*
-const sid_filterfp_t* IniConfig::filter (sid2_model_t model)
-{
-    if (model == SID2_MOS8580)
-        return filter8580.providefp ();
-    return filter6581.providefp ();
-}
-*/

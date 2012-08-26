@@ -14,105 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: player.cpp,v $
- *  Revision 1.31  2004/02/26 18:19:22  s_a_white
- *  Updates for VC7 (use real libstdc++ headers instead of draft ones).
- *
- *  Revision 1.30  2004/02/12 05:58:03  s_a_white
- *  Update argurements and help menu handling.
- *
- *  Revision 1.29  2004/01/31 17:07:45  s_a_white
- *  Support of specifing max sids writes forming sid2crc and experimental
- *  TSID2 library support.
- *
- *  Revision 1.28  2003/12/15 23:34:49  s_a_white
- *  Timebase for timers now obtainable from engine.
- *
- *  Revision 1.27  2003/10/18 12:45:12  s_a_white
- *  no message
- *
- *  Revision 1.26  2003/07/16 06:54:06  s_a_white
- *  Added sid2crc support.
- *
- *  Revision 1.25  2003/06/27 21:07:40  s_a_white
- *  Fixed problem whereby the audio buffer size was ever only calculated once.
- *
- *  Revision 1.24  2003/02/23 08:59:20  s_a_white
- *  Displayed keyboard checks at high quiet levels.   At these quiet levels we
- *  are most likely being run from within another program.
- *
- *  Revision 1.23  2003/02/22 09:41:59  s_a_white
- *  Made crcs be printed for every subtune automatically.
- *
- *  Revision 1.22  2003/02/20 18:50:44  s_a_white
- *  sid2crc support.
- *
- *  Revision 1.21  2003/01/20 16:26:18  s_a_white
- *  Updated for new event scheduler interface.
- *
- *  Revision 1.20  2003/01/14 20:37:10  s_a_white
- *  Updated previous song select timeout to 4 seconds.
- *
- *  Revision 1.19  2003/01/08 08:45:14  s_a_white
- *  Don't configure an emulation if it failed to be created.
- *
- *  Revision 1.18  2002/08/19 17:04:28  s_a_white
- *  Added timeout to decide if previous key should select previous song or
- *  restart current song.
- *
- *  Revision 1.17  2002/06/16 19:44:21  s_a_white
- *  Changing resid filter works again.
- *
- *  Revision 1.16  2002/04/18 22:57:28  s_a_white
- *  Fixed use of track looping/single when creating audio files.
- *
- *  Revision 1.15  2002/03/11 18:02:56  s_a_white
- *  Display errors like sidplay1.
- *
- *  Revision 1.14  2002/03/04 19:30:15  s_a_white
- *  Fix C++ use of nothrow.
- *
- *  Revision 1.13  2002/01/30 00:34:15  s_a_white
- *  Printing builder error message instead of not enough memory.
- *
- *  Revision 1.12  2002/01/29 08:11:43  s_a_white
- *  TSID filename fix
- *
- *  Revision 1.11  2002/01/28 19:40:50  s_a_white
- *  Added TSID support.
- *
- *  Revision 1.10  2002/01/16 19:54:56  s_a_white
- *  Fixed -b command arg with UNKNOWN songlengh.
- *
- *  Revision 1.9  2002/01/16 19:28:55  s_a_white
- *  Now now wraps at 100th minute.
- *
- *  Revision 1.8  2002/01/10 19:39:46  s_a_white
- *  Fixed default to switch to please solaris compiler.
- *
- *  Revision 1.7  2001/12/11 19:38:13  s_a_white
- *  More GCC3 Fixes.
- *
- *  Revision 1.6  2001/12/07 18:22:33  s_a_white
- *  Player quit fixes.
- *
- *  Revision 1.5  2001/12/05 22:22:48  s_a_white
- *  Added playerFast flag.
- *
- *  Revision 1.4  2001/12/03 20:00:24  s_a_white
- *  sidSamples no longer forced for hardsid.
- *
- *  Revision 1.3  2001/12/03 19:17:34  s_a_white
- *  Corrected spelling of BUILDER.
- *
- *  Revision 1.2  2001/12/01 20:16:23  s_a_white
- *  Player changed to ConsolePlayer.
- *
- *  Revision 1.1  2001/11/27 19:10:44  s_a_white
- *  Initial Release.
- *
- ***************************************************************************/
 
 #include <iostream>
 using std::cout;
@@ -411,41 +312,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids);
             if (!rs->getStatus()) goto createSidEmu_error;
-#if 0
-            if (m_filter.definition)
-            {
-                rs->filter(m_filter.definition.providefp());
-            }
-            else
-            {
-                /* figure out the model from settings and tuneinfo */
-                sid2_model_t model = m_engCfg.sidModel;
-                if (model == SID2_MODEL_CORRECT)
-                {
-                    switch (m_tune.getInfo().sidModel1)
-                    {
-                        case SIDTUNE_SIDMODEL_6581:
-                            model = SID2_MOS6581;
-                            break;
-                        case SIDTUNE_SIDMODEL_8580:
-                            model = SID2_MOS8580;
-                            break;
-                        default:
-                            /* Fuck, libsidplay should tell me which chip it chose
-                            * as I see the code setting it up into tuneinfo, but
-                            * it doesn't seem to work! I'll debug it; for now... */
-                            model = SID2_MOS6581;
-                            break;
-                    }
-                }
 
-                /* NB: NULL means default */
-                const sid_filterfp_t *filter = m_iniCfg.filter(model);
-                rs->filter(filter);
-                if (! *m_engCfg.sidEmulation)
-                    goto createSidEmu_error;
-            }
-#endif
             if (m_filter.filterCurve6581)
                 rs->filter6581Curve(m_filter.filterCurve6581);
             if (m_filter.filterCurve8580)

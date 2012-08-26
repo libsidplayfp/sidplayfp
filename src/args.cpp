@@ -14,65 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: args.cpp,v $
- *  Revision 1.18  2004/05/05 23:49:20  s_a_white
- *  Remove the hardsid option from the args list if not sid devices are available.
- *
- *  Revision 1.17  2004/03/01 00:16:56  s_a_white
- *  ostream is part of std namespace.
- *
- *  Revision 1.16  2004/02/26 18:19:22  s_a_white
- *  Updates for VC7 (use real libstdc++ headers instead of draft ones).
- *
- *  Revision 1.15  2004/02/12 05:58:03  s_a_white
- *  Update argurements and help menu handling.
- *
- *  Revision 1.14  2004/01/31 17:07:44  s_a_white
- *  Support of specifing max sids writes forming sid2crc and experimental
- *  TSID2 library support.
- *
- *  Revision 1.13  2003/10/28 08:44:44  s_a_white
- *  Force being able to select MOS6581 from command line.
- *
- *  Revision 1.12  2003/06/27 21:09:00  s_a_white
- *  Better error checking on args and now displays invalid arguments.
- *
- *  Revision 1.11  2003/02/23 08:53:11  s_a_white
- *  Option none nolonger uses the audio hardware (removing realtime delays).
- *  New option nosid allows library profiling without the sid emulation.
- *
- *  Revision 1.10  2003/02/20 18:50:43  s_a_white
- *  sid2crc support.
- *
- *  Revision 1.9  2002/11/06 19:08:46  s_a_white
- *  Added --none to command line for selecting no sid (debug purposes).
- *
- *  Revision 1.8  2002/09/23 21:49:58  s_a_white
- *  Display error message on engine configuration failure.
- *
- *  Revision 1.7  2002/04/18 22:57:28  s_a_white
- *  Fixed use of track looping/single when creating audio files.
- *
- *  Revision 1.6  2002/03/11 18:02:56  s_a_white
- *  Display errors like sidplay1.
- *
- *  Revision 1.5  2002/01/29 08:11:43  s_a_white
- *  TSID filename fix
- *
- *  Revision 1.4  2002/01/29 00:49:49  jpaana
- *  Fixed a typo on in the TSID code
- *
- *  Revision 1.3  2002/01/28 19:40:50  s_a_white
- *  Added TSID support.
- *
- *  Revision 1.2  2001/12/01 20:16:23  s_a_white
- *  Player changed to ConsolePlayer.
- *
- *  Revision 1.1  2001/11/27 19:13:24  s_a_white
- *  Initial Release.
- *
- ***************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -181,19 +122,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
             {
                 if (argv[i][3] == '\0')
                     m_filter.enabled = false;
-#if 0
-                else
-                {   // New filter
-                    // This line will open an existing file
-                    m_filter.enabled = true;
-                    m_filter.definition.read (&(argv[i][3]));
-                    if (!m_filter.definition)
-                    {
-                        displayError (m_filter.definition.error ());
-                        return -1;
-                    }
-                }
-#endif
             }
 
             // Newer sid (8580)

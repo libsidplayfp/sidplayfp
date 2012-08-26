@@ -14,34 +14,11 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: IniConfig.h,v $
- *  Revision 1.5  2001/07/03 17:49:27  s_a_white
- *  External filter no longer supported.  This filter is needed internally by the
- *  library.
- *
- *  Revision 1.4  2001/04/09 17:11:03  s_a_white
- *  Added INI file version number so theres a possibility for automated updates
- *  should the keys/sections change names (or meaning).
- *
- *  Revision 1.3  2001/03/27 19:00:49  s_a_white
- *  Default record and play lengths can now be set in the sidplay2.ini file.
- *
- *  Revision 1.2  2001/03/26 18:13:07  s_a_white
- *  Support individual filters for 6581 and 8580.
- *
- ***************************************************************************/
 
 #ifndef _IniConfig_h_
 #define _IniConfig_h_
 
 #include "ini/libini.h"
-
-/*#ifdef MSVC_HEADER_LOCATIONS
-#include <SidFilter.h>
-#else
-#include <sidplayfp/SidFilter.h>
-#endif*/
 
 class IniConfig
 {
@@ -84,8 +61,6 @@ public:
         sid2_model_t  sidModel;
         bool          forceModel;
         bool          filter;
-        //char         *filter6581;
-        //char         *filter8580;
         double        bias;
         double        filterCurve6581;
         int           filterCurve8580;
@@ -101,8 +76,6 @@ protected:
     struct    console_section   console_s;
     struct    audio_section     audio_s;
     struct    emulation_section emulation_s;
-    //SidFilter filter6581;
-    //SidFilter filter8580;
 
 protected:
     void  clear ();
@@ -118,7 +91,6 @@ protected:
     bool  readConsole   (ini_fd_t ini);
     bool  readAudio     (ini_fd_t ini);
     bool  readEmulation (ini_fd_t ini);
-//     bool  readFilters   (const char *ini_file);
 
 public:
     IniConfig  ();
@@ -132,7 +104,6 @@ public:
     const console_section&   console      () { return console_s; }
     const audio_section&     audio        () { return audio_s; }
     const emulation_section& emulation    () { return emulation_s; }
-//     const sid_filterfp_t*      filter       (sid2_model_t model);
 };
 
 #endif // _IniConfig_h_

@@ -14,40 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: player.h,v $
- *  Revision 1.10  2004/02/12 05:58:03  s_a_white
- *  Update argurements and help menu handling.
- *
- *  Revision 1.9  2004/01/31 17:07:45  s_a_white
- *  Support of specifing max sids writes forming sid2crc and experimental
- *  TSID2 library support.
- *
- *  Revision 1.8  2003/06/27 21:09:37  s_a_white
- *  Constified some of the interfaces.
- *
- *  Revision 1.7  2003/02/20 18:50:45  s_a_white
- *  sid2crc support.
- *
- *  Revision 1.6  2002/01/29 08:11:43  s_a_white
- *  TSID filename fix
- *
- *  Revision 1.5  2002/01/28 19:40:50  s_a_white
- *  Added TSID support.
- *
- *  Revision 1.4  2001/12/05 22:22:48  s_a_white
- *  Added playerFast flag.
- *
- *  Revision 1.3  2001/12/03 19:17:34  s_a_white
- *  Corrected spelling of BUILDER.
- *
- *  Revision 1.2  2001/12/01 20:16:23  s_a_white
- *  Player changed to ConsolePlayer.
- *
- *  Revision 1.1  2001/11/27 19:10:44  s_a_white
- *  Initial Release.
- *
- ***************************************************************************/
 
 #ifndef _player_h_
 #define _player_h_
@@ -157,7 +123,6 @@ private:
 
     struct m_filter_t
     {
-//         SidFilter      definition;
         // Filter parameter for reSID
         double         bias;
         // Filter parameters for reSIDfp

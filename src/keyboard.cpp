@@ -14,34 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: keyboard.cpp,v $
- *  Revision 1.8  2004/02/21 11:24:44  s_a_white
- *  Don't lockup when the keyboard input stream is not a terminal.
- *
- *  Revision 1.7  2002/10/17 21:23:39  s_a_white
- *  Added string.h as some platforms have bzero using memset without having
- *  a valid prototype available.
- *
- *  Revision 1.6  2001/12/07 18:22:57  s_a_white
- *  Added up/down arrow keys for windows.
- *
- *  Revision 1.5  2001/11/16 19:29:37  s_a_white
- *  Warning fixes.
- *
- *  Revision 1.4  2001/07/25 17:10:41  s_a_white
- *  Added 8/2 to speed up/slow down player.
- *
- *  Revision 1.3  2001/07/03 17:47:56  s_a_white
- *  Added A_NONE.
- *
- *  Revision 1.1  2001/01/08 16:41:42  s_a_white
- *  App and Library Seperation
- *
- *  Revision 1.1  2000/12/12 19:13:15  s_a_white
- *  New keyboard handling routines.
- *
- ***************************************************************************/
 
 #include "keyboard.h"
 

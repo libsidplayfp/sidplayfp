@@ -14,53 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-/***************************************************************************
- *  $Log: menu.cpp,v $
- *  Revision 1.14  2004/02/26 18:19:22  s_a_white
- *  Updates for VC7 (use real libstdc++ headers instead of draft ones).
- *
- *  Revision 1.13  2004/02/09 23:42:50  s_a_white
- *  Fixed damaged menu border shown using verbose option.
- *
- *  Revision 1.12  2004/01/31 17:07:45  s_a_white
- *  Support of specifing max sids writes forming sid2crc and experimental
- *  TSID2 library support.
- *
- *  Revision 1.11  2003/10/28 00:26:00  s_a_white
- *  Display power on cycles count for a loaded song.
- *
- *  Revision 1.10  2003/09/14 13:47:41  s_a_white
- *  Show whether the environment was forcefully changed from the default
- *  or user requested.
- *
- *  Revision 1.9  2003/07/16 06:53:12  s_a_white
- *  Only display tune description strings if they have been provided.
- *
- *  Revision 1.8  2003/02/20 18:50:44  s_a_white
- *  sid2crc support.
- *
- *  Revision 1.7  2002/11/22 08:35:16  s_a_white
- *  Renamed "Copyright" to "Released".
- *
- *  Revision 1.6  2002/03/04 19:28:28  s_a_white
- *  Displays more details about sidplay2s psid driver.
- *
- *  Revision 1.5  2002/01/29 21:55:29  s_a_white
- *  Display actual environment mode instead of requested one.
- *
- *  Revision 1.4  2002/01/28 19:40:50  s_a_white
- *  Added TSID support.
- *
- *  Revision 1.3  2002/01/15 19:12:24  s_a_white
- *  PSID2NG update.
- *
- *  Revision 1.2  2001/12/01 20:16:23  s_a_white
- *  Player changed to ConsolePlayer.
- *
- *  Revision 1.1  2001/11/27 19:10:44  s_a_white
- *  Initial Release.
- *
- ***************************************************************************/
 
 #include <ctype.h>
 #include <iostream>
@@ -286,24 +239,6 @@ void ConsolePlayer::menu ()
         }
     }
     consoleTable (tableEnd);
-
-/*
-    cerr << "Credits:\n";
-    const char **p;
-    const char  *credit;
-    p = m_engine.credits ();
-    while (*p)
-    {
-        credit = *p;
-        while (*credit)
-        {
-            cerr << credit << endl;
-            credit += strlen (credit) + 1;
-        }
-        cerr << endl;
-        p++;
-    }
-*/
 
     if (m_driver.file)
         cerr << "Creating audio file, please wait...";
