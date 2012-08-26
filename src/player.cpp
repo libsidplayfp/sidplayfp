@@ -274,7 +274,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     if (title == NULL)
     {
         size_t length, i;
-        title  = tuneInfo->dataFileName;
+        title  = tuneInfo->dataFileName();
         length = strlen (title);
         i      = length;
         while (i > 0)
@@ -300,8 +300,8 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         name[i] = '\0';
 
         // Change name based on subtune
-        if (tuneInfo->songs > 1)
-            sprintf (&name[i], "[%u]", tuneInfo->currentSong);
+        if (tuneInfo->songs() > 1)
+            sprintf (&name[i], "[%u]", tuneInfo->currentSong());
         strcat (&name[i], m_driver.device->extension ());
         title = name;
     }
@@ -500,8 +500,6 @@ createSidEmu_error:
 
 bool ConsolePlayer::open (void)
 {
-    const SidTuneInfo *tuneInfo;
-
     if ((m_state & ~playerFast) == playerRestart)
     {
         if (m_quietLevel < 2)
@@ -520,9 +518,9 @@ bool ConsolePlayer::open (void)
     }
 
     // Get tune details
-    tuneInfo = (m_engine.info ()).tuneInfo;
+    const SidTuneInfo *tuneInfo = m_tune.getInfo ();
     if (!m_track.single)
-        m_track.songs = tuneInfo->songs;
+        m_track.songs = tuneInfo->songs();
     if (!createOutput (m_driver.output, tuneInfo))
         return false;
     if (!createSidEmu (m_driver.sid))
@@ -552,7 +550,7 @@ bool ConsolePlayer::open (void)
     }
 
     // Set up the play timer
-    m_context = (m_engine.info()).eventContext;
+    m_context = m_engine.getEventContext();
     m_timer.stop  = 0;
     m_timer.stop += m_timer.length;
 

@@ -80,7 +80,7 @@ using std::setfill;
 void ConsolePlayer::menu ()
 {
     const sid2_info_t &info     = m_engine.info ();
-    const SidTuneInfo &tuneInfo = *info.tuneInfo;
+    const SidTuneInfo *tuneInfo = m_tune.getInfo();
 
     if (m_quietLevel > 1)
         return;
@@ -110,39 +110,36 @@ void ConsolePlayer::menu ()
     }
 
     consoleTable (tableSeperator);
-    if (tuneInfo.numberOfInfoStrings > 0)
+
+    if (tuneInfo->numberOfInfoStrings() == 3) //FIXME
     {
-        if (!tuneInfo.musPlayer && (tuneInfo.numberOfInfoStrings == 3))
-        {
-            consoleTable  (tableMiddle);
-            consoleColour (cyan, true);
-            cerr << " Title        : ";
-            consoleColour (magenta, true);
-            cerr << tuneInfo.infoString[0] << endl;
-            consoleTable  (tableMiddle);
-            consoleColour (cyan, true);
-            cerr << " Author       : ";
-            consoleColour (magenta, true);
-            cerr << tuneInfo.infoString[1] << endl;
-            consoleTable  (tableMiddle);
-            consoleColour (cyan, true);
-            cerr << " Released     : ";
-            consoleColour (magenta, true);
-            cerr << tuneInfo.infoString[2] << endl;
-        }
-        else
-        {
-            for (int i = 0; i < tuneInfo.numberOfInfoStrings; i++)
-            {
-                consoleTable  (tableMiddle);
-                consoleColour (cyan, true);
-                cerr << " Description  : ";
-                consoleColour (magenta, true);
-                cerr << tuneInfo.infoString[i] << endl;
-            }
-        }
-        consoleTable (tableSeperator);
+        consoleTable  (tableMiddle);
+        consoleColour (cyan, true);
+        cerr << " Title        : ";
+        consoleColour (magenta, true);
+        cerr << tuneInfo->infoString(0) << endl;
+        consoleTable  (tableMiddle);
+        consoleColour (cyan, true);
+        cerr << " Author       : ";
+        consoleColour (magenta, true);
+        cerr << tuneInfo->infoString(1) << endl;
+        consoleTable  (tableMiddle);
+        consoleColour (cyan, true);
+        cerr << " Released     : ";
+        consoleColour (magenta, true);
+        cerr << tuneInfo->infoString(2) << endl;
     }
+
+    for (int i = 0; i < tuneInfo->numberOfCommentStrings(); i++)
+    {
+        consoleTable  (tableMiddle);
+        consoleColour (cyan, true);
+        cerr << " Comment      : ";
+        consoleColour (magenta, true);
+        cerr << tuneInfo->commentString(i) << endl;
+    }
+
+    consoleTable (tableSeperator);
 
     if (m_verboseLevel)
     {
@@ -150,26 +147,26 @@ void ConsolePlayer::menu ()
         consoleColour (green, true);
         cerr << " File format  : ";
         consoleColour (white, true);
-        cerr << tuneInfo.formatString << endl;
+        cerr << tuneInfo->formatString() << endl;
         consoleTable  (tableMiddle);
         consoleColour (green, true);
         cerr << " Filename(s)  : ";
         consoleColour (white, true);
-        cerr << tuneInfo.dataFileName << endl;
+        cerr << tuneInfo->dataFileName() << endl;
         // Second file is only sometimes present
-        if (tuneInfo.infoFileName[0])
+        if (tuneInfo->infoFileName())
         {
             consoleTable  (tableMiddle);
             consoleColour (green, true);
             cerr << "              : ";
             consoleColour (white, true);
-            cerr << tuneInfo.infoFileName << endl;
+            cerr << tuneInfo->infoFileName() << endl;
         }
         consoleTable  (tableMiddle);
         consoleColour (green, true);
         cerr << " Condition    : ";
         consoleColour (white, true);
-        cerr << tuneInfo.statusString << endl;
+        cerr << m_tune.statusString() << endl;
 
 #if HAVE_TSID == 1
         if (!m_tsid)
@@ -198,9 +195,9 @@ void ConsolePlayer::menu ()
                 i += m_track.songs;
         }
         cerr << i << '/' << m_track.songs;
-        cerr << " (tune " << tuneInfo.currentSong << '/'
-             << tuneInfo.songs << '['
-             << tuneInfo.startSong << "])";
+        cerr << " (tune " << tuneInfo->currentSong() << '/'
+             << tuneInfo->songs() << '['
+             << tuneInfo->startSong() << "])";
     }
 
     if (m_track.loop)
@@ -213,7 +210,7 @@ void ConsolePlayer::menu ()
         consoleColour (green, true);
         cerr << " Song Speed   : ";
         consoleColour (white, true);
-        cerr << tuneInfo.speedString << endl;
+        cerr << info.speedString << endl;
     }
 
     consoleTable  (tableMiddle);
@@ -252,20 +249,20 @@ void ConsolePlayer::menu ()
             cerr << "-$" << setw(4) << setfill('0') << info.driverAddr +
                 (info.driverLength - 1);
         }
-        if (tuneInfo.playAddr == 0xffff)
-            cerr << ", SYS = $" << setw(4) << setfill('0') << tuneInfo.initAddr;
+        if (tuneInfo->playAddr() == 0xffff)
+            cerr << ", SYS = $" << setw(4) << setfill('0') << tuneInfo->initAddr();
         else
-            cerr << ", INIT = $" << setw(4) << setfill('0') << tuneInfo.initAddr;
+            cerr << ", INIT = $" << setw(4) << setfill('0') << tuneInfo->initAddr();
         cerr << endl;
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << "              : ";
         consoleColour (white, false);
-        cerr << "LOAD   = $" << setw(4) << setfill('0') << tuneInfo.loadAddr;
-        cerr << "-$"         << setw(4) << setfill('0') << tuneInfo.loadAddr +
-            (tuneInfo.c64dataLen - 1);
-        if (tuneInfo.playAddr != 0xffff)
-            cerr << ", PLAY = $" << setw(4) << setfill('0') << tuneInfo.playAddr;
+        cerr << "LOAD   = $" << setw(4) << setfill('0') << tuneInfo->loadAddr();
+        cerr << "-$"         << setw(4) << setfill('0') << tuneInfo->loadAddr() +
+            (tuneInfo->c64dataLen() - 1);
+        if (tuneInfo->playAddr() != 0xffff)
+            cerr << ", PLAY = $" << setw(4) << setfill('0') << tuneInfo->playAddr();
         cerr << dec << endl;
         cerr.unsetf(std::ios::uppercase);
 
@@ -276,7 +273,7 @@ void ConsolePlayer::menu ()
         cerr << "Filter = "
              << ((m_filter.enabled == true) ? "Yes" : "No");
         cerr << ", Model = "
-             << (info.tuneInfo->sidModel1 == SID2_MOS8580 ? "8580" : "6581")
+             << (tuneInfo->sidModel1() == SID2_MOS8580 ? "8580" : "6581")
              << endl;
 
         if (m_verboseLevel > 1)
