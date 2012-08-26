@@ -53,7 +53,7 @@
 #define _player_h_
 
 #include "config.h"
-
+#include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplay2.h>
 #include <sidplayfp/event.h>
 #ifdef MSVC_HEADER_LOCATIONS
