@@ -323,12 +323,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 else
                     m_verboseLevel = atoi(&argv[i][2]);
             }
-            else if (strncmp (&argv[i][1], "-crc", 4) == 0)
-            {
-                m_crc = ~0;
-                if (argv[i][5] == '=')
-                    m_crc = (uint_least32_t) atoi(&argv[i][6]);
-            }
             else if (strncmp (&argv[i][1], "-delay=", 7) == 0)
             {
                 m_engCfg.powerOnDelay = (uint_least16_t) atoi(&argv[i][8]);
@@ -449,13 +443,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
     if (m_track.single)
         m_track.songs = 1;
 
-    // CRC handling (remove random behaviour)
-    if (m_crc)
-    {
-        m_engCfg.powerOnDelay = 0;
-        m_engCfg.sid2crcCount = m_crc;
-    }
-
     // If user provided no time then load songlength database
     // and set default lengths incase it's not found in there.
     {
@@ -571,7 +558,6 @@ void ConsolePlayer::displayDebugArgs ()
 
     out << "Debug Options:" << endl
         << " --cpu-debug   display cpu register and assembly dumps" << endl
-        << " --crc[=<num>] generate CRC for [<num>] sid writes (default: 0)" << endl
         << " --delay=<num> simulate c64 power on delay" << endl
 
         << " --none        no audio output device" << endl

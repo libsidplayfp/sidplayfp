@@ -145,7 +145,6 @@ private:
     uint_least8_t      m_quietLevel;
     uint_least8_t      m_verboseLevel;
 
-    uint_least32_t     m_crc;
     bool               m_cpudebug;
 
     bool    v1mute, v2mute, v3mute;

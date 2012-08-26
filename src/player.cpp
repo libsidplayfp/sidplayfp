@@ -174,7 +174,6 @@ ConsolePlayer::ConsolePlayer (const char * const name)
  m_context(NULL),
  m_quietLevel(0),
  m_verboseLevel(0),
- m_crc(0),
  m_cpudebug(false)
 {   // Other defaults
     m_filename       = "";
@@ -661,14 +660,6 @@ bool ConsolePlayer::play ()
     default:
         if (m_quietLevel < 2)
             cerr << endl;
-        if (m_crc)
-        {
-            const SidTuneInfo *tuneInfo = (m_engine.info ()).tuneInfo;
-            cout << std::setw(8) << std::setfill('0') << std::hex
-                 << (m_engine.info ()).sid2crc << " : " << std::dec
-                 << m_filename << " - song " << tuneInfo->currentSong
-                 << "/" << tuneInfo->songs << endl;
-        }
         m_engine.stop ();
 #if HAVE_TSID == 1
         if (m_tsid)
@@ -717,10 +708,6 @@ void ConsolePlayer::event (void)
     if (seconds != m_timer.current)
     {
         m_timer.current = seconds;
-
-        // Handle exiting on crc completion
-        if (m_crc && (m_crc == (m_engine.info ()).sid2crcCount))
-            m_timer.stop = seconds;
 
         if (seconds == m_timer.start)
         {   // Switch audio drivers.
