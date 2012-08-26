@@ -434,6 +434,7 @@ bool ConsolePlayer::open (void)
     m_speed.current   = m_speed.max;
     m_engine.fastForward (100 * m_speed.current);
     v1mute = v2mute = v3mute = false;
+    v4mute = v5mute = v6mute = false;
 
     // As yet we don't have a required songlength
     // so try the songlength database
@@ -733,7 +734,21 @@ void ConsolePlayer::decodeKeys ()
             v3mute = !v3mute;
             m_engine.mute(0, 2, v3mute);
         break;
-        //TODO add mute for second SID
+
+        case A_TOGGLE_VOICE4:
+            v4mute = !v4mute;
+            m_engine.mute(1, 0, v4mute);
+        break;
+
+        case A_TOGGLE_VOICE5:
+            v5mute = !v5mute;
+            m_engine.mute(1, 1, v5mute);
+        break;
+
+        case A_TOGGLE_VOICE6:
+            v6mute = !v6mute;
+            m_engine.mute(1, 2, v6mute);
+        break;
 
         case A_TOGGLE_FILTER:
             m_filter.enabled = !m_filter.enabled;

@@ -114,6 +114,7 @@ private:
     bool               m_cpudebug;
 
     bool    v1mute, v2mute, v3mute;
+    bool    v4mute, v5mute, v6mute;
 
     int     m_precision;
 
