@@ -124,26 +124,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
                     m_filter.enabled = false;
             }
 
-            // Newer sid (8580)
-            else if (strncmp (&argv[i][1], "ns", 2) == 0)
-            {
-                switch (argv[i][3])
-                {
-                case '\0':
-                case '1':
-                    m_engCfg.sidDefault = SID2_MOS8580;
-                    m_engCfg.forceModel = true;
-                    break;
-                // No new sid so use old one (6581)
-                case '0':
-                    m_engCfg.sidDefault = SID2_MOS6581;
-                    m_engCfg.forceModel = true;
-                    break;
-                default:
-                    err = true;
-                }
-            }
-
             // Track options
             else if (strncmp (&argv[i][1], "ols", 3) == 0)
             {
@@ -219,6 +199,26 @@ int ConsolePlayer::args (int argc, const char *argv[])
             else if (strcmp (&argv[i][1], "rr") == 0)
             {
                 m_engCfg.samplingMethod = SID2_RESAMPLE_INTERPOLATE;
+            }
+
+            // SID model options
+            else if (strcmp (&argv[i][1], "mof") == 0)
+            {
+                m_engCfg.sidDefault = SID2_MOS6581;
+                m_engCfg.forceModel = true;
+            }
+            else if (strcmp (&argv[i][1], "mnf") == 0)
+            {
+                m_engCfg.sidDefault = SID2_MOS8580;
+                m_engCfg.forceModel = true;
+            }
+            else if (strcmp (&argv[i][1], "mo") == 0)
+            {
+                m_engCfg.sidDefault = SID2_MOS6581;
+            }
+            else if (strcmp (&argv[i][1], "mn") == 0)
+            {
+                m_engCfg.sidDefault = SID2_MOS8580;
             }
 
             // Video/Verbose Options
@@ -434,7 +434,6 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -fd          force dual sid environment" << endl
 
         << " -nf          no SID filter emulation" << endl
-        << " -ns[0|1]     (no) MOS 8580 waveforms (default: from tune or cfg)" << endl
 
         << " -o<l|s>      looping and/or single track" << endl
         << " -o<num>      start track (default: preset)" << endl
@@ -451,6 +450,9 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -<v|q>       verbose or quiet (no time display) output" << endl
         << " -v[p|n][f]   set VIC PAL/NTSC clock speed (default: defined by song)" << endl
         << "              Use 'f' to force the clock by preventing speed fixing" << endl
+
+        << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
+        << "              Use 'f' to force the model" << endl
 
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl

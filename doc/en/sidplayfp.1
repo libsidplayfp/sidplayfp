@@ -21,9 +21,6 @@ Set frequency in Hz (default: 44100).
 \fB\-nf\fR
 No filter emulation.  This will reduce CPU overhead at the cost of reduced sound quality.
 .TP
-\fB\-ns\fR
-Emulate MOS8580 waveforms (default: MOS6581).
-.TP
 \fB\-o<num>\fR
 Select track number (default: preset).
 .TP
@@ -69,6 +66,9 @@ Set play length in [mins:]secs format (0 is endless).
 .TP
 \fB\-v<n|p>[f]\fR
 Set VIC clock speed.  'n' is NTSC (America, 60Hz) and 'p' is PAL (Europe, 50Hz).  Providing an 'f' will prevent speed fixing that tries to compensate automatically for the speed difference.  Removing speed speed fixing simulates what happens on a real C64.  Options can be written as: -vnf or -vn -vf.
+.TP
+\fB\-m<o|n>[f]\fR
+Set SID chip model.  'o' is the old 6581 and 'n' is the new 8580.  Providing an 'f' will force the selected model overriding the one specified from the tune.
 .TP
 \fB\-r<i|r>[f]\fR
 Set resampling mode.  'i' is interpolation (less expensive) and 'r' resampling (accurate).  Providing an 'f' will provide faster resampling sacrificing quality.  Fast resampling is available only for reSID emulation.  Options can be written as: -rif or -ri -rf.
