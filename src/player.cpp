@@ -381,9 +381,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         if (rs)
         {
             m_engCfg.sidEmulation = rs;
-            if (!*rs) goto createSidEmu_error;
+            if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids);
-            if (!*rs) goto createSidEmu_error;
+            if (!rs->getStatus()) goto createSidEmu_error;
 #if 0
             if (m_filter.definition)
             {
@@ -439,9 +439,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         if (rs)
         {
             m_engCfg.sidEmulation = rs;
-            if (!*rs) goto createSidEmu_error;
+            if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids);
-            if (!*rs) goto createSidEmu_error;
+            if (!rs->getStatus()) goto createSidEmu_error;
 
             rs->bias(m_filter.bias);
         }
@@ -460,9 +460,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         if (hs)
         {
             m_engCfg.sidEmulation = hs;
-            if (!*hs) goto createSidEmu_error;
+            if (!*hs->getStatus()) goto createSidEmu_error;
             hs->create ((m_engine.info ()).maxsids);
-            if (!*hs) goto createSidEmu_error;
+            if (!*hs->getStatus()) goto createSidEmu_error;
         }
         break;
     }

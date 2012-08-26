@@ -421,9 +421,9 @@ int ConsolePlayer::args (int argc, const char *argv[])
     // Load the tune
     m_filename = argv[infile];
     m_tune.load (m_filename);
-    if (!m_tune)
+    if (!m_tune.getStatus())
     {
-        displayError ((m_tune.getInfo ()).statusString);
+        displayError (m_tune.statusString());
         return -1;
     }
 
