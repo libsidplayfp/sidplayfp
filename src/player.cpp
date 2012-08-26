@@ -826,18 +826,19 @@ void ConsolePlayer::decodeKeys ()
 
         case A_TOGGLE_VOICE1:
             v1mute = !v1mute;
-            m_engine.mute(0, v1mute);
+            m_engine.mute(0, 0, v1mute);
         break;
 
         case A_TOGGLE_VOICE2:
             v2mute = !v2mute;
-            m_engine.mute(1, v2mute);
+            m_engine.mute(0, 1, v2mute);
         break;
 
         case A_TOGGLE_VOICE3:
             v3mute = !v3mute;
-            m_engine.mute(2, v3mute);
+            m_engine.mute(0, 2, v3mute);
         break;
+        //TODO add mute for second SID
 
         case A_TOGGLE_FILTER:
             m_filter.enabled = !m_filter.enabled;
