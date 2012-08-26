@@ -634,7 +634,7 @@ bool ConsolePlayer::play ()
         ret = m_engine.play (buffer, length);
         if (ret < length)
         {
-            if (m_engine.state () != sid2_stopped)
+            if (m_engine.isPlaying ())
             {
                 m_state = playerError;
                 return false;
