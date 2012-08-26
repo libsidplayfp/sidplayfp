@@ -123,13 +123,17 @@ ConsolePlayer::ConsolePlayer (const char * const name)
     m_engine.setRoms(kernalRom, basicRom, chargenRom);
 }
 
-uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size) {
-printf("Loading rom %s\n", romPath);
+uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size)
+{
     FILE *file = fopen (romPath, "rb");
     if (!file)
         goto error;
     {
+#ifdef HAVE_EXCEPTIONS
+    uint8_t *buffer = new(std::nothrow) uint8_t[size];
+#else
     uint8_t *buffer = new uint8_t[size];
+#endif
     if (buffer == 0)
         goto error;
     {
@@ -142,7 +146,6 @@ printf("Loading rom %s\n", romPath);
     }
 
 error:
-printf("Error\n");
     fclose (file);
     return 0;
 }
