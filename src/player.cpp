@@ -459,9 +459,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         if (hs)
         {
             m_engCfg.sidEmulation = hs;
-            if (!*hs->getStatus()) goto createSidEmu_error;
+            if (!hs->getStatus()) goto createSidEmu_error;
             hs->create ((m_engine.info ()).maxsids);
-            if (!*hs->getStatus()) goto createSidEmu_error;
+            if (!hs->getStatus()) goto createSidEmu_error;
         }
         break;
     }
