@@ -669,7 +669,7 @@ bool ConsolePlayer::play ()
         if (m_tsid)
         {
             int_least32_t length;
-            char md5[SIDTUNE_MD5_LENGTH + 1];
+            char md5[SidTune::MD5_LENGTH + 1];
             m_tune.createMD5 (md5);
             length = m_database.length (md5, m_track.selected);
             // ignore errors
