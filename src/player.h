@@ -151,6 +151,10 @@ private:
 
     int     m_precision;
 
+    uint8_t *kernalRom;
+    uint8_t *basicRom;
+    uint8_t *chargenRom;
+
     struct m_filter_t
     {
 //         SidFilter      definition;
@@ -218,9 +222,11 @@ private:
     void emuflush       (void);
     void menu           (void);
 
+    uint8_t* loadRom    (const char* romPath, const int size);
+
 public:
     ConsolePlayer (const char * const name);
-    virtual ~ConsolePlayer() {;}
+    virtual ~ConsolePlayer() { delete [] kernalRom; delete [] basicRom; delete [] chargenRom; }
 
     int            args  (int argc, const char *argv[]);
     bool           open  (void);

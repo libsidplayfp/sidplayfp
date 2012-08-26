@@ -52,6 +52,9 @@ public:
         char          *database;
         uint_least32_t playLength;
         uint_least32_t recordLength;
+        char          *kernalRom;
+        char          *basicRom;
+        char          *chargenRom;
     };
 
     struct console_section

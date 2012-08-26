@@ -80,6 +80,9 @@ IniConfig::IniConfig ()
     sidplay2_s.database    = NULL;
 //     emulation_s.filter6581 = NULL;
 //     emulation_s.filter8580 = NULL;
+    sidplay2_s.kernalRom   = NULL;
+    sidplay2_s.basicRom    = NULL;
+    sidplay2_s.chargenRom  = NULL;
     clear ();
 }
 
@@ -96,6 +99,9 @@ void IniConfig::clear ()
     SAFE_FREE (sidplay2_s.database);
     sidplay2_s.playLength   = 0;           // INFINITE
     sidplay2_s.recordLength = 3 * 60 + 30; // 3.5 minutes
+    SAFE_FREE (sidplay2_s.kernalRom);
+    SAFE_FREE (sidplay2_s.basicRom);
+    SAFE_FREE (sidplay2_s.chargenRom);
 
     console_s.ansi          = false;
     console_s.topLeft       = '+';
@@ -279,6 +285,10 @@ bool IniConfig::readSidplay2 (ini_fd_t ini)
         sidplay2_s.playLength   = (uint_least32_t) time;
     if (readTime (ini, "Default Record Length", time))
         sidplay2_s.recordLength = (uint_least32_t) time;
+
+    ret &= readString (ini, "Kernal Rom", sidplay2_s.kernalRom);
+    ret &= readString (ini, "Basic Rom", sidplay2_s.basicRom);
+    ret &= readString (ini, "Chargen Rom", sidplay2_s.chargenRom);
 
     return ret;
 }

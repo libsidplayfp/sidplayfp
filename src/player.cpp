@@ -215,8 +215,36 @@ ConsolePlayer::ConsolePlayer (const char * const name)
 
     createOutput (OUT_NULL, NULL);
     createSidEmu (EMU_NONE);
+
+    kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192);
+    basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192);
+    chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096);
+    m_engine.setRoms(kernalRom, basicRom, chargenRom);
 }
 
+uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size) {
+printf("Loading rom %s\n", romPath);
+    FILE *file = fopen (romPath, "rb");
+    if (!file)
+        goto error;
+    {
+    uint8_t *buffer = new uint8_t[size];
+    if (buffer == 0)
+        goto error;
+    {
+    size_t count = fread (buffer, sizeof(char), size, file);
+    if (count != size)
+        goto error;
+    }
+    fclose (file);
+    return buffer;
+    }
+
+error:
+printf("Error\n");
+    fclose (file);
+    return 0;
+}
 
 // Create the output object to process sound buffer
 bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
