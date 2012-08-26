@@ -180,24 +180,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 m_engCfg.frequency = (uint_least32_t) atoi (argv[i]+2);
             }
 
-            // Player Mode (Environment) Options ----------
-            else if (strcmp (&argv[i][1], "mb") == 0)
-            {   // Bankswitching
-                m_engCfg.environment = sid2_envBS;
-            }
-            else if (strcmp (&argv[i][1], "mr") == 0)
-            {   // Real C64
-                m_engCfg.environment = sid2_envR;
-            }
-            else if (strcmp (&argv[i][1], "mt") == 0)
-            {   // Transparent Rom
-                m_engCfg.environment = sid2_envTP;
-            }
-            else if (argv[i][1] == 'm')
-            {   // PlaySID
-                m_engCfg.environment = sid2_envPS;
-            }
-
             // No filter options
             else if (strncmp (&argv[i][1], "nf", 2) == 0)
             {
@@ -593,11 +575,6 @@ void ConsolePlayer::displayDebugArgs ()
         << " --cpu-debug   display cpu register and assembly dumps" << endl
         << " --crc[=<num>] generate CRC for [<num>] sid writes (default: 0)" << endl
         << " --delay=<num> simulate c64 power on delay" << endl
-
-        << " -m            PlaySID compatibility mode (read the docs!)" << endl
-        << " -mt           Sidplays Transparent Rom mode" << endl
-        << " -mb           Sidplays Bankswitching mode" << endl
-        << " -mr           Real C64 mode (default)>" << endl
 
         << " --none        no audio output device" << endl
         << " --nosid       no sid emulation" << endl;

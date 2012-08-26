@@ -278,34 +278,6 @@ void ConsolePlayer::menu ()
         cerr << ", Model = "
              << (info.tuneInfo->sidModel1 == SID2_MOS8580 ? "8580" : "6581")
              << endl;
-        consoleTable  (tableMiddle);
-        consoleColour (yellow, true);
-        cerr << " Environment  : ";
-        consoleColour (white, false);
-        switch (info.environment)
-        {
-        case sid2_envPS:
-            cerr << "PlaySID-specific rips";
-        break;
-        case sid2_envTP:
-            cerr << "Transparent ROM";
-        break;
-        case sid2_envBS:
-            cerr << "Bank Switching";
-        break;
-        case sid2_envR:  // When it happens
-            cerr << "Real C64";
-        break;
-        case sid2_envTR:
-            cerr << "Sidusage Tracker Mode";
-        break;
-        default:
-            cerr << "Unknown";
-        }
-
-        if (m_engCfg.environment != info.environment)
-            cerr << " (forced)";
-        cerr << endl;
 
         if (m_verboseLevel > 1)
         {
