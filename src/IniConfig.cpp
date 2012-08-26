@@ -116,7 +116,6 @@ void IniConfig::clear ()
     emulation_s.sidModel      = SID2_MOS6581;
     emulation_s.forceModel    = false;
     emulation_s.filter        = true;
-    emulation_s.sidSamples    = true;
 
     emulation_s.bias            = 0.0;
     emulation_s.filterCurve6581 = 0.0;
@@ -369,7 +368,6 @@ bool IniConfig::readEmulation (ini_fd_t ini)
     ret &= readDouble (ini, "FilterBias", emulation_s.bias);
     ret &= readDouble (ini, "FilterCurve6581", emulation_s.filterCurve6581);
     ret &= readInt (ini, "FilterCurve8580", emulation_s.filterCurve8580);
-    ret &= readBool   (ini, "SidSamples", emulation_s.sidSamples);
 
     return ret;
 }

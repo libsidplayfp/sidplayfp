@@ -169,10 +169,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
             {   // Override sidTune and enable the second sid
                 m_engCfg.forceDualSids = true;
             }
-            else if (strcmp (&argv[i][1], "fs") == 0)
-            {   // Force samples through soundcard instead of SID
-                m_engCfg.sidSamples = false;
-            }
             else if (argv[i][1] == 'f')
             {
                 if (argv[i][2] == '\0')

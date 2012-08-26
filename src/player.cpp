@@ -208,7 +208,6 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         m_engCfg.sidModel     = emulation.sidModel;
         m_engCfg.forceModel   = emulation.forceModel;
         m_engCfg.sidDefault   = SID2_MOS6581;
-        m_engCfg.sidSamples   = emulation.sidSamples;
         m_filter.enabled      = emulation.filter;
         m_filter.bias         = emulation.bias;
         m_filter.filterCurve6581 = emulation.filterCurve6581;
