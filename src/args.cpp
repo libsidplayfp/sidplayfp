@@ -432,7 +432,6 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -f<num>      set frequency in Hz (default: "
         << SID2_DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -fd          force dual sid environment" << endl
-        << " -fs          force samples to a channel (default: uses sid)" << endl
 
         << " -nf          no SID filter emulation" << endl
         << " -ns[0|1]     (no) MOS 8580 waveforms (default: from tune or cfg)" << endl
