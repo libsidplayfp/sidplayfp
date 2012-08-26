@@ -206,6 +206,7 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         m_engCfg.playback     = audio.playback;
         m_precision           = audio.precision;
         m_engCfg.sidModel     = emulation.sidModel;
+        m_engCfg.forceModel   = emulation.forceModel;
         m_engCfg.sidDefault   = SID2_MOS6581;
         m_engCfg.sidSamples   = emulation.sidSamples;
         m_filter.enabled      = emulation.filter;

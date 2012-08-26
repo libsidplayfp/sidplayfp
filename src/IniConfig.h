@@ -79,6 +79,7 @@ public:
         sid2_clock_t  clockSpeed;
         bool          clockForced;
         sid2_model_t  sidModel;
+        bool          forceModel;
         bool          filter;
         //char         *filter6581;
         //char         *filter8580;

@@ -111,9 +111,10 @@ void IniConfig::clear ()
     audio_s.playback  = sid2_mono;
     audio_s.precision = 16;
 
-    emulation_s.clockSpeed    = SID2_CLOCK_CORRECT;
+    emulation_s.clockSpeed    = SID2_CLOCK_PAL;
     emulation_s.clockForced   = false;
-    emulation_s.sidModel      = SID2_MODEL_CORRECT;
+    emulation_s.sidModel      = SID2_MOS6581;
+    emulation_s.forceModel    = false;
     emulation_s.filter        = true;
     emulation_s.sidSamples    = true;
 

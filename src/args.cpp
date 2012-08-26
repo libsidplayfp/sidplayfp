@@ -208,10 +208,12 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 case '\0':
                 case '1':
                     m_engCfg.sidModel = SID2_MOS8580;
+                    m_engCfg.forceModel = true;
                     break;
                 // No new sid so use old one (6581)
                 case '0':
                     m_engCfg.sidModel = SID2_MOS6581;
+                    m_engCfg.forceModel = true;
                     break;
                 default:
                     err = true;
