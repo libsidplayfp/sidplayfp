@@ -203,12 +203,12 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 {
                 case '\0':
                 case '1':
-                    m_engCfg.sidModel = SID2_MOS8580;
+                    m_engCfg.sidDefault = SID2_MOS8580;
                     m_engCfg.forceModel = true;
                     break;
                 // No new sid so use old one (6581)
                 case '0':
-                    m_engCfg.sidModel = SID2_MOS6581;
+                    m_engCfg.sidDefault = SID2_MOS6581;
                     m_engCfg.forceModel = true;
                     break;
                 default:
@@ -297,12 +297,12 @@ int ConsolePlayer::args (int argc, const char *argv[])
             else if (strcmp (&argv[i][1], "vnf") == 0)
             {
                 m_engCfg.clockForced = true;
-                m_engCfg.clockSpeed  = SID2_CLOCK_NTSC;
+                m_engCfg.clockDefault  = SID2_CLOCK_NTSC;
             }
             else if (strcmp (&argv[i][1], "vpf") == 0)
             {
                 m_engCfg.clockForced = true;
-                m_engCfg.clockSpeed  = SID2_CLOCK_PAL;
+                m_engCfg.clockDefault  = SID2_CLOCK_PAL;
             }
             else if (strcmp (&argv[i][1], "vf") == 0)
             {
@@ -310,11 +310,11 @@ int ConsolePlayer::args (int argc, const char *argv[])
             }
             else if (strcmp (&argv[i][1], "vn") == 0)
             {
-                m_engCfg.clockSpeed  = SID2_CLOCK_NTSC;
+                m_engCfg.clockDefault  = SID2_CLOCK_NTSC;
             }
             else if (strcmp (&argv[i][1], "vp") == 0)
             {
-                m_engCfg.clockSpeed  = SID2_CLOCK_PAL;
+                m_engCfg.clockDefault  = SID2_CLOCK_PAL;
             }
             else if (argv[i][1] == 'v')
             {
