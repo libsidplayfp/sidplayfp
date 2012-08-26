@@ -199,12 +199,12 @@ ConsolePlayer::ConsolePlayer (const char * const name)
 
         // INI Configuration Settings
         m_engCfg.clockForced  = emulation.clockForced;
-        m_engCfg.clockSpeed   = emulation.clockSpeed;
+        m_engCfg.clockDefault = emulation.clockSpeed;
         m_engCfg.clockDefault = SID2_CLOCK_PAL;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.playback     = audio.playback;
         m_precision           = audio.precision;
-        m_engCfg.sidModel     = emulation.sidModel;
+        m_engCfg.sidDefault   = emulation.sidModel;
         m_engCfg.forceModel   = emulation.forceModel;
         m_engCfg.sidDefault   = SID2_MOS6581;
         m_filter.enabled      = emulation.filter;
