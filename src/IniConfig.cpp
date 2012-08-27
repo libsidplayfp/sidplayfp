@@ -340,7 +340,6 @@ void IniConfig::read ()
 {
     char *path = NULL;
     ini_fd_t ini  = 0;
-    size_t  length;
     std::string configPath;
 
 #ifdef _WIN32
