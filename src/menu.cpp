@@ -96,15 +96,15 @@ void ConsolePlayer::menu ()
     consoleTable (tableStart);
     consoleTable (tableMiddle);
     consoleColour (red, true);
-    cerr << "   SID";
+    cerr << "  SID";
     consoleColour (blue, true);
-    cerr << "PLAY";
+    cerr << "PLAYFP";
     consoleColour (white, true);
     cerr << " - Music Player and C64 SID Chip Emulator" << endl;
     consoleTable  (tableMiddle);
     consoleColour (white, false);
     {
-        cerr << setw(17) << "Sidplay" << " V" << VERSION << ", ";
+        cerr << setw(19) << "Sidplayfp" << " V" << VERSION << ", ";
         cerr << (char) toupper (*info.name);
         cerr << info.name + 1 << " V" << info.version << endl;
     }
