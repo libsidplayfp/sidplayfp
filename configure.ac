@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(sidplayfp,[0.4.0alpha])
+AC_INIT(sidplayfp,[1.0.0alpha1])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -125,7 +125,7 @@ MY_CHECK_IOS_OPENMODE
 
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
-PKG_CHECK_MODULES(SIDPLAYFP,[libsidplayfp >= 0.3])
+PKG_CHECK_MODULES(SIDPLAYFP,[libsidplayfp >= 1.0])
 
 # hack?
 saveCPPFLAGS=$CPPFLAGS
