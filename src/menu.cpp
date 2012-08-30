@@ -83,7 +83,7 @@ void ConsolePlayer::menu ()
         cerr << tuneInfo->infoString(2) << endl;
     }
 
-    for (int i = 0; i < tuneInfo->numberOfCommentStrings(); i++)
+    for (unsigned int i = 0; i < tuneInfo->numberOfCommentStrings(); i++)
     {
         consoleTable  (tableMiddle);
         consoleColour (cyan, true);
