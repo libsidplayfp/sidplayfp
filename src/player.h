@@ -118,10 +118,6 @@ private:
 
     int     m_precision;
 
-    uint8_t *kernalRom;
-    uint8_t *basicRom;
-    uint8_t *chargenRom;
-
     struct m_filter_t
     {
         // Filter parameter for reSID
@@ -192,7 +188,7 @@ private:
 
 public:
     ConsolePlayer (const char * const name);
-    virtual ~ConsolePlayer() { delete [] kernalRom; delete [] basicRom; delete [] chargenRom; }
+    virtual ~ConsolePlayer() {}
 
     int            args  (int argc, const char *argv[]);
     bool           open  (void);

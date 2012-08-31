@@ -117,10 +117,13 @@ ConsolePlayer::ConsolePlayer (const char * const name)
     createOutput (OUT_NULL, NULL);
     createSidEmu (EMU_NONE);
 
-    kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192);
-    basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192);
-    chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096);
+    uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192);
+    uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192);
+    uint8_t *chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096);
     m_engine.setRoms(kernalRom, basicRom, chargenRom);
+    delete [] kernalRom;
+    delete [] basicRom;
+    delete [] chargenRom;
 }
 
 uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size)
