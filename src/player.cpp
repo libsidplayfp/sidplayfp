@@ -20,6 +20,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 #include <iomanip>
+#include <fstream>
+
 #include "config.h"
 
 #ifdef HAVE_EXCEPTIONS
@@ -128,8 +130,9 @@ ConsolePlayer::ConsolePlayer (const char * const name)
 
 uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size)
 {
-    FILE *file = fopen (romPath, "rb");
-    if (!file)
+    std::ifstream is(romPath, std::ios::binary);
+
+    if (is.fail())
         goto error;
     {
 #ifdef HAVE_EXCEPTIONS
@@ -139,17 +142,17 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size)
 #endif
     if (buffer == 0)
         goto error;
-    {
-    size_t count = fread (buffer, sizeof(char), size, file);
-    if (count != size)
+
+    is.read((char*)buffer, size);
+    if (is.fail())
         goto error;
-    }
-    fclose (file);
+
+    is.close();
     return buffer;
     }
 
 error:
-    fclose (file);
+    is.close();
     return 0;
 }
 
@@ -401,6 +404,12 @@ createSidEmu_error:
 
 bool ConsolePlayer::open (void)
 {
+    if (!m_engine.getStatus())
+    {
+        displayError (m_engine.error ());
+        return false;
+    }
+
     if ((m_state & ~playerFast) == playerRestart)
     {
         if (m_quietLevel < 2)
