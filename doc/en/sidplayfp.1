@@ -41,6 +41,9 @@ in the case of the stereo prg format as currently there is no way
 to identify them.  Stereo MUS files are however automatically
 detected.  The second sid appears in the 0xD420-0xD7FF address range.
 .TP
+\fB\-u<num>\fR
+Mute a channel.  May be used more than one time.  Channel 1 to 3 are for the first SID chip while channels from 4 to 6 are for the second one on stereo tunes.
+.TP
 \fB\-p<num>\fR
 Set bit precision for wav saving. The default is 32 (32 bit float), but can be set to 16 to create 16 bit little endian wavs.
 .TP

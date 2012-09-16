@@ -84,6 +84,9 @@ int ConsolePlayer::args (int argc, const char *argv[])
     m_driver.file   = false;
     m_driver.sid    = EMU_RESIDFP;
 
+    v1mute = v2mute = v3mute = false;
+    v4mute = v5mute = v6mute = false;
+
     // parse command line arguments
     while ((i < argc) && (argv[i] != NULL))
     {
@@ -146,6 +149,26 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 if (argv[i][2] == '\0')
                     err = true;
                 m_track.first = atoi(&argv[i][2]);
+            }
+
+            // Channel muting
+            else if (argv[i][1] == 'u')
+            {
+                if (argv[i][2] == '\0')
+                    err = true;
+                else
+                {
+                    const int voice = atoi(&argv[i][2]);
+                    switch (voice)
+                    {
+                    case 1: v1mute = true; break;
+                    case 2: v2mute = true; break;
+                    case 3: v3mute = true; break;
+                    case 4: v4mute = true; break;
+                    case 5: v5mute = true; break;
+                    case 6: v6mute = true; break;
+                    }
+                }
             }
 
             else if (argv[i][1] == 'p')
@@ -432,6 +455,8 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -f<num>      set frequency in Hz (default: "
         << SID2_DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -fd          force dual sid environment" << endl
+
+        << "-u<num>       mute voice <num> (e.g. -u1 -u2)" << endl
 
         << " -nf          no SID filter emulation" << endl
 
