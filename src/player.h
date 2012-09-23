@@ -184,7 +184,7 @@ private:
     void emuflush       (void);
     void menu           (void);
 
-    uint8_t* loadRom    (const char* romPath, const int size);
+    uint8_t* loadRom    (const char* romPath, const int size, const char defaultRom[]);
 
 public:
     ConsolePlayer (const char * const name);

@@ -119,18 +119,18 @@ ConsolePlayer::ConsolePlayer (const char * const name)
     createOutput (OUT_NULL, NULL);
     createSidEmu (EMU_NONE);
 
-    uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192);
-    uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192);
-    uint8_t *chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096);
+    uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, "kernal");
+    uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, "basic");
+    uint8_t *chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, "chargen");
     m_engine.setRoms(kernalRom, basicRom, chargenRom);
     delete [] kernalRom;
     delete [] basicRom;
     delete [] chargenRom;
 }
 
-uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size)
+uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char defaultRom[])
 {
-    std::ifstream is(romPath, std::ios::binary);
+    std::ifstream is((romPath == 0)?defaultRom:romPath, std::ios::binary);
 
     if (is.fail())
         goto error;
