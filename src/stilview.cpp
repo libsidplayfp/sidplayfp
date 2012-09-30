@@ -41,11 +41,11 @@ bool showVersion = false;
 bool interactive = false;
 bool demo = false;
 
-char *STIL_DEMO_ENTRY="/Galway_Martin/Green_Beret.sid";
+char STIL_DEMO_ENTRY[]="/Galway_Martin/Green_Beret.sid";
 
 // This is used for testing setBaseDir() when switching between different
 // HVSC base directories. Ideally, it should point to a valid HVSC dir.
-char *OTHER_HVSC_BASE_DIR="E:\\MUSIC\\SID\\C64music\\";
+char OTHER_HVSC_BASE_DIR[]="E:\\MUSIC\\SID\\C64music\\";
 
 #define STIL_MAX_PATH_SIZE 1024
 
