@@ -2,11 +2,12 @@
 SUBDIRS = audio
 
 AM_CPPFLAGS = -I $(top_builddir) \
-$(SIDPLAYFP_CFLAGS)
+$(SIDPLAYFP_CFLAGS) \
+$(STILVIEW_CFLAGS)
 
 # The console user interface.
 
-bin_PROGRAMS = sidplayfp
+bin_PROGRAMS = sidplayfp stilview
 
 sidplayfp_SOURCES = \
 IniConfig.cpp \
@@ -35,6 +36,12 @@ $(AUDIO_DRV) $(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS)
 # $(LIBLTDL_LDFLAGS)
+
+stilview_SOURCES = \
+stilview.cpp
+
+stilview_LDADD = \
+$(STILVIEW_LIBS)
 
 # Remove bad default includes
 DEFAULT_INCLUDES=

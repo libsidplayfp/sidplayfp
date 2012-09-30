@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "stil.h"
+#include "stilview/stil.h"
 
 STIL myStil;
 char *hvscLoc = NULL;

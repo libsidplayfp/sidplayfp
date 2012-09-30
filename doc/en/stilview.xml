@@ -1,0 +1,686 @@
+<?xml version='1.0'?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+ "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<article>
+  <articleinfo>
+    <title>xmlto</title>
+
+    <author>
+      <firstname>LaLa</firstname>
+      <affiliation>
+        <address><email>LaLa@C64.org</email></address>
+      </affiliation>
+      <contrib>Original author</contrib>
+    </author>
+
+    <copyright>
+      <year>1998, 2002</year>
+      <holder>LaLa</holder>
+    </copyright>
+  </articleinfo>
+
+  <section>
+    <title>Reference</title>
+
+    <refentry>
+      <refentryinfo>
+	<title>STILView</title>
+	<date>September 2012</date>
+	<productname>stilview</productname>
+      </refentryinfo>
+
+      <refmeta>
+	<refentrytitle>stilview</refentrytitle>
+	<manvolnum>1</manvolnum>
+      </refmeta>
+
+      <refnamediv>
+	<refname>stilview</refname>
+	<refpurpose>command-line program to help you retrieve the entries stored in STIL</refpurpose>
+      </refnamediv>
+
+      <refsynopsisdiv>
+	<cmdsynopsis>
+	  <command>stilview</command>
+	  <arg choice="opt"><option>-b</option></arg>
+	  <arg choice="opt"><option>-d</option></arg>
+	  <arg choice="opt"><option>-e</option>
+	    <replaceable>entry</replaceable></arg>
+	  <arg choice="opt"><option>-f</option>
+	    <replaceable>field</replaceable></arg>
+	  <arg choice="opt"><option>-i</option></arg>
+	  <arg choice="opt"><option>-l</option>
+	    <replaceable>HVSC base dir</replaceable></arg>
+	  <arg choice="opt"><option>-m</option></arg>
+	  <arg choice="opt"><option>-o</option></arg>
+	  <arg choice="opt"><option>-s</option></arg>
+	  <arg choice="opt"><option>-t</option>
+	    <replaceable>tune number</replaceable></arg>
+	</cmdsynopsis>
+
+	<cmdsynopsis>
+	  <command>stilview</command>
+	  <group choice="req">
+	    <arg>-h</arg>
+	    <arg>-v</arg>
+	  </group>
+	</cmdsynopsis>
+      </refsynopsisdiv>
+
+      <refsect1>
+	<title>Description</title>
+
+	<para>STILView is a command-line driven program to help you retrieve the entries
+	 stored in STIL fast and accurately. STILView uses the STIL C++ class heavily to
+	 do this, and in fact, the primary purpose of this command-line program is to
+	 test that class (which is, BTW, used in many GUI-based SID players, most
+	 notably in SIDPlay for Windows and XSIDPLAY for Unix systems). However, it is
+	 user-friendly enough to be used by non-programmers, too.</para>
+
+	<para>I am not sure about what other people do, but I use this command-line STILView
+	 primarily as a tool under Solaris 2.6 to print out the STIL information for a
+	 SID file I am listening to with the UNIX command-line version of SIDPlay...</para>
+      </refsect1>
+
+      <refsect1>
+	<title>Glossary</title>
+
+	<para>Some terms and STIL-related lingo in alphabetical order:</para>
+
+	<para>BUG ENTRY - There exists a special file in HVSC (/DOCUMENTS/BUGlist.txt) that
+	 lists all known bugs in SID tunes in HVSC. See the top of that file for details
+	 about what's in it exactly. A BUG entry is like a STIL entry, but it is
+	 contained in this BUGlist.txt file.</para>
+
+	<para>FIELD - The smallest piece of information in a STIL entry. Currently valid
+	 field names are NAME, TITLE, ARTIST and COMMENT.</para>
+
+	<para>FILE-GLOBAL COMMENT - A special COMMENT field in a STIL entry for a multi-tune
+	 SID file that refers to the whole SID, not just one tune in it. These usually
+	 contain general information about the SID file itself.</para>
+
+	<para>Example:</para>
+
+	<screen>/Hubbard_Rob/Gerry_the_Germ.sid
+COMMENT: In Rob's own demo of this music, the tunes are named after the levels
+         in the original game.
+(#1)
+  TITLE: Lungs
+(#2)
+  TITLE: Kidney
+(#7)
+  TITLE: End</screen>
+
+	<para>HVSC - High Voltage SID Collection. If you don't know what this is, you
+	 downloaded the wrong program. :)</para>
+
+	<para>HVSC-RELATIVE PATHNAME - The pathname plus filename of a SID file that can be
+	 found in your HVSC, relative to the base directory of HVSC. It is always in
+	 UNIX-style format, eg.: /Hubbard_Rob/Commando.sid refers to Rob Hubbard's
+	 Commando.sid file within HVSC (which may actually be found as
+	 C:\Music\HVSC\Hubbard_Rob\Commando.sid on your Windows PC).</para>
+
+	<para>MULTI-TUNE ENTRY - A STIL entry that is referring to a SID file that has many
+	 tunes in it. Each tune might have its own STIL block, which are separated by a
+	 so-called tune designation in the form of "(#x)", where x = the tune number.
+	 Consult the STIL.FAQ in HVSC for a detailed description.</para>
+
+	<para>Example:</para>
+
+	<screen>/Hubbard_Rob/Gerry_the_Germ.sid
+COMMENT: In Rob's own demo of this music, the tunes are named after the levels
+         in the original game.
+(#1)
+  TITLE: Lungs
+(#2)
+  TITLE: Kidney
+(#7)
+  TITLE: End</screen>
+
+	<para>SECTION - A part of STIL that belongs to one composer (ie. every STIL entry
+	 referring to SID files that are in one subdirectory in HVSC). Sections in STIL
+	 are always separated by a line in the form of: "### Composer's name ########".</para>
+
+	<para>SECTION-GLOBAL COMMENT - A special STIL entry that refers not to an individual
+	 SID file, but to a whole subdirectory. These usually contain info about the
+	 composer himself, or about all the SID file he/she ever composed, and are
+	 always indexed in the form of "/Subdir/" (note the trailing slash!).</para>
+
+	<para>Example:</para>
+
+	<screen>/Hubbard_Rob/
+COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+         have often stolen Hubbard's routine causing some tunes to be falsely
+         credited to him.
+         Hubbard's own comments are denoted by (RH).</screen>
+
+	<para>SINGLE-TUNE ENTRY - A STIL entry that has no tune designation in it in the
+	 form of "(#x)", where x is a number. (Note, that a single-tune entry might still
+	 refer to a SID file which has many tunes in it, ie. when a single-tune entry
+	 has nothing but a COMMENT field in it!)</para>
+
+	<para>Example:</para>
+
+	<screen>/Hubbard_Rob/Chain_Reaction.sid
+  TITLE: Zoolook (remix) [from Zoolook]
+ ARTIST: Jean Michel Jarre</screen>
+
+	<para>Another example (the SID this is refering to has many tunes in it!):</para>
+
+	<screen>/Barrett_Steve/Magic_Land_Dizzy.sid
+COMMENT: Also used in the game "Wacky Darts" (c) 1990 Codemasters.</screen>
+
+	<para>STIL - SID Tune Information List, essentially a text-file database that can be
+	 found in your HVSC in the /DOCUMENTS/ subdirectory.</para>
+
+	<para>STIL ENTRY - All of the pieces of information in STIL relating to one SID file
+	 of the HVSC. They are always indexed by the HVSC-relative pathname.</para>
+
+	<para>TUNE - One of the compositions in a SID. Most SID files have only one tune in
+	 them, but many have more than one (eg. one for the title score of the game, and
+	 one for the hi-score music).</para>
+      </refsect1>
+
+      <refsect1>
+	<title>Options</title>
+
+	<variablelist>
+	  <varlistentry>
+	    <term><option>-b</option></term>
+	    <listitem>
+	      <para>Do *not* print BUG entries</para>
+	      <para>Default value: Not specified (ie. do print BUG entries)
+	       Example: stilview -e=/Hubbard_Rob/Commando.sid -b</para>
+	      <para>When this option is specified, BUG entries will not be printed for the given
+	       SID tune. At a minimum, the -e option has to be specified for this option to
+	       work.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-d</option></term>
+	    <listitem>
+	      <para>Default value: Not specified (ie. debug mode is off)</para>
+	      <para>Example: stilview -e=/Hubbard_Rob/Commando.sid -d</para>
+
+	      <para>Turns on debug mode in STILView. This will result in an extensive output, with
+	       the debugging messages going to STDERR. If you encounter any problem or strange
+	       behavior with STILView, run STILView with the exact same options as you did
+	       when you encountered the problem, with this -d option added to them. Capture
+	       the complete output of this run, and send it to me with a detailed explanation
+	       of the problem (see email address at the top of this file).</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-e</option>=<replaceable>entry</replaceable></term>
+	    <listitem>
+	      <para>Default: NONE (you have to give an HVSC-relative pathname to this option)</para>
+	      <para>Example #1: stilview -e=/Hubbard_Rob/Commando.sid
+	       Example #2: stilview -e=/Hubbard_Rob/</para>
+
+	      <para>This is where you specify the STIL entry you are looking for, given as an
+	       HVSC-relative pathname. If there exists no STIL entry for the given filename,
+	       STILView will print out nothing. Otherwise, you'll get the STIL entry (or parts
+	       of it, as you may have specified it by other options). HVSC-relative pathnames
+	       are case-insensitive, so /HUBBARD_ROB/Commando.sid is the same as
+	       /Hubbard_Rob/Commando.sid.</para>
+
+	      <para>Example #1 is the most frequent way of retrieving STIL entries, and it will
+	       return all of the STIL entry for Commando.sid, as well as the section-global
+	       comment for /Hubbard_Rob/. Example #2 is another valid thing to do: this will
+	       return only the section-global comment for /Hubbard_Rob/.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-h</option></term>
+	    <listitem>
+	      <para>Default: NONE
+	       Example: stilview -h</para>
+
+	       <para>Prints a brief help screen listing the available options. All other options
+	       that are also specified on the command-line are ignored.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-f</option>=<replaceable>field</replaceable></term>
+	    <listitem>
+	      <para>Default: all</para>
+	      <para>Valid values for &lt;field&gt; are: all, name, author, title, artist, comment</para>
+	      <para>Example #1: stilview -l -e=/Hubbard_Rob/Delta.sid -f=comment</para>
+	      <para>Example #2: stilview -l -e=/Hubbard_Rob/Delta.sid -t=1 -f=title</para>
+	      <para>Example #3: stilview -l -e=/Hubbard_Rob/Delta.sid -t=12 -f=all -s -b</para>
+
+	      <para>Asks for one particular field in a STIL entry. Combined with the -t option,
+	       these two options can retrieve any portion of a STIL entry, including a single
+	       field in a specific subtune's entry. Below is full and complete explanation of
+	       what the different possible combinations of the -t and -f options retrieve:</para>
+
+	      <para>-t=0 -f=all : All of the STIL entry is printed.</para>
+	      <para>-t=0 -f=comment : The file-global comment is printed. For single-tune entries
+	           that have nothing but a COMMENT field in them, this prints that COMMENT.
+	           For single-tune entries that have other fields in them, this prints nothing.
+	           (This is because single-tune entries with nothing but a COMMENT field are
+	           assumed to be file-global comments.)</para>
+	      <para>-t=0 -f=&lt;name/author/title/artist&gt; : Nothing is printed. This combination of
+	           these options is invalid.</para>
+	      <para>-t=&lt;x&gt; -f=all : (Where x is anything but 0.) All fields from the portion of the
+	           STIL entry for the given tune number &lt;x&gt; are printed. For single-tune
+	           entries, asking for -t=1 -f=all is equivalent to saying -t=0 -f=all, since
+	           by definition, the whole entry refers to only one tune. (However, specifying
+	           -t with any other number than 1 will print nothing!) Note that if there's a
+	           file-global comment in the STIL entry (which also means that if a
+	           single-tune entry has nothing but a COMMENT field in it), that is *not*
+	           printed with these combinations of options.</para>
+	      <para>-t=&lt;x&gt; -f=&lt;name/author/title/artist/comment&gt; : (Where x is anything but 0.) The
+	           specific field from the portion of the STIL entry for the given tune number
+	           is printed. For single-tune entries that have nothing but a COMMENT in them,
+	           this returns nothing.</para>
+
+	      <para>Of course, if the STIL entry or any portion of it asked with these options does
+	       not exist, STILView will print nothing. Also, unless otherwise specified with
+	       the -o, -s and -b options, the section-global comment and the BUG entry of the
+	       given SID file will also get printed (provided they exist).</para>
+
+	      <para>In example #1, the file-global comment for /Hubbard_Rob/Delta.sid is printed,
+	       since -t is not specified and is assumed to be 0. Also printed are the section-
+	       global comment and the BUG entry for the same SID file (if they exist). In
+	       example #2, the TITLE field of the STIL entry for tune #1 of
+	       /Hubbard_Rob/Delta.sid is printed along with the section-global comment and the
+	       BUG entry for the same SID file (if they exist). In example #3, all of the STIL
+	       entry for tune #12 of /Hubbard_Rob/Delta.sid is printed, but nothing else.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-i</option></term>
+	    <listitem>
+	      <para>Default: NONE</para>
+	      <para>Example: stilview -i</para>
+
+	      <para>Starts STILView in interactive mode, ignoring all other options specified on
+	       the command-line, except -l, -d and -m. In interactive mode, you can look for
+	       STIL entries by typing them in. You will get prompted for the desired STIL
+	       entry (which has to be specified with an HVSC-relative pathname), for the tune
+	       number requested (which should be any non-negative number, but this is not
+	       enforced), and finally for the specific STIL field you want to retrieve.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-l</option>=<replaceable>HVSC base dir</replaceable></term>
+	    <listitem>
+	      <para>Default: The value of the HVSC_BASE environment variable</para>
+	      <para>Example #1: stilview -l=C:\Music\HVSC\ -e=/Hubbard_Rob/Commando.sid</para>
+	      <para>Example #2: stilview -l=../HVSC/ =-e=/Hubbard_Rob/Commando.sid</para>
+	      <para>Example #3: stilview -l -e=/Hubbard_Rob/Commando.sid</para>
+
+	      <para>This is where you tell STILView where it can find the HVSC base directory (the
+	       path to the directory has to be specified in the form required by your
+	       operating system, eg. C:\Music\HVSC under Windows, /home/lala/HVSC under UNIX).
+	       STILView will then try to locate the STIL.txt file in the /DOCUMENTS/
+	       subdirectory of that directory. If this option is not specified (or if -l is
+	       specified without a base directory), STILView will try to extract the path of
+	       the HVSC base directory from the HVSC_BASE environment variable. If that
+	       environment variable doesn't exist or is pointing to a location where there's
+	       no STIL.txt file in a DOCUMENTS directory, STILView fails. If the HVSC_BASE
+	       environment variable exists and is valid, and this option is specified, the
+	       directory specified with this option is used as the HVSC base directory instead
+	       of the environment variable.</para>
+
+	      <para>In example #1 the HVSC base directory is located in C:\Music\HVSC\ on the hard
+	       drive of a Windows PC, in example #2 it is located in the HVSC directory of
+	       the current directory's parent directory of a UNIX system. In example #3 the
+	       HVSC base directory is not specified with the option, so it is assumed that
+	       the HVSC_BASE environment variable contains the path to it. In reality,
+	       specifying the -l option in example #3 is redundant, and can be omitted.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-m</option></term>
+	    <listitem>
+	      <para>Demo mode</para>
+	      <para>Default: NONE</para>
+	      <para>Example #1: stilview -m</para>
+	      <para>Example #2: stilview -e=/Hubbard_Rob/Commando.sid -m -i</para>
+
+	      <para>When specified, it prints out a whole bunch of things that a) test most of the
+	       functionality of STILView, and b) show what STILView is capable of retrieving
+	       from STIL. In example #1, the demo is printed with the STIL info coming from a
+	       default STIL entry, then STILView quits. In example #2, the demo is printed
+	       taking the STIL info from the specified STIL entry of /Hubbard_Rob/Commando.sid
+	       (instead of the default SID file), then interactive mode is entered.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-o</option></term>
+	    <listitem>
+	      <para>Do *not* print STIL entries</para>
+	      <para>Default value: Not specified (ie. do print STIL entries)</para>
+	      <para>Example #1: stilview -e=/Hubbard_Rob/Delta.sid -o</para>
+	      <para>Example #2: stilview -e=/Hubbard_Rob/Delta.sid -o -s</para>
+
+	      <para>When this option is specified, STIL entries will not be printed for the given
+	       SID tune (but section-global entries and BUG entries will be printed, provided
+	       they exist and other options did not turn their output off). At a minimum, the
+	       -e option has to be specified for this option to work. Example #1 will print
+	       out the section-global comment and the BUG entry for /Hubbard_Rob/Delta.sid,
+	       example #2 will print out just the section-global comment for the same SID.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-s</option></term>
+	    <listitem>
+	      <para>Do *not* print section-global comments</para>
+	      <para>Default value: Not specified (ie. do print section-global entries)</para>
+	      <para>Example: stilview -e=/Hubbard_Rob/Delta.sid -s</para>
+
+	      <para>When this option is specified, section-global entries will not be printed for
+	       the given SID tune. At a minimum, the -e option has to be specified for this
+	       option to work.</para>
+	    </listitem>
+	  </varlistentry>
+
+	  <varlistentry>
+	    <term><option>-t</option>=<replaceable>tune number</replaceable></term>
+	    <listitem>
+	      <para>Default value: 0</para>
+	      <para>Example #1: stilview -e=/Hubbard_Rob/Commando.sid -t=0</para>
+	      <para>Example #2: stilview -e=/Hubbard_Rob/Delta.sid -t=1 -f=title -s -b</para>
+	      <para>Example #3: stilview -e=/Hubbard_Rob/Delta.sid -t=12</para>
+
+	      <para>Asks for the portion of a STIL entry referring to one particular tune. If tune
+	       number 0 is given, it retrieves all of the entry. Combined with the -f option,
+	       these two options can retrieve any portion of a STIL entry, including a single
+	       field in a specific subtune's entry.</para>
+
+	      <para>For further details about this option, see the explanation of the -f option.</para>
+
+	      <para>Example #1 retrieves all of the STIL entry for /Hubbard_Rob/Commando.sid,
+	       including the section-global comment and the BUG entry (if any), but since the
+	       default value for this option is 0, it might as well be omitted in this
+	       example. Example #2 retrieves only the TITLE field of the first subtune's
+	       entry for /Hubbard_Rob/Delta.sid (and not the section- global comment or the
+	       BUG entry), while example #3 retrieves all of the STIL entry for tune #12 of
+	       the same SID file (including the section-global comment and the BUG entry, if
+	       any).</para>
+	    </listitem>
+	  </varlistentry>
+
+          <varlistentry>
+	    <term><option>-v</option></term>
+	    <listitem>
+	      <para>Print version numbers</para>
+	      <para>Default value: Not specified (ie. do *not* print version numbers)</para>
+	      <para>Example #1: stilview -v</para>
+	      <para>Example #2: stilview -e=/Hubbard_Rob/Commando.sid -v</para>
+
+	      <para>When this option is specified, the version number of the STILView program and
+	       the version number of the STIL.txt file used by it is printed out. In example
+	       #1 this is the only piece of info that gets printed on the screen, in example
+	       #2 the version numbers are printed out, then the STIL entry for
+	       /Hubbard_Rob/Commando.sid is also printed out.</para>
+	    </listitem>
+          </varlistentry>
+
+	</variablelist>
+      </refsect1>
+
+      <refsect1>
+	<title>Environment</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><envar>HVSC_BASE</envar></term>
+	    <listitem>
+	      <para>Specifies the location of the HVSC base directory.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+
+      <refsect1>
+	<title>Examples</title>
+	<para>All of the examples below assume that the HVSC_BASE environment is set to a
+	 valid HVSC base directory (where the $HVSC_BASE/DOCUMENTS/STIL.txt and
+	 $HVSC_BASE/DOCUMENTS/BUGlist.txt files exist), and the examples also assume the
+	 presence of the following entries in these files:</para>
+
+	<para>--- In STIL.txt ---</para>
+
+	<screen>/Hubbard_Rob/
+COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+         have often stolen Hubbard's routine causing some tunes to be falsely
+         credited to him.
+
+/Hubbard_Rob/Action_Biker.sid
+COMMENT: "Action B was a very early game and very conservative in it's approach
+         - it was my idea of giving them what I thought they wanted, a simple
+         cute tune....." (RH)
+
+/Hubbard_Rob/Commando.sid
+COMMENT: Tunes #1 and #3 have been converted from arcade version.
+
+/Hubbard_Rob/Delta.sid
+COMMENT: According to Hubbard, Kentilla and Delta were the most complicated one
+         to compose, they took the longest time to do and they both drove him
+         insane.
+(#1)
+  TITLE: On the Run [from the Dark Side of the Moon]
+ ARTIST: Pink Floyd
+COMMENT: It is more inspired by it than a remix of it.
+(#12)
+  TITLE: Koyaanisqatsi [from the movie]
+ ARTIST: Philip Glass
+COMMENT: "Inspired by Philip Glass and Pink Floyd." (RH)
+
+/Hubbard_Rob/International_Karate.sid
+  TITLE: Merry Christmas, Mr. Lawrence [from the movie] (0:42-1:16)
+ ARTIST: Ryuichi Sakamoto
+COMMENT: "[...] I started exploring pentatonic things in B flat minor over
+         different bass notes, B flat, D flat, G flat and A flat. The middle
+         section went into F (I think) at double tempo to liven things up. I
+         was pleased with the tune......" (RH)
+
+/Hubbard_Rob/Rasputin.sid
+(#1)
+  TITLE: Katjusha (0:07-0:36)
+ ARTIST: Matvei Blanter, M. Isakovski
+  TITLE: Katjusha (2:20)
+ ARTIST: Matvei Blanter, M. Isakovski
+  TITLE: Kaljinka (2:41-2:51)
+ ARTIST: Traditional
+COMMENT: Russian folk song.
+  TITLE: Kaljinka (3:12-3:22)
+ ARTIST: Traditional
+COMMENT: Russian folk song.
+(#2)
+COMMENT: Russian folk song.</screen>
+
+	<para>--- In BUGlist.txt ---</para>
+
+	<screen>/Hubbard_Rob/Commando.sid
+  BUG: This is just for demo.
+
+/Hubbard_Rob/Delta.sid
+(#12)
+  BUG: Demo entry.</screen>
+
+	<para>Given these entries, following are the printouts you can expect from STILView.
+($> denotes a command-line prompt given by your operating system.)</para>
+
+	<para>Everything related to a SID file is printed:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Commando.sid
+   ---- GLOBAL  COMMENT ----
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+   ------ STIL  ENTRY ------
+   COMMENT: Tunes #1 and #3 have been converted from arcade version.
+   ---------- BUG ----------
+     BUG: This is just for demo.
+$></screen>
+
+	<para>Ask for just the section-global comment:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/
+   /Hubbard_Rob/
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+$></screen>
+
+	<para>Note that this can also be retrieved with:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Commando.sid -o -b
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+$></screen>
+
+	<para>This prints out nothing, as single-tune entries do not have file-global
+	 comments:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/International_Karate.sid -t=0 -f=comment -s -b
+$></screen>
+
+	<para>...Except if the only field in them is a COMMENT (in which case that comment is
+	 assumed to be a file-global comment):</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Action_Biker.sid -t=0 -f=comment -s -b
+   COMMENT: "Action B was a very early game and very conservative in it's approach
+            - it was my idea of giving them what I thought they wanted, a simple
+            cute tune....." (RH)
+$></screen>
+
+	<para>Also note that single-tune entries have only one tune, so asking for the STIL
+	 entry of tune #3 is pointless:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/International_Karate.sid -t=3 -s -b
+$></screen>
+
+	<para>Print out the file-global comment for the given SID file:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -t=0 -f=comment -s -b
+   COMMENT: According to Hubbard, Kentilla and Delta were the most complicated one
+            to compose, they took the longest time to do and they both drove him
+            insane.
+$></screen>
+
+	<para>Print out the ARTIST field of tune #12 of the given SID file, plus print out
+	 everything else related to the SID file:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -t=12 -f=artist
+   ---- GLOBAL  COMMENT ----
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+   ------ STIL  ENTRY ------
+    ARTIST: Philip Glass
+   ---------- BUG ----------
+     BUG: Demo entry.
+$></screen>
+
+	<para>Note that the current version of STILView is capable to retrieve only the first
+	 specified field of a tune that covers multiple songs! See below:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Rasputin.sid -t=1 -f=title -s
+     TITLE: Katjusha (0:07-0:36)
+$></screen>
+
+	<para>Section-global comments are printed out even if the STIL entry for the given
+	 SID file does not exist:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/This_doesnt_exist.sid
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+$></screen>
+
+	<para>The following 4 steps depict how to have STILView print out everything related
+	 to a given SID file's given tune number one by one:</para>
+
+	<para>1) This prints out just the section-global comment:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -o -b
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+$></screen>
+
+	<para>2) This prints out just the file-global comment:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -t=0 -f=comment -s -b
+   COMMENT: According to Hubbard, Kentilla and Delta were the most complicated one
+            to compose, they took the longest time to do and they both drove him
+            insane.
+$></screen>
+
+	<para>3) This prints out all of the STIL entry for the given tune number:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -t=12 -f=all -s -b
+     TITLE: Koyaanisqatsi [from the movie]
+    ARTIST: Philip Glass
+   COMMENT: "Inspired by Philip Glass and Pink Floyd." (RH)
+$></screen>
+
+	<para>4) And this prints out just the BUG entry for the same tune number:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -t=12 -s -o
+     BUG: Demo entry.
+$></screen>
+
+	<para>The following 3 steps depict how to have STILView print out everything related
+	 to a given SID file:</para>
+
+	<para>1) This prints out just the section-global comment:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -o -b
+   COMMENT: All of these tunes have been confirmed by Hubbard to be his. People
+            have often stolen Hubbard's routine causing some tunes to be falsely
+            credited to him.
+$></screen>
+
+	<para>2) This prints out all of the STIL entry:</para>
+
+	<screen>$> stilview -e=/Hubbard_Rob/Delta.sid -s -b
+   COMMENT: "[...] The Delta music loader and ingame music was Gary Liddon's idea.
+            [...] He was the producer at Thalamus at the time. He told Rob Hubbard
+            to make the ingame music like the 2nd track from Dark Side of the Moon
+            by Pink Floyd." (Info from Matt Furniss.)
+            "The small jingles are all small clips from Sanxion and Romeo/Juliet
+            music. They were all supposed to be for short stingers such as end of
+            level, extra life etc..."
+            "Delta was based on this minimalist composition technique inspired by
+            Glass and a bit of Pink Floyd. It was quite hard too do and required
+            some custom code to the driver to do it. The music was tedious to
+            debug. The other Delta stuff was more conventional - I quite liked the
+            other tunes. Delta was spread over a 2 week period....." (RH)
+            According to Hubbard, Kentilla and Delta were the most complicated one
+            to compose, they took the longest time to do and they both drove him
+            insane.
+   (#1)
+     TITLE: On the Run [from the Dark Side of the Moon]
+     ARTIST: Pink Floyd
+   COMMENT: It is more inspired by it than a remix of it.
+   (#12)
+     TITLE: Koyaanisqatsi [from the movie]
+    ARTIST: Philip Glass
+   COMMENT: "Inspired by Philip Glass and Pink Floyd." (RH)
+$></screen>
+
+	<para>3) And this prints out all of the BUG entry:</para>
+
+<screen>$> <command>stilview</command> -e=/Hubbard_Rob/Delta.sid -s -o
+   (#12)
+     BUG: Demo entry.
+$></screen>
+      </refsect1>
+    </refentry>
+  </section>
+</article>
