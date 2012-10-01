@@ -130,7 +130,36 @@ ConsolePlayer::ConsolePlayer (const char * const name)
 
 uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char defaultRom[])
 {
-    std::ifstream is((romPath == 0)?defaultRom:romPath, std::ios::binary);
+    std::string dataPath;
+
+    // FIXME this code is dupicated in IniConfig.cpp
+#ifdef _WIN32
+    char szPath[MAX_PATH];
+
+    if (SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, szPath)!=S_OK)
+    {
+        char *path = getenv("USERPROFILE");
+        if (!path)
+            return 0;
+        dataPath.append(path).append("\\Application Data");
+    }
+    else
+        dataPath.append(szPath);
+#else
+    char *path = getenv("XDG_DATA_HOME");
+    if (!path)
+    {
+        path = getenv("HOME");
+        if (!path)
+            return 0;
+        dataPath.append(path).append("/.local/share");
+    }
+    else
+        dataPath.append("/").append(path);
+#endif
+    dataPath.append("/").append(defaultRom);
+
+    std::ifstream is((romPath)?romPath:dataPath.c_str(), std::ios::binary);
 
     if (is.fail())
         goto error;
