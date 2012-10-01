@@ -155,9 +155,9 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char 
         dataPath.append(path).append("/.local/share");
     }
     else
-        dataPath.append("/").append(path);
+        dataPath.append(path);
 #endif
-    dataPath.append("/").append(defaultRom);
+    dataPath.append("/sidplayfp/").append(defaultRom);
 
     std::ifstream is((romPath)?romPath:dataPath.c_str(), std::ios::binary);
 
