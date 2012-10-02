@@ -28,6 +28,10 @@ using std::endl;
 #   include <new>
 #endif
 
+#ifdef _WIN32
+#   include <shlobj.h>
+#endif
+
 #include "player.h"
 #include "keyboard.h"
 
