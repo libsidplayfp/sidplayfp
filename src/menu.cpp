@@ -28,11 +28,13 @@ using std::setw;
 using std::setfill;
 #include "player.h"
 
+#include "sidplayfp/SidInfo.h"
+
 
 // Display console menu
 void ConsolePlayer::menu ()
 {
-    const sid2_info_t &info     = m_engine.info ();
+    const SidInfo &info         = m_engine.info ();
     const SidTuneInfo *tuneInfo = m_tune.getInfo();
 
     if (m_quietLevel > 1)
@@ -58,8 +60,8 @@ void ConsolePlayer::menu ()
     consoleColour (white, false);
     {
         cerr << setw(19) << "Sidplayfp" << " V" << VERSION << ", ";
-        cerr << (char) toupper (*info.name);
-        cerr << info.name + 1 << " V" << info.version << endl;
+        cerr << (char) toupper (*info.name());
+        cerr << info.name() + 1 << " V" << info.version() << endl;
     }
 
     consoleTable (tableSeperator);
@@ -163,7 +165,7 @@ void ConsolePlayer::menu ()
         consoleColour (green, true);
         cerr << " Song Speed   : ";
         consoleColour (white, true);
-        cerr << info.speedString << endl;
+        cerr << info.speedString() << endl;
     }
 
     consoleTable  (tableMiddle);
@@ -194,13 +196,13 @@ void ConsolePlayer::menu ()
         consoleColour (white, false);
         // Display PSID Driver location
         cerr << "DRIVER = ";
-        if (info.driverAddr == 0)
+        if (info.driverAddr() == 0)
             cerr << "NOT PRESENT";
         else
         {
-            cerr << "$"  << setw(4) << setfill('0') << info.driverAddr;
-            cerr << "-$" << setw(4) << setfill('0') << info.driverAddr +
-                (info.driverLength - 1);
+            cerr << "$"  << setw(4) << setfill('0') << info.driverAddr();
+            cerr << "-$" << setw(4) << setfill('0') << info.driverAddr() +
+                (info.driverLength() - 1);
         }
         if (tuneInfo->playAddr() == 0xffff)
             cerr << ", SYS = $" << setw(4) << setfill('0') << tuneInfo->initAddr();
@@ -249,7 +251,7 @@ void ConsolePlayer::menu ()
             consoleColour (yellow, true);
             cerr << " Delay        : ";
             consoleColour (white, false);
-            cerr << info.powerOnDelay << " (cycles at poweron)" << endl;
+            cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
     }
     consoleTable (tableEnd);

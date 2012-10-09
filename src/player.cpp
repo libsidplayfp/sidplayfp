@@ -39,6 +39,7 @@ using std::endl;
 # include <sidbuilder.h>
 #else
 # include <sidplayfp/sidbuilder.h>
+# include <sidplayfp/SidInfo.h>
 #endif
 
 // Previous song select timeout (3 secs)
@@ -352,7 +353,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         {
             m_engCfg.sidEmulation = rs;
             if (!rs->getStatus()) goto createSidEmu_error;
-            rs->create ((m_engine.info ()).maxsids);
+            rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
 
             if (m_filter.filterCurve6581)
@@ -376,7 +377,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         {
             m_engCfg.sidEmulation = rs;
             if (!rs->getStatus()) goto createSidEmu_error;
-            rs->create ((m_engine.info ()).maxsids);
+            rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
 
             rs->bias(m_filter.bias);
@@ -397,7 +398,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
         {
             m_engCfg.sidEmulation = hs;
             if (!hs->getStatus()) goto createSidEmu_error;
-            hs->create ((m_engine.info ()).maxsids);
+            hs->create ((m_engine.info ()).maxsids());
             if (!hs->getStatus()) goto createSidEmu_error;
         }
         break;
