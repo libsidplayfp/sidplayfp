@@ -22,6 +22,7 @@
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplay2.h>
 #include <sidplayfp/event.h>
+#include <sidplayfp/SidConfig.h>
 #ifdef MSVC_HEADER_LOCATIONS
 #include <SidDatabase.h>
 #else
@@ -97,7 +98,7 @@ private:
 
     const char* const  m_name;
     sidplay2           m_engine;
-    sid2_config_t      m_engCfg;
+    SidConfig          m_engCfg;
     SidTune            m_tune;
     player_state_t     m_state;
     const char*        m_outfile;

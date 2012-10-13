@@ -50,15 +50,15 @@ public:
     struct audio_section
     {   // INI Section - [Audio]
         long frequency;
-        sid2_playback_t playback;
+        SidConfig::playback_t playback;
         int  precision;
     };
 
     struct emulation_section
     {   // INI Section - [Emulation]
-        sid2_clock_t  clockSpeed;
+        SidConfig::clock_t  clockSpeed;
         bool          clockForced;
-        sid2_model_t  sidModel;
+        SidConfig::model_t  sidModel;
         bool          forceModel;
         bool          filter;
         double        bias;

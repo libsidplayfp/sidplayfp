@@ -108,13 +108,13 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         // INI Configuration Settings
         m_engCfg.clockForced  = emulation.clockForced;
         m_engCfg.clockDefault = emulation.clockSpeed;
-        m_engCfg.clockDefault = SID2_CLOCK_PAL;
+        m_engCfg.clockDefault = SidConfig::CLOCK_PAL;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.playback     = audio.playback;
         m_precision           = audio.precision;
         m_engCfg.sidDefault   = emulation.sidModel;
         m_engCfg.forceModel   = emulation.forceModel;
-        m_engCfg.sidDefault   = SID2_MOS6581;
+        m_engCfg.sidDefault   = SidConfig::MOS6581;
         m_filter.enabled      = emulation.filter;
         m_filter.bias         = emulation.bias;
         m_filter.filterCurve6581 = emulation.filterCurve6581;
@@ -283,7 +283,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     m_driver.cfg.precision = m_precision;
     m_driver.cfg.channels  = 1; // Mono
     m_driver.cfg.bufSize   = 0; // Recalculate
-    if (m_engCfg.playback == sid2_stereo)
+    if (m_engCfg.playback == SidConfig::STEREO)
         m_driver.cfg.channels = 2;
 
     {   // Open the hardware
@@ -310,12 +310,12 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     switch (m_driver.cfg.channels)
     {
     case 1:
-        if (m_engCfg.playback == sid2_stereo)
-            m_engCfg.playback  = sid2_mono;
+        if (m_engCfg.playback == SidConfig::STEREO)
+            m_engCfg.playback  = SidConfig::MONO;
         break;
     case 2:
-        if (m_engCfg.playback != sid2_stereo)
-            m_engCfg.playback  = sid2_stereo;
+        if (m_engCfg.playback != SidConfig::STEREO)
+            m_engCfg.playback  = SidConfig::STEREO;
         break;
     default:
         cerr << m_name << ": " << "ERROR: " << m_driver.cfg.channels

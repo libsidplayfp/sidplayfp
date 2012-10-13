@@ -194,7 +194,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
 
             else if (argv[i][1] == 's')
             {   // Stereo Playback
-                m_engCfg.playback = sid2_stereo;
+                m_engCfg.playback = SidConfig::STEREO;
             }
 
             else if (argv[i][1] == 't')
@@ -207,53 +207,53 @@ int ConsolePlayer::args (int argc, const char *argv[])
             // Resampling Options ----------
             else if (strcmp (&argv[i][1], "rif") == 0)
             {
-                m_engCfg.samplingMethod = SID2_INTERPOLATE;
+                m_engCfg.samplingMethod = SidConfig::INTERPOLATE;
                 m_engCfg.fastSampling = true;
             }
             else if (strcmp (&argv[i][1], "rrf") == 0)
             {
-                m_engCfg.samplingMethod = SID2_RESAMPLE_INTERPOLATE;
+                m_engCfg.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
                 m_engCfg.fastSampling = true;
             }
             else if (strcmp (&argv[i][1], "ri") == 0)
             {
-                m_engCfg.samplingMethod = SID2_INTERPOLATE;
+                m_engCfg.samplingMethod = SidConfig::INTERPOLATE;
             }
             else if (strcmp (&argv[i][1], "rr") == 0)
             {
-                m_engCfg.samplingMethod = SID2_RESAMPLE_INTERPOLATE;
+                m_engCfg.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
             }
 
             // SID model options
             else if (strcmp (&argv[i][1], "mof") == 0)
             {
-                m_engCfg.sidDefault = SID2_MOS6581;
+                m_engCfg.sidDefault = SidConfig::MOS6581;
                 m_engCfg.forceModel = true;
             }
             else if (strcmp (&argv[i][1], "mnf") == 0)
             {
-                m_engCfg.sidDefault = SID2_MOS8580;
+                m_engCfg.sidDefault = SidConfig::MOS8580;
                 m_engCfg.forceModel = true;
             }
             else if (strcmp (&argv[i][1], "mo") == 0)
             {
-                m_engCfg.sidDefault = SID2_MOS6581;
+                m_engCfg.sidDefault = SidConfig::MOS6581;
             }
             else if (strcmp (&argv[i][1], "mn") == 0)
             {
-                m_engCfg.sidDefault = SID2_MOS8580;
+                m_engCfg.sidDefault = SidConfig::MOS8580;
             }
 
             // Video/Verbose Options
             else if (strcmp (&argv[i][1], "vnf") == 0)
             {
                 m_engCfg.clockForced = true;
-                m_engCfg.clockDefault  = SID2_CLOCK_NTSC;
+                m_engCfg.clockDefault  = SidConfig::CLOCK_NTSC;
             }
             else if (strcmp (&argv[i][1], "vpf") == 0)
             {
                 m_engCfg.clockForced = true;
-                m_engCfg.clockDefault  = SID2_CLOCK_PAL;
+                m_engCfg.clockDefault  = SidConfig::CLOCK_PAL;
             }
             else if (strcmp (&argv[i][1], "vf") == 0)
             {
@@ -261,11 +261,11 @@ int ConsolePlayer::args (int argc, const char *argv[])
             }
             else if (strcmp (&argv[i][1], "vn") == 0)
             {
-                m_engCfg.clockDefault  = SID2_CLOCK_NTSC;
+                m_engCfg.clockDefault  = SidConfig::CLOCK_NTSC;
             }
             else if (strcmp (&argv[i][1], "vp") == 0)
             {
-                m_engCfg.clockDefault  = SID2_CLOCK_PAL;
+                m_engCfg.clockDefault  = SidConfig::CLOCK_PAL;
             }
             else if (argv[i][1] == 'v')
             {
@@ -453,7 +453,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -b<num>      set start time in [m:]s format (default 0)" << endl
 
         << " -f<num>      set frequency in Hz (default: "
-        << SID2_DEFAULT_SAMPLING_FREQ << ")" << endl
+        << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -fd          force dual sid environment" << endl
 
         << "-u<num>       mute voice <num> (e.g. -u1 -u2)" << endl

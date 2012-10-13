@@ -72,13 +72,13 @@ void IniConfig::clear ()
     console_s.junctionLeft  = '+';
     console_s.junctionRight = '+';
 
-    audio_s.frequency = SID2_DEFAULT_SAMPLING_FREQ;
-    audio_s.playback  = sid2_mono;
+    audio_s.frequency = SidConfig::DEFAULT_SAMPLING_FREQ;
+    audio_s.playback  = SidConfig::MONO;
     audio_s.precision = 16;
 
-    emulation_s.clockSpeed    = SID2_CLOCK_PAL;
+    emulation_s.clockSpeed    = SidConfig::CLOCK_PAL;
     emulation_s.clockForced   = false;
-    emulation_s.sidModel      = SID2_MOS6581;
+    emulation_s.sidModel      = SidConfig::MOS6581;
     emulation_s.forceModel    = false;
     emulation_s.filter        = true;
 
@@ -283,9 +283,9 @@ bool IniConfig::readAudio (ini_fd_t ini)
         ret &= readInt (ini, "Channels",  channels);
         if (channels)
         {
-            audio_s.playback = sid2_mono;
+            audio_s.playback = SidConfig::MONO;
             if (channels != 1)
-                audio_s.playback = sid2_stereo;
+                audio_s.playback = SidConfig::STEREO;
         }
     }
 
@@ -306,9 +306,9 @@ bool IniConfig::readEmulation (ini_fd_t ini)
         {
             if (clockSpeed < 0 || clockSpeed > 1)
                 ret = false;
-            emulation_s.clockSpeed = SID2_CLOCK_PAL;
+            emulation_s.clockSpeed = SidConfig::CLOCK_PAL;
             if (clockSpeed)
-                emulation_s.clockSpeed = SID2_CLOCK_NTSC;
+                emulation_s.clockSpeed = SidConfig::CLOCK_NTSC;
         }
     }
 
@@ -321,9 +321,9 @@ bool IniConfig::readEmulation (ini_fd_t ini)
         {
             if (mos8580 < 0 || mos8580 > 1)
                 ret = false;
-            emulation_s.sidModel = SID2_MOS6581;
+            emulation_s.sidModel = SidConfig::MOS6581;
             if (mos8580)
-                emulation_s.sidModel = SID2_MOS8580;
+                emulation_s.sidModel = SidConfig::MOS8580;
         }
     }
 
