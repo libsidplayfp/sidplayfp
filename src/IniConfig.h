@@ -20,6 +20,8 @@
 
 #include "ini/libini.h"
 
+#include <sidplayfp/SidConfig.h>
+
 class IniConfig
 {
 public:
