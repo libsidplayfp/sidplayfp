@@ -253,6 +253,25 @@ void ConsolePlayer::menu ()
             consoleColour (white, false);
             cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
+
+        consoleTable  (tableSeperator);
+        consoleTable  (tableMiddle);
+        consoleColour (magenta, true);
+        cerr << " Kernal ROM   : ";
+        consoleColour (white, false);
+        cerr << info.kernalDesc() << endl;
+
+        consoleTable  (tableMiddle);
+        consoleColour (magenta, true);
+        cerr << " BASIC ROM    : ";
+        consoleColour (white, false);
+        cerr << info.basicDesc() << endl;
+
+        consoleTable  (tableMiddle);
+        consoleColour (magenta, true);
+        cerr << " Chargen ROM  : ";
+        consoleColour (white, false);
+        cerr << info.chargenDesc() << endl;
     }
     consoleTable (tableEnd);
 
