@@ -265,7 +265,8 @@ void checkArguments(void)
 int main(int argc, char **argv)
 {
     char temp[STIL_MAX_PATH_SIZE];
-    char *tmpptr, *versionPtr, *sectionPtr, *entryPtr, *bugPtr;
+    char *tmpptr, *sectionPtr, *entryPtr, *bugPtr;
+    const char *versionPtr;
     char fieldchar;
     float tempval;
 
@@ -284,12 +285,12 @@ int main(int argc, char **argv)
     }
     else {
         if (showVersion && (hvscLoc == NULL)) {
-            tmpptr = myStil.getVersion();
-            if (tmpptr == NULL) {
+            versionPtr = myStil.getVersion();
+            if (versionPtr == NULL) {
                 cerr << "ERROR: No STIL version string was found!" << endl;
             }
             else {
-                cout << tmpptr;
+                cout << versionPtr;
             }
 
             exit(0);
@@ -373,12 +374,12 @@ int main(int argc, char **argv)
 
         // This gets printed regardless.
 
-        tmpptr = myStil.getVersion();
-        if (tmpptr == NULL) {
+        versionPtr = myStil.getVersion();
+        if (versionPtr == NULL) {
             cerr << "ERROR: No STIL version string was found!" << endl;
         }
         else {
-            cout << tmpptr;
+            cout << versionPtr;
         }
 
         if (demo) {
@@ -418,12 +419,12 @@ int main(int argc, char **argv)
 
                     cout << "---- ONE STRING ----" << endl;
 
-                    tmpptr = myStil.getVersion();
-                    if (tmpptr == NULL) {
+                    versionPtr = myStil.getVersion();
+                    if (versionPtr == NULL) {
                         cerr << "ERROR: No STIL version string was found!" << endl;
                     }
                     else {
-                        cout << tmpptr;
+                        cout << versionPtr;
                     }
 
                     cout << "---- STIL CLASS VERSION # ----" << endl;
