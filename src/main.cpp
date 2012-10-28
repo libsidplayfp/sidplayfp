@@ -105,7 +105,7 @@ void sighandler (int signum)
 }
 
 
-void displayError (const char *arg0, uint num)
+void displayError (const char *arg0, unsigned int num)
 {
     cerr << arg0 << ": ";
 

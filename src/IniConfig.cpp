@@ -134,7 +134,7 @@ bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
     if (!ret)
         return false;
 
-    if (ini_readString (ini, ret, (uint) length) < 0)
+    if (ini_readString (ini, ret, (unsigned int) length) < 0)
     {
         free (ret);
         return false;

@@ -76,7 +76,7 @@ enum
     ERR_FILE_OPEN
 };
 
-void displayError (const char *arg0, uint num);
+void displayError (const char *arg0, unsigned int num);
 
 
 // Grouped global variables
@@ -179,7 +179,7 @@ private:
     bool createOutput   (OUTPUTS driver, const SidTuneInfo *tuneInfo);
     bool createSidEmu   (SIDEMUS emu);
     void displayError   (const char *error);
-    void displayError   (uint num) { ::displayError (m_name, num); }
+    void displayError   (unsigned int num) { ::displayError (m_name, num); }
     void decodeKeys     (void);
     void event          (void);
     void emuflush       (void);

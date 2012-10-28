@@ -316,7 +316,7 @@ void ConsolePlayer::consoleColour (player_colour_t colour, bool bold)
 // Display menu outline
 void ConsolePlayer::consoleTable (player_table_t table)
 {
-    const uint tableWidth = 54;
+    const unsigned int tableWidth = 54;
 
     consoleColour (white, true);
     switch (table)
