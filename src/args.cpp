@@ -495,7 +495,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     {
         HardSIDBuilder hs("");
-        if (hs.devices (false))
+        if (hs.availDevices ())
             out << " --hardsid    enable hardsid support" << endl;
     }
 #endif
