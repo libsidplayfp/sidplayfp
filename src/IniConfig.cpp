@@ -18,7 +18,7 @@
 #include <string>
 #include <stdlib.h>
 #include <string.h>
-#include <sidplayfp/sidplay2.h>
+
 #include "config.h"
 #include "IniConfig.h"
 
