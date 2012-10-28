@@ -265,7 +265,7 @@ void checkArguments(void)
 int main(int argc, char **argv)
 {
     char temp[STIL_MAX_PATH_SIZE];
-    char *tmpptr, *sectionPtr, *entryPtr, *bugPtr;
+    const char *tmpptr, *sectionPtr, *entryPtr, *bugPtr;
     const char *versionPtr;
     char fieldchar;
     float tempval;
@@ -452,9 +452,9 @@ int main(int argc, char **argv)
             strcpy(temp, hvscLoc);
 
             // Chop the trailing slash
-            tmpptr = temp+strlen(temp)-1;
-            if (*tmpptr == SLASH) {
-                *tmpptr = '\0';
+            char *tmp = temp+strlen(temp)-1;
+            if (*tmp == SLASH) {
+                *tmp = '\0';
             }
             strcat(temp, entryStr);
 
