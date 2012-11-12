@@ -37,9 +37,12 @@ using std::endl;
 
 #ifdef MSVC_HEADER_LOCATIONS
 # include <sidbuilder.h>
+# include <SidInfo.h>
+# include <SidTuneInfo.h>
 #else
 # include <sidplayfp/sidbuilder.h>
 # include <sidplayfp/SidInfo.h>
+# include <sidplayfp/SidTuneInfo.h>
 #endif
 
 // Previous song select timeout (3 secs)

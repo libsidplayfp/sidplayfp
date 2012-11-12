@@ -28,7 +28,8 @@ using std::setw;
 using std::setfill;
 #include "player.h"
 
-#include "sidplayfp/SidInfo.h"
+#include <sidplayfp/SidInfo.h>
+#include <sidplayfp/SidTuneInfo.h>
 
 
 // Display console menu
