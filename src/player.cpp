@@ -541,7 +541,10 @@ bool ConsolePlayer::open (void)
     m_driver.selected = &m_driver.null;
     m_speed.current   = m_speed.max;
     m_engine.fastForward (100 * m_speed.current);
-    v1mute = v2mute = v3mute = false;
+
+    m_engine.mute(0, v1mute);
+    m_engine.mute(1, v2mute);
+    m_engine.mute(2, v3mute);
 
     // As yet we don't have a required songlength
     // so try the songlength database

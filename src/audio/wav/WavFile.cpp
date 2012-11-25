@@ -58,6 +58,7 @@
 
 #include <stdlib.h>
 #include <sidplayfp/sidendian.h>
+#include <vector>
 #include "WavFile.h"
 #include "WavFileDefs.h"
 
@@ -151,8 +152,6 @@ short* WavFile::open(AudioConfig &cfg, const char* name)
 
 short* WavFile::write()
 {
-    float buf16[_settings.bufSize];
-    unsigned long i;
     if (file && !file->fail()) {
         unsigned long int bytes = _settings.bufSize;
         if (!headerWritten) {
@@ -165,11 +164,12 @@ short* WavFile::write()
             bytes *= 2;
             file->write((char*)_sampleBuffer, bytes);
         } else {
+            std::vector<float> buffer(_settings.bufSize);
             bytes *= 4;
-            for (i=0;i<_settings.bufSize;i++) {
-                buf16[i] = ((float)_sampleBuffer[i])/32768.;
+            for (unsigned long i=0;i<_settings.bufSize;i++) {
+                buffer[i] = ((float)_sampleBuffer[i])/32768.f;
             }
-            file->write((char*)buf16, bytes);
+            file->write((char*)&buffer.front(), bytes);
         }
         byteCount += bytes;
 
