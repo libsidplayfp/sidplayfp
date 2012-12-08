@@ -456,7 +456,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -fd          force dual sid environment" << endl
 
-        << "-u<num>       mute voice <num> (e.g. -u1 -u2)" << endl
+        << " -u<num>       mute voice <num> (e.g. -u1 -u2)" << endl
 
         << " -nf          no SID filter emulation" << endl
 
