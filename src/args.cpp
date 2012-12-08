@@ -410,7 +410,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
             if (database && (*database != '\0'))
             {   // Try loading the database specificed by the user
-                if (m_database.open (database) < 0)
+                if (!m_database.open (database))
                 {
                     displayError (m_database.error ());
                     return -1;
