@@ -51,6 +51,24 @@ char OTHER_HVSC_BASE_DIR[]="E:\\MUSIC\\SID\\C64music\\";
 
 using namespace std;
 
+char toLowerAscii(char c)
+{
+    return (c < 'A' || c > 'Z') ? c : c + ('a' - 'A');
+}
+
+bool strEquals(const char* s1, const char* s2)
+{
+    while (*s1 && *s2)
+    {
+        if (toLowerAscii(*s1) != toLowerAscii(*s2))
+            return false;
+        s1++;
+        s2++;
+    }
+
+    return !(*s1 || *s2);
+}
+
 void printUsageStr(void)
 {
     cout << endl;
@@ -181,22 +199,22 @@ void processArguments(int argc, char **argv)
                         cerr << "ERROR: field was not specified correctly!" << endl;
                         printUsage();
                     }
-                    if (MYSTRICMP(fieldStr, "all") == 0) {
+                    if (strEquals(fieldStr, "all")) {
                         field = STIL::all;
                     }
-                    else if (MYSTRICMP(fieldStr, "name") == 0) {
+                    else if (strEquals(fieldStr, "name")) {
                         field = STIL::name;
                     }
-                    else if (MYSTRICMP(fieldStr, "author") == 0) {
+                    else if (strEquals(fieldStr, "author")) {
                         field = STIL::author;
                     }
-                    else if (MYSTRICMP(fieldStr, "title") == 0) {
+                    else if (strEquals(fieldStr, "title")) {
                         field = STIL::title;
                     }
-                    else if (MYSTRICMP(fieldStr, "artist") == 0) {
+                    else if (strEquals(fieldStr, "artist")) {
                         field = STIL::artist;
                     }
-                    else if (MYSTRICMP(fieldStr, "comment") == 0) {
+                    else if (strEquals(fieldStr, "comment")) {
                         field = STIL::comment;
                     }
                     else {
