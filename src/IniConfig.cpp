@@ -231,7 +231,7 @@ bool IniConfig::readSidplay2 (ini_fd_t ini)
     bool ret = true;
     int  time, version = sidplay2_s.version;
 
-    (void) ini_locateHeading (ini, "SIDPlay2");
+    (void) ini_locateHeading (ini, "SIDPlayfp");
     ret &= readInt (ini, "Version", version);
     if (version > 0)
         sidplay2_s.version = version;
