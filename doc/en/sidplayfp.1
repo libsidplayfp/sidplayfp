@@ -33,13 +33,17 @@ Verbose output while playing.
 \fB\-b<num>\fR
 Set start time in [mins:]secs format (compatible with sid2wav).
 .TP
-\fB\-fd\fR
-Force dual sid environment.
+\fB\-ds<addr>\fR
+Force dual sid environment by adding a second chip at specified address.
 This forces emulation of  2 sid-chips for stereo playback
 even if datafile is identified as only being mono.  This occurs
 in the case of the stereo prg format as currently there is no way
-to identify them.  Stereo MUS files are however automatically
-detected.  The second sid appears in the 0xD420-0xD7FF address range.
+to identify them.  Stereo MUS and SID files are however automatically
+detected.
+The second sid may be installed in the 0xD420-0xD7FF or 0xDE00-0xDFFF
+address range.
+Address may be specified in exadecimal (e.g -ds0xd420) or decimal
+(e.g. -ds54304) format.
 .TP
 \fB\-u<num>\fR
 Mute a channel.  May be used more than one time.  Channel 1 to 3 are for the first SID chip while channels from 4 to 6 are for the second one on stereo tunes.

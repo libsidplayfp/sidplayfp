@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <cstdlib>
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -66,6 +68,17 @@ bool ConsolePlayer::parseTime (const char *str, uint_least32_t &time)
     return true;
 }
 
+bool ConsolePlayer::parseAddress (const char *str, uint_least16_t &address)
+{
+    if (*str == '\0')
+        return false;
+
+    long x = strtol(str, 0, 0);
+
+    address = x;
+    return true;
+}
+
 // Parse command line arguments
 int ConsolePlayer::args (int argc, const char *argv[])
 {
@@ -109,9 +122,10 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 if (!parseTime (&argv[i][2], m_timer.start))
                     err = true;
             }
-            else if (strcmp (&argv[i][1], "fd") == 0)
+            else if (strncmp (&argv[i][1], "ds", 2) == 0)
             {   // Override sidTune and enable the second sid
-                m_engCfg.forceDualSids = true;
+                if (!parseAddress (&argv[i][3], m_engCfg.secondSidAddress))
+                    err = true;
             }
             else if (argv[i][1] == 'f')
             {
@@ -454,7 +468,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
-        << " -fd          force dual sid environment" << endl
+        << " -ds<addr>    set second sid address (e.g. -dsd420)" << endl
 
         << " -u<num>       mute voice <num> (e.g. -u1 -u2)" << endl
 

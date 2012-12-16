@@ -173,6 +173,7 @@ private:
 
     // Command line args
     bool parseTime        (const char *str, uint_least32_t &time);
+    bool parseAddress      (const char *str, uint_least16_t &address);
     void displayArgs      (const char *arg = NULL);
     void displayDebugArgs ();
 
