@@ -241,45 +241,45 @@ int ConsolePlayer::args (int argc, const char *argv[])
             // SID model options
             else if (strcmp (&argv[i][1], "mof") == 0)
             {
-                m_engCfg.sidDefault = SidConfig::MOS6581;
-                m_engCfg.forceModel = true;
+                m_engCfg.defaultSidModel = SidConfig::MOS6581;
+                m_engCfg.forceSidModel = true;
             }
             else if (strcmp (&argv[i][1], "mnf") == 0)
             {
-                m_engCfg.sidDefault = SidConfig::MOS8580;
-                m_engCfg.forceModel = true;
+                m_engCfg.defaultSidModel = SidConfig::MOS8580;
+                m_engCfg.forceSidModel = true;
             }
             else if (strcmp (&argv[i][1], "mo") == 0)
             {
-                m_engCfg.sidDefault = SidConfig::MOS6581;
+                m_engCfg.defaultSidModel = SidConfig::MOS6581;
             }
             else if (strcmp (&argv[i][1], "mn") == 0)
             {
-                m_engCfg.sidDefault = SidConfig::MOS8580;
+                m_engCfg.defaultSidModel = SidConfig::MOS8580;
             }
 
             // Video/Verbose Options
             else if (strcmp (&argv[i][1], "vnf") == 0)
             {
-                m_engCfg.clockForced = true;
-                m_engCfg.clockDefault  = SidConfig::CLOCK_NTSC;
+                m_engCfg.forceC64Model = true;
+                m_engCfg.defaultC64Model  = SidConfig::NTSC;
             }
             else if (strcmp (&argv[i][1], "vpf") == 0)
             {
-                m_engCfg.clockForced = true;
-                m_engCfg.clockDefault  = SidConfig::CLOCK_PAL;
+                m_engCfg.forceC64Model = true;
+                m_engCfg.defaultC64Model  = SidConfig::PAL;
             }
             else if (strcmp (&argv[i][1], "vf") == 0)
             {
-                m_engCfg.clockForced = true;
+                m_engCfg.forceC64Model = true;
             }
             else if (strcmp (&argv[i][1], "vn") == 0)
             {
-                m_engCfg.clockDefault  = SidConfig::CLOCK_NTSC;
+                m_engCfg.defaultC64Model  = SidConfig::NTSC;
             }
             else if (strcmp (&argv[i][1], "vp") == 0)
             {
-                m_engCfg.clockDefault  = SidConfig::CLOCK_PAL;
+                m_engCfg.defaultC64Model  = SidConfig::PAL;
             }
             else if (argv[i][1] == 'v')
             {

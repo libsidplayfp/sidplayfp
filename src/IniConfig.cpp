@@ -76,8 +76,8 @@ void IniConfig::clear ()
     audio_s.playback  = SidConfig::MONO;
     audio_s.precision = 16;
 
-    emulation_s.clockSpeed    = SidConfig::CLOCK_PAL;
-    emulation_s.clockForced   = false;
+    emulation_s.modelDefault  = SidConfig::PAL;
+    emulation_s.modelForced   = false;
     emulation_s.sidModel      = SidConfig::MOS6581;
     emulation_s.forceModel    = false;
     emulation_s.filter        = true;
@@ -300,33 +300,37 @@ bool IniConfig::readEmulation (ini_fd_t ini)
     (void) ini_locateHeading (ini, "Emulation");
 
     {
-        int clockSpeed = -1;
-        ret &= readInt (ini, "ClockSpeed", clockSpeed);
-        if (clockSpeed != -1)
+        char *str;
+        ret &= readString (ini, "C64Model", str);
+        if (ret)
         {
-            if (clockSpeed < 0 || clockSpeed > 1)
-                ret = false;
-            emulation_s.clockSpeed = SidConfig::CLOCK_PAL;
-            if (clockSpeed)
-                emulation_s.clockSpeed = SidConfig::CLOCK_NTSC;
+            if (strcmp(str, "PAL") == 0)
+                emulation_s.modelDefault = SidConfig::PAL;
+            else if (strcmp(str, "NTSC") == 0)
+                emulation_s.modelDefault = SidConfig::NTSC;
+            else if (strcmp(str, "OLD_NTSC") == 0)
+                emulation_s.modelDefault = SidConfig::OLD_NTSC;
+            else if (strcmp(str, "DREAN") == 0)
+                emulation_s.modelDefault = SidConfig::DREAN;
         }
     }
 
-    ret &= readBool (ini, "ForceSongSpeed", emulation_s.clockForced);
+    ret &= readBool (ini, "ForceC64Model", emulation_s.modelForced);
 
     {
-        int mos8580 = -1;
-        ret &= readInt (ini, "MOS8580", mos8580);
-        if (mos8580 != -1)
+        char *str;
+        ret &= readString (ini, "SidModel", str);
+        if (ret)
         {
-            if (mos8580 < 0 || mos8580 > 1)
-                ret = false;
-            emulation_s.sidModel = SidConfig::MOS6581;
-            if (mos8580)
+            if (strcmp(str, "MOS6581") == 0)
+                emulation_s.sidModel = SidConfig::MOS6581;
+            else if (strcmp(str, "MOS8580") == 0)
                 emulation_s.sidModel = SidConfig::MOS8580;
         }
     }
-
+    
+    ret &= readBool (ini, "ForceSidModel", emulation_s.forceModel);
+    
     ret &= readBool (ini, "UseFilter", emulation_s.filter);
 
     ret &= readDouble (ini, "FilterBias", emulation_s.bias);

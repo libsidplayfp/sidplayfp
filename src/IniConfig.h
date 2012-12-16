@@ -58,9 +58,9 @@ public:
 
     struct emulation_section
     {   // INI Section - [Emulation]
-        SidConfig::clock_t  clockSpeed;
-        bool          clockForced;
-        SidConfig::model_t  sidModel;
+        SidConfig::c64_model_t  modelDefault;
+        bool          modelForced;
+        SidConfig::sid_model_t  sidModel;
         bool          forceModel;
         bool          filter;
         double        bias;

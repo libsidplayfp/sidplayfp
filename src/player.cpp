@@ -109,15 +109,13 @@ ConsolePlayer::ConsolePlayer (const char * const name)
         IniConfig::emulation_section emulation = m_iniCfg.emulation();
 
         // INI Configuration Settings
-        m_engCfg.clockForced  = emulation.clockForced;
-        m_engCfg.clockDefault = emulation.clockSpeed;
-        m_engCfg.clockDefault = SidConfig::CLOCK_PAL;
+        m_engCfg.forceC64Model   = emulation.modelForced;
+        m_engCfg.defaultC64Model = emulation.modelDefault;
+        m_engCfg.defaultSidModel = emulation.sidModel;
+        m_engCfg.forceSidModel   = emulation.forceModel;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.playback     = audio.playback;
         m_precision           = audio.precision;
-        m_engCfg.sidDefault   = emulation.sidModel;
-        m_engCfg.forceModel   = emulation.forceModel;
-        m_engCfg.sidDefault   = SidConfig::MOS6581;
         m_filter.enabled      = emulation.filter;
         m_filter.bias         = emulation.bias;
         m_filter.filterCurve6581 = emulation.filterCurve6581;
