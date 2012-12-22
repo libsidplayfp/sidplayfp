@@ -79,17 +79,23 @@ Number of channels, 1 for mono and 2 for stereo playback
 \fBBitsPerSample\fR=\fI<number>\fR
 .br
 .SH Emulation
-\fBClockSpeed\fR=\fI<number>\fR
-Default clock speed, 0 for PAL and 1 for NTSC
+.TP
+\fBC64Model\fR=\fI<PAL|NTSC|OLD_NTSC|DREAN>\fR
+Default c64 model, PAL for european PAL-B model, NTSC for american/japanese NTSC-M models,
+OLD_NTSC for NTSC-M models with old video chip and DREAN for argentinian PAL-N model.
 .br
 
 .TP
-\fBForceSongSpeed\fR=\fItrue|false\fR
+\fBForceC64Model\fR=\fItrue|false\fR
 .br
 
 .TP
-\fBMOS8580\fR=\fI<number>\fR
-Default SID chip model, 0 for MOS6581 and 1 for MOS8580
+\fBSidModel\fR=\fI<MOS6581|MOS8580>\fR
+Default SID chip model, old MOS 6581 or newer MOS 8580
+.br
+
+.TP
+\fBForceSidModel\fR=\fItrue|false\fR
 .br
 
 .TP
@@ -98,19 +104,19 @@ Enable/disable the emulation of the SID filter
 .br
 
 .TP
-\fBFilterBias\fR=<number>
+\fBFilterBias\fR=\fI<number>\fR
 Controls the filter bias in the ReSID emulation.
 The bias is given in millivolts, and a maximum reasonable control range is approximately -500 to 500
 .br
 
 .TP
-\fBFilterCurve6581\fR=<number>
+\fBFilterCurve6581\fR=\fI<number>\fR
 Controls the filter curve for the 6581 model in the ReSIDfp emulation.
 Ranges from 0.0 (light) to 1.0 (dark), the default value is 0.5
 .br
 
 .TP
-\fBFilterCurve8580\fR=<number>
+\fBFilterCurve8580\fR=\fI<number>\fR
 Controls the filter curve for the 8580 model in the ReSIDfp emulation.
 Value is expressed in Hertz and the default is 12500
 .br
