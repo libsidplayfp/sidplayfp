@@ -23,6 +23,7 @@
 #include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/event.h>
 #include <sidplayfp/SidConfig.h>
+#include <sidplayfp/SidTuneInfo.h>
 #ifdef MSVC_HEADER_LOCATIONS
 #include <SidDatabase.h>
 #else
@@ -185,6 +186,8 @@ private:
     void event          (void);
     void emuflush       (void);
     void menu           (void);
+
+    const char* getModel (SidTuneInfo::model_t model);
 
     uint8_t* loadRom    (const char* romPath, const int size, const char defaultRom[]);
 

@@ -229,22 +229,19 @@ void ConsolePlayer::menu ()
         cerr << "Filter = "
              << ((m_filter.enabled == true) ? "Yes" : "No");
         cerr << ", Model = ";
-        switch (tuneInfo->sidModel1())
-        {
-        case SidTuneInfo::SIDMODEL_UNKNOWN:
-            cerr << "UNKNOWN";
-            break;
-        case SidTuneInfo::SIDMODEL_6581:
-            cerr << "6581";
-            break;
-        case SidTuneInfo::SIDMODEL_8580:
-            cerr << "8580";
-            break;
-        case SidTuneInfo::SIDMODEL_ANY:
-            cerr << "ANY";
-            break;
-        }
+        cerr << getModel(tuneInfo->sidModel1());
         cerr << endl;
+        
+        if (tuneInfo->isStereo())
+        {
+            consoleTable  (tableMiddle);
+            consoleColour (yellow, true);
+            cerr << "              : ";
+            consoleColour (white, false);
+            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2();
+            cerr << ", Model = " << getModel(tuneInfo->sidModel2());
+            cerr << endl;
+        }
 
         if (m_verboseLevel > 1)
         {
@@ -351,9 +348,25 @@ void ConsolePlayer::consoleTable (player_table_t table)
     cerr << "\n";
 }
 
+
 // Restore Ansi Console to defaults
 void ConsolePlayer::consoleRestore ()
 {
     if ((m_iniCfg.console ()).ansi)
         cerr << '\x1b' << "[0m";
+}
+
+const char* ConsolePlayer::getModel (SidTuneInfo::model_t model)
+{
+    switch (model)
+    {
+    case SidTuneInfo::SIDMODEL_UNKNOWN:
+        return "UNKNOWN";
+    case SidTuneInfo::SIDMODEL_6581:
+        return "6581";
+    case SidTuneInfo::SIDMODEL_8580:
+        return "8580";
+    case SidTuneInfo::SIDMODEL_ANY:
+        return "ANY";
+    }
 }
