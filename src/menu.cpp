@@ -238,7 +238,7 @@ void ConsolePlayer::menu ()
             consoleColour (yellow, true);
             cerr << "              : ";
             consoleColour (white, false);
-            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2();
+            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2() << dec;
             cerr << ", Model = " << getModel(tuneInfo->sidModel2());
             cerr << endl;
         }
