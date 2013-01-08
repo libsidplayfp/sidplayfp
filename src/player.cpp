@@ -439,12 +439,6 @@ createSidEmu_error:
 
 bool ConsolePlayer::open (void)
 {
-    if (!m_engine.getStatus())
-    {
-        displayError (m_engine.error ());
-        return false;
-    }
-
     if ((m_state & ~playerFast) == playerRestart)
     {
         if (m_quietLevel < 2)
