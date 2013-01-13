@@ -25,7 +25,7 @@ No filter emulation.  This will reduce CPU overhead at the cost of reduced sound
 Select track number (default: preset).
 .TP
 \fB\-s\fR
-Stereo Hardware support.  For Sidplay the channels for the sid will be split into left and right creating a stereo effect.  The same effect is present for Sidplayfp unless the tune is identified as stereo.  If this is the case then sid 1 and 2 become the left and right channels respectively.  For Sidplay other options are provided to produce special effects when in stereo mode, but Sidplayfp does not as yet support these.
+Stereo playback.  If the tune is identified as stereo then sid 1 and 2 become the left and right channels respectively.
 .TP
 \fB\-v[num]\fR
 Verbose output while playing.
@@ -91,7 +91,7 @@ sidplayfp.ini(5)
 
 .RS
 .SH NOTES
-ROM dumps are no longer embedded but must be supplied by the user. By default <command>sidplayfp</command> will look for the files under $XDG_DATA_HOME (or $HOME/.local/share/sidplayfp/ if not defined) on Linux and C:\\Documents and Settings\\username\\Application Data\\sidplayfp\\ on Windows. You can override the defaults by changing the settings in sidplayfp.ini(5). The only mandatory ROM is the kernal, basic and chargen are optional and most tune should work fine without.
+ROM dumps are no longer embedded but must be supplied by the user. By default <command>sidplayfp</command> will look for the files kernal, basic and chargen under $XDG_DATA_HOME (or $HOME/.local/share/sidplayfp/ if not defined) on Linux and C:\\Documents and Settings\\username\\Application Data\\sidplayfp\\ on Windows. You can override the defaults by changing the settings in sidplayfp.ini(5). The ROM are optional and most tune should work fine without.
 .SH OTHER INFORMATION
 Sidplayfp Homepage:
     http://sourceforge.net/projects/sidplay-residfp/
