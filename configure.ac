@@ -1,9 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(sidplayfp,[1.0.0beta2])
+AC_INIT([sidplayfp],[1.0.0beta2])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
-AM_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 
 
@@ -114,7 +114,7 @@ AUDIO_DRV="$audiodrv_libadd"
 AC_SUBST(AUDIO_DRV)
 
 dnl Use C++ for tests.
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 
 dnl Check for nothrow allocator.
 MY_CHECK_EXCEPTIONS
