@@ -46,5 +46,5 @@ By default sidplayfp will look for the files under $XDG_DATA_HOME
 C:\Documents and Settings\username\Application Data\sidplayfp\
 on Windows. You can override the defaults by changing the settings
 in sidplayfp.ini(5).
-The only mandatory ROM is the kernal, basic and chargen are optional and
-most tune should work fine without.
+The ROMs are optional and most tune should work fine without
+but compatibility is not guaranteed.
