@@ -301,8 +301,8 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
     {
         char *str;
-        ret &= readString (ini, "C64Model", str);
-        if (ret)
+        const bool res = readString (ini, "C64Model", str);
+        if (res)
         {
             if (strcmp(str, "PAL") == 0)
                 emulation_s.modelDefault = SidConfig::PAL;
@@ -313,24 +313,26 @@ bool IniConfig::readEmulation (ini_fd_t ini)
             else if (strcmp(str, "DREAN") == 0)
                 emulation_s.modelDefault = SidConfig::DREAN;
         }
+        ret &= res;
     }
 
     ret &= readBool (ini, "ForceC64Model", emulation_s.modelForced);
 
     {
         char *str;
-        ret &= readString (ini, "SidModel", str);
-        if (ret)
+        const bool res = readString (ini, "SidModel", str);
+        if (res)
         {
             if (strcmp(str, "MOS6581") == 0)
                 emulation_s.sidModel = SidConfig::MOS6581;
             else if (strcmp(str, "MOS8580") == 0)
                 emulation_s.sidModel = SidConfig::MOS8580;
         }
+        ret &= res;
     }
-    
+
     ret &= readBool (ini, "ForceSidModel", emulation_s.forceModel);
-    
+
     ret &= readBool (ini, "UseFilter", emulation_s.filter);
 
     ret &= readDouble (ini, "FilterBias", emulation_s.bias);
