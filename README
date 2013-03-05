@@ -1,4 +1,5 @@
 sidplayfp
+=========
 
 http://sourceforge.net/projects/sidplay-residfp/
 
@@ -12,13 +13,29 @@ Copyright (c) 2007-2010 Antti Lankila
 Copyright (c) 2010-2013 Leandro Nini <drfiemost@users.sourceforge.net>
 
 
+NOTE:
+-----
+ROM dumps are no longer embedded but must be supplied by the user.
+By default sidplayfp will look for the files under $XDG_DATA_HOME
+(or $HOME/.local/share/sidplayfp/ if not defined) on Linux and
+C:\Documents and Settings\username\Application Data\sidplayfp\
+on Windows. You can override the defaults by changing the settings
+in sidplayfp.ini(5).
+The ROMs are optional and most tune should work fine without
+but compatibility is not guaranteed.
+
+
+
 stilview
+========
 
 STILView is a command-line driven program to help you retrieve
 the entries stored in STIL fast and accurately.
 
-Copyright (C) 1998, 2002 by LaLa
+Copyright (c) 1998, 2002 by LaLa
 Copyright (c) 2013 Leandro Nini <drfiemost@users.sourceforge.net>
+
+
 
 -----------------------------------------------------------------------------
 
@@ -37,14 +54,3 @@ Copyright (c) 2013 Leandro Nini <drfiemost@users.sourceforge.net>
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 -----------------------------------------------------------------------------
-
-NOTE:
-
-ROM dumps are no longer embedded but must be supplied by the user.
-By default sidplayfp will look for the files under $XDG_DATA_HOME
-(or $HOME/.local/share/sidplayfp/ if not defined) on Linux and
-C:\Documents and Settings\username\Application Data\sidplayfp\
-on Windows. You can override the defaults by changing the settings
-in sidplayfp.ini(5).
-The ROMs are optional and most tune should work fine without
-but compatibility is not guaranteed.
