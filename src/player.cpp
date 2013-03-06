@@ -21,6 +21,7 @@ using std::cerr;
 using std::endl;
 #include <iomanip>
 #include <fstream>
+#include <stdlib.h>
 
 #include "config.h"
 
