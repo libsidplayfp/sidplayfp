@@ -65,25 +65,29 @@ void ConsolePlayer::menu ()
         cerr << info.name() + 1 << " V" << info.version() << endl;
     }
 
-    consoleTable (tableSeperator);
-
-    if (tuneInfo->numberOfInfoStrings() == 3) //FIXME
+    const unsigned int n = tuneInfo->numberOfInfoStrings();
+    if (n)
     {
+        consoleTable (tableSeperator);
+
         consoleTable  (tableMiddle);
         consoleColour (cyan, true);
         cerr << " Title        : ";
         consoleColour (magenta, true);
         cerr << tuneInfo->infoString(0) << endl;
-        consoleTable  (tableMiddle);
-        consoleColour (cyan, true);
-        cerr << " Author       : ";
-        consoleColour (magenta, true);
-        cerr << tuneInfo->infoString(1) << endl;
-        consoleTable  (tableMiddle);
-        consoleColour (cyan, true);
-        cerr << " Released     : ";
-        consoleColour (magenta, true);
-        cerr << tuneInfo->infoString(2) << endl;
+        if (n>1)
+        {
+            consoleTable  (tableMiddle);
+            consoleColour (cyan, true);
+            cerr << " Author       : ";
+            consoleColour (magenta, true);
+            cerr << tuneInfo->infoString(1) << endl;
+            consoleTable  (tableMiddle);
+            consoleColour (cyan, true);
+            cerr << " Released     : ";
+            consoleColour (magenta, true);
+            cerr << tuneInfo->infoString(2) << endl;
+        }
     }
 
     for (unsigned int i = 0; i < tuneInfo->numberOfCommentStrings(); i++)
