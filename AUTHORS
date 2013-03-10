@@ -13,7 +13,8 @@ supplied contributions or code was derived from their work:
     Jarno Paananen    - 16 bit mixer code, Windows
                         MMSYSTEM Drivers
     Antti Lankila     - Pulse Audio driver
-    Leandro Nini      - build system changes and packaging
+    Leandro Nini      - build system changes, port to libsidplayfp
+                        minor improvements
     LaLa              - stilview
 
 Credit where credit is due, so if I missed anyone please let me know.

@@ -10,7 +10,7 @@ It is composed by a number of sections, each one composed by a section name, enc
 .TP
 \fB[SIDPlayfp]\fR \- Generic configuration
 .TP
-\fB[Console]\fR \-
+\fB[Console]\fR \- Console appearance configuration
 .TP
 \fB[Audio]\fR \- Audio output configuration
 .TP
@@ -32,53 +32,111 @@ Configuration version
 
 .TP
 \fBSonglength Database\fR=\fI<path>\fR
-Path for the Songlength DB
+Full path for the Songlength DB. Should point to the DOCUMENTS/Songlengths.txt file under the HVSC collection path.
 .br
 
 .TP
 \fBDefault Play Length\fR=\fImm:ss\fR
+Default play time if Songlength Database is not found.
 .br
 
 .TP
 \fBDefault Record Length\fR=\fImm:ss\fR
+Default recording time when writing wave files if Songlength Database is not found.
 .br
 
 .TP
 \fBKernal Rom\fR=\fI<path>\fR
-Path for the Kernal Rom file.
+Full path for the Kernal Rom file. This is the most important rom and should always be provided, although many tunes will still work without.
+By default the program will look for a \fIkernal\fR file under the following locations:
+.IP \[bu]
+$XDG_DATA_HOME/sidplayfp/
+on *NIX systems where XDG_DATA_HOME is defined.
+.IP \[bu]
+$HOME/.local/share/sidplayfp/
+on *NIX systems where XDG_DATA_HOME is not defined.
+.IP \[bu]
+%CSIDL_APPDATA%\\sidplayfp\\
+on Windows systems where CSIDL_APPDATA is defined.
+.IP \[bu]
+%USERPROFILE%\\Application Data\\sidplayfp\\
+on Windows systems where CSIDL_APPDATA is not defined.
 .br
 
 .TP
 \fBBasic Rom\fR=\fI<path>\fR
-Path for the Basic Rom file.
+Full path for the Basic Rom file. This is moslty useful for playing BASIC tunes.
+By default the program will look for a \fIbasic\fR file under the same locations as above.
 .br
 
 .TP
 \fBChargen Rom\fR=\fI<path>\fR
-Path for the Character generator Rom file.
+Full path for the Character generator Rom file. Almost useless for playback of tunes, but included for completeness.
+By default the program will look for a \fIchargen\fR file under the same locations as above.
 .br
 
 .SH Console
 .TP
 \fBAnsi\fR=\fItrue|false\fR
-Use ANSI escape sequences to provide colored output.
+Use ANSI escape sequences to provide colored output if supported by the terminal.
+.br
+
+.TP
+\fBChar Top Left\fR=\fI<char>\fR
+Character for the top left corner.
+.br
+
+.TP
+\fBChar Top Right\fR=\fI<char>\fR
+Character for the top right corner.
+.br
+
+.TP
+\fBChar Bottom Left\fR=\fI<char>\fR
+Character for the bottom left corner.
+.br
+
+.TP
+\fBChar Bottom Right\fR=\fI<char>\fR
+Character for the bottom right corner.
+.br
+
+.TP
+\fBChar Vertical\fR=\fI<char>\fR
+Character for vertical lines.
+.br
+
+.TP
+\fBChar Horizontal\fR=\fI<char>\fR
+Character for horizontal lines.
+.br
+
+.TP
+\fBChar Junction Left\fR=\fI<char>\fR
+Character for left junctions.
+.br
+
+.TP
+\fBChar Junction Right\fR=\fI<char>\fR
+Character for right junctions.
 .br
 
 .SH Audio
 .TP
 \fBFrequency\fR=\fI<number>\fR
-Playback frequency expressed in Hertz
+Playback frequency expressed in Hertz.
 .br
 
 .TP
 \fBChannels\fR=\fI<number>\fR
-Number of channels, 1 for mono and 2 for stereo playback
+Number of channels, 1 for mono and 2 for stereo playback.
 .br
 
 .TP
 \fBBitsPerSample\fR=\fI<16|32>\fR
 Number of bits ber sample, used only for wav output. Using values other than the ones specified will produce invalid output.
 .br
+
 .SH Emulation
 .TP
 \fBC64Model\fR=\fI<PAL|NTSC|OLD_NTSC|DREAN>\fR
@@ -88,6 +146,7 @@ OLD_NTSC for NTSC-M models with old video chip and DREAN for argentinian PAL-N m
 
 .TP
 \fBForceC64Model\fR=\fItrue|false\fR
+Force the selected c64 model wven if the tune states otherwise.
 .br
 
 .TP
@@ -97,11 +156,12 @@ Default SID chip model, old MOS 6581 or newer MOS 8580
 
 .TP
 \fBForceSidModel\fR=\fItrue|false\fR
+Force the selected SID chip model wven if the tune states otherwise.
 .br
 
 .TP
 \fBUseFilter\fR=\fItrue|false\fR
-Enable/disable the emulation of the SID filter
+Enable/disable the emulation of the SID filter.
 .br
 
 .TP
