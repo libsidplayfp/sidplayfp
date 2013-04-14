@@ -25,6 +25,10 @@ using std::cerr;
 using std::endl;
 #include "player.h"
 
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#endif
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #   include <sidplayfp/builders/hardsid.h>
 #endif
@@ -418,10 +422,20 @@ int ConsolePlayer::args (int argc, const char *argv[])
         }
         if (!m_timer.valid)
         {
+#if !defined _WIN32 && defined HAVE_UNISTD_H
+            char buffer[PATH_MAX];
+#endif
             const char *database = (m_iniCfg.sidplay2()).database;
             m_timer.length = (m_iniCfg.sidplay2()).playLength;
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
+#if !defined _WIN32 && defined HAVE_UNISTD_H
+            if (!database || *database == '\0') {
+                snprintf(buffer, PATH_MAX, "%sSonglengths.txt", PKGDATADIR);
+                if (::access(buffer, R_OK) == 0)
+                   database = buffer;
+            }
+#endif
             if (database && (*database != '\0'))
             {   // Try loading the database specificed by the user
                 if (!m_database.open (database))
