@@ -1,7 +1,7 @@
 
 SUBDIRS = audio
 
-AM_CPPFLAGS = -I $(top_builddir) \
+AM_CPPFLAGS = -I $(top_builddir) -DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS)
 

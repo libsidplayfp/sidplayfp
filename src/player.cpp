@@ -25,6 +25,10 @@ using std::endl;
 
 #include "config.h"
 
+#ifdef HAVE_UNISTD_H
+#   include <unistd.h>
+#endif
+
 #ifdef HAVE_EXCEPTIONS
 #   include <new>
 #endif
@@ -165,6 +169,14 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char 
         dataPath.append(path);
 #endif
     dataPath.append("/sidplayfp/").append(defaultRom);
+
+#if !defined _WIN32 && defined HAVE_UNISTD_H
+    if (::access(dataPath.c_str(), R_OK) != 0)
+    {
+        dataPath = PKGDATADIR;
+        dataPath.append(defaultRom);
+    }
+#endif
 
     std::ifstream is((romPath)?romPath:dataPath.c_str(), std::ios::binary);
 
