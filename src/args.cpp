@@ -29,6 +29,8 @@ using std::endl;
 #   include <unistd.h>
 #endif
 
+#include <limits.h>
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #   include <sidplayfp/builders/hardsid.h>
 #endif
@@ -430,10 +432,11 @@ int ConsolePlayer::args (int argc, const char *argv[])
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
 #if !defined _WIN32 && defined HAVE_UNISTD_H
-            if (!database || *database == '\0') {
+            if (!database || *database == '\0')
+            {
                 snprintf(buffer, PATH_MAX, "%sSonglengths.txt", PKGDATADIR);
                 if (::access(buffer, R_OK) == 0)
-                   database = buffer;
+                    database = buffer;
             }
 #endif
             if (database && (*database != '\0'))
