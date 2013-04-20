@@ -22,9 +22,6 @@
 #ifdef   HAVE_DIRECTX
 
 #include <stdio.h>
-#ifdef HAVE_EXCEPTIONS
-#   include <new>
-#endif
 
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
 

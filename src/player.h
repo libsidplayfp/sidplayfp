@@ -23,26 +23,24 @@
 #define PLAYER_H
 
 #include "config.h"
+
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/event.h>
 #include <sidplayfp/SidConfig.h>
 #include <sidplayfp/SidTuneInfo.h>
-#ifdef MSVC_HEADER_LOCATIONS
-#include <SidDatabase.h>
-#else
 #include <sidplayfp/SidDatabase.h>
-#endif
+
 #include "audio/AudioDrv.h"
 #include "IniConfig.h"
 
 #ifdef HAVE_TSID
-#   if HAVE_TSID > 1
-#   include <tsid2/tsid2.h>
-#   define TSID TSID2
-#   else
-#   include <tsid/tsid.h>
-#   endif
+#  if HAVE_TSID > 1
+#    include <tsid2/tsid2.h>
+#    define TSID TSID2
+#  else
+#    include <tsid/tsid.h>
+#  endif
 #endif
 
 typedef enum {black, red, green, yellow, blue, magenta, cyan, white}

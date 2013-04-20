@@ -19,18 +19,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "player.h"
+
 #include <ctype.h>
+
 #include <iostream>
+#include <iomanip>
+
 using std::cout;
 using std::cerr;
 using std::endl;
 using std::dec;
 using std::hex;
 using std::flush;
-#include <iomanip>
 using std::setw;
 using std::setfill;
-#include "player.h"
 
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>

@@ -19,29 +19,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <stdlib.h>
+#include "player.h"
+
 #include <string.h>
+#include <limits.h>
+
+#ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+#endif
+
 #include <iostream>
-#include <cstdlib>
 
 using std::cout;
 using std::cerr;
 using std::endl;
-#include "player.h"
-
-#ifdef HAVE_UNISTD_H
-#   include <unistd.h>
-#endif
-
-#include <limits.h>
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
-#   include <sidplayfp/builders/hardsid.h>
-#endif
-
-#if defined(HAVE_SGI)
-#   define DISALLOW_16BIT_SOUND
-#   define DISALLOW_STEREO_SOUND
+#  include <sidplayfp/builders/hardsid.h>
 #endif
 
 

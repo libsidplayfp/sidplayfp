@@ -25,9 +25,11 @@
 
 #include <fstream>
 #include <iostream>
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "stilview/stil.h"
 
 STIL myStil;

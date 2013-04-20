@@ -19,12 +19,11 @@
  */
 
 #include "audiodrv.h"
-#ifdef   HAVE_PULSE
-#include <pulse/simple.h>
 
-#include <stdio.h>
+#ifdef HAVE_PULSE
+
 #ifdef HAVE_EXCEPTIONS
-#   include <new>
+#  include <new>
 #endif
 
 Audio_Pulse::Audio_Pulse()

@@ -19,9 +19,9 @@
  */
 
 #include "null.h"
-#include "config.h"
+
 #ifdef HAVE_EXCEPTIONS
-#   include <new>
+#  include <new>
 #endif
 
 Audio_Null::Audio_Null ()

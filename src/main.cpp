@@ -19,12 +19,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "player.h"
+
 #include <stdlib.h>
+#include <signal.h>
+
 #include <iostream>
+
 using std::cerr;
 using std::endl;
-#include <signal.h>
-#include "player.h"
+
 #include "keyboard.h"
 
 

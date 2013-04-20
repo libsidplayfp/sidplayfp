@@ -22,18 +22,14 @@
 #define AUDIO_PULSE_H
 
 #include "config.h"
-#ifdef   HAVE_PULSE
+
+#ifdef HAVE_PULSE
 
 #ifndef AudioDriver
-#define AudioDriver Audio_Pulse
+#  define AudioDriver Audio_Pulse
 #endif
 
 #include <pulse/simple.h>
-#include <sys/ioctl.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
 
 #include "../AudioBase.h"
 

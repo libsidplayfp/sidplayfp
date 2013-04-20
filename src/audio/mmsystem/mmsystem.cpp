@@ -20,14 +20,11 @@
  */
 
 #include "mmsystem.h"
-#ifdef   HAVE_MMSYSTEM
+
+#ifdef HAVE_MMSYSTEM
 
 #include <stdio.h>
 #include <mmreg.h>
-
-#ifdef HAVE_EXCEPTIONS
-#   include <new>
-#endif
 
 Audio_MMSystem::Audio_MMSystem ()
 {

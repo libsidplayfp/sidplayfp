@@ -38,7 +38,7 @@
 
 // Make sure that a sound driver was used
 #ifndef AudioDriver
-#   warning Audio hardware not recognised, please check configuration files.
+#  warning Audio hardware not recognised, please check configuration files.
 #endif
 
 // Add music conversion drivers

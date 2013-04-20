@@ -25,8 +25,7 @@
 #define WAV_FILE_H
 
 #include <iostream>
-#include <iomanip>
-#include <fstream>
+
 #include "../AudioBase.h"
 
 struct wavHeader                        // little endian format

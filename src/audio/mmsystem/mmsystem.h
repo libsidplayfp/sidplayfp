@@ -22,14 +22,16 @@
 #define AUDIO_MMSYSTEM_H
 
 #include "config.h"
-#ifdef   HAVE_MMSYSTEM
+
+#ifdef HAVE_MMSYSTEM
 
 #ifndef AudioDriver
-#define AudioDriver Audio_MMSystem
+#  define AudioDriver Audio_MMSystem
 #endif
 
 #include <windows.h>
 #include <mmsystem.h>
+
 #include "../AudioBase.h"
 
 

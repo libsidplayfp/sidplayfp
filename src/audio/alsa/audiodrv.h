@@ -22,17 +22,13 @@
 #define AUDIO_ALSA_H
 
 #include "config.h"
-#ifdef   HAVE_ALSA
+
+#ifdef HAVE_ALSA
 
 #ifndef AudioDriver
-#define AudioDriver Audio_ALSA
+#  define AudioDriver Audio_ALSA
 #endif
 
-#include <stdio.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
 #include <alsa/asoundlib.h>
 #include "../AudioBase.h"
 

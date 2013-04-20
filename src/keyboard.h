@@ -22,7 +22,7 @@
 #include "config.h"
 
 #ifdef _WIN32
-#   include <conio.h>
+#  include <conio.h>
 #else
     int _kbhit (void);
 #endif

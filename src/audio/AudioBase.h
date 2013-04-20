@@ -22,6 +22,7 @@
 #define AUDIOBASE_H
 
 #include <string.h>
+
 #include "AudioConfig.h"
 
 class AudioBase

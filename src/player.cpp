@@ -19,15 +19,19 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "config.h"
+
+#include "player.h"
+
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+
 using std::cout;
 using std::cerr;
 using std::endl;
-#include <iomanip>
-#include <fstream>
-#include <stdlib.h>
 
-#include "config.h"
+#include <stdlib.h>
 
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
@@ -41,46 +45,27 @@ using std::endl;
 #   include <shlobj.h>
 #endif
 
-#include "player.h"
 #include "keyboard.h"
 
-#ifdef MSVC_HEADER_LOCATIONS
-# include <sidbuilder.h>
-# include <SidInfo.h>
-# include <SidTuneInfo.h>
-#else
-# include <sidplayfp/sidbuilder.h>
-# include <sidplayfp/SidInfo.h>
-# include <sidplayfp/SidTuneInfo.h>
-#endif
+#include <sidplayfp/sidbuilder.h>
+#include <sidplayfp/SidInfo.h>
+#include <sidplayfp/SidTuneInfo.h>
 
 // Previous song select timeout (3 secs)
 #define SID2_PREV_SONG_TIMEOUT 4
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
-#  ifdef MSVC_HEADER_LOCATIONS
-#   include <builders/residfp-builder/residfp.h>
-#  else
-#   include <sidplayfp/builders/residfp.h>
-#  endif
+#  include <sidplayfp/builders/residfp.h>
 const char ConsolePlayer::RESIDFP_ID[]   = "ReSIDfp";
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
-#  ifdef MSVC_HEADER_LOCATIONS
-#   include <builders/resid-builder/resid.h>
-#  else
-#   include <sidplayfp/builders/resid.h>
-#  endif
+#  include <sidplayfp/builders/resid.h>
 const char ConsolePlayer::RESID_ID[]   = "ReSID";
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
-#  ifdef MSVC_HEADER_LOCATIONS
-#    include <builders/hardsid-builder/hardsid.h>
-#  else
-#    include <sidplayfp/builders/hardsid.h>
-#  endif
+#   include <sidplayfp/builders/hardsid.h>
 const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 

@@ -21,13 +21,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <stdlib.h>
-#include <vector>
 #include "WavFile.h"
 #include "WavFileDefs.h"
 
+#include <vector>
+#include <iomanip>
+#include <fstream>
+
 #ifdef WAV_HAVE_EXCEPTIONS
-#   include <new>
+#  include <new>
 #endif
 
 #ifdef WAV_HAVE_IOS_OPENMODE

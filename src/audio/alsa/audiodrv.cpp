@@ -19,12 +19,11 @@
  */
 
 #include "audiodrv.h"
-#ifdef   HAVE_ALSA
 
-#include <errno.h>
-#include <stdio.h>
+#ifdef HAVE_ALSA
+
 #ifdef HAVE_EXCEPTIONS
-#   include <new>
+#  include <new>
 #endif
 
 Audio_ALSA::Audio_ALSA()

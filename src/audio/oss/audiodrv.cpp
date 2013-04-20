@@ -22,8 +22,11 @@
 #ifdef   HAVE_OSS
 
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+
 #ifdef HAVE_EXCEPTIONS
-#   include <new>
+#  include <new>
 #endif
 
 #if defined(HAVE_NETBSD)

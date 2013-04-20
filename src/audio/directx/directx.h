@@ -22,10 +22,11 @@
 #define AUDIO_DIRECTX_H
 
 #include "config.h"
-#ifdef   HAVE_DIRECTX
+
+#ifdef HAVE_DIRECTX
 
 #ifndef AudioDriver
-#define AudioDriver Audio_DirectX
+#  define AudioDriver Audio_DirectX
 #endif
 
 #if DIRECTSOUND_VERSION < 0x0500

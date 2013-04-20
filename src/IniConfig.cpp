@@ -19,22 +19,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "config.h"
+
+#include "IniConfig.h"
+
 #include <string>
-#include <stdlib.h>
+
 #include <string.h>
 #include <stdlib.h>
 
-#include "config.h"
-#include "IniConfig.h"
-
 #ifndef _WIN32
-#   include <sys/types.h>
-#   include <sys/stat.h>  /* mkdir */
-#   include <dirent.h>    /* opendir */
+#  include <sys/types.h>
+#  include <sys/stat.h>  /* mkdir */
+#  include <dirent.h>    /* opendir */
 #else
-#   include <windows.h>
-#   include <shlobj.h>
+#  include <windows.h>
+#  include <shlobj.h>
 #endif
+
 const char *IniConfig::DIR_NAME  = "sidplayfp";
 const char *IniConfig::FILE_NAME = "sidplayfp.ini";
 

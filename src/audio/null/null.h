@@ -22,10 +22,11 @@
 #define AUDIO_NULL_H
 
 #include "config.h"
-#ifdef   HAVE_HARDSID
-#   ifndef AudioDriver
-#   define AudioDriver Audio_Null
-#   endif
+
+#ifdef HAVE_HARDSID
+#  ifndef AudioDriver
+#    define AudioDriver Audio_Null
+#  endif
 #endif
 
 #include "../AudioBase.h"

@@ -22,28 +22,25 @@
 #define AUDIO_OSS_H
 
 #include "config.h"
-#ifdef   HAVE_OSS
+
+#ifdef HAVE_OSS
 
 #ifndef AudioDriver
-#define AudioDriver Audio_OSS
+#  define AudioDriver Audio_OSS
 #endif
 
 #include <sys/ioctl.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <unistd.h>
 
 #if defined(HAVE_SYS_SOUNDCARD_H)
-#   include <sys/soundcard.h>
+#  include <sys/soundcard.h>
 #elif defined(HAVE_LINUX_SOUNDCARD_H)
-#   include <linux/soundcard.h>
+#  include <linux/soundcard.h>
 #elif defined(HAVE_MACHINE_SOUNDCARD_H)
-#   include <machine/soundcard.h>
+#  include <machine/soundcard.h>
 #elif defined(HAVE_SOUNDCARD_H)
-#   include <soundcard.h>
+#  include <soundcard.h>
 #else
-#   error Audio driver not supported.
+#  error Audio driver not supported.
 #endif
 
 #include "../AudioBase.h"
