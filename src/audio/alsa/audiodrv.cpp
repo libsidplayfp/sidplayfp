@@ -1,42 +1,22 @@
-// --------------------------------------------------------------------------
-// Advanced Linux Sound Architecture (ALSA) specific audio driver interface.
-// --------------------------------------------------------------------------
-/***************************************************************************
- *  $Log: audiodrv.cpp,v $
- *  Revision 1.10  2006/10/16 17:44:24  s_a_white
- *  Recover from a ctrl-z, bg which causes a buffer underrun during playback
+/*
+ * This file is part of sidplayfp, a console SID player.
  *
- *  Revision 1.9  2005/10/17 08:30:55  s_a_white
- *  Gentoo bug #98769.  goto open_error crosses initialization of
- *  `unsigned int rate'
+ * Copyright 2000-2006 Simon White
  *
- *  Revision 1.8  2005/07/18 19:46:43  s_a_white
- *  Switch from obsolete alsa interface (patch by shd).
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  Revision 1.7  2002/03/04 19:07:48  s_a_white
- *  Fix C++ use of nothrow.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Revision 1.6  2002/01/10 19:04:00  s_a_white
- *  Interface changes for audio drivers.
- *
- *  Revision 1.5  2001/12/11 19:38:13  s_a_white
- *  More GCC3 Fixes.
- *
- *  Revision 1.4  2001/01/29 01:17:30  jpaana
- *  Use int_least8_t instead of ubyte_sidt which is obsolete now
- *
- *  Revision 1.3  2001/01/23 21:23:23  s_a_white
- *  Replaced SID_HAVE_EXCEPTIONS with HAVE_EXCEPTIONS in new
- *  drivers.
- *
- *  Revision 1.2  2001/01/18 18:35:41  s_a_white
- *  Support for multiple drivers added.  C standard update applied (There
- *  should be no spaces before #)
- *
- *  Revision 1.1  2001/01/08 16:41:43  s_a_white
- *  App and Library Seperation
- *
- ***************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 #include "audiodrv.h"
 #ifdef   HAVE_ALSA

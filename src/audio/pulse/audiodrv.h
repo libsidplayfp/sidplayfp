@@ -1,45 +1,22 @@
-/***************************************************************************
-                          audiodrv.h  -  OSS sound support
-                             -------------------
-    begin                : Sat Jul 8 2000
-    copyright            : (C) 2000 by Simon White
-    email                : s_a_white@email.com
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-/***************************************************************************
- *  $Log: audiodrv.h,v $
- *  Revision 1.5  2001/10/30 23:35:35  s_a_white
- *  Added pause support.
+/*
+ * This file is part of sidplayfp, a console SID player.
  *
- *  Revision 1.4  2001/07/14 16:53:29  s_a_white
- *  Updated to use new audio base class.
+ * Copyright 2008 Antti Lankila
  *
- *  Revision 1.3  2001/01/23 17:50:59  s_a_white
- *  Removed duplicate #endif.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  Revision 1.2  2001/01/18 18:36:16  s_a_white
- *  Support for multiple drivers added.  C standard update applied (There
- *  should be no spaces before #)
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Revision 1.1  2001/01/08 16:41:43  s_a_white
- *  App and Library Seperation
- *
- *  Revision 1.3  2000/12/11 19:09:12  s_a_white
- *  AC99 Update.
- *
- ***************************************************************************/
-
-// --------------------------------------------------------------------------
-// ``Open Sound System (OSS)'' specific audio driver interface.
-// --------------------------------------------------------------------------
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 #ifndef audio_pulse_h_
 #define audio_pulse_h_

@@ -1,48 +1,22 @@
-/***************************************************************************
-                          null.cpp  -  Null audio driver used for hardsid
-                                       and songlength detection
-                             -------------------
-    begin                : Mon Nov 6 2000
-    copyright            : (C) 2000 by Simon White
-    email                : s_a_white@email.com
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-/***************************************************************************
- *  $Log: null.cpp,v $
- *  Revision 1.8  2002/03/07 07:55:59  s_a_white
- *  Removed bad define.
+/*
+ * This file is part of sidplayfp, a console SID player.
  *
- *  Revision 1.7  2002/03/04 19:07:48  s_a_white
- *  Fix C++ use of nothrow.
+ * Copyright 2000-2002 Simon White
  *
- *  Revision 1.6  2001/12/11 19:38:13  s_a_white
- *  More GCC3 Fixes.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  Revision 1.5  2001/08/21 21:57:14  jpaana
- *  Don't try to resize the buffer if the size is given (confuses other audiodrivers)
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Revision 1.4  2001/07/14 16:55:51  s_a_white
- *  Cast _sampleBuffer from void * for delete to avoid warning
- *  message.
- *
- *  Revision 1.3  2001/07/03 17:54:50  s_a_white
- *  Support for new audio interface for better compatibility.
- *
- *  Revision 1.2  2001/01/23 21:22:31  s_a_white
- *  Changed to array delete.
- *
- *  Revision 1.1  2001/01/08 16:41:43  s_a_white
- *  App and Library Seperation
- *
- ***************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 #include "null.h"
 #include "config.h"

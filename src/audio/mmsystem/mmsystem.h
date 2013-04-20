@@ -1,39 +1,22 @@
-/***************************************************************************
-                          mmsystem.h  -  ``Waveout for Windows''
-                                         specific audio driver interface.
-                             -------------------
-    begin                : Fri Aug 11 2000
-    copyright            : (C) 2000 by Jarno Paananen
-    email                : jpaana@s2.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-/***************************************************************************
- *  $Log: mmsystem.h,v $
- *  Revision 1.5  2001/10/30 23:35:35  s_a_white
- *  Added pause support.
+/*
+ * This file is part of sidplayfp, a console SID player.
  *
- *  Revision 1.4  2001/07/03 17:54:23  s_a_white
- *  Support for new audio interface for better compatibility.
+ * Copyright 2000 Jarno Paananen
  *
- *  Revision 1.3  2001/01/23 17:50:59  s_a_white
- *  Removed duplicate #endif.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  Revision 1.2  2001/01/18 18:36:16  s_a_white
- *  Support for multiple drivers added.  C standard update applied (There
- *  should be no spaces before #)
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Revision 1.1  2001/01/08 16:41:43  s_a_white
- *  App and Library Seperation
- *
- ***************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 #ifndef _audio_mmsystem_h_
 #define _audio_mmsystem_h_

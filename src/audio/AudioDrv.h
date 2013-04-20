@@ -1,36 +1,22 @@
-/***************************************************************************
-                          AudioDrv.h  -  Just include all the drivers
-                             -------------------
-    begin                : Thu Jul 20 2000
-    copyright            : (C) 2000 by Simon White
-    email                : s_a_white@email.com
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-/***************************************************************************
- *  $Log: AudioDrv.h,v $
- *  Revision 1.2  2001/01/18 18:34:30  s_a_white
- *  Support for multiple drivers added.  Drivers are now arranged in
- *  preference order.
+/*
+ * This file is part of sidplayfp, a console SID player.
  *
- *  Revision 1.1  2001/01/08 16:41:43  s_a_white
- *  App and Library Seperation
+ * Copyright 2000 Simon White
  *
- *  Revision 1.6  2000/12/18 15:16:42  s_a_white
- *  No hardware support generates only a warning now.  Allows code to default
- *  to wav file generation on any platform.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  Revision 1.5  2000/12/11 19:07:14  s_a_white
- *  AC99 Update.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- ***************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 #ifndef _AudioDrv_h_
 #define _AudioDrv_h_

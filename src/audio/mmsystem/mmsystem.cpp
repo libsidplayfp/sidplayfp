@@ -1,45 +1,23 @@
-/***************************************************************************
-                          mmsystem.cpp - "Waveout for Windows" specific
-                                         audio driver interface for NT, Win9x
-                                         and possibly Win3.1 with Win32s
-                             -------------------
-    begin                : Fri Aug 11 2000
-    copyright            : (C) 2000 by Jarno Paananen
-    email                : jpaana@s2.org
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-/***************************************************************************
- *  $Log: mmsystem.cpp,v $
- *  Revision 1.7  2002/03/04 19:07:48  s_a_white
- *  Fix C++ use of nothrow.
+/*
+ * This file is part of sidplayfp, a console SID player.
  *
- *  Revision 1.6  2001/12/11 19:38:13  s_a_white
- *  More GCC3 Fixes.
+ * Copyright 2001-2002 Simon White
+ * Copyright 2000 Jarno Paananen
  *
- *  Revision 1.5  2001/11/21 00:04:36  s_a_white
- *  Buffer alignment issues fixed.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
  *
- *  Revision 1.4  2001/11/16 19:32:51  s_a_white
- *  Removed warning.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Revision 1.3  2001/09/17 19:08:55  s_a_white
- *  Sample enconding support added.
- *
- *  Revision 1.2  2001/07/03 17:54:23  s_a_white
- *  Support for new audio interface for better compatibility.
- *
- *  Revision 1.1  2001/01/08 16:41:43  s_a_white
- *  App and Library Seperation
- *
- ***************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
 
 #include "mmsystem.h"
 #ifdef   HAVE_MMSYSTEM
