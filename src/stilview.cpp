@@ -108,7 +108,7 @@ void printHelp(void)
     cout << "-v            - Print STILView's and STIL's version number." << endl;
     cout << "-h            - Print this help screen (all other options are ignored)." << endl;
     cout << endl;
-    cout << "See USAGE.txt for further details and for examples." << endl;
+    cout << "See user manual for further details and for examples." << endl;
     cout << endl;
     exit(0);
 }
