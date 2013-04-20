@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef audio_null_h_
-#define audio_null_h_
+#ifndef AUDIO_NULL_H
+#define AUDIO_NULL_H
 
 #include "config.h"
 #ifdef   HAVE_HARDSID
@@ -50,4 +50,4 @@ public:  // --------------------------------------------------------- public
     void  pause () {;}
 };
 
-#endif // audio_null_h_
+#endif // AUDIO_NULL_H

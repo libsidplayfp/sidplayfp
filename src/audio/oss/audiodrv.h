@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef audio_oss_h_
-#define audio_oss_h_
+#ifndef AUDIO_OSS_H
+#define AUDIO_OSS_H
 
 #include "config.h"
 #ifdef   HAVE_OSS
@@ -81,4 +81,4 @@ public:  // --------------------------------------------------------- public
 };
 
 #endif // HAVE_OSS
-#endif // audio_oss_h_
+#endif // AUDIO_OSS_H

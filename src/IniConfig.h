@@ -19,8 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _IniConfig_h_
-#define _IniConfig_h_
+#ifndef INICONFIG_H
+#define INICONFIG_H
 
 #include "ini/libini.h"
 
@@ -115,4 +115,4 @@ public:
     const emulation_section& emulation    () { return emulation_s; }
 };
 
-#endif // _IniConfig_h_
+#endif // INICONFIG_H

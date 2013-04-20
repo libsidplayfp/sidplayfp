@@ -19,8 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _player_h_
-#define _player_h_
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include "config.h"
 #include <sidplayfp/SidTune.h>
@@ -207,4 +207,4 @@ public:
     player_state_t state (void) { return m_state; }
 };
 
-#endif // _player_h_
+#endif // PLAYER_H

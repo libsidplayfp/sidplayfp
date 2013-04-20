@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _AudioDrv_h_
-#define _AudioDrv_h_
+#ifndef AUDIODRV_H
+#define AUDIODRV_H
 
 // Drivers must be put in order of preference
 #include "config.h"
@@ -44,4 +44,4 @@
 // Add music conversion drivers
 #include "wav/WavFile.h"
 
-#endif // _AudioDrv_h_
+#endif // AUDIODRV_H

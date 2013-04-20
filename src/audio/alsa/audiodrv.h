@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef audio_alsa_h_
-#define audio_alsa_h_
+#ifndef AUDIO_ALSA_H
+#define AUDIO_ALSA_H
 
 #include "config.h"
 #ifdef   HAVE_ALSA
@@ -58,4 +58,4 @@ public:  // --------------------------------------------------------- public
 };
 
 #endif // HAVE_ALSA
-#endif // audio_alsa_h_
+#endif // AUDIO_ALSA_H

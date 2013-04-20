@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef audio_pulse_h_
-#define audio_pulse_h_
+#ifndef AUDIO_PULSE_H
+#define AUDIO_PULSE_H
 
 #include "config.h"
 #ifdef   HAVE_PULSE
@@ -58,4 +58,4 @@ public:  // --------------------------------------------------------- public
 };
 
 #endif // HAVE_PULSE
-#endif // audio_pulse_h_
+#endif // AUDIO_PULSE_H

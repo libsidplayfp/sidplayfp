@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _audio_mmsystem_h_
-#define _audio_mmsystem_h_
+#ifndef AUDIO_MMSYSTEM_H
+#define AUDIO_MMSYSTEM_H
 
 #include "config.h"
 #ifdef   HAVE_MMSYSTEM
@@ -62,4 +62,4 @@ public:  // --------------------------------------------------------- public
 };
 
 #endif // HAVE_MMSYSTEM
-#endif // _audio_mmsystem_h_
+#endif // AUDIO_MMSYSTEM_H

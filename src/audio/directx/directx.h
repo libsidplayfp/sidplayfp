@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef audio_directx_h_
-#define audio_directx_h_
+#ifndef AUDIO_DIRECTX_H
+#define AUDIO_DIRECTX_H
 
 #include "config.h"
 #ifdef   HAVE_DIRECTX
@@ -75,4 +75,4 @@ public:  // --------------------------------------------------------- public
 };
 
 #endif // HAVE_DIRECTX
-#endif // audio_directx_h_
+#endif // AUDIO_DIRECTX_H

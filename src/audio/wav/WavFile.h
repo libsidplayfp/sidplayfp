@@ -21,8 +21,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef WAV_FILE_HEADER_H
-#define WAV_FILE_HEADER_H
+#ifndef WAV_FILE_H
+#define WAV_FILE_H
 
 #include <iostream>
 #include <iomanip>

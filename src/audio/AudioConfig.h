@@ -18,8 +18,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _AudioConfig_h_
-#define _AudioConfig_h_
+#ifndef AUDIOCONFIG_H
+#define AUDIOCONFIG_H
 
 #include <stdint.h>
 
@@ -40,4 +40,4 @@ public:
     }
 };
 
-#endif  // _AudioConfig_h_
+#endif  // AUDIOCONFIG_H
