@@ -468,7 +468,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
-        << " -ds<addr>    set second sid address (e.g. -dsd420)" << endl
+        << " -ds<addr>    set second sid address (e.g. -ds0xd420)" << endl
 
         << " -u<num>      mute voice <num> (e.g. -u1 -u2)" << endl
 
