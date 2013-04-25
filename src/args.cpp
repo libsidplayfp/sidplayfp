@@ -530,7 +530,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 #endif
     out << endl
         // Changed to new homepage address
-        << "Home Page: http://sourceforge.net/projects/sidplay-residfp/" << endl;
+        << "Home Page: " PACKAGE_URL << endl;
 //        << "Mail comments, bug reports, or contributions to <sidplay2@email.com>." << endl;
 }
 
