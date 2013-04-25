@@ -43,14 +43,11 @@ public:  // --------------------------------------------------------- public
     Audio_Pulse();
     ~Audio_Pulse();
 
-    short *open  (AudioConfig &cfg, const char *name);
-    void  close ();
-    short *reset ()
-    {
-        return _sampleBuffer;
-    }
-    short *write ();
-    void  pause () {;}
+    bool open  (AudioConfig &cfg, const char *name);
+    void close ();
+    void reset () {}
+    bool write ();
+    void pause () {}
 };
 
 #endif // HAVE_PULSE

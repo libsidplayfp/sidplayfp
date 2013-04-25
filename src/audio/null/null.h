@@ -44,11 +44,11 @@ public:  // --------------------------------------------------------- public
     Audio_Null();
     ~Audio_Null();
 
-    short *open  (AudioConfig &cfg, const char *);
-    void  close ();
-    short *reset ();
-    short *write ();
-    void  pause () {;}
+    bool open  (AudioConfig &cfg, const char *);
+    void close ();
+    void reset () {}
+    bool write ();
+    void pause () {}
 };
 
 #endif // AUDIO_NULL_H

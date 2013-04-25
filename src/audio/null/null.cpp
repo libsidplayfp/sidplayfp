@@ -20,10 +20,6 @@
 
 #include "null.h"
 
-#ifdef HAVE_EXCEPTIONS
-#  include <new>
-#endif
-
 Audio_Null::Audio_Null ()
 {
     isOpen = false;
@@ -34,58 +30,33 @@ Audio_Null::~Audio_Null ()
     close();
 }
 
-short *Audio_Null::open (AudioConfig &cfg, const char *)
+bool Audio_Null::open (AudioConfig &cfg, const char *)
 {
-    uint_least32_t bufSize = cfg.bufSize;
-
     if (isOpen)
     {
         _errorString = "NULL ERROR: Audio device already open.";
         return NULL;
     }
 
-    if (bufSize == 0)
-    {
-        bufSize  = 4096;
-    }
-
-    // We need to make a buffer for the user
-#if defined(HAVE_EXCEPTIONS)
-    _sampleBuffer = new(std::nothrow) short[bufSize];
-#else
-    _sampleBuffer = new short[bufSize];
-#endif
-    if (!_sampleBuffer)
-        return NULL;
-
     isOpen      = true;
-    cfg.bufSize = bufSize;
     _settings   = cfg;
-    return _sampleBuffer;
+    return true;
 }
 
-short *Audio_Null::write ()
+bool Audio_Null::write ()
 {
     if (!isOpen)
     {
         _errorString = "NULL ERROR: Audio device not open.";
-        return NULL;
+        return false;
     }
-    return _sampleBuffer;
-}
-
-short *Audio_Null::reset (void)
-{
-    if (!isOpen)
-         return NULL;
-    return _sampleBuffer;
+    return true;
 }
 
 void Audio_Null::close (void)
 {
     if (!isOpen)
         return;
-    delete [] (uint_least8_t *) _sampleBuffer;
-    _sampleBuffer = NULL;
+
     isOpen = false;
 }

@@ -102,7 +102,7 @@ WavFile::WavFile()
     headerWritten = false;
 }
 
-short* WavFile::open(AudioConfig &cfg, const char* name)
+bool WavFile::open(AudioConfig &cfg, const char* name)
 {
     unsigned long  int freq;
     unsigned short int channels, bits, format;
@@ -120,7 +120,7 @@ short* WavFile::open(AudioConfig &cfg, const char* name)
     cfg.bufSize = bufSize;
 
     if (name == NULL)
-        return NULL;
+        return false;
 
     if (file && !file->fail())
         close();
@@ -134,7 +134,7 @@ short* WavFile::open(AudioConfig &cfg, const char* name)
     _sampleBuffer = new short[bufSize];
 #endif
     if (!_sampleBuffer)
-        return NULL;
+        return false;
 
     // Fill in header with parameters and expected file size.
     endian_little32(wavHdr.length,sizeof(wavHeader)-8);
@@ -160,10 +160,10 @@ short* WavFile::open(AudioConfig &cfg, const char* name)
     }
 
     _settings = cfg;
-    return _sampleBuffer;
+    return true;
 }
 
-short* WavFile::write()
+bool WavFile::write()
 {
     if (file && !file->fail()) {
         unsigned long int bytes = _settings.bufSize;
@@ -187,7 +187,7 @@ short* WavFile::write()
         byteCount += bytes;
 
     }
-    return _sampleBuffer;
+    return true;
 }
 
 void WavFile::close()

@@ -54,7 +54,7 @@ void Audio_OSS::outOfOrder ()
     _audiofd     = -1;
 }
 
-short *Audio_OSS::open (AudioConfig &cfg, const char *)
+bool Audio_OSS::open (AudioConfig &cfg, const char *)
 {
     int mask, format;
     int wantedFormat = 0;
@@ -63,7 +63,7 @@ short *Audio_OSS::open (AudioConfig &cfg, const char *)
     if (_audiofd != -1)
     {
         _errorString = "ERROR: Device already in use";
-        return NULL;
+        return false;
     }
 
     if (access (AUDIODEVICE, W_OK) == -1)
@@ -127,7 +127,7 @@ short *Audio_OSS::open (AudioConfig &cfg, const char *)
 
     // Setup internal Config
     _settings = cfg;
-return _sampleBuffer;
+    return true;
 
 open_error:
     if (_audiofd != -1)
@@ -137,7 +137,7 @@ open_error:
     }
 
     perror (AUDIODEVICE);
-return NULL;
+    return false;
 }
 
 // Close an opened audio device, free any allocated buffers and
@@ -152,14 +152,14 @@ void Audio_OSS::close ()
     }
 }
 
-short *Audio_OSS::write ()
+bool Audio_OSS::write ()
 {
     //short tmp[_settings.bufSize];
 
     if (_audiofd == (-1))
     {
         _errorString = "ERROR: Device not open.";
-        return NULL;
+        return false;
     }
 
    /* for (uint_least32_t n = 0; n < _settings.bufSize; n ++) {
@@ -167,7 +167,7 @@ short *Audio_OSS::write ()
     }*/
 
     ::write (_audiofd, _sampleBuffer, 2 * _settings.bufSize);
-    return _sampleBuffer;
+    return true;
 }
 
 #endif // HAVE_OSS

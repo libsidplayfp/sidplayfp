@@ -44,14 +44,14 @@ Audio_MMSystem::~Audio_MMSystem()
     close();
 }
 
-short *Audio_MMSystem::open (AudioConfig &cfg, const char *)
+bool Audio_MMSystem::open (AudioConfig &cfg, const char *)
 {
     WAVEFORMATEX  wfm;
 
     if (isOpen)
     {
         _errorString = "MMSYSTEM ERROR: Audio device already open.";
-        return NULL;
+        return false;
     }
     isOpen = true;
 
@@ -129,19 +129,19 @@ short *Audio_MMSystem::open (AudioConfig &cfg, const char *)
 
     blockNum = 0;
     _sampleBuffer = blocks[blockNum];
-return _sampleBuffer;
+    return true;
 
 Audio_MMSystem_openError:
     close ();
-    return NULL;
+    return false;
 }
 
-short*Audio_MMSystem::write ()
+bool Audio_MMSystem::write ()
 {
     if (!isOpen)
     {
         _errorString = "MMSYSTEM ERROR: Device not open.";
-        return NULL;
+        return false;
     }
 
     /* Reset wave header fields: */
@@ -152,14 +152,14 @@ short*Audio_MMSystem::write ()
                               sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
     {
         _errorString = "MMSYSTEM ERROR: Error in waveOutPrepareHeader.";
-        return NULL;
+        return false;
     }
 
     if ( waveOutWrite(waveHandle, blockHeaders[blockNum],
                       sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
     {
         _errorString = "MMSYSTEM ERROR: Error in waveOutWrite.";
-        return NULL;
+        return false;
     }
 
     /* Next block, circular buffer style, and I don't like modulo. */
@@ -174,18 +174,18 @@ short*Audio_MMSystem::write ()
                                 sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
     {
         _errorString = "MMSYSTEM ERROR: Error in waveOutUnprepareHeader.";
-        return NULL;
+        return false;
     }
 
     _sampleBuffer = blocks[blockNum];
-    return _sampleBuffer;
+    return true;
 }
 
 // Rev 1.2 (saw) - Changed, see AudioBase.h
-short *Audio_MMSystem::reset (void)
+void Audio_MMSystem::reset ()
 {
     if (!isOpen)
-        return NULL;
+        return;
 
     // Stop play and kill the current music.
     // Start new music data being added at the begining of
@@ -193,11 +193,10 @@ short *Audio_MMSystem::reset (void)
     if ( waveOutReset(waveHandle) != MMSYSERR_NOERROR )
     {
         _errorString = "MMSYSTEM ERROR: Error in waveOutReset.";
-        return NULL;
+        return;
     }
     blockNum = 0;
     _sampleBuffer = blocks[blockNum];
-    return _sampleBuffer;
 }
 
 void Audio_MMSystem::close (void)

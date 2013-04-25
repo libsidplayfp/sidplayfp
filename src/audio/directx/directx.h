@@ -66,13 +66,12 @@ public:  // --------------------------------------------------------- public
 
     // This first one assumes progrm is built as a
     // console application
-    short *open  (AudioConfig &cfg, const char *name);
-    short *open  (AudioConfig &cfg, const char *name, HWND hwnd);
-    void  close ();
-    // Rev 1.3 (saw) - Changed
-    short *reset ();
-    short *write ();
-    void  pause ();
+    bool open  (AudioConfig &cfg, const char *name);
+    bool open  (AudioConfig &cfg, const char *name, HWND hwnd);
+    void close ();
+    void reset ();
+    bool write ();
+    void pause ();
 };
 
 #endif // HAVE_DIRECTX

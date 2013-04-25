@@ -73,7 +73,7 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     return (hwndFound);
 }
 
-short *Audio_DirectX::open (AudioConfig &cfg, const char *name)
+bool Audio_DirectX::open (AudioConfig &cfg, const char *name)
 {
     HWND hwnd;
     // Assume we have a console.  Use other other
@@ -82,7 +82,7 @@ short *Audio_DirectX::open (AudioConfig &cfg, const char *name)
     return open (cfg, name, hwnd);
 }
 
-short *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
+bool Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
 {
     DSBUFFERDESC        dsbdesc;
     LPDIRECTSOUNDBUFFER lpDsbPrimary = 0;
@@ -192,7 +192,7 @@ short *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     if (FAILED (lpDsb->SetCurrentPosition(0)))
     {
         _errorString = "DIRECTX ERROR: Unable to set play position to start of buffer.";
-        return NULL;
+        return false;
     }
 
     // Update the users settings
@@ -200,15 +200,15 @@ short *Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
     _settings     = cfg;
     isPlaying     = false;
     _sampleBuffer = (short*)lpvData;
-return _sampleBuffer;
+    return true;
 
 Audio_DirectX_openError:
     SAFE_RELEASE (lpDsbPrimary);
     close ();
-    return NULL;
+    return false;
 }
 
-short *Audio_DirectX::write ()
+bool Audio_DirectX::write ()
 {
     DWORD dwEvt;
     DWORD dwBytes;
@@ -216,7 +216,7 @@ short *Audio_DirectX::write ()
     if (!isOpen)
     {
         _errorString = "DIRECTX ERROR: Device not open.";
-        return NULL;
+        return false;
     }
     // Unlock the current buffer for playing
     lpDsb->Unlock (lpvData, bufSize, NULL, 0);
@@ -229,7 +229,7 @@ short *Audio_DirectX::write ()
         if (FAILED (lpDsb->Play (0,0,DSBPLAY_LOOPING)))
         {
             _errorString = "DIRECTX ERROR: Unable to start playback.";
-            return NULL;
+            return false;
         }
     }
 
@@ -247,13 +247,13 @@ short *Audio_DirectX::write ()
     if (FAILED (lpDsb->Lock (bufSize * dwEvt, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
         _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
-        return NULL;
+        return false;
     }
     _sampleBuffer = (short*)lpvData;
-    return _sampleBuffer;
+    return true;
 }
 
-short *Audio_DirectX::reset (void)
+void Audio_DirectX::reset (void)
 {
     DWORD dwBytes;
     if (!isOpen)
@@ -274,7 +274,6 @@ short *Audio_DirectX::reset (void)
         return NULL;
     }
     _sampleBuffer = (short*)lpvData;
-    return _sampleBuffer;
 }
 
 // Rev 1.8 (saw) - Alias fix

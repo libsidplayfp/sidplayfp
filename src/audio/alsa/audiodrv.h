@@ -45,12 +45,11 @@ public:  // --------------------------------------------------------- public
     Audio_ALSA();
     ~Audio_ALSA();
 
-    short *open  (AudioConfig &cfg, const char *name);
-    void  close ();
-    // Rev 1.2 (saw) - Changed, see AudioBase.h
-    short *reset ();
-    short *write ();
-    void  pause () {;}
+    bool open  (AudioConfig &cfg, const char *name);
+    void close ();
+    void reset () {}
+    bool write ();
+    void pause () {}
 };
 
 #endif // HAVE_ALSA

@@ -61,20 +61,17 @@ public:  // --------------------------------------------------------- public
     Audio_OSS();
     ~Audio_OSS();
 
-    short *open  (AudioConfig &cfg, const char *name);
-    void  close ();
-    // Rev 1.2 (saw) - Changed, see AudioBase.h
-    short *reset ()
+    bool open  (AudioConfig &cfg, const char *name);
+    void close ();
+    void reset ()
     {
         if (_audiofd != (-1))
         {
-            if (ioctl (_audiofd, SNDCTL_DSP_RESET, 0) != (-1))
-                return _sampleBuffer;
+            ioctl (_audiofd, SNDCTL_DSP_RESET, 0);
         }
-        return NULL;
     }
-    short *write ();
-    void  pause () {;}
+    bool write ();
+    void  pause () {}
 };
 
 #endif // HAVE_OSS

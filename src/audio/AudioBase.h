@@ -38,14 +38,14 @@ public:
         _errorString  = "None";
         _sampleBuffer = NULL;
     }
-    virtual ~AudioBase () {;}
+    virtual ~AudioBase () {}
 
     // All drivers must support these
-    virtual short *open(AudioConfig &cfg, const char *name) = 0;
-    virtual short *reset() = 0;
-    virtual short *write() = 0;
-    virtual void  close () = 0;
-    virtual void  pause () = 0;
+    virtual bool open(AudioConfig &cfg, const char *name) = 0;
+    virtual void reset() = 0;
+    virtual bool write() = 0;
+    virtual void close () = 0;
+    virtual void pause () = 0;
     virtual const char *extension () const { return ""; }
     short *buffer () { return _sampleBuffer; }
 

@@ -291,12 +291,12 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
     {   // Open the hardware
         bool err = false;
-        if (m_driver.device->open (m_driver.cfg, title) == NULL)
+        if (!m_driver.device->open (m_driver.cfg, title))
             err = true;
         // Can't open the same driver twice
         if (driver != OUT_NULL)
         {
-            if (m_driver.null.open (m_driver.cfg, title) == NULL)
+            if (!m_driver.null.open (m_driver.cfg, title))
                 err = true;;
         }
         if (name != NULL)

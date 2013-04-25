@@ -42,7 +42,7 @@ void Audio_Pulse::outOfOrder ()
     _errorString = "None";
 }
 
-short *Audio_Pulse::open (AudioConfig &cfg, const char *)
+bool Audio_Pulse::open (AudioConfig &cfg, const char *)
 {
     pa_sample_spec pacfg = {};
 
@@ -83,14 +83,14 @@ short *Audio_Pulse::open (AudioConfig &cfg, const char *)
 
     _settings = cfg;
 
-    return _sampleBuffer;
+    return true;
 
 open_error:
     if (_audioHandle)
         pa_simple_free(_audioHandle);
     _audioHandle = NULL;
 
-    return NULL;
+    return false;
 }
 
 // Close an opened audio device, free any allocated buffers and
@@ -108,18 +108,18 @@ void Audio_Pulse::close ()
     }
 }
 
-short *Audio_Pulse::write ()
+bool Audio_Pulse::write ()
 {
     if (_audioHandle == NULL)
     {
         _errorString = "ERROR: Device not open.";
-        return NULL;
+        return false;
     }
 
     if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, NULL) < 0) {
         _errorString = "Error writing to PA.";
     }
-    return _sampleBuffer;
+    return true;
 }
 
 #endif // HAVE_OSS

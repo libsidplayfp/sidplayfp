@@ -44,14 +44,14 @@ void Audio_ALSA::outOfOrder ()
     _audioHandle = NULL;
 }
 
-short *Audio_ALSA::open (AudioConfig &cfg, const char *)
+bool Audio_ALSA::open (AudioConfig &cfg, const char *)
 {
     AudioConfig tmpCfg;
 
     if (_audioHandle != NULL)
     {
         _errorString = "ERROR: Device already in use";
-        return NULL;
+        return false;
      }
 
     snd_pcm_uframes_t    buffer_frames;
@@ -141,7 +141,7 @@ short *Audio_ALSA::open (AudioConfig &cfg, const char *)
     _settings = tmpCfg;
     // Update the users settings
     getConfig (cfg);
-    return _sampleBuffer;
+    return true;
 
 open_error:
     if (hw_params)
@@ -149,7 +149,7 @@ open_error:
     if (_audioHandle != NULL)
         close ();
     perror ("ALSA");
-    return NULL;
+    return false;
 }
 
 // Close an opened audio device, free any allocated buffers and
@@ -164,22 +164,17 @@ void Audio_ALSA::close ()
     }
 }
 
-short *Audio_ALSA::reset ()
-{
-    return _sampleBuffer;
-}
-
-short *Audio_ALSA::write ()
+bool Audio_ALSA::write ()
 {
     if (_audioHandle == NULL)
     {
         _errorString = "ERROR: Device not open.";
-        return NULL;
+        return false;
     }
 
     if (snd_pcm_writei  (_audioHandle, _sampleBuffer, _settings.bufSize / _alsa_to_frames_divisor) == -EPIPE)
         snd_pcm_prepare (_audioHandle); // Underrun
-    return _sampleBuffer;
+    return true;
 }
 
 #endif // HAVE_ALSA
