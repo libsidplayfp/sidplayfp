@@ -9,8 +9,7 @@ AM_INIT_AUTOMAKE
 
 AC_CANONICAL_HOST
 
-dnl Initialize libtool.
-LT_INIT
+AC_PROG_RANLIB
 
 dnl Checks for programs.
 AC_PROG_CXX
