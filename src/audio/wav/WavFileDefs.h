@@ -37,7 +37,7 @@
   #define WAV_WORDS_BIGENDIAN
 #endif
 
-#undef HAVE_IOS_BIN
+#undef WAV_HAVE_IOS_BIN
 #if defined(HAVE_IOS_BIN)
   #define WAV_HAVE_IOS_BIN
 #endif
@@ -49,7 +49,7 @@
 
 #undef WAV_HAVE_BAD_COMPILER
 #ifdef HAVE_BAD_COMPILER
-  #define HAVE_BAD_COMPILER
+  #define WAV_HAVE_BAD_COMPILER
 #endif
 
 #undef WAV_HAVE_IOS_OPENMODE

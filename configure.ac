@@ -113,9 +113,6 @@ esac
 AUDIO_DRV="$audiodrv_libadd"
 AC_SUBST(AUDIO_DRV)
 
-dnl Use C++ for tests.
-AC_LANG([C++])
-
 dnl Check for nothrow allocator.
 MY_CHECK_EXCEPTIONS
 
