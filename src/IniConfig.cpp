@@ -34,6 +34,8 @@
 #  include <sys/types.h>
 #  include <sys/stat.h>  /* mkdir */
 #  include <dirent.h>    /* opendir */
+#else
+#  include <windows.h>
 #endif
 
 const char *IniConfig::DIR_NAME  = "sidplayfp";

@@ -23,6 +23,8 @@
 #include <cstdlib>
 
 #ifdef _WIN32
+#  include <windows.h>
+#  include <shlobj.h>
 
 std::string utils::getPath()
 {
@@ -38,7 +40,15 @@ std::string utils::getPath()
         returnPath.append(path).append("\\Application Data");
     }
     else
+    {
+#ifdef UNICODE
+        char path[MAX_PATH];
+        size_t ret = wcstombs(path, szPath, sizeof(path));
+        returnPath.append(path);
+#else
         returnPath.append(szPath);
+#endif
+    }
 
     return returnPath;
 }
