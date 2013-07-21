@@ -19,6 +19,8 @@ main.cpp \
 menu.cpp \
 player.cpp \
 player.h \
+utils.cpp \
+utils.h \
 ini/libini.h \
 ini/headings.h \
 ini/headings.i \

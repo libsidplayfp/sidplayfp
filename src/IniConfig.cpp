@@ -21,6 +21,8 @@
 
 #include "config.h"
 
+#include "utils.h"
+
 #include "IniConfig.h"
 
 #include <string>
@@ -32,9 +34,6 @@
 #  include <sys/types.h>
 #  include <sys/stat.h>  /* mkdir */
 #  include <dirent.h>    /* opendir */
-#else
-#  include <windows.h>
-#  include <shlobj.h>
 #endif
 
 const char *IniConfig::DIR_NAME  = "sidplayfp";
@@ -351,34 +350,18 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
 void IniConfig::read ()
 {
-    char *path = NULL;
     ini_fd_t ini  = 0;
+
     std::string configPath;
 
-#ifdef _WIN32
-    char szPath[MAX_PATH];
-
-    if (SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, szPath)!=S_OK)
+    try
     {
-        path = getenv("USERPROFILE");
-        if (!path)
-            goto IniConfig_read_error;
-        configPath.append(path).append("\\Application Data");
+        configPath = utils::getConfigPath();
     }
-    else
-        configPath.append(szPath);
-#else
-    path = getenv("XDG_CONFIG_HOME");
-    if (!path)
+    catch (utils::error &e)
     {
-        path = getenv("HOME");
-        if (!path)
-            goto IniConfig_read_error;
-        configPath.append(path).append("/.config");
+        goto IniConfig_read_error;
     }
-    else
-        configPath.append(path);
-#endif
 
     configPath.append("/").append(DIR_NAME);
 

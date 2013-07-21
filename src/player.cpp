@@ -23,6 +23,8 @@
 
 #include "player.h"
 
+#include "utils.h"
+
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -39,10 +41,6 @@ using std::endl;
 
 #ifdef HAVE_EXCEPTIONS
 #   include <new>
-#endif
-
-#ifdef _WIN32
-#   include <shlobj.h>
 #endif
 
 #include "keyboard.h"
@@ -131,32 +129,15 @@ ConsolePlayer::ConsolePlayer (const char * const name)
 uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char defaultRom[])
 {
     std::string dataPath;
-
-    // FIXME this code is dupicated in IniConfig.cpp
-#ifdef _WIN32
-    char szPath[MAX_PATH];
-
-    if (SHGetFolderPathA(NULL, CSIDL_APPDATA, NULL, 0, szPath)!=S_OK)
+    try
     {
-        char *path = getenv("USERPROFILE");
-        if (!path)
-            return 0;
-        dataPath.append(path).append("\\Application Data");
+        dataPath = utils::getDataPath();
     }
-    else
-        dataPath.append(szPath);
-#else
-    char *path = getenv("XDG_DATA_HOME");
-    if (!path)
+    catch (utils::error &e)
     {
-        path = getenv("HOME");
-        if (!path)
-            return 0;
-        dataPath.append(path).append("/.local/share");
+        return 0;
     }
-    else
-        dataPath.append(path);
-#endif
+
     dataPath.append("/sidplayfp/").append(defaultRom);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
