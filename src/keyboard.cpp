@@ -177,7 +177,6 @@ static int keyboard_search (char *cmd)
 int keyboard_decode ()
 {
     char cmd[MAX_CMDLEN+1];
-    int c;
     int  nch = 0;
     int  action = A_NONE;
 
@@ -185,7 +184,7 @@ int keyboard_decode ()
      * Collect characters in a buffer.
      * Start with the one we have, and get more if we need them.
      */
-    c = _getch();
+   int  c = _getch();
     if (c == '\0')
         c = '\340'; // 224
     else if (c == ESC)

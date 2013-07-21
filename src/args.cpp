@@ -42,14 +42,13 @@ using std::endl;
 // Convert time from integer
 bool ConsolePlayer::parseTime (const char *str, uint_least32_t &time)
 {
-    char *sep;
-    uint_least32_t _time;
-
     // Check for empty string
     if (*str == '\0')
         return false;
 
-    sep = (char *) strstr (str, ":");
+    uint_least32_t _time;
+
+    char *sep = (char *) strstr (str, ":");
     if (!sep)
     {   // User gave seconds
         _time = atoi (str);
@@ -86,10 +85,6 @@ bool ConsolePlayer::parseAddress (const char *str, uint_least16_t &address)
 // Parse command line arguments
 int ConsolePlayer::args (int argc, const char *argv[])
 {
-    int  infile = 0;
-    int  i      = 0;
-    bool err    = false;
-
     if (argc == 0) // at least one argument required
     {
         displayArgs ();
@@ -103,6 +98,10 @@ int ConsolePlayer::args (int argc, const char *argv[])
 
     v1mute = v2mute = v3mute = false;
     v4mute = v5mute = v6mute = false;
+
+    int  infile = 0;
+    int  i      = 0;
+    bool err    = false;
 
     // parse command line arguments
     while ((i < argc) && (argv[i] != NULL))

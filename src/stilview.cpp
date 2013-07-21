@@ -118,9 +118,7 @@ void printHelp(void)
 
 char *getArgValue(char *argStr)
 {
-    char *temp;
-
-    temp = (char *)strchr(argStr, '=');
+    char *temp = (char *)strchr(argStr, '=');
 
     if (temp == NULL) {
         return NULL;
@@ -135,12 +133,7 @@ char *getArgValue(char *argStr)
 
 void processArguments(int argc, char **argv)
 {
-    int i;
-    char *fieldStr;
-    char *tuneStr;
-    char *tempLoc;
-
-    for (i=1; i<argc; i++) {
+    for (int i=1; i<argc; i++) {
         if (argv[i][0] == '-') {
             switch (argv[i][1]) {
                 case 'd':
@@ -165,19 +158,23 @@ void processArguments(int argc, char **argv)
                     break;
                 case 'l':
                 case 'L':
-                    tempLoc = getArgValue(argv[i]);
+                {
+                    char *tempLoc = getArgValue(argv[i]);
                     if (tempLoc != NULL) {
                         hvscLoc = tempLoc;
                     }
+                }
                     break;
                 case 't':
                 case 'T':
-                    tuneStr = getArgValue(argv[i]);
+                {
+                    char *tuneStr = getArgValue(argv[i]);
                     if (tuneStr == NULL) {
                         cerr << "ERROR: tune number was not specified correctly!" << endl;
                         printUsage();
                     }
                     sscanf(tuneStr, "%d", &tuneNo);
+                }
                     break;
                 case 's':
                 case 'S':
@@ -197,7 +194,8 @@ void processArguments(int argc, char **argv)
                     break;
                 case 'f':
                 case 'F':
-                    fieldStr = getArgValue(argv[i]);
+                {
+                    char *fieldStr = getArgValue(argv[i]);
                     if (fieldStr == NULL) {
                         cerr << "ERROR: field was not specified correctly!" << endl;
                         printUsage();
@@ -226,6 +224,7 @@ void processArguments(int argc, char **argv)
                         cerr << "all, name, author, title, artist, comment." << endl;
                         printUsage();
                     }
+                }
                     break;
                 case 'h':
                 case 'H':
@@ -288,7 +287,6 @@ int main(int argc, char **argv)
     char temp[STIL_MAX_PATH_SIZE];
     const char *tmpptr, *sectionPtr, *entryPtr, *bugPtr;
     const char *versionPtr;
-    char fieldchar;
     float tempval;
 
     if (argc < 2) {
@@ -564,6 +562,7 @@ int main(int argc, char **argv)
                     cin >> tuneNo;
 
                     cout << "Field [(A)ll, (N)ame, A(U)thor (T)itle, A(R)tist,(C)omment]: ";
+                    char fieldchar;
                     cin >> fieldchar;
 
                     switch (fieldchar) {
