@@ -1,6 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
+ * Copyright 2013 Leandro Nini
  * Copyright 2001-2002 Simon White
  * Copyright 2000 Jarno Paananen
  *
@@ -73,67 +74,68 @@ bool Audio_MMSystem::open (AudioConfig &cfg, const char *)
     // Rev 1.3 (saw) - Calculate buffer to hold 250ms of data
     bufSize = wfm.nSamplesPerSec / 4 * wfm.nBlockAlign;
 
-    cfg.bufSize = bufSize / 2;
-    waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
-    if ( !waveHandle ) {
-        _errorString = "MMSYSTEM ERROR: Can't open wave out device.";
-        goto Audio_MMSystem_openError;
-    }
-
-    _settings    = cfg;
-
+    try
     {
-        /* Allocate and lock memory for all mixing blocks: */
-        int i;
-        for (i = 0; i < MAXBUFBLOCKS; i++ )
-        {
-            /* Allocate global memory for mixing block: */
-            if ( (blockHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
-                                                bufSize)) == NULL )
-            {
-                _errorString = "MMSYSTEM ERROR: Can't allocate global memory.";
-                goto Audio_MMSystem_openError;
-            }
-
-            /* Lock mixing block memory: */
-            if ( (blocks[i] = (short *)GlobalLock(blockHandles[i])) == NULL )
-            {
-                _errorString = "MMSYSTEM ERROR: Can't lock global memory.";
-                goto Audio_MMSystem_openError;
-            }
-
-            /* Allocate global memory for mixing block header: */
-            if ( (blockHeaderHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
-                                                      sizeof(WAVEHDR))) == NULL )
-            {
-                _errorString = "MMSYSTEM ERROR: Can't allocate global memory.";
-                goto Audio_MMSystem_openError;
-            }
-
-            /* Lock mixing block header memory: */
-            WAVEHDR *header;
-            if ( (header = blockHeaders[i] =
-                  (WAVEHDR*)GlobalLock(blockHeaderHandles[i])) == NULL )
-            {
-                _errorString = "MMSYSTEM ERROR: Can't lock global memory.";
-                goto Audio_MMSystem_openError;
-            }
-
-            /* Reset wave header fields: */
-            memset (header, 0, sizeof (WAVEHDR));
-            header->lpData         = (char*)blocks[i];
-            header->dwBufferLength = bufSize;
-            header->dwFlags        = WHDR_DONE; /* mark the block is done */
+        cfg.bufSize = bufSize / 2;
+        waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
+        if ( !waveHandle ) {
+            throw error("MMSYSTEM ERROR: Can't open wave out device.");
         }
+
+        _settings    = cfg;
+
+        {
+            /* Allocate and lock memory for all mixing blocks: */
+            int i;
+            for (i = 0; i < MAXBUFBLOCKS; i++ )
+            {
+                /* Allocate global memory for mixing block: */
+                if ( (blockHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
+                                                    bufSize)) == NULL )
+                {
+                    throw error("MMSYSTEM ERROR: Can't allocate global memory.");
+                }
+
+                /* Lock mixing block memory: */
+                if ( (blocks[i] = (short *)GlobalLock(blockHandles[i])) == NULL )
+                {
+                    throw error("MMSYSTEM ERROR: Can't lock global memory.");
+                }
+
+                /* Allocate global memory for mixing block header: */
+                if ( (blockHeaderHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
+                                                        sizeof(WAVEHDR))) == NULL )
+                {
+                    throw error("MMSYSTEM ERROR: Can't allocate global memory.");
+                }
+
+                /* Lock mixing block header memory: */
+                WAVEHDR *header;
+                if ( (header = blockHeaders[i] =
+                    (WAVEHDR*)GlobalLock(blockHeaderHandles[i])) == NULL )
+                {
+                    throw error("MMSYSTEM ERROR: Can't lock global memory.");
+                }
+
+                /* Reset wave header fields: */
+                memset (header, 0, sizeof (WAVEHDR));
+                header->lpData         = (char*)blocks[i];
+                header->dwBufferLength = bufSize;
+                header->dwFlags        = WHDR_DONE; /* mark the block is done */
+            }
+        }
+
+        blockNum = 0;
+        _sampleBuffer = blocks[blockNum];
+        return true;
     }
+    catch(error &e)
+    {
+        _errorString = e.message();
 
-    blockNum = 0;
-    _sampleBuffer = blocks[blockNum];
-    return true;
-
-Audio_MMSystem_openError:
-    close ();
-    return false;
+        close ();
+        return false;
+    }
 }
 
 bool Audio_MMSystem::write ()

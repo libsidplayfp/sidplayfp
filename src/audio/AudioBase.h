@@ -1,6 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
+ * Copyright 2013 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -27,6 +28,17 @@
 
 class AudioBase
 {
+protected:
+    class error
+    {
+    private:
+        const char* m_msg;
+
+    public:
+        error(const char* msg) : m_msg(msg) {}
+        const char* message() const { return m_msg; }
+    };
+
 protected:
     AudioConfig _settings;
     const char *_errorString;

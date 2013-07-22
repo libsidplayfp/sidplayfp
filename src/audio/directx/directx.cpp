@@ -1,6 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
+ * Copyright 2013 Leandro Nini
  * Copyright 2000-2002 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -84,128 +85,125 @@ bool Audio_DirectX::open (AudioConfig &cfg, const char *name)
 
 bool Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
 {
-    DSBUFFERDESC        dsbdesc;
     LPDIRECTSOUNDBUFFER lpDsbPrimary = 0;
-    WAVEFORMATEX        wfm;
-    DWORD               dwBytes;
-    int i;
 
-    if (isOpen)
+    try
     {
-        _errorString = "DIRECTX ERROR: Audio device already open.";
-        goto Audio_DirectX_openError;
+        DSBUFFERDESC        dsbdesc;
+        WAVEFORMATEX        wfm;
+        DWORD               dwBytes;
+        int i;
+
+        if (isOpen)
+        {
+            throw error("DIRECTX ERROR: Audio device already open.");
+        }
+
+        lpvData = 0;
+        isOpen  = true;
+
+        for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
+            rghEvent[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
+
+        if (FAILED (DirectSoundCreate (NULL, &lpds, NULL)))
+        {
+            throw error("DIRECTX ERROR: Could not open audio device.");
+        }
+        if (FAILED (lpds->SetCooperativeLevel (hwnd, DSSCL_PRIORITY)))
+        {
+            throw error("DIRECTX ERROR: Could not set cooperative level.");
+        }
+
+        // Primary Buffer Setup
+        memset (&dsbdesc, 0, sizeof(DSBUFFERDESC));
+        dsbdesc.dwSize        = sizeof(DSBUFFERDESC);
+        dsbdesc.dwFlags       = DSBCAPS_PRIMARYBUFFER;
+        dsbdesc.dwBufferBytes = 0;
+        dsbdesc.lpwfxFormat   = NULL;
+
+        // Format
+        memset (&wfm, 0, sizeof(WAVEFORMATEX));
+        wfm.wFormatTag      = WAVE_FORMAT_PCM;
+        wfm.nChannels       = cfg.channels;
+        wfm.nSamplesPerSec  = cfg.frequency;
+        wfm.wBitsPerSample  = 16;
+        wfm.nBlockAlign     = wfm.wBitsPerSample / 8 * wfm.nChannels;
+        wfm.nAvgBytesPerSec = wfm.nSamplesPerSec * wfm.nBlockAlign;
+
+        if (FAILED (lpds->CreateSoundBuffer(&dsbdesc, &lpDsbPrimary, NULL)))
+        {
+            throw error("DIRECTX ERROR: Unable to create sound buffer.");
+        }
+        if (FAILED (lpDsbPrimary->SetFormat(&wfm)))
+        {
+            throw error("DIRECTX ERROR: Unable to setup required sampling format.");
+        }
+        lpDsbPrimary->Release ();
+
+        // Buffer size reduced to 2 blocks of 500ms
+        bufSize = wfm.nSamplesPerSec / 2 * wfm.nBlockAlign;
+
+        // Allocate secondary buffers
+        memset (&dsbdesc, 0, sizeof(DSBUFFERDESC));
+        dsbdesc.dwSize  = sizeof(DSBUFFERDESC);
+        dsbdesc.dwFlags = DSBCAPS_CTRLPOSITIONNOTIFY |
+            DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLPAN;
+        dsbdesc.dwBufferBytes = bufSize * AUDIO_DIRECTX_BUFFERS;
+        dsbdesc.lpwfxFormat   = &wfm;
+
+        if (FAILED (lpds->CreateSoundBuffer(&dsbdesc, &lpDsb, NULL)))
+        {
+            throw error("DIRECTX ERROR: Could not create sound buffer.");
+        }
+        lpDsb->Stop();
+
+        // Apparently this is used for timing ------------------------
+        DSBPOSITIONNOTIFY rgdscbpn[AUDIO_DIRECTX_BUFFERS];
+        // Buffer Start Notification
+        // Rev 2.0.4 (saw) - On starting to play a buffer
+        for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
+        {   // Track one buffer ahead
+            rgdscbpn[i].dwOffset     = bufSize * ((i + 1) % AUDIO_DIRECTX_BUFFERS);
+            rgdscbpn[i].hEventNotify = rghEvent[i];
+        }
+
+        if (FAILED (lpDsb->QueryInterface (IID_IDirectSoundNotify, (VOID **) &lpdsNotify)))
+        {
+            throw error("DIRECTX ERROR: Sound interface query failed.");
+        }
+        if (FAILED (lpdsNotify->SetNotificationPositions(AUDIO_DIRECTX_BUFFERS, rgdscbpn)))
+        {
+            throw error("DIRECTX ERROR: Unable to set up sound notification positions.");
+        }
+        // -----------------------------------------------------------
+
+        lpDsb->Stop ();
+        if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
+        {
+            throw error("DIRECTX ERROR: Unable to lock sound buffer.");
+        }
+
+        // Rev 1.7 (saw) - Set the play position back to the begining
+        if (FAILED (lpDsb->SetCurrentPosition(0)))
+        {
+            throw error("DIRECTX ERROR: Unable to set play position to start of buffer.");
+        }
+
+        // Update the users settings
+        cfg.bufSize   = bufSize / 2;
+        _settings     = cfg;
+        isPlaying     = false;
+        _sampleBuffer = (short*)lpvData;
+        return true;
     }
-
-    lpvData = 0;
-    isOpen  = true;
-
-    for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
-        rghEvent[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
-
-    if (FAILED (DirectSoundCreate (NULL, &lpds, NULL)))
+    catch(error &e)
     {
-        _errorString = "DIRECTX ERROR: Could not open audio device.";
-        goto Audio_DirectX_openError;
-    }
-    if (FAILED (lpds->SetCooperativeLevel (hwnd, DSSCL_PRIORITY)))
-    {
-        _errorString = "DIRECTX ERROR: Could not set cooperative level.";
-        goto Audio_DirectX_openError;
-    }
+        _errorString = e.message();
 
-    // Primary Buffer Setup
-    memset (&dsbdesc, 0, sizeof(DSBUFFERDESC));
-    dsbdesc.dwSize        = sizeof(DSBUFFERDESC);
-    dsbdesc.dwFlags       = DSBCAPS_PRIMARYBUFFER;
-    dsbdesc.dwBufferBytes = 0;
-    dsbdesc.lpwfxFormat   = NULL;
-
-    // Format
-    memset (&wfm, 0, sizeof(WAVEFORMATEX));
-    wfm.wFormatTag      = WAVE_FORMAT_PCM;
-    wfm.nChannels       = cfg.channels;
-    wfm.nSamplesPerSec  = cfg.frequency;
-    wfm.wBitsPerSample  = 16;
-    wfm.nBlockAlign     = wfm.wBitsPerSample / 8 * wfm.nChannels;
-    wfm.nAvgBytesPerSec = wfm.nSamplesPerSec * wfm.nBlockAlign;
-
-    if (FAILED (lpds->CreateSoundBuffer(&dsbdesc, &lpDsbPrimary, NULL)))
-    {
-        _errorString = "DIRECTX ERROR: Unable to create sound buffer.";
-        goto Audio_DirectX_openError;
-    }
-    if (FAILED (lpDsbPrimary->SetFormat(&wfm)))
-    {
-        _errorString = "DIRECTX ERROR: Unable to setup required sampling format.";
-        goto Audio_DirectX_openError;
-    }
-    lpDsbPrimary->Release ();
-
-    // Buffer size reduced to 2 blocks of 500ms
-    bufSize = wfm.nSamplesPerSec / 2 * wfm.nBlockAlign;
-
-    // Allocate secondary buffers
-    memset (&dsbdesc, 0, sizeof(DSBUFFERDESC));
-    dsbdesc.dwSize  = sizeof(DSBUFFERDESC);
-    dsbdesc.dwFlags = DSBCAPS_CTRLPOSITIONNOTIFY |
-        DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRLPAN;
-    dsbdesc.dwBufferBytes = bufSize * AUDIO_DIRECTX_BUFFERS;
-    dsbdesc.lpwfxFormat   = &wfm;
-
-    if (FAILED (lpds->CreateSoundBuffer(&dsbdesc, &lpDsb, NULL)))
-    {
-        _errorString = "DIRECTX ERROR: Could not create sound buffer.";
-        goto Audio_DirectX_openError;
-    }
-    lpDsb->Stop();
-
-    // Apparently this is used for timing ------------------------
-    DSBPOSITIONNOTIFY rgdscbpn[AUDIO_DIRECTX_BUFFERS];
-    // Buffer Start Notification
-    // Rev 2.0.4 (saw) - On starting to play a buffer
-    for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
-    {   // Track one buffer ahead
-        rgdscbpn[i].dwOffset     = bufSize * ((i + 1) % AUDIO_DIRECTX_BUFFERS);
-        rgdscbpn[i].hEventNotify = rghEvent[i];
-    }
-
-    if (FAILED (lpDsb->QueryInterface (IID_IDirectSoundNotify, (VOID **) &lpdsNotify)))
-    {
-        _errorString = "DIRECTX ERROR: Sound interface query failed.";
-        goto Audio_DirectX_openError;
-    }
-    if (FAILED (lpdsNotify->SetNotificationPositions(AUDIO_DIRECTX_BUFFERS, rgdscbpn)))
-    {
-        _errorString = "DIRECTX ERROR: Unable to set up sound notification positions.";
-        goto Audio_DirectX_openError;
-    }
-    // -----------------------------------------------------------
-
-    lpDsb->Stop ();
-    if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
-    {
-        _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
-        goto Audio_DirectX_openError;
-    }
-
-    // Rev 1.7 (saw) - Set the play position back to the begining
-    if (FAILED (lpDsb->SetCurrentPosition(0)))
-    {
-        _errorString = "DIRECTX ERROR: Unable to set play position to start of buffer.";
+        SAFE_RELEASE (lpDsbPrimary);
+        close ();
         return false;
     }
-
-    // Update the users settings
-    cfg.bufSize   = bufSize / 2;
-    _settings     = cfg;
-    isPlaying     = false;
-    _sampleBuffer = (short*)lpvData;
-    return true;
-
-Audio_DirectX_openError:
-    SAFE_RELEASE (lpDsbPrimary);
-    close ();
-    return false;
 }
 
 bool Audio_DirectX::write ()

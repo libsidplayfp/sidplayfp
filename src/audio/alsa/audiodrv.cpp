@@ -1,6 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
+ * Copyright 2013 Leandro Nini
  * Copyright 2000-2006 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +22,8 @@
 #include "audiodrv.h"
 
 #ifdef HAVE_ALSA
+
+#include <stdio.h>
 
 #ifdef HAVE_EXCEPTIONS
 #  include <new>
@@ -46,110 +49,102 @@ void Audio_ALSA::outOfOrder ()
 
 bool Audio_ALSA::open (AudioConfig &cfg, const char *)
 {
-    AudioConfig tmpCfg;
-
-    if (_audioHandle != NULL)
-    {
-        _errorString = "ERROR: Device already in use";
-        return false;
-     }
-
-    snd_pcm_uframes_t    buffer_frames;
     snd_pcm_hw_params_t *hw_params = 0;
 
-    if (snd_pcm_open (&_audioHandle, "default", SND_PCM_STREAM_PLAYBACK, 0))
+    try
     {
-        _errorString = "ERROR: Could not open audio device.";
-        goto open_error;
-    }
-
-    // May later be replaced with driver defaults.
-    tmpCfg = cfg;
-
-    if (snd_pcm_hw_params_malloc (&hw_params))
-    {
-        _errorString = "ERROR: could not malloc hwparams.";
-        goto open_error;
-    }
-
-    if (snd_pcm_hw_params_any (_audioHandle, hw_params))
-    {
-        _errorString = "ERROR: could not initialize hw params";
-        goto open_error;
-    }
-
-    if (snd_pcm_hw_params_set_access (_audioHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED))
-    {
-        _errorString = "ERROR: could not set access type";
-        goto open_error;
-    }
-
-    if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE))
-    {
-        _errorString = "ERROR: could not set sample format";
-        goto open_error;
-    }
-
-    if (snd_pcm_hw_params_set_channels (_audioHandle, hw_params, tmpCfg.channels))
-    {
-        _errorString = "ERROR: could not set channel count";
-        goto open_error;
-    }
-
-    {   // Gentoo bug #98769, comment 4
-        unsigned int rate = tmpCfg.frequency;
-        if (snd_pcm_hw_params_set_rate_near (_audioHandle, hw_params, &rate, 0))
+        if (_audioHandle != NULL)
         {
-            _errorString = "ERROR: could not set sample rate";
-            goto open_error;
+            throw error("ERROR: Device already in use");
         }
-    }
 
-    _alsa_to_frames_divisor = tmpCfg.channels;
-    buffer_frames = 4096;
-    snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &buffer_frames, 0);
+        if (snd_pcm_open (&_audioHandle, "default", SND_PCM_STREAM_PLAYBACK, 0))
+        {
+           throw error("ERROR: Could not open audio device.");
+        }
 
-    if (snd_pcm_hw_params (_audioHandle, hw_params))
-    {
-        _errorString = "ERROR: could not set hw parameters";
-        goto open_error;
-    }
+        // May later be replaced with driver defaults.
+        AudioConfig tmpCfg = cfg;
 
-    snd_pcm_hw_params_free (hw_params);
-    hw_params = 0;
+        if (snd_pcm_hw_params_malloc (&hw_params))
+        {
+            throw error("ERROR: could not malloc hwparams.");
+        }
 
-    if (snd_pcm_prepare (_audioHandle))
-    {
-        _errorString = "ERROR: could not prepare audio interface for use";
-        goto open_error;
-    }
+        if (snd_pcm_hw_params_any (_audioHandle, hw_params))
+        {
+            throw error("ERROR: could not initialize hw params");
+        }
 
-    tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;
+        if (snd_pcm_hw_params_set_access (_audioHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED))
+        {
+            throw error("ERROR: could not set access type");
+        }
+
+        if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE))
+        {
+            throw error("ERROR: could not set sample format");
+        }
+
+        if (snd_pcm_hw_params_set_channels (_audioHandle, hw_params, tmpCfg.channels))
+        {
+            throw error("ERROR: could not set channel count");
+        }
+
+        {   // Gentoo bug #98769, comment 4
+            unsigned int rate = tmpCfg.frequency;
+            if (snd_pcm_hw_params_set_rate_near (_audioHandle, hw_params, &rate, 0))
+            {
+                throw error("ERROR: could not set sample rate");
+            }
+        }
+
+        _alsa_to_frames_divisor = tmpCfg.channels;
+        snd_pcm_uframes_t buffer_frames = 4096;
+        snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &buffer_frames, 0);
+
+        if (snd_pcm_hw_params (_audioHandle, hw_params))
+        {
+            throw error("ERROR: could not set hw parameters");
+        }
+
+        snd_pcm_hw_params_free (hw_params);
+        hw_params = 0;
+
+        if (snd_pcm_prepare (_audioHandle))
+        {
+            throw error("ERROR: could not prepare audio interface for use");
+        }
+
+        tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;
 #ifdef HAVE_EXCEPTIONS
-    _sampleBuffer = new(std::nothrow) short[tmpCfg.bufSize];
+        _sampleBuffer = new(std::nothrow) short[tmpCfg.bufSize];
 #else
-    _sampleBuffer = new short[tmpCfg.bufSize];
+        _sampleBuffer = new short[tmpCfg.bufSize];
 #endif
 
-    if (!_sampleBuffer)
-    {
-        _errorString = "AUDIO: Unable to allocate memory for sample buffers.";
-        goto open_error;
+        if (!_sampleBuffer)
+        {
+            throw error("AUDIO: Unable to allocate memory for sample buffers.");
+        }
+
+        // Setup internal Config
+        _settings = tmpCfg;
+        // Update the users settings
+        getConfig (cfg);
+        return true;
     }
+    catch(error &e)
+    {
+        _errorString = e.message();
 
-    // Setup internal Config
-    _settings = tmpCfg;
-    // Update the users settings
-    getConfig (cfg);
-    return true;
-
-open_error:
-    if (hw_params)
-        snd_pcm_hw_params_free (hw_params);
-    if (_audioHandle != NULL)
-        close ();
-    perror ("ALSA");
-    return false;
+        if (hw_params)
+            snd_pcm_hw_params_free (hw_params);
+        if (_audioHandle != NULL)
+            close ();
+        perror ("ALSA");
+        return false;
+    }
 }
 
 // Close an opened audio device, free any allocated buffers and

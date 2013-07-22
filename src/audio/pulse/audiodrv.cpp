@@ -1,6 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
+ * Copyright 2013 Leandro Nini
  * Copyright 2008 Antti Lankila
  *
  * This program is free software; you can redistribute it and/or modify
@@ -63,34 +64,38 @@ bool Audio_Pulse::open (AudioConfig &cfg, const char *)
         NULL
     );
 
-    if (! _audioHandle) {
-        _errorString = "Error acquiring pulseaudio stream";
-        goto open_error;
-    }
+    try
+    {
+        if (! _audioHandle) {
+            throw error("Error acquiring pulseaudio stream");
+        }
 
-    cfg.bufSize = 4096;
+        cfg.bufSize = 4096;
 
 #ifdef HAVE_EXCEPTIONS
-    _sampleBuffer = new(std::nothrow) short[cfg.bufSize];
+        _sampleBuffer = new(std::nothrow) short[cfg.bufSize];
 #else
-    _sampleBuffer = new short[cfg.bufSize];
+        _sampleBuffer = new short[cfg.bufSize];
 #endif
 
-    if (!_sampleBuffer) {
-        _errorString = "AUDIO: Unable to allocate memory for sample buffers.";
-        goto open_error;
+        if (!_sampleBuffer) {
+            throw error("AUDIO: Unable to allocate memory for sample buffers.");
+        }
+
+        _settings = cfg;
+
+        return true;
     }
+    catch(error &e)
+    {
+        _errorString = e.message();
 
-    _settings = cfg;
+        if (_audioHandle)
+            pa_simple_free(_audioHandle);
+        _audioHandle = NULL;
 
-    return true;
-
-open_error:
-    if (_audioHandle)
-        pa_simple_free(_audioHandle);
-    _audioHandle = NULL;
-
-    return false;
+        return false;
+    }
 }
 
 // Close an opened audio device, free any allocated buffers and
