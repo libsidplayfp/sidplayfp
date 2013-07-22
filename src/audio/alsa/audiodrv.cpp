@@ -25,9 +25,7 @@
 
 #include <stdio.h>
 
-#ifdef HAVE_EXCEPTIONS
-#  include <new>
-#endif
+#include <new>
 
 Audio_ALSA::Audio_ALSA()
 {
@@ -117,13 +115,12 @@ bool Audio_ALSA::open (AudioConfig &cfg, const char *)
         }
 
         tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;
-#ifdef HAVE_EXCEPTIONS
-        _sampleBuffer = new(std::nothrow) short[tmpCfg.bufSize];
-#else
-        _sampleBuffer = new short[tmpCfg.bufSize];
-#endif
 
-        if (!_sampleBuffer)
+        try
+        {
+            _sampleBuffer = new short[tmpCfg.bufSize];
+        }
+        catch (std::bad_alloc& ba)
         {
             throw error("AUDIO: Unable to allocate memory for sample buffers.");
         }

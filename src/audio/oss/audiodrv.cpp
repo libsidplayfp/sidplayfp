@@ -25,9 +25,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#ifdef HAVE_EXCEPTIONS
-#  include <new>
-#endif
+#include <new>
 
 #if defined(HAVE_NETBSD)
 const char Audio_OSS::AUDIODEVICE[] = "/dev/audio";
@@ -106,13 +104,12 @@ bool Audio_OSS::open (AudioConfig &cfg, const char *)
         int temp = 0;
         ioctl (_audiofd, SNDCTL_DSP_GETBLKSIZE, &temp);
         cfg.bufSize = (uint_least32_t) temp;
-#ifdef HAVE_EXCEPTIONS
-        _sampleBuffer = new(std::nothrow) short[cfg.bufSize];
-#else
-        _sampleBuffer = new short[cfg.bufSize];
-#endif
 
-        if (!_sampleBuffer)
+        try
+        {
+            _sampleBuffer = new short[cfg.bufSize];
+        }
+        catch (std::bad_alloc& ba)
         {
             throw error("AUDIO: Unable to allocate memory for sample buffers.");
         }

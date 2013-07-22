@@ -27,10 +27,7 @@
 #include <vector>
 #include <iomanip>
 #include <fstream>
-
-#ifdef WAV_HAVE_EXCEPTIONS
-#  include <new>
-#endif
+#include <new>
 
 #ifdef WAV_HAVE_IOS_OPENMODE
     typedef std::ios::openmode openmode;
@@ -128,13 +125,14 @@ bool WavFile::open(AudioConfig &cfg, const char* name)
     byteCount = 0;
 
     // We need to make a buffer for the user
-#if defined(WAV_HAVE_EXCEPTIONS)
-    _sampleBuffer = new(std::nothrow) short[bufSize];
-#else
-    _sampleBuffer = new short[bufSize];
-#endif
-    if (!_sampleBuffer)
+    try
+    {
+        _sampleBuffer = new short[bufSize];
+    }
+    catch (std::bad_alloc& ba)
+    {
         return false;
+    }
 
     // Fill in header with parameters and expected file size.
     endian_little32(wavHdr.length,sizeof(wavHeader)-8);

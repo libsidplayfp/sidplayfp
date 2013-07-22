@@ -28,6 +28,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <new>
 
 using std::cout;
 using std::cerr;
@@ -37,10 +38,6 @@ using std::endl;
 
 #ifdef HAVE_UNISTD_H
 #   include <unistd.h>
-#endif
-
-#ifdef HAVE_EXCEPTIONS
-#   include <new>
 #endif
 
 #include "keyboard.h"
@@ -153,20 +150,21 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char 
     if (is.fail())
         goto error;
     {
-#ifdef HAVE_EXCEPTIONS
-    uint8_t *buffer = new(std::nothrow) uint8_t[size];
-#else
-    uint8_t *buffer = new uint8_t[size];
-#endif
-    if (buffer == 0)
-        goto error;
+        try
+        {
+            uint8_t *buffer = new uint8_t[size];
 
-    is.read((char*)buffer, size);
-    if (is.fail())
-        goto error;
+            is.read((char*)buffer, size);
+            if (is.fail())
+                goto error;
 
-    is.close();
-    return buffer;
+            is.close();
+            return buffer;
+        }
+        catch (std::bad_alloc& ba)
+        {
+            goto error;
+        }
     }
 
 error:
@@ -199,19 +197,25 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     break;
 
     case OUT_SOUNDCARD:
-#ifdef HAVE_EXCEPTIONS
-        m_driver.device = new(std::nothrow) AudioDriver;
-#else
-        m_driver.device = new AudioDriver;
-#endif
+        try
+        {
+            m_driver.device = new AudioDriver;
+        }
+        catch (std::bad_alloc& ba)
+        {
+            m_driver.device = 0;
+        }
     break;
 
     case OUT_WAV:
-#ifdef HAVE_EXCEPTIONS
-        m_driver.device = new(std::nothrow) WavFile;
-#else
-        m_driver.device = new WavFile;
-#endif
+        try
+        {
+            m_driver.device = new WavFile;
+        }
+        catch (std::bad_alloc& ba)
+        {
+            m_driver.device = 0;
+        }
     break;
 
     default:
@@ -240,12 +244,11 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         }
         if (!i) i = length;
 
-#ifdef HAVE_EXCEPTIONS
-        name = new(std::nothrow) char[i + 10];
-#else
-        name = new char[i + 10];
-#endif
-        if (!name)
+        try
+        {
+            name = new char[i + 10];
+        }
+        catch (std::bad_alloc& ba)
         {
             displayError (ERR_NOT_ENOUGH_MEMORY);
             return false;
@@ -328,13 +331,10 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     case EMU_RESIDFP:
     {
-#ifdef HAVE_EXCEPTIONS
-        ReSIDfpBuilder *rs = new(std::nothrow) ReSIDfpBuilder( RESIDFP_ID );
-#else
-        ReSIDfpBuilder *rs = new ReSIDfpBuilder( RESIDFP_ID );
-#endif
-        if (rs)
+        try
         {
+            ReSIDfpBuilder *rs = new ReSIDfpBuilder( RESIDFP_ID );
+
             m_engCfg.sidEmulation = rs;
             if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids());
@@ -345,6 +345,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             if (m_filter.filterCurve8580)
                 rs->filter8580Curve((double)m_filter.filterCurve8580);
         }
+        catch (std::bad_alloc& ba) {}
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
@@ -352,13 +353,10 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     case EMU_RESID:
     {
-#ifdef HAVE_EXCEPTIONS
-        ReSIDBuilder *rs = new(std::nothrow) ReSIDBuilder( RESID_ID );
-#else
-        ReSIDBuilder *rs = new ReSIDfpBuilder( RESID_ID );
-#endif
-        if (rs)
+        try
         {
+            ReSIDBuilder *rs = new ReSIDBuilder( RESID_ID );
+
             m_engCfg.sidEmulation = rs;
             if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids());
@@ -366,6 +364,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 
             rs->bias(m_filter.bias);
         }
+        catch (std::bad_alloc& ba) {}
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESID_H
@@ -373,18 +372,16 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     case EMU_HARDSID:
     {
-#ifdef HAVE_EXCEPTIONS
-        HardSIDBuilder *hs = new(std::nothrow) HardSIDBuilder( HARDSID_ID );
-#else
-        HardSIDBuilder *hs = new HardSIDBuilder( HARDSID_ID );
-#endif
-        if (hs)
+        try
         {
+            HardSIDBuilder *hs = new HardSIDBuilder( HARDSID_ID );
+
             m_engCfg.sidEmulation = hs;
             if (!hs->getStatus()) goto createSidEmu_error;
             hs->create ((m_engine.info ()).maxsids());
             if (!hs->getStatus()) goto createSidEmu_error;
         }
+        catch (std::bad_alloc& ba) {}
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H

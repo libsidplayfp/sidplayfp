@@ -23,9 +23,7 @@
 
 #ifdef HAVE_PULSE
 
-#ifdef HAVE_EXCEPTIONS
-#  include <new>
-#endif
+#include <new>
 
 Audio_Pulse::Audio_Pulse()
 {
@@ -72,13 +70,12 @@ bool Audio_Pulse::open (AudioConfig &cfg, const char *)
 
         cfg.bufSize = 4096;
 
-#ifdef HAVE_EXCEPTIONS
-        _sampleBuffer = new(std::nothrow) short[cfg.bufSize];
-#else
-        _sampleBuffer = new short[cfg.bufSize];
-#endif
-
-        if (!_sampleBuffer) {
+        try
+        {
+            _sampleBuffer = new short[cfg.bufSize];
+        }
+        catch (std::bad_alloc& ba)
+        {
             throw error("AUDIO: Unable to allocate memory for sample buffers.");
         }
 

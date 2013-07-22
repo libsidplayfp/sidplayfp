@@ -112,9 +112,6 @@ esac
 AUDIO_DRV="$audiodrv_libadd"
 AC_SUBST(AUDIO_DRV)
 
-dnl Check for nothrow allocator.
-MY_CHECK_EXCEPTIONS
-
 dnl Check ANSI C++ ios features
 MY_CHECK_IOS_BIN
 MY_CHECK_IOS_OPENMODE
