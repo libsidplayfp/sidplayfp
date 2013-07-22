@@ -28,6 +28,7 @@
 #  include <unistd.h>
 #endif
 
+#include <cstdlib>
 #include <iostream>
 
 using std::cout;
