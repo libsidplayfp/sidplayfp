@@ -146,7 +146,7 @@ bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
     }
 
     str = ret;
-return true;
+    return true;
 }
 
 
@@ -223,7 +223,7 @@ bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
 
     value = time;
     free (str);
-return ret;
+    return ret;
 
 IniCofig_readTime_error:
     free (str);
