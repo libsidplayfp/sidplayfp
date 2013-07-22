@@ -126,19 +126,16 @@ bool IniConfig::readInt (ini_fd_t ini, const char *key, int &value)
 
 bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
 {
-    char  *ret;
-    size_t length;
-
     if (ini_locateKey (ini, key) < 0)
     {   // Dosen't exist, add it
         (void) ini_writeString (ini, "");
     }
 
-    length = (size_t) ini_dataLength (ini);
+    size_t length = (size_t) ini_dataLength (ini);
     if (!length)
         return 0;
 
-    ret = (char *) malloc (++length);
+    char *ret = (char *) malloc (++length);
     if (!ret)
         return false;
 
@@ -196,8 +193,7 @@ bool IniConfig::readChar (ini_fd_t ini, const char *key, char &ch)
 
 bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
 {
-    char *str, *sep;
-    int   time;
+    char *str;
     bool  ret = readString (ini, key, str);
     if (!ret)
         return false;
@@ -205,7 +201,8 @@ bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
     if (!*str)
         return false;
 
-    sep = strstr (str, ":");
+    int   time;
+    char *sep = strstr (str, ":");
     if (!sep)
     {   // User gave seconds
         time = atoi (str);
