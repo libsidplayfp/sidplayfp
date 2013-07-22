@@ -22,18 +22,11 @@
  */
 
 #include "WavFile.h"
-#include "WavFileDefs.h"
 
 #include <vector>
 #include <iomanip>
 #include <fstream>
 #include <new>
-
-#ifdef WAV_HAVE_IOS_OPENMODE
-    typedef std::ios::openmode openmode;
-#else
-    typedef int openmode;
-#endif
 
 // Get the lo byte (8 bit) in a dword (32 bit)
 inline uint8_t endian_32lo8 (uint_least32_t dword)
@@ -144,17 +137,10 @@ bool WavFile::open(AudioConfig &cfg, const char* name)
     endian_little16(wavHdr.bitsPerSample,bits);
     endian_little32(wavHdr.dataChunkLen,0);
 
-    openmode createAttr = std::ios::out;
-#if defined(WAV_HAVE_IOS_BIN)
-    createAttr |= std::ios::bin;
-#else
-    createAttr |= std::ios::binary;
-#endif
-
     if (strncmp("-", name, 2) == 0) {
         file = &std::cout;
     } else {
-        file = new std::ofstream(name, createAttr|std::ios::trunc);
+        file = new std::ofstream(name, std::ios::out|std::ios::binary|std::ios::trunc);
     }
 
     _settings = cfg;

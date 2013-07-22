@@ -112,10 +112,6 @@ esac
 AUDIO_DRV="$audiodrv_libadd"
 AC_SUBST(AUDIO_DRV)
 
-dnl Check ANSI C++ ios features
-MY_CHECK_IOS_BIN
-MY_CHECK_IOS_OPENMODE
-
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
 PKG_CHECK_MODULES(SIDPLAYFP,[libsidplayfp >= 1.0])
