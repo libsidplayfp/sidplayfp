@@ -50,22 +50,23 @@ bool Audio_Pulse::open (AudioConfig &cfg, const char *)
     pacfg.format = PA_SAMPLE_S16NE;
 
     // Set sample precision and type of encoding.
+    int error;
     _audioHandle = pa_simple_new(
         NULL,
-        "sidplay",
+        "sidplayfp",
         PA_STREAM_PLAYBACK,
         NULL,
-        "Music",
+        "sidplayfp",
         &pacfg,
         NULL,
         NULL,
-        NULL
+        &error
     );
 
     try
     {
         if (! _audioHandle) {
-            throw error("Error acquiring pulseaudio stream");
+            throw error(pa_strerror(error));
         }
 
         cfg.bufSize = 4096;
@@ -118,8 +119,9 @@ bool Audio_Pulse::write ()
         return false;
     }
 
-    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, NULL) < 0) {
-        _errorString = "Error writing to PA.";
+    int error;
+    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &error) < 0) {
+        _errorString = pa_strerror(error);
     }
     return true;
 }
