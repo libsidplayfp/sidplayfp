@@ -23,8 +23,6 @@
 
 #ifdef HAVE_ALSA
 
-#include <stdio.h>
-
 #include <new>
 
 Audio_ALSA::Audio_ALSA()
@@ -45,6 +43,14 @@ void Audio_ALSA::outOfOrder ()
     _audioHandle = NULL;
 }
 
+void Audio_ALSA::checkResult(int err)
+{
+    if (err < 0)
+    {
+        throw error(snd_strerror(err));
+    }
+}
+
 bool Audio_ALSA::open (AudioConfig &cfg, const char *)
 {
     snd_pcm_hw_params_t *hw_params = 0;
@@ -56,64 +62,36 @@ bool Audio_ALSA::open (AudioConfig &cfg, const char *)
             throw error("ERROR: Device already in use");
         }
 
-        if (snd_pcm_open (&_audioHandle, "default", SND_PCM_STREAM_PLAYBACK, 0))
-        {
-           throw error("ERROR: Could not open audio device.");
-        }
+        checkResult(snd_pcm_open(&_audioHandle, "default", SND_PCM_STREAM_PLAYBACK, 0));
 
         // May later be replaced with driver defaults.
         AudioConfig tmpCfg = cfg;
 
-        if (snd_pcm_hw_params_malloc (&hw_params))
-        {
-            throw error("ERROR: could not malloc hwparams.");
-        }
+        checkResult(snd_pcm_hw_params_malloc(&hw_params));
 
-        if (snd_pcm_hw_params_any (_audioHandle, hw_params))
-        {
-            throw error("ERROR: could not initialize hw params");
-        }
+        checkResult(snd_pcm_hw_params_any(_audioHandle, hw_params));
 
-        if (snd_pcm_hw_params_set_access (_audioHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED))
-        {
-            throw error("ERROR: could not set access type");
-        }
+        checkResult(snd_pcm_hw_params_set_access(_audioHandle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED));
 
-        if (snd_pcm_hw_params_set_format (_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE))
-        {
-            throw error("ERROR: could not set sample format");
-        }
+        checkResult(snd_pcm_hw_params_set_format(_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE));
 
-        if (snd_pcm_hw_params_set_channels (_audioHandle, hw_params, tmpCfg.channels))
-        {
-            throw error("ERROR: could not set channel count");
-        }
+        checkResult(snd_pcm_hw_params_set_channels(_audioHandle, hw_params, tmpCfg.channels));
 
         {   // Gentoo bug #98769, comment 4
             unsigned int rate = tmpCfg.frequency;
-            if (snd_pcm_hw_params_set_rate_near (_audioHandle, hw_params, &rate, 0))
-            {
-                throw error("ERROR: could not set sample rate");
-            }
+            checkResult(snd_pcm_hw_params_set_rate_near(_audioHandle, hw_params, &rate, 0));
         }
 
         _alsa_to_frames_divisor = tmpCfg.channels;
         snd_pcm_uframes_t buffer_frames = 4096;
-        snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &buffer_frames, 0);
+        checkResult(snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &buffer_frames, 0));
 
-        if (snd_pcm_hw_params (_audioHandle, hw_params))
-        {
-            throw error("ERROR: could not set hw parameters");
-        }
+        checkResult(snd_pcm_hw_params(_audioHandle, hw_params));
 
-        snd_pcm_hw_params_free (hw_params);
+        snd_pcm_hw_params_free(hw_params);
         hw_params = 0;
 
-        if (snd_pcm_prepare (_audioHandle))
-        {
-            throw error("ERROR: could not prepare audio interface for use");
-        }
-
+        checkResult(snd_pcm_prepare(_audioHandle));
         tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;
 
         try
@@ -136,10 +114,10 @@ bool Audio_ALSA::open (AudioConfig &cfg, const char *)
         _errorString = e.message();
 
         if (hw_params)
-            snd_pcm_hw_params_free (hw_params);
+            snd_pcm_hw_params_free(hw_params);
         if (_audioHandle != NULL)
-            close ();
-        perror ("ALSA");
+            close();
+
         return false;
     }
 }
@@ -148,7 +126,7 @@ bool Audio_ALSA::open (AudioConfig &cfg, const char *)
 // reset any variables that reflect the current state.
 void Audio_ALSA::close ()
 {
-    if (_audioHandle != NULL )
+    if (_audioHandle != NULL)
     {
         snd_pcm_close(_audioHandle);
         delete[] _sampleBuffer;
@@ -164,8 +142,16 @@ bool Audio_ALSA::write ()
         return false;
     }
 
-    if (snd_pcm_writei  (_audioHandle, _sampleBuffer, _settings.bufSize / _alsa_to_frames_divisor) == -EPIPE)
-        snd_pcm_prepare (_audioHandle); // Underrun
+    int err = snd_pcm_writei(_audioHandle, _sampleBuffer, _settings.bufSize / _alsa_to_frames_divisor);
+    if (err < 0)
+    {
+        err = snd_pcm_recover(_audioHandle, err, 0);
+        if (err < 0)
+        {
+            _errorString = snd_strerror(err);
+            return false;
+        }
+    }
     return true;
 }
 

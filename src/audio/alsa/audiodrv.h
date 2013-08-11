@@ -40,6 +40,7 @@ private:  // ------------------------------------------------------- private
     int _alsa_to_frames_divisor;
 
     void outOfOrder ();
+    void checkResult(int err);
 
 public:  // --------------------------------------------------------- public
     Audio_ALSA();
