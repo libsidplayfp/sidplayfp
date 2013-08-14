@@ -41,6 +41,8 @@ using std::endl;
 #endif
 
 #include "keyboard.h"
+#include "audio/AudioDrv.h"
+#include "audio/wav/WavFile.h"
 
 #include <sidplayfp/sidbuilder.h>
 #include <sidplayfp/SidInfo.h>

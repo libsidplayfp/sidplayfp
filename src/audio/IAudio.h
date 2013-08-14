@@ -19,50 +19,26 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef AUDIOBASE_H
-#define AUDIOBASE_H
+#ifndef IAUDIO_H
+#define IAUDIO_H
 
-#include <string.h>
+class AudioConfig;
 
-#include "IAudio.h"
-#include "AudioConfig.h"
-
-class AudioBase : public IAudio
+class IAudio
 {
-protected:
-    class error
-    {
-    private:
-        const char* m_msg;
-
-    public:
-        error(const char* msg) : m_msg(msg) {}
-        const char* message() const { return m_msg; }
-    };
-
-protected:
-    AudioConfig _settings;
-    const char *_errorString;
-    short      *_sampleBuffer;
-
 public:
-    AudioBase ()
-    {
-        _errorString  = "None";
-        _sampleBuffer = NULL;
-    }
-    virtual ~AudioBase() {}
+    virtual ~IAudio() {}
 
-    const char *extension() const { return ""; }
-    short *buffer() { return _sampleBuffer; }
-
-    void getConfig(AudioConfig &cfg) const {
-        cfg = _settings;
-    }
-
-    const char *getErrorString() const {
-        return _errorString;
-    }
+    // All drivers must support these
+    virtual bool open(AudioConfig &cfg, const char *name) = 0;
+    virtual void reset() = 0;
+    virtual bool write() = 0;
+    virtual void close() = 0;
+    virtual void pause() = 0;
+    virtual const char *extension() const = 0;
+    virtual short *buffer() = 0;
+    virtual void getConfig(AudioConfig &cfg) const = 0;
+    virtual const char *getErrorString() const = 0;
 };
 
-#endif // AUDIOBASE_H
+#endif // IAUDIO_H

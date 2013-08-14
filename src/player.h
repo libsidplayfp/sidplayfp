@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2012 Leandro Nini
+ * Copyright 2011-2013 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -31,7 +31,9 @@
 #include <sidplayfp/SidTuneInfo.h>
 #include <sidplayfp/SidDatabase.h>
 
-#include "audio/AudioDrv.h"
+#include "audio/IAudio.h"
+#include "audio/AudioConfig.h"
+#include "audio/null/null.h"
 #include "IniConfig.h"
 
 #ifdef HAVE_TSID
@@ -139,8 +141,8 @@ private:
         SIDEMUS        sid;      // Sid emulation
         bool           file;     // File based driver
         AudioConfig    cfg;
-        AudioBase*     selected; // Selected Output Driver
-        AudioBase*     device;   // HW/File Driver
+        IAudio*        selected; // Selected Output Driver
+        IAudio*        device;   // HW/File Driver
         Audio_Null     null;     // Used for everything
     } m_driver;
 

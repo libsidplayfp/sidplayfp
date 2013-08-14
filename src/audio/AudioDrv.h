@@ -24,8 +24,7 @@
 // Drivers must be put in order of preference
 #include "config.h"
 
-// Hardsid Compatibility Driver
-#include "null/null.h"
+#include "IAudio.h"
 
 // Unix Sound Drivers
 #include "pulse/audiodrv.h"
@@ -41,12 +40,9 @@
 #  warning Audio hardware not recognised, please check configuration files.
 #endif
 
-// Add music conversion drivers
-#include "wav/WavFile.h"
-
 #include <memory>
 
-class audioDrv : public AudioBase
+class audioDrv : public IAudio
 {
 private:
     std::auto_ptr<AudioBase> audio;
@@ -55,12 +51,16 @@ public:
     audioDrv() : audio(new AudioDriver()) {}
     virtual ~audioDrv() {}
 
-    bool open(AudioConfig &cfg, const char *name) { audio->open(cfg, name); }
+    bool open(AudioConfig &cfg, const char *name) { return audio->open(cfg, name); }
     void reset() { audio->reset(); }
     bool write() { return audio->write(); }
     void close() { audio->close(); }
     void pause() { audio->pause(); }
-    const char *extension() const { return audio->extension(); }
+    const char *extension() const { return ""; }
+    short *buffer() { return audio->buffer(); }
+    void getConfig(AudioConfig &cfg) const { audio->getConfig(cfg); }
+    const char *getErrorString() const { return audio->getErrorString(); }
+    
 };
 
 #endif // AUDIODRV_H
