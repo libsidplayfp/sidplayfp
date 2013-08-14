@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     g_player = &player;
 
     {// Decode the command line args
-        int ret = player.args (argc - 1, const_cast<const char**>(argv + 1));
+        const int ret = player.args (argc - 1, const_cast<const char**>(argv + 1));
         if (ret < 0)
             goto main_error;
         else if (!ret)

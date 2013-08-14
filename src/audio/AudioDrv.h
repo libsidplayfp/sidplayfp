@@ -44,4 +44,23 @@
 // Add music conversion drivers
 #include "wav/WavFile.h"
 
+#include <memory>
+
+class audioDrv : public AudioBase
+{
+private:
+    std::auto_ptr<AudioBase> audio;
+
+public:
+    audioDrv() : audio(new AudioDriver()) {}
+    virtual ~audioDrv() {}
+
+    bool open(AudioConfig &cfg, const char *name) { audio->open(cfg, name); }
+    void reset() { audio->reset(); }
+    bool write() { return audio->write(); }
+    void close() { audio->close(); }
+    void pause() { audio->pause(); }
+    const char *extension() const { return audio->extension(); }
+};
+
 #endif // AUDIODRV_H

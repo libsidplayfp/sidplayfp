@@ -175,9 +175,6 @@ error:
 // Create the output object to process sound buffer
 bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 {
-    char *name = NULL;
-    const char *title = m_outfile;
-
     // Remove old audio driver
     m_driver.null.close ();
     m_driver.selected = &m_driver.null;
@@ -187,6 +184,8 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
             delete m_driver.device;
         m_driver.device = NULL;
     }
+
+    const char *title = m_outfile;
 
     // Create audio driver
     switch (driver)
@@ -199,7 +198,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     case OUT_SOUNDCARD:
         try
         {
-            m_driver.device = new AudioDriver;
+            m_driver.device = new audioDrv();
         }
         catch (std::bad_alloc& ba)
         {
@@ -230,13 +229,14 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         return false;
     }
 
+    char *name = NULL;
+
     // Generate a name for the wav file
     if (title == NULL)
     {
-        size_t length, i;
-        title  = tuneInfo->dataFileName();
-        length = strlen (title);
-        i      = length;
+        title = tuneInfo->dataFileName();
+        size_t length = strlen (title);
+        size_t i = length;
         while (i > 0)
         {
             if (title[--i] == '.')
@@ -281,7 +281,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         if (driver != OUT_NULL)
         {
             if (!m_driver.null.open (m_driver.cfg, title))
-                err = true;;
+                err = true;
         }
         if (name != NULL)
             delete [] name;
@@ -469,7 +469,7 @@ bool ConsolePlayer::open (void)
     // so try the songlength database
     if (!m_timer.valid)
     {
-        int_least32_t length = m_database.length (m_tune);
+       const  int_least32_t length = m_database.length (m_tune);
         if (length > 0)
             m_timer.length = length;
     }
@@ -549,14 +549,12 @@ void ConsolePlayer::emuflush ()
 // Out play loop to be externally called
 bool ConsolePlayer::play ()
 {
-    short *buffer = m_driver.selected->buffer ();
-    uint_least32_t length = m_driver.cfg.bufSize;
-
     if (m_state == playerRunning)
     {
         // Fill buffer
-        uint_least32_t ret;
-        ret = m_engine.play (buffer, length);
+        short *buffer = m_driver.selected->buffer ();
+        const uint_least32_t length = m_driver.cfg.bufSize;
+        const uint_least32_t ret = m_engine.play (buffer, length);
         if (ret < length)
         {
             if (m_engine.isPlaying ())
@@ -593,10 +591,9 @@ bool ConsolePlayer::play ()
 #elif HAVE_TSID == 2
         if (m_tsid)
         {
-            int_least32_t length;
             char md5[SidTune::MD5_LENGTH + 1];
             m_tune.createMD5 (md5);
-            length = m_database.length (md5, m_track.selected);
+            int_least32_t length = m_database.length (md5, m_track.selected);
             // ignore errors
             if (length < 0)
                 length = 0;
@@ -620,7 +617,7 @@ void ConsolePlayer::stop ()
 // External Timer Event
 void ConsolePlayer::event (void)
 {
-    uint_least32_t seconds = m_engine.time();
+    const uint_least32_t seconds = m_engine.time();
     if ( !m_quietLevel )
     {
         cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
@@ -676,11 +673,9 @@ void ConsolePlayer::displayError (const char *error)
 // Keyboard handling
 void ConsolePlayer::decodeKeys ()
 {
-    int action;
-
     do
     {
-        action = keyboard_decode ();
+        const int action = keyboard_decode ();
         if (action == A_INVALID)
             continue;
 
