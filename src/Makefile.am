@@ -1,9 +1,13 @@
 
 SUBDIRS = audio
 
-AM_CPPFLAGS = -I $(top_builddir) -DPKGDATADIR="\"$(pkgdatadir)/\"" \
+AM_CPPFLAGS = \
+-I $(top_builddir) \
+-DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
-$(STILVIEW_CFLAGS)
+$(STILVIEW_CFLAGS) \
+$(ALSA_CFLAGS) \
+$(PULSE_CFLAGS)
 
 # The console user interface.
 
@@ -32,11 +36,15 @@ ini/list.h \
 ini/list.i \
 ini/types.i
 
-sidplayfp_LDADD = ./audio/null/libnull.a \
+sidplayfp_LDADD = \
+./audio/libaudio.a \
+./audio/null/libnull.a \
 ./audio/wav/libwav.a \
 $(AUDIO_DRV) $(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
-$(BUILDERS_LDFLAGS)
+$(BUILDERS_LDFLAGS) \
+$(ALSA_LIBS) \
+$(PULSE_LIBS)
 # $(LIBLTDL_LDFLAGS)
 
 stilview_SOURCES = \
