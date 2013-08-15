@@ -30,7 +30,7 @@ Audio_Null::~Audio_Null ()
     close();
 }
 
-bool Audio_Null::open (AudioConfig &cfg, const char *)
+bool Audio_Null::open (AudioConfig &cfg)
 {
     if (isOpen)
     {

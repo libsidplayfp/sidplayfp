@@ -28,6 +28,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <sstream>
 #include <new>
 
 using std::cout;
@@ -174,6 +175,39 @@ error:
     return 0;
 }
 
+IAudio* ConsolePlayer::getWavFile(const SidTuneInfo *tuneInfo)
+{
+    const char *title = m_outfile;
+
+    // Generate a name for the wav file
+    if (title == NULL)
+    {
+        title = tuneInfo->dataFileName();
+        const size_t length = strlen(title);
+        size_t i = length;
+        while (i > 0)
+        {
+            if (title[--i] == '.')
+                break;
+        }
+        if (!i) i = length;
+
+        std::string name(title, i);
+
+        // Change name based on subtune
+        if (tuneInfo->songs() > 1)
+        {
+            std::ostringstream sstream;
+            sstream << "[" << tuneInfo->currentSong() << "]";
+            name.append(sstream.str());
+        }
+        name.append(WavFile::extension());
+        title = name.c_str();
+    }
+
+    return new WavFile(title);
+}
+
 // Create the output object to process sound buffer
 bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 {
@@ -187,14 +221,11 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         m_driver.device = NULL;
     }
 
-    const char *title = m_outfile;
-
     // Create audio driver
     switch (driver)
     {
     case OUT_NULL:
         m_driver.device = &m_driver.null;
-        title = "";
     break;
 
     case OUT_SOUNDCARD:
@@ -211,7 +242,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     case OUT_WAV:
         try
         {
-            m_driver.device = new WavFile;
+            m_driver.device = getWavFile(tuneInfo);
         }
         catch (std::bad_alloc& ba)
         {
@@ -231,42 +262,6 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         return false;
     }
 
-    char *name = NULL;
-
-    // Generate a name for the wav file
-    if (title == NULL)
-    {
-        title = tuneInfo->dataFileName();
-        size_t length = strlen (title);
-        size_t i = length;
-        while (i > 0)
-        {
-            if (title[--i] == '.')
-                break;
-        }
-        if (!i) i = length;
-
-        try
-        {
-            name = new char[i + 10];
-        }
-        catch (std::bad_alloc& ba)
-        {
-            displayError (ERR_NOT_ENOUGH_MEMORY);
-            return false;
-        }
-
-        strcpy (name, title);
-        // Prevent extension ".sid.wav"
-        name[i] = '\0';
-
-        // Change name based on subtune
-        if (tuneInfo->songs() > 1)
-            sprintf (&name[i], "[%u]", tuneInfo->currentSong());
-        strcat (&name[i], m_driver.device->extension ());
-        title = name;
-    }
-
     // Configure with user settings
     m_driver.cfg.frequency = m_engCfg.frequency;
     m_driver.cfg.precision = m_precision;
@@ -277,16 +272,16 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
     {   // Open the hardware
         bool err = false;
-        if (!m_driver.device->open (m_driver.cfg, title))
+        if (!m_driver.device->open (m_driver.cfg))
             err = true;
+
         // Can't open the same driver twice
         if (driver != OUT_NULL)
         {
-            if (!m_driver.null.open (m_driver.cfg, title))
+            if (!m_driver.null.open (m_driver.cfg))
                 err = true;
         }
-        if (name != NULL)
-            delete [] name;
+
         if (err) {
             displayError(m_driver.device->getErrorString());
             return false;

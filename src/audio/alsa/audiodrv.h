@@ -46,7 +46,7 @@ public:  // --------------------------------------------------------- public
     Audio_ALSA();
     ~Audio_ALSA();
 
-    bool open  (AudioConfig &cfg, const char *name);
+    bool open  (AudioConfig &cfg);
     void close ();
     void reset () {}
     bool write ();

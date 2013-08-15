@@ -195,6 +195,8 @@ private:
 
     uint8_t* loadRom    (const char* romPath, const int size, const char defaultRom[]);
 
+    IAudio* getWavFile(const SidTuneInfo *tuneInfo);
+
 public:
     ConsolePlayer (const char * const name);
     virtual ~ConsolePlayer() {}

@@ -44,7 +44,7 @@ public:  // --------------------------------------------------------- public
     Audio_Null();
     ~Audio_Null();
 
-    bool open  (AudioConfig &cfg, const char *);
+    bool open  (AudioConfig &cfg);
     void close ();
     void reset () {}
     bool write ();

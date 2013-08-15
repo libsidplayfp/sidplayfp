@@ -55,7 +55,7 @@ public:  // --------------------------------------------------------- public
     Audio_MMSystem();
     ~Audio_MMSystem();
 
-    bool open  (AudioConfig &cfg, const char *name);
+    bool open  (AudioConfig &cfg);
     void close ();
     void reset ();
     bool write ();

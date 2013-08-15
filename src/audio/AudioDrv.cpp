@@ -36,42 +36,42 @@
 #  warning Audio hardware not recognised, please check configuration files.
 #endif
 
-bool audioDrv::open(AudioConfig &cfg, const char *name)
+bool audioDrv::open(AudioConfig &cfg)
 {
     bool res = false;
 #ifdef HAVE_PULSE
     if(!res)
     {
         audio.reset(new Audio_Pulse());
-        res = audio->open(cfg, name);
+        res = audio->open(cfg);
     }
 #endif
 #ifdef HAVE_ALSA
     if(!res)
     {
         audio.reset(new Audio_ALSA());
-        res = audio->open(cfg, name);
+        res = audio->open(cfg);
     }
 #endif
 #ifdef HAVE_OSS
     if(!res)
     {
         audio.reset(new Audio_OSS());
-        res = audio->open(cfg, name);
+        res = audio->open(cfg);
     }
 #endif
 #ifdef HAVE_DIRECTX
     if(!res)
     {
         audio.reset(new Audio_DirectX());
-        res = audio->open(cfg, name);
+        res = audio->open(cfg);
     }
 #endif
 #ifdef HAVE_MMSYSTEM
     if(!res)
     {
         audio.reset(new Audio_MMSystem());
-        res = audio->open(cfg, name);
+        res = audio->open(cfg);
     }
 #endif
     return res;

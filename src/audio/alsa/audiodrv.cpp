@@ -51,7 +51,7 @@ void Audio_ALSA::checkResult(int err)
     }
 }
 
-bool Audio_ALSA::open (AudioConfig &cfg, const char *)
+bool Audio_ALSA::open (AudioConfig &cfg)
 {
     snd_pcm_hw_params_t *hw_params = 0;
 

@@ -66,8 +66,8 @@ public:  // --------------------------------------------------------- public
 
     // This first one assumes progrm is built as a
     // console application
-    bool open  (AudioConfig &cfg, const char *name);
-    bool open  (AudioConfig &cfg, const char *name, HWND hwnd);
+    bool open  (AudioConfig &cfg);
+    bool open  (AudioConfig &cfg, HWND hwnd);
     void close ();
     void reset ();
     bool write ();

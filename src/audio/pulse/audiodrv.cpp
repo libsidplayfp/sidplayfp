@@ -41,7 +41,7 @@ void Audio_Pulse::outOfOrder ()
     _errorString = "None";
 }
 
-bool Audio_Pulse::open (AudioConfig &cfg, const char *)
+bool Audio_Pulse::open (AudioConfig &cfg)
 {
     pa_sample_spec pacfg = {};
 

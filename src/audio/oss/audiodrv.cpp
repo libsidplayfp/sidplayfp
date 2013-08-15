@@ -52,7 +52,7 @@ void Audio_OSS::outOfOrder ()
     _audiofd     = -1;
 }
 
-bool Audio_OSS::open (AudioConfig &cfg, const char *)
+bool Audio_OSS::open (AudioConfig &cfg)
 {
     if (_audiofd != -1)
     {

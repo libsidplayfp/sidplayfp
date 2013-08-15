@@ -53,7 +53,6 @@ public:
     }
     virtual ~AudioBase() {}
 
-    const char *extension() const { return ""; }
     short *buffer() { return _sampleBuffer; }
 
     void getConfig(AudioConfig &cfg) const {

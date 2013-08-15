@@ -61,7 +61,7 @@ public:  // --------------------------------------------------------- public
     Audio_OSS();
     ~Audio_OSS();
 
-    bool open  (AudioConfig &cfg, const char *name);
+    bool open  (AudioConfig &cfg);
     void close ();
     void reset ()
     {

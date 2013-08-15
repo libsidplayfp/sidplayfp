@@ -35,12 +35,11 @@ private:
 public:
     virtual ~audioDrv() {}
 
-    bool open(AudioConfig &cfg, const char *name);
+    bool open(AudioConfig &cfg);
     void reset() { audio->reset(); }
     bool write() { return audio->write(); }
     void close() { audio->close(); }
     void pause() { audio->pause(); }
-    const char *extension() const { return ""; }
     short *buffer() { return audio->buffer(); }
     void getConfig(AudioConfig &cfg) const { audio->getConfig(cfg); }
     const char *getErrorString() const { return audio->getErrorString(); }

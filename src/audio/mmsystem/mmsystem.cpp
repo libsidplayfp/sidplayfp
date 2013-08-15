@@ -45,7 +45,7 @@ Audio_MMSystem::~Audio_MMSystem()
     close();
 }
 
-bool Audio_MMSystem::open (AudioConfig &cfg, const char *)
+bool Audio_MMSystem::open (AudioConfig &cfg)
 {
     WAVEFORMATEX  wfm;
 

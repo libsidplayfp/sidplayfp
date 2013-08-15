@@ -25,6 +25,7 @@
 #define WAV_FILE_H
 
 #include <iostream>
+#include <string>
 
 #include "../AudioBase.h"
 
@@ -57,6 +58,8 @@ struct wavHeader                        // little endian format
 class WavFile: public AudioBase
 {
 private:
+    std::string name;
+
     unsigned long int byteCount;
 
     static const wavHeader defaultWavHdr;
@@ -67,33 +70,29 @@ private:
     int precision;
 
 public:
+    WavFile(const char *name);
+    ~WavFile() { close(); }
 
-    WavFile();
+    static const char *extension () { return ".wav"; }
 
-    // Only unsigned 8-bit, and signed 16-bit, samples are supported.
+    // Only signed 16-bit and 32bit float samples are supported.
     // Endian-ess is adjusted if necessary.
     //
     // If number of sample bytes is given, this can speed up the
     // process of closing a huge file on slow storage media.
 
-    bool open(AudioConfig &cfg, const char *name);
+    bool open(AudioConfig &cfg);
 
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
     bool write();
     void close();
     void pause() {}
-    const char *extension () const { return ".wav"; }
-    ~WavFile() { close(); }
-
-    void reset () {}
+    void reset() {}
 
     // Stream state.
     bool fail() const { return (file->fail() != 0); }
     bool bad()  const { return (file->bad()  != 0); }
-
-    operator bool()  const { return (file->good() != 0); }
-    bool operator!() const { return (file->fail() != 0); }
 };
 
-#endif /* WAVE_FILE_HEADER_H */
+#endif /* WAV_FILE_H */

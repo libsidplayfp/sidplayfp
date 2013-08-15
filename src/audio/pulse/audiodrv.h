@@ -43,7 +43,7 @@ public:  // --------------------------------------------------------- public
     Audio_Pulse();
     ~Audio_Pulse();
 
-    bool open  (AudioConfig &cfg, const char *name);
+    bool open  (AudioConfig &cfg);
     void close ();
     void reset () {}
     bool write ();

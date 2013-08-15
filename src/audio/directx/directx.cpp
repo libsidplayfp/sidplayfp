@@ -74,7 +74,7 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     return (hwndFound);
 }
 
-bool Audio_DirectX::open (AudioConfig &cfg, const char *name)
+bool Audio_DirectX::open (AudioConfig &cfg)
 {
     HWND hwnd;
     // Assume we have a console.  Use other other
@@ -83,7 +83,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, const char *name)
     return open (cfg, name, hwnd);
 }
 
-bool Audio_DirectX::open (AudioConfig &cfg, const char *, HWND hwnd)
+bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 {
     LPDIRECTSOUNDBUFFER lpDsbPrimary = 0;
 

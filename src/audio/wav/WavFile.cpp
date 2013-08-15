@@ -84,32 +84,27 @@ const wavHeader WavFile::defaultWavHdr = {
     {0x64,0x61,0x74,0x61}, {0,0,0,0}
 };
 
-WavFile::WavFile()
-: wavHdr(defaultWavHdr),
-  file(0)
-{
-    precision = 32;
-    headerWritten = false;
-}
+WavFile::WavFile(const char *name) :
+    name(name),
+    wavHdr(defaultWavHdr),
+    file(0),
+    headerWritten(false),
+    precision(32)
+{}
 
-bool WavFile::open(AudioConfig &cfg, const char* name)
+bool WavFile::open(AudioConfig &cfg)
 {
-    unsigned long  int freq;
-    unsigned short int channels, bits, format;
-    unsigned short int blockAlign;
-    unsigned long  int bufSize;
-
     precision = cfg.precision;
 
-    bits        = precision;
-    format      = (precision == 16 ) ? 1 : 3;
-    channels    = cfg.channels;
-    freq        = cfg.frequency;
-    blockAlign  = (bits>>3)*channels;
-    bufSize     = freq * blockAlign;
+    unsigned short bits       = precision;
+    unsigned short format     = (precision == 16 ) ? 1 : 3;
+    unsigned short channels   = cfg.channels;
+    unsigned long freq        = cfg.frequency;
+    unsigned short blockAlign = (bits>>3)*channels;
+    unsigned long bufSize     = freq * blockAlign;
     cfg.bufSize = bufSize;
 
-    if (name == NULL)
+    if (name.empty())
         return false;
 
     if (file && !file->fail())
@@ -137,10 +132,13 @@ bool WavFile::open(AudioConfig &cfg, const char* name)
     endian_little16(wavHdr.bitsPerSample,bits);
     endian_little32(wavHdr.dataChunkLen,0);
 
-    if (strncmp("-", name, 2) == 0) {
+    if (name.compare("-") == 0)
+    {
         file = &std::cout;
-    } else {
-        file = new std::ofstream(name, std::ios::out|std::ios::binary|std::ios::trunc);
+    }
+    else
+    {
+        file = new std::ofstream(name.c_str(), std::ios::out|std::ios::binary|std::ios::trunc);
     }
 
     _settings = cfg;
