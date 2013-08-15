@@ -44,7 +44,9 @@ PKG_CHECK_MODULES(PULSE,
 
 dnl Checks what version of Unix we have and soundcard support
 AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h \
-sys/soundcard.h soundcard.h dsound.h mmsystem.h])
+sys/soundcard.h soundcard.h])
+
+AC_CHECK_HEADERS([dsound.h mmsystem.h], [], [], [#include <windows.h>])
 
 if test "$ac_cv_header_dsound_h" = "yes"; then
     AC_DEFINE([HAVE_DIRECTX], 1, [Define to 1 if you have DirectSound (-ldsound).])
@@ -69,6 +71,8 @@ if test "x$ac_cv_header_machine_soundcard_h" = "xyes" -o "x$ac_cv_header_linux_s
     AC_DEFINE([HAVE_OSS], 1, [Define to 1 if you have OSS.])
     audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
 fi
+
+AC_SUBST(AUDIO_LDFLAGS)
 
 AUDIO_DRV="$audiodrv_libadd"
 AC_SUBST(AUDIO_DRV)

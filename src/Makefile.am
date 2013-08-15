@@ -40,7 +40,8 @@ sidplayfp_LDADD = \
 ./audio/libaudio.a \
 ./audio/null/libnull.a \
 ./audio/wav/libwav.a \
-$(AUDIO_DRV) $(AUDIO_LDFLAGS) \
+$(AUDIO_DRV) \
+$(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
