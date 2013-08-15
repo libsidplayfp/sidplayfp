@@ -44,27 +44,30 @@ PKG_CHECK_MODULES(PULSE,
 
 dnl Checks what version of Unix we have and soundcard support
 AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h \
-sys/soundcard.hsoundcard.h dsound.h mmsystem.h])
+sys/soundcard.h soundcard.h dsound.h mmsystem.h])
 
-if test "$ac_cv_header_dsound_h" == "yes"; then
+if test "$ac_cv_header_dsound_h" = "yes"; then
     AC_DEFINE([HAVE_DIRECTX], 1, [Define to 1 if you have DirectSound (-ldsound).])
     audiodrv_libadd="$audiodrv_libadd ./audio/directx/libdirectx.a"
     AUDIO_LDFLAGS="$AUDIO_LDFLAGS -ldsound -ldxguid"
 fi
 
-if test "$ac_cv_header_mmsystem_h" == "yes"; then
+if test "$ac_cv_header_mmsystem_h" = "yes"; then
     AC_DEFINE([HAVE_MMSYSTEM], 1, [Define to 1 if you have MMSYSTEM (-lwinmm).])
     audiodrv_libadd="$audiodrv_libadd ./audio/mmsystem/libmmsystem.a"
     AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lwinmm"
 fi
 
-if test "$ac_cv_header_soundcard_h" == "yes" -o
-        test "$ac_cv_header_machine_soundcard_h" == "yes"; -o
-        test "$ac_cv_header_linux_soundcard_h" == "yes"; -o
-        test "$ac_cv_header_sys_soundcard_h" == "yes"; then
+# NetBSD/OpenBSD OSS audio emulation
+if test "x$ac_cv_header_soundcard_h" = "xyes"; then
     AC_DEFINE([HAVE_OSS], 1, [Define to 1 if you have OSS.])
     audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lwinmm"
+    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lossaudio"
+fi
+
+if test "x$ac_cv_header_machine_soundcard_h" = "xyes" -o "x$ac_cv_header_linux_soundcard_h" = "xyes" -o "x$ac_cv_header_sys_soundcard_h" = "xyes"; then
+    AC_DEFINE([HAVE_OSS], 1, [Define to 1 if you have OSS.])
+    audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
 fi
 
 AUDIO_DRV="$audiodrv_libadd"
