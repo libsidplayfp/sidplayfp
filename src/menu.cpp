@@ -334,25 +334,25 @@ void ConsolePlayer::consoleTable (player_table_t table)
         cerr << (m_iniCfg.console ()).topLeft << setw(tableWidth)
              << setfill ((m_iniCfg.console ()).horizontal) << ""
              << (m_iniCfg.console ()).topRight;
-    break;
+        break;
 
     case tableMiddle:
         cerr << setw(tableWidth + 1) << setfill(' ') << ""
              << (m_iniCfg.console ()).vertical << '\r'
              << (m_iniCfg.console ()).vertical;
-    return;
+        return;
 
     case tableSeperator:
         cerr << (m_iniCfg.console ()).junctionRight << setw(tableWidth)
              << setfill ((m_iniCfg.console ()).horizontal) << ""
              << (m_iniCfg.console ()).junctionLeft;
-    break;
+        break;
 
     case tableEnd:
         cerr << (m_iniCfg.console ()).bottomLeft << setw(tableWidth)
              << setfill ((m_iniCfg.console ()).horizontal) << ""
              << (m_iniCfg.console ()).bottomRight;
-    break;
+        break;
     }
 
     // Move back to begining of row and skip first char

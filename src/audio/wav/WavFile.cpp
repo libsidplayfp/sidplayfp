@@ -99,9 +99,9 @@ bool WavFile::open(AudioConfig &cfg)
     unsigned short bits       = precision;
     unsigned short format     = (precision == 16 ) ? 1 : 3;
     unsigned short channels   = cfg.channels;
-    unsigned long freq        = cfg.frequency;
+    unsigned long  freq       = cfg.frequency;
     unsigned short blockAlign = (bits>>3)*channels;
-    unsigned long bufSize     = freq * blockAlign;
+    unsigned long  bufSize    = freq * blockAlign;
     cfg.bufSize = bufSize;
 
     if (name.empty())
@@ -119,6 +119,7 @@ bool WavFile::open(AudioConfig &cfg)
     }
     catch (std::bad_alloc& ba)
     {
+        _errorString = "WAVFILE: Unable to allocate memory for sample buffers.";
         return false;
     }
 
@@ -147,21 +148,27 @@ bool WavFile::open(AudioConfig &cfg)
 
 bool WavFile::write()
 {
-    if (file && !file->fail()) {
+    if (file && !file->fail())
+    {
         unsigned long int bytes = _settings.bufSize;
-        if (!headerWritten) {
+        if (!headerWritten)
+        {
             file->write((char*)&wavHdr,sizeof(wavHeader));
             headerWritten = true;
         }
 
         /* XXX endianness... */
-        if (precision == 16) {
+        if (precision == 16)
+        {
             bytes *= 2;
             file->write((char*)_sampleBuffer, bytes);
-        } else {
+        }
+        else
+        {
             std::vector<float> buffer(_settings.bufSize);
             bytes *= 4;
-            for (unsigned long i=0;i<_settings.bufSize;i++) {
+            for (unsigned long i=0;i<_settings.bufSize;i++)
+            {
                 buffer[i] = ((float)_sampleBuffer[i])/32768.f;
             }
             file->write((char*)&buffer.front(), bytes);
@@ -174,10 +181,12 @@ bool WavFile::write()
 
 void WavFile::close()
 {
-    if (file && !file->fail()) {
+    if (file && !file->fail())
+    {
         endian_little32(wavHdr.length,byteCount+sizeof(wavHeader)-8);
         endian_little32(wavHdr.dataChunkLen,byteCount);
-        if (file != &std::cout) {
+        if (file != &std::cout)
+        {
             file->seekp(0, std::ios::beg);
             file->write((char*)&wavHdr,sizeof(wavHeader));
             delete file;

@@ -137,7 +137,8 @@ static int keyboard_search (char *cmd)
                 }
                 return (a);
             }
-        } else if (*q == '\0')
+        }
+        else if (*q == '\0')
         {
             /*
              * Hit the end of the user's command,
@@ -145,7 +146,8 @@ static int keyboard_search (char *cmd)
              * The user's command is incomplete.
              */
             return (A_PREFIX);
-        } else
+        }
+        else
         {
             /*
              * Not a match.
@@ -184,7 +186,7 @@ int keyboard_decode ()
      * Collect characters in a buffer.
      * Start with the one we have, and get more if we need them.
      */
-   int  c = _getch();
+    int c = _getch();
     if (c == '\0')
         c = '\340'; // 224
     else if (c == ESC)

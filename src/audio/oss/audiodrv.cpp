@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 #include <fcntl.h>
 
 #include <new>
@@ -142,6 +143,14 @@ void Audio_OSS::close ()
         ::close (_audiofd);
         delete [] _sampleBuffer;
         outOfOrder ();
+    }
+}
+
+void Audio_OSS::reset ()
+{
+    if (_audiofd != -1)
+    {
+        ioctl (_audiofd, SNDCTL_DSP_RESET, 0);
     }
 }
 

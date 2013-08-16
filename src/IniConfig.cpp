@@ -43,8 +43,8 @@ const char *IniConfig::FILE_NAME = "sidplayfp.ini";
 
 #define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
 
-IniConfig::IniConfig ()
-:status(true)
+IniConfig::IniConfig () :
+    status(true)
 {   // Initialise everything else
     sidplay2_s.database    = NULL;
     sidplay2_s.kernalRom   = NULL;

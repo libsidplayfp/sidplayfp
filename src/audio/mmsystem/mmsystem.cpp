@@ -78,16 +78,16 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
     {
         cfg.bufSize = bufSize / 2;
         waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
-        if ( !waveHandle ) {
+        if ( !waveHandle )
+        {
             throw error("MMSYSTEM ERROR: Can't open wave out device.");
         }
 
-        _settings    = cfg;
+        _settings = cfg;
 
         {
             /* Allocate and lock memory for all mixing blocks: */
-            int i;
-            for (i = 0; i < MAXBUFBLOCKS; i++ )
+            for (int i = 0; i < MAXBUFBLOCKS; i++ )
             {
                 /* Allocate global memory for mixing block: */
                 if ( (blockHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
@@ -216,14 +216,12 @@ void Audio_MMSystem::close (void)
 
         /* Make sure all blocks are indeed done: */
         int doneTimeout = 500;
-        int allDone;
-        int i;
 
         for (;;) {
-            allDone = 1;
-            for ( i = 0; i < MAXBUFBLOCKS; i++ ) {
+            bool allDone = true;
+            for ( int i = 0; i < MAXBUFBLOCKS; i++ ) {
                 if ( blockHeaders[i] && (blockHeaders[i]->dwFlags & WHDR_DONE) == 0 )
-                    allDone = 0;
+                    allDone = false;
             }
 
             if ( allDone || (doneTimeout == 0) )
@@ -234,7 +232,7 @@ void Audio_MMSystem::close (void)
 
         /* Unprepare all mixing blocks, unlock and deallocate
            all mixing blocks and mixing block headers: */
-        for ( i = 0; i < MAXBUFBLOCKS; i++ )
+        for ( int i = 0; i < MAXBUFBLOCKS; i++ )
         {
             if ( blockHeaders[i] )
                 waveOutUnprepareHeader(waveHandle, blockHeaders[i], sizeof(WAVEHDR));

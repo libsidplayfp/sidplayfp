@@ -68,7 +68,8 @@ main_restart:
 #endif
 
     // Play loop
-    for (;;) {
+    for (;;)
+    {
         if (!player.play ())
             break;
     }
@@ -107,7 +108,7 @@ void sighandler (int signum)
     case SIGTERM:
         // Exit now!
         g_player->stop ();
-    break;
+        break;
     default: break;
     }
 }
@@ -122,19 +123,19 @@ void displayError (const char *arg0, unsigned int num)
     case ERR_SYNTAX:
         cerr << "command line syntax error" << endl
              << "Try `" << arg0 << " --help' for more information." << endl;
-    break;
+        break;
 
     case ERR_NOT_ENOUGH_MEMORY:
         cerr << "ERROR: Not enough memory." << endl;
-    break;
+        break;
 
     case ERR_SIGHANDLER:
         cerr << "ERROR: Could not install signal handler." << endl;
-    break;
+        break;
 
     case ERR_FILE_OPEN:
         cerr << "ERROR: Could not open file for binary input." << endl;
-    break;
+        break;
 
     default: break;
     }

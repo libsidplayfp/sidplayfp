@@ -68,18 +68,18 @@ const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 
 
-ConsolePlayer::ConsolePlayer (const char * const name)
-:Event("External Timer\n"),
- m_name(name),
- m_tune(0),
- m_state(playerStopped),
- m_outfile(NULL),
- m_context(NULL),
- m_quietLevel(0),
- m_verboseLevel(0),
- m_cpudebug(false)
+ConsolePlayer::ConsolePlayer (const char * const name) :
+    Event("External Timer\n"),
+    m_name(name),
+    m_tune(0),
+    m_state(playerStopped),
+    m_outfile(NULL),
+    m_context(NULL),
+    m_filename(""),
+    m_quietLevel(0),
+    m_verboseLevel(0),
+    m_cpudebug(false)
 {   // Other defaults
-    m_filename       = "";
     m_filter.enabled = true;
     m_driver.device  = NULL;
     m_timer.start    = 0;

@@ -100,12 +100,14 @@ bool Audio_Pulse::open (AudioConfig &cfg)
 // reset any variables that reflect the current state.
 void Audio_Pulse::close ()
 {
-    if (_audioHandle != NULL) {
+    if (_audioHandle != NULL)
+    {
         pa_simple_free(_audioHandle);
         _audioHandle = NULL;
     }
 
-    if (_sampleBuffer != NULL) {
+    if (_sampleBuffer != NULL)
+    {
         delete [] _sampleBuffer;
         outOfOrder ();
     }
@@ -120,7 +122,8 @@ bool Audio_Pulse::write ()
     }
 
     int error;
-    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &error) < 0) {
+    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &error) < 0)
+    {
         _errorString = pa_strerror(error);
     }
     return true;

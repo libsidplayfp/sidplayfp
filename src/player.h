@@ -45,32 +45,38 @@
 #  endif
 #endif
 
-typedef enum {black, red, green, yellow, blue, magenta, cyan, white}
+typedef enum { black, red, green, yellow, blue, magenta, cyan, white }
     player_colour_t;
-typedef enum {tableStart, tableMiddle, tableSeperator, tableEnd}
+typedef enum { tableStart, tableMiddle, tableSeperator, tableEnd }
     player_table_t;
-typedef enum {
+typedef enum
+{
     playerError = 0, playerRunning, playerPaused, playerStopped,
     playerRestart, playerExit, playerFast = 128,
     playerFastRestart = playerRestart | playerFast,
     playerFastExit = playerExit | playerFast
 } player_state_t;
 
-typedef enum {/* Same as EMU_DEFAULT except no soundcard.
-                 Still allows wav generation */
-              EMU_NONE = 0,
-              /* The following require a soundcard */
-              EMU_DEFAULT, EMU_RESIDFP, EMU_RESID,
-              /* The following should disable the soundcard */
-              EMU_HARDSID, EMU_SIDSTATION, EMU_COMMODORE,
-              EMU_SIDSYN, EMU_END} SIDEMUS;
+typedef enum
+{
+    /* Same as EMU_DEFAULT except no soundcard.
+    Still allows wav generation */
+    EMU_NONE = 0,
+    /* The following require a soundcard */
+    EMU_DEFAULT, EMU_RESIDFP, EMU_RESID,
+    /* The following should disable the soundcard */
+    EMU_HARDSID, EMU_SIDSTATION, EMU_COMMODORE,
+    EMU_SIDSYN, EMU_END} SIDEMUS;
 
-typedef enum {/* Define possible output sources */
-              OUT_NULL = 0,
-              /* Hardware */
-              OUT_SOUNDCARD,
-              /* File creation support */
-              OUT_WAV, OUT_AU, OUT_END} OUTPUTS;
+typedef enum
+{
+    /* Define possible output sources */
+    OUT_NULL = 0,
+    /* Hardware */
+    OUT_SOUNDCARD,
+    /* File creation support */
+    OUT_WAV, OUT_AU, OUT_END
+} OUTPUTS;
 
 // Error and status message numbers.
 enum
@@ -193,7 +199,7 @@ private:
 
     const char* getModel (SidTuneInfo::model_t model);
 
-    uint8_t* loadRom    (const char* romPath, const int size, const char defaultRom[]);
+    uint8_t* loadRom(const char* romPath, const int size, const char defaultRom[]);
 
     IAudio* getWavFile(const SidTuneInfo *tuneInfo);
 

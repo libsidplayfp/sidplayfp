@@ -44,7 +44,7 @@ HWND Audio_DirectX::GetConsoleHwnd ()
 {   // Taken from Microsoft Knowledge Base
     // Article ID: Q124103
     #define MY_bufSize 1024 // buffer size for console window totles
-    HWND hwndFound;         // this is whta is returned to the caller
+
 #ifdef UNICODE
     WCHAR pszNewWindowTitle[MY_bufSize]; // contains fabricated WindowTitle
     WCHAR pszOldWindowTitle[MY_bufSize]; // contains original WindowTitle
@@ -67,19 +67,18 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     Sleep (40);
 
     // look for NewWindowTitle
-    hwndFound = FindWindow (NULL, pszNewWindowTitle);
+    HWND hwndFound = FindWindow (NULL, pszNewWindowTitle);
 
     // restore original window title
     SetConsoleTitle (pszOldWindowTitle);
-    return (hwndFound);
+    return hwndFound;
 }
 
 bool Audio_DirectX::open (AudioConfig &cfg)
 {
-    HWND hwnd;
     // Assume we have a console.  Use other other
     // if we have a non console Window
-    hwnd = GetConsoleHwnd ();
+    HWND hwnd = GetConsoleHwnd ();
     return open (cfg, name, hwnd);
 }
 
@@ -89,11 +88,6 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 
     try
     {
-        DSBUFFERDESC        dsbdesc;
-        WAVEFORMATEX        wfm;
-        DWORD               dwBytes;
-        int i;
-
         if (isOpen)
         {
             throw error("DIRECTX ERROR: Audio device already open.");
@@ -102,7 +96,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         lpvData = 0;
         isOpen  = true;
 
-        for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
+        for (int i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
             rghEvent[i] = CreateEvent(NULL, FALSE, FALSE, NULL);
 
         if (FAILED (DirectSoundCreate (NULL, &lpds, NULL)))
@@ -115,6 +109,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         }
 
         // Primary Buffer Setup
+        DSBUFFERDESC dsbdesc;
         memset (&dsbdesc, 0, sizeof(DSBUFFERDESC));
         dsbdesc.dwSize        = sizeof(DSBUFFERDESC);
         dsbdesc.dwFlags       = DSBCAPS_PRIMARYBUFFER;
@@ -122,6 +117,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         dsbdesc.lpwfxFormat   = NULL;
 
         // Format
+        WAVEFORMATEX wfm;
         memset (&wfm, 0, sizeof(WAVEFORMATEX));
         wfm.wFormatTag      = WAVE_FORMAT_PCM;
         wfm.nChannels       = cfg.channels;
@@ -161,7 +157,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         DSBPOSITIONNOTIFY rgdscbpn[AUDIO_DIRECTX_BUFFERS];
         // Buffer Start Notification
         // Rev 2.0.4 (saw) - On starting to play a buffer
-        for (i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
+        for (int i = 0; i < AUDIO_DIRECTX_BUFFERS; i++)
         {   // Track one buffer ahead
             rgdscbpn[i].dwOffset     = bufSize * ((i + 1) % AUDIO_DIRECTX_BUFFERS);
             rgdscbpn[i].hEventNotify = rghEvent[i];
@@ -178,6 +174,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         // -----------------------------------------------------------
 
         lpDsb->Stop ();
+        DWORD dwBytes;
         if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
         {
             throw error("DIRECTX ERROR: Unable to lock sound buffer.");
@@ -208,9 +205,6 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 
 bool Audio_DirectX::write ()
 {
-    DWORD dwEvt;
-    DWORD dwBytes;
-
     if (!isOpen)
     {
         _errorString = "DIRECTX ERROR: Device not open.";
@@ -233,6 +227,7 @@ bool Audio_DirectX::write ()
 
     // Check the incoming event to make sure it's one of our event messages and
     // not something else
+    DWORD dwEvt;
     do
     {
         dwEvt  = MsgWaitForMultipleObjects (AUDIO_DIRECTX_BUFFERS, rghEvent, FALSE, INFINITE, QS_ALLINPUT);
@@ -242,6 +237,7 @@ bool Audio_DirectX::write ()
 //    printf ("Event - %lu\n", dwEvt);
 
     // Lock the next buffer for filling
+    DWORD dwBytes;
     if (FAILED (lpDsb->Lock (bufSize * dwEvt, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
         _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";

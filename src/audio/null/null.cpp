@@ -38,8 +38,8 @@ bool Audio_Null::open (AudioConfig &cfg)
         return NULL;
     }
 
-    isOpen      = true;
-    _settings   = cfg;
+    isOpen    = true;
+    _settings = cfg;
     return true;
 }
 

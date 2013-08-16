@@ -29,8 +29,6 @@
 #  define AudioDriver Audio_OSS
 #endif
 
-#include <sys/ioctl.h>
-
 #if defined(HAVE_SYS_SOUNDCARD_H)
 #  include <sys/soundcard.h>
 #elif defined(HAVE_LINUX_SOUNDCARD_H)
@@ -63,15 +61,9 @@ public:  // --------------------------------------------------------- public
 
     bool open  (AudioConfig &cfg);
     void close ();
-    void reset ()
-    {
-        if (_audiofd != (-1))
-        {
-            ioctl (_audiofd, SNDCTL_DSP_RESET, 0);
-        }
-    }
+    void reset ();
     bool write ();
-    void  pause () {}
+    void pause () {}
 };
 
 #endif // HAVE_OSS
