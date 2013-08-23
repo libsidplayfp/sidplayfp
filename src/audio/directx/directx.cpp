@@ -79,7 +79,7 @@ bool Audio_DirectX::open (AudioConfig &cfg)
     // Assume we have a console.  Use other other
     // if we have a non console Window
     HWND hwnd = GetConsoleHwnd ();
-    return open (cfg, name, hwnd);
+    return open (cfg, hwnd);
 }
 
 bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
@@ -251,7 +251,7 @@ void Audio_DirectX::reset (void)
 {
     DWORD dwBytes;
     if (!isOpen)
-         return NULL;
+         return;
 
     // Stop play and kill the current music.
     // Start new music data being added at the begining of
@@ -265,7 +265,7 @@ void Audio_DirectX::reset (void)
     if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
         _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
-        return NULL;
+        return;
     }
     _sampleBuffer = (short*)lpvData;
 }
