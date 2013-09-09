@@ -40,7 +40,7 @@ public:
     bool write() { return audio->write(); }
     void close() { audio->close(); }
     void pause() { audio->pause(); }
-    short *buffer() { return audio->buffer(); }
+    short *buffer() const { return audio->buffer(); }
     void getConfig(AudioConfig &cfg) const { audio->getConfig(cfg); }
     const char *getErrorString() const { return audio->getErrorString(); }
 };

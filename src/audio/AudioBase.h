@@ -67,7 +67,7 @@ public:
     }
     virtual ~AudioBase() {}
 
-    short *buffer() { return _sampleBuffer; }
+    short *buffer() const { return _sampleBuffer; }
 
     void getConfig(AudioConfig &cfg) const {
         cfg = _settings;

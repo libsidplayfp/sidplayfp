@@ -35,7 +35,7 @@ public:
     virtual bool write() = 0;
     virtual void close() = 0;
     virtual void pause() = 0;
-    virtual short *buffer() = 0;
+    virtual short *buffer() const = 0;
     virtual void getConfig(AudioConfig &cfg) const = 0;
     virtual const char *getErrorString() const = 0;
 };
