@@ -25,7 +25,8 @@
 
 #include <new>
 
-Audio_Pulse::Audio_Pulse()
+Audio_Pulse::Audio_Pulse() :
+    AudioBase("PULSE")
 {
     outOfOrder();
 }
@@ -38,7 +39,7 @@ Audio_Pulse::~Audio_Pulse ()
 void Audio_Pulse::outOfOrder ()
 {
     _sampleBuffer = NULL;
-    _errorString = "None";
+    clearError();
 }
 
 bool Audio_Pulse::open (AudioConfig &cfg)
@@ -77,7 +78,7 @@ bool Audio_Pulse::open (AudioConfig &cfg)
         }
         catch (std::bad_alloc& ba)
         {
-            throw error("AUDIO: Unable to allocate memory for sample buffers.");
+            throw error("Unable to allocate memory for sample buffers.");
         }
 
         _settings = cfg;
@@ -86,7 +87,7 @@ bool Audio_Pulse::open (AudioConfig &cfg)
     }
     catch(error &e)
     {
-        _errorString = e.message();
+        setError(e.message());
 
         if (_audioHandle)
             pa_simple_free(_audioHandle);
@@ -117,14 +118,14 @@ bool Audio_Pulse::write ()
 {
     if (_audioHandle == NULL)
     {
-        _errorString = "ERROR: Device not open.";
+        setError("Device not open.");
         return false;
     }
 
     int error;
     if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &error) < 0)
     {
-        _errorString = pa_strerror(error);
+        setError(pa_strerror(error));
     }
     return true;
 }

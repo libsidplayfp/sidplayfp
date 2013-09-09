@@ -20,7 +20,8 @@
 
 #include "null.h"
 
-Audio_Null::Audio_Null ()
+Audio_Null::Audio_Null() :
+    AudioBase("NULL")
 {
     isOpen = false;
 }
@@ -34,7 +35,7 @@ bool Audio_Null::open (AudioConfig &cfg)
 {
     if (isOpen)
     {
-        _errorString = "NULL ERROR: Audio device already open.";
+        setError("Audio device already open.");
         return NULL;
     }
 
@@ -47,7 +48,7 @@ bool Audio_Null::write ()
 {
     if (!isOpen)
     {
-        _errorString = "NULL ERROR: Audio device not open.";
+        setError("Audio device not open.");
         return false;
     }
     return true;

@@ -22,7 +22,7 @@
 #ifndef AUDIOBASE_H
 #define AUDIOBASE_H
 
-#include <string.h>
+#include <string>
 
 #include "IAudio.h"
 #include "AudioConfig.h"
@@ -40,15 +40,29 @@ protected:
         const char* message() const { return m_msg; }
     };
 
+private:
+    const char *_backendName;
+    std::string _errorString;
+
 protected:
     AudioConfig _settings;
-    const char *_errorString;
     short      *_sampleBuffer;
 
-public:
-    AudioBase ()
+protected:
+    void setError(const char* msg)
     {
-        _errorString  = "None";
+        _errorString.assign(_backendName).append(" ERROR: ").append(msg);
+    }
+
+    void clearError()
+    {
+        _errorString.clear();
+    }
+
+public:
+    AudioBase(const char* name) :
+        _backendName(name)
+    {
         _sampleBuffer = NULL;
     }
     virtual ~AudioBase() {}
@@ -60,7 +74,7 @@ public:
     }
 
     const char *getErrorString() const {
-        return _errorString;
+        return _errorString.c_str();
     }
 };
 

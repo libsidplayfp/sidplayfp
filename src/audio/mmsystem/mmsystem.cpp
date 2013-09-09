@@ -27,7 +27,8 @@
 #include <stdio.h>
 #include <mmreg.h>
 
-Audio_MMSystem::Audio_MMSystem ()
+Audio_MMSystem::Audio_MMSystem() :
+    AudioBase("MMSYSTEM")
 {
     isOpen = false;
     for ( int i = 0; i < MAXBUFBLOCKS; i++ )
@@ -51,7 +52,7 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
 
     if (isOpen)
     {
-        _errorString = "MMSYSTEM ERROR: Audio device already open.";
+        setError("Audio device already open.");
         return false;
     }
     isOpen = true;
@@ -80,7 +81,7 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
         waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
         if ( !waveHandle )
         {
-            throw error("MMSYSTEM ERROR: Can't open wave out device.");
+            throw error("Can't open wave out device.");
         }
 
         _settings = cfg;
@@ -93,20 +94,20 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
                 if ( (blockHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
                                                     bufSize)) == NULL )
                 {
-                    throw error("MMSYSTEM ERROR: Can't allocate global memory.");
+                    throw error("Can't allocate global memory.");
                 }
 
                 /* Lock mixing block memory: */
                 if ( (blocks[i] = (short *)GlobalLock(blockHandles[i])) == NULL )
                 {
-                    throw error("MMSYSTEM ERROR: Can't lock global memory.");
+                    throw error("Can't lock global memory.");
                 }
 
                 /* Allocate global memory for mixing block header: */
                 if ( (blockHeaderHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
                                                         sizeof(WAVEHDR))) == NULL )
                 {
-                    throw error("MMSYSTEM ERROR: Can't allocate global memory.");
+                    throw error("Can't allocate global memory.");
                 }
 
                 /* Lock mixing block header memory: */
@@ -114,7 +115,7 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
                 if ( (header = blockHeaders[i] =
                     (WAVEHDR*)GlobalLock(blockHeaderHandles[i])) == NULL )
                 {
-                    throw error("MMSYSTEM ERROR: Can't lock global memory.");
+                    throw error("Can't lock global memory.");
                 }
 
                 /* Reset wave header fields: */
@@ -131,7 +132,7 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
     }
     catch(error &e)
     {
-        _errorString = e.message();
+        setError(e.message());
 
         close ();
         return false;
@@ -142,7 +143,7 @@ bool Audio_MMSystem::write ()
 {
     if (!isOpen)
     {
-        _errorString = "MMSYSTEM ERROR: Device not open.";
+        setError("Device not open.");
         return false;
     }
 
@@ -153,14 +154,14 @@ bool Audio_MMSystem::write ()
     if ( waveOutPrepareHeader(waveHandle, blockHeaders[blockNum],
                               sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
     {
-        _errorString = "MMSYSTEM ERROR: Error in waveOutPrepareHeader.";
+        setError("Error in waveOutPrepareHeader.");
         return false;
     }
 
     if ( waveOutWrite(waveHandle, blockHeaders[blockNum],
                       sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
     {
-        _errorString = "MMSYSTEM ERROR: Error in waveOutWrite.";
+        setError("Error in waveOutWrite.");
         return false;
     }
 
@@ -175,7 +176,7 @@ bool Audio_MMSystem::write ()
     if ( waveOutUnprepareHeader(waveHandle, blockHeaders[blockNum],
                                 sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
     {
-        _errorString = "MMSYSTEM ERROR: Error in waveOutUnprepareHeader.";
+        setError("Error in waveOutUnprepareHeader.");
         return false;
     }
 
@@ -194,7 +195,7 @@ void Audio_MMSystem::reset ()
     // the first buffer
     if ( waveOutReset(waveHandle) != MMSYSERR_NOERROR )
     {
-        _errorString = "MMSYSTEM ERROR: Error in waveOutReset.";
+        setError("Error in waveOutReset.");
         return;
     }
     blockNum = 0;

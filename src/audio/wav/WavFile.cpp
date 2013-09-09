@@ -85,6 +85,7 @@ const wavHeader WavFile::defaultWavHdr = {
 };
 
 WavFile::WavFile(const char *name) :
+    AudioBase("WAVFILE"),
     name(name),
     wavHdr(defaultWavHdr),
     file(0),
@@ -119,7 +120,7 @@ bool WavFile::open(AudioConfig &cfg)
     }
     catch (std::bad_alloc& ba)
     {
-        _errorString = "WAVFILE: Unable to allocate memory for sample buffers.";
+        setError("Unable to allocate memory for sample buffers.");
         return false;
     }
 

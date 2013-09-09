@@ -34,7 +34,8 @@ const char Audio_OSS::AUDIODEVICE[] = "/dev/audio";
 const char Audio_OSS::AUDIODEVICE[] = "/dev/dsp";
 #endif
 
-Audio_OSS::Audio_OSS()
+Audio_OSS::Audio_OSS() :
+    AudioBase("OSS")
 {
     // Reset everything.
     outOfOrder();
@@ -49,7 +50,7 @@ Audio_OSS::~Audio_OSS ()
 void Audio_OSS::outOfOrder ()
 {
     // Reset everything.
-    _errorString = "None";
+    clearError();
     _audiofd     = -1;
 }
 
@@ -57,7 +58,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
 {
     if (_audiofd != -1)
     {
-        _errorString = "ERROR: Device already in use";
+        setError("Device already in use");
         return false;
     }
 
@@ -65,25 +66,25 @@ bool Audio_OSS::open (AudioConfig &cfg)
     {
         if (access (AUDIODEVICE, W_OK) == -1)
         {
-            throw error("ERROR: Could locate an audio device.");
+            throw error("Could locate an audio device.");
         }
 
         if ((_audiofd = ::open (AUDIODEVICE, O_WRONLY, 0)) == (-1))
         {
-            throw error("ERROR: Could not open audio device.");
+            throw error("Could not open audio device.");
         }
 
         int format = AFMT_S16_LE;
         if (ioctl (_audiofd, SNDCTL_DSP_SETFMT, &format) == (-1))
         {
-            throw error("AUDIO: Could not set sample format.");
+            throw error("Could not set sample format.");
         }
 
         // Set mono/stereo.
         if (ioctl (_audiofd, SNDCTL_DSP_CHANNELS, &cfg.channels) == (-1))
         {
-            throw error("AUDIO: Could not set mono/stereo.");
-        }
+            throw error("Could not set mono/stereo.");
+         }
 
         // Verify and accept the number of channels the driver accepted.
         switch (cfg.channels)
@@ -92,14 +93,14 @@ bool Audio_OSS::open (AudioConfig &cfg)
         case 2:
         break;
         default:
-            throw error("AUDIO: Could not set mono/stereo.");
+            throw error("Could not set mono/stereo.");
         break;
         }
 
         // Set frequency.
         if (ioctl (_audiofd, SNDCTL_DSP_SPEED, &cfg.frequency) == (-1))
         {
-            throw error("AUDIO: Could not set frequency.");
+            throw error("Could not set frequency.");
         }
 
         int temp = 0;
@@ -112,7 +113,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
         }
         catch (std::bad_alloc& ba)
         {
-            throw error("AUDIO: Unable to allocate memory for sample buffers.");
+            throw error("Unable to allocate memory for sample buffers.");
         }
 
         // Setup internal Config
@@ -121,7 +122,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
     }
     catch(error &e)
     {
-        _errorString = e.message();
+        setError(e.message());
 
         if (_audiofd != -1)
         {
@@ -160,7 +161,7 @@ bool Audio_OSS::write ()
 
     if (_audiofd == (-1))
     {
-        _errorString = "ERROR: Device not open.";
+        setError("Device not open.");
         return false;
     }
 

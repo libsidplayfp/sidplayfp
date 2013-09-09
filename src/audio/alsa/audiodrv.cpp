@@ -25,7 +25,8 @@
 
 #include <new>
 
-Audio_ALSA::Audio_ALSA()
+Audio_ALSA::Audio_ALSA() :
+    AudioBase("ALSA")
 {
     // Reset everything.
     outOfOrder();
@@ -39,7 +40,7 @@ Audio_ALSA::~Audio_ALSA ()
 void Audio_ALSA::outOfOrder ()
 {
     // Reset everything.
-    _errorString = "None";
+    clearError();
     _audioHandle = NULL;
 }
 
@@ -59,7 +60,7 @@ bool Audio_ALSA::open (AudioConfig &cfg)
     {
         if (_audioHandle != NULL)
         {
-            throw error("ERROR: Device already in use");
+            throw error("Device already in use");
         }
 
         checkResult(snd_pcm_open(&_audioHandle, "default", SND_PCM_STREAM_PLAYBACK, 0));
@@ -100,7 +101,7 @@ bool Audio_ALSA::open (AudioConfig &cfg)
         }
         catch (std::bad_alloc& ba)
         {
-            throw error("AUDIO: Unable to allocate memory for sample buffers.");
+            throw error("Unable to allocate memory for sample buffers.");
         }
 
         // Setup internal Config
@@ -111,7 +112,7 @@ bool Audio_ALSA::open (AudioConfig &cfg)
     }
     catch(error &e)
     {
-        _errorString = e.message();
+        setError(e.message());
 
         if (hw_params)
             snd_pcm_hw_params_free(hw_params);
@@ -138,7 +139,7 @@ bool Audio_ALSA::write ()
 {
     if (_audioHandle == NULL)
     {
-        _errorString = "ERROR: Device not open.";
+        setError("Device not open.");
         return false;
     }
 
@@ -148,7 +149,7 @@ bool Audio_ALSA::write ()
         err = snd_pcm_recover(_audioHandle, err, 0);
         if (err < 0)
         {
-            _errorString = snd_strerror(err);
+            setError(snd_strerror(err));
             return false;
         }
     }

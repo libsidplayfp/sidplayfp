@@ -26,7 +26,8 @@
 
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
 
-Audio_DirectX::Audio_DirectX ()
+Audio_DirectX::Audio_DirectX() :
+    AudioBase("DIRECTX")
 {
     isOpen     = false;
     lpdsNotify = 0;
@@ -90,7 +91,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
     {
         if (isOpen)
         {
-            throw error("DIRECTX ERROR: Audio device already open.");
+            throw error("Audio device already open.");
         }
 
         lpvData = 0;
@@ -101,11 +102,11 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 
         if (FAILED (DirectSoundCreate (NULL, &lpds, NULL)))
         {
-            throw error("DIRECTX ERROR: Could not open audio device.");
+            throw error("Could not open audio device.");
         }
         if (FAILED (lpds->SetCooperativeLevel (hwnd, DSSCL_PRIORITY)))
         {
-            throw error("DIRECTX ERROR: Could not set cooperative level.");
+            throw error("Could not set cooperative level.");
         }
 
         // Primary Buffer Setup
@@ -128,11 +129,11 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 
         if (FAILED (lpds->CreateSoundBuffer(&dsbdesc, &lpDsbPrimary, NULL)))
         {
-            throw error("DIRECTX ERROR: Unable to create sound buffer.");
+            throw error("Unable to create sound buffer.");
         }
         if (FAILED (lpDsbPrimary->SetFormat(&wfm)))
         {
-            throw error("DIRECTX ERROR: Unable to setup required sampling format.");
+            throw error("Unable to setup required sampling format.");
         }
         lpDsbPrimary->Release ();
 
@@ -149,7 +150,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 
         if (FAILED (lpds->CreateSoundBuffer(&dsbdesc, &lpDsb, NULL)))
         {
-            throw error("DIRECTX ERROR: Could not create sound buffer.");
+            throw error("Could not create sound buffer.");
         }
         lpDsb->Stop();
 
@@ -165,11 +166,11 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
 
         if (FAILED (lpDsb->QueryInterface (IID_IDirectSoundNotify, (VOID **) &lpdsNotify)))
         {
-            throw error("DIRECTX ERROR: Sound interface query failed.");
+            throw error("Sound interface query failed.");
         }
         if (FAILED (lpdsNotify->SetNotificationPositions(AUDIO_DIRECTX_BUFFERS, rgdscbpn)))
         {
-            throw error("DIRECTX ERROR: Unable to set up sound notification positions.");
+            throw error("Unable to set up sound notification positions.");
         }
         // -----------------------------------------------------------
 
@@ -177,13 +178,13 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         DWORD dwBytes;
         if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
         {
-            throw error("DIRECTX ERROR: Unable to lock sound buffer.");
+            throw error("Unable to lock sound buffer.");
         }
 
         // Rev 1.7 (saw) - Set the play position back to the begining
         if (FAILED (lpDsb->SetCurrentPosition(0)))
         {
-            throw error("DIRECTX ERROR: Unable to set play position to start of buffer.");
+            throw error("Unable to set play position to start of buffer.");
         }
 
         // Update the users settings
@@ -195,7 +196,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
     }
     catch(error &e)
     {
-        _errorString = e.message();
+       setError(e.message());
 
         SAFE_RELEASE (lpDsbPrimary);
         close ();
@@ -207,7 +208,7 @@ bool Audio_DirectX::write ()
 {
     if (!isOpen)
     {
-        _errorString = "DIRECTX ERROR: Device not open.";
+       setError("Device not open.");
         return false;
     }
     // Unlock the current buffer for playing
@@ -220,7 +221,7 @@ bool Audio_DirectX::write ()
         isPlaying = true;
         if (FAILED (lpDsb->Play (0,0,DSBPLAY_LOOPING)))
         {
-            _errorString = "DIRECTX ERROR: Unable to start playback.";
+           setError("Unable to start playback.");
             return false;
         }
     }
@@ -240,7 +241,7 @@ bool Audio_DirectX::write ()
     DWORD dwBytes;
     if (FAILED (lpDsb->Lock (bufSize * dwEvt, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
-        _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
+       setError("Unable to lock sound buffer.");
         return false;
     }
     _sampleBuffer = (short*)lpvData;
@@ -264,7 +265,7 @@ void Audio_DirectX::reset (void)
     // Rev 1.4 (saw) - Added as lock can fail.
     if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
-        _errorString = "DIRECTX ERROR: Unable to lock sound buffer.";
+       setError("Unable to lock sound buffer.");
         return;
     }
     _sampleBuffer = (short*)lpvData;
