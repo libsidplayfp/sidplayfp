@@ -133,7 +133,7 @@ bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
 
     size_t length = (size_t) ini_dataLength (ini);
     if (!length)
-        return 0;
+        return false;
 
     char *ret = (char *) malloc (++length);
     if (!ret)

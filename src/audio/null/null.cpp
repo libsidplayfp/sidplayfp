@@ -34,7 +34,7 @@ bool Audio_Null::open (AudioConfig &cfg)
     if (isOpen)
     {
         setError("Audio device already open.");
-        return NULL;
+        return false;
     }
 
     isOpen    = true;
