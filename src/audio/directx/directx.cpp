@@ -206,7 +206,7 @@ bool Audio_DirectX::write ()
 {
     if (!isOpen)
     {
-       setError("Device not open.");
+        setError("Device not open.");
         return false;
     }
     // Unlock the current buffer for playing
@@ -219,7 +219,7 @@ bool Audio_DirectX::write ()
         isPlaying = true;
         if (FAILED (lpDsb->Play (0,0,DSBPLAY_LOOPING)))
         {
-           setError("Unable to start playback.");
+            setError("Unable to start playback.");
             return false;
         }
     }
@@ -239,7 +239,7 @@ bool Audio_DirectX::write ()
     DWORD dwBytes;
     if (FAILED (lpDsb->Lock (bufSize * dwEvt, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
-       setError("Unable to lock sound buffer.");
+        setError("Unable to lock sound buffer.");
         return false;
     }
     _sampleBuffer = (short*)lpvData;
@@ -263,7 +263,7 @@ void Audio_DirectX::reset (void)
     // Rev 1.4 (saw) - Added as lock can fail.
     if (FAILED (lpDsb->Lock (0, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
-       setError("Unable to lock sound buffer.");
+        setError("Unable to lock sound buffer.");
         return;
     }
     _sampleBuffer = (short*)lpvData;

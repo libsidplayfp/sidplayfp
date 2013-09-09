@@ -29,7 +29,6 @@ class IAudio
 public:
     virtual ~IAudio() {}
 
-    // All drivers must support these
     virtual bool open(AudioConfig &cfg) = 0;
     virtual void reset() = 0;
     virtual bool write() = 0;

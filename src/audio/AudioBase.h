@@ -67,11 +67,13 @@ public:
 
     short *buffer() const { return _sampleBuffer; }
 
-    void getConfig(AudioConfig &cfg) const {
+    void getConfig(AudioConfig &cfg) const
+    {
         cfg = _settings;
     }
 
-    const char *getErrorString() const {
+    const char *getErrorString() const
+    {
         return _errorString.c_str();
     }
 };

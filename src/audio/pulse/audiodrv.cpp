@@ -126,8 +126,9 @@ bool Audio_Pulse::write ()
     if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &error) < 0)
     {
         setError(pa_strerror(error));
+        // FIXME should we return false here?
     }
     return true;
 }
 
-#endif // HAVE_OSS
+#endif // HAVE_PULSE

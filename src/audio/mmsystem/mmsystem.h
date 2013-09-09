@@ -38,7 +38,7 @@
 class Audio_MMSystem: public AudioBase
 {
 private:  // ------------------------------------------------------- private
-    HWAVEOUT    waveHandle;
+    HWAVEOUT  waveHandle;
 
     // Rev 1.3 (saw) - Buffer sizes adjusted to get a
     // correct playtimes
@@ -48,8 +48,8 @@ private:  // ------------------------------------------------------- private
     WAVEHDR *blockHeaders[MAXBUFBLOCKS];
     HGLOBAL  blockHeaderHandles[MAXBUFBLOCKS];
     int      blockNum;
-    bool     isOpen;
     int      bufSize;
+    bool     isOpen;
 
 public:  // --------------------------------------------------------- public
     Audio_MMSystem();

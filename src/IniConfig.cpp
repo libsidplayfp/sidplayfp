@@ -100,7 +100,7 @@ bool  IniConfig::readDouble (ini_fd_t ini, const char *key, double &value)
 {
     double d = value;
     if (ini_locateKey (ini, key) < 0)
-    {   // Dosen't exist, add it
+    {   // Doesn't exist, add it
         (void) ini_writeString (ini, "");
     }
     if (ini_readDouble (ini, &d) < 0)
@@ -114,7 +114,7 @@ bool IniConfig::readInt (ini_fd_t ini, const char *key, int &value)
 {
     int i = value;
     if (ini_locateKey (ini, key) < 0)
-    {   // Dosen't exist, add it
+    {   // Doesn't exist, add it
         (void) ini_writeString (ini, "");
     }
     if (ini_readInt (ini, &i) < 0)
@@ -127,7 +127,7 @@ bool IniConfig::readInt (ini_fd_t ini, const char *key, int &value)
 bool IniConfig::readString (ini_fd_t ini, const char *key, char *&str)
 {
     if (ini_locateKey (ini, key) < 0)
-    {   // Dosen't exist, add it
+    {   // Doesn't exist, add it
         (void) ini_writeString (ini, "");
     }
 
@@ -154,7 +154,7 @@ bool IniConfig::readBool (ini_fd_t ini, const char *key, bool &boolean)
 {
     int b = boolean;
     if (ini_locateKey (ini, key) < 0)
-    {   // Dosen't exist, add it
+    {   // Doesn't exist, add it
         (void) ini_writeString (ini, "");
     }
     if (ini_readBool (ini, &b) < 0)
@@ -201,7 +201,7 @@ bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
     if (!*str)
         return false;
 
-    int   time;
+    int time;
     char *sep = strstr (str, ":");
     if (!sep)
     {   // User gave seconds

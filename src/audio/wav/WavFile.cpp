@@ -125,14 +125,14 @@ bool WavFile::open(AudioConfig &cfg)
     }
 
     // Fill in header with parameters and expected file size.
-    endian_little32(wavHdr.length,sizeof(wavHeader)-8);
-    endian_little16(wavHdr.channels,channels);
-    endian_little16(wavHdr.format,format);
-    endian_little32(wavHdr.sampleFreq,freq);
-    endian_little32(wavHdr.bytesPerSec,freq*blockAlign);
-    endian_little16(wavHdr.blockAlign,blockAlign);
-    endian_little16(wavHdr.bitsPerSample,bits);
-    endian_little32(wavHdr.dataChunkLen,0);
+    endian_little32(wavHdr.length, sizeof(wavHeader)-8);
+    endian_little16(wavHdr.channels, channels);
+    endian_little16(wavHdr.format, format);
+    endian_little32(wavHdr.sampleFreq, freq);
+    endian_little32(wavHdr.bytesPerSec, freq*blockAlign);
+    endian_little16(wavHdr.blockAlign, blockAlign);
+    endian_little16(wavHdr.bitsPerSample, bits);
+    endian_little32(wavHdr.dataChunkLen, 0);
 
     if (name.compare("-") == 0)
     {
@@ -184,12 +184,12 @@ void WavFile::close()
 {
     if (file && !file->fail())
     {
-        endian_little32(wavHdr.length,byteCount+sizeof(wavHeader)-8);
-        endian_little32(wavHdr.dataChunkLen,byteCount);
+        endian_little32(wavHdr.length, byteCount+sizeof(wavHeader)-8);
+        endian_little32(wavHdr.dataChunkLen, byteCount);
         if (file != &std::cout)
         {
             file->seekp(0, std::ios::beg);
-            file->write((char*)&wavHdr,sizeof(wavHeader));
+            file->write((char*)&wavHdr, sizeof(wavHeader));
             delete file;
         }
         file = 0;

@@ -36,10 +36,11 @@
 class Audio_ALSA: public AudioBase
 {
 private:  // ------------------------------------------------------- private
-    snd_pcm_t * _audioHandle;
+    snd_pcm_t *_audioHandle;
     int _alsa_to_frames_divisor;
 
-    void outOfOrder ();
+private:
+    void outOfOrder();
     void checkResult(int err);
 
 public:  // --------------------------------------------------------- public

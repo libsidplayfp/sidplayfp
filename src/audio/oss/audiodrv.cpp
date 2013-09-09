@@ -51,7 +51,7 @@ void Audio_OSS::outOfOrder ()
 {
     // Reset everything.
     clearError();
-    _audiofd     = -1;
+    _audiofd = -1;
 }
 
 bool Audio_OSS::open (AudioConfig &cfg)
@@ -66,7 +66,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
     {
         if (access (AUDIODEVICE, W_OK) == -1)
         {
-            throw error("Could locate an audio device.");
+            throw error("Could not locate an audio device.");
         }
 
         if ((_audiofd = ::open (AUDIODEVICE, O_WRONLY, 0)) == (-1))
@@ -139,7 +139,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
 // reset any variables that reflect the current state.
 void Audio_OSS::close ()
 {
-    if (_audiofd != (-1))
+    if (_audiofd != -1)
     {
         ::close (_audiofd);
         delete [] _sampleBuffer;
@@ -157,17 +157,11 @@ void Audio_OSS::reset ()
 
 bool Audio_OSS::write ()
 {
-    //short tmp[_settings.bufSize];
-
-    if (_audiofd == (-1))
+    if (_audiofd == -1)
     {
         setError("Device not open.");
         return false;
     }
-
-   /* for (uint_least32_t n = 0; n < _settings.bufSize; n ++) {
-            tmp[n] = _sampleBuffer[n] * (1 << 15);
-    }*/
 
     ::write (_audiofd, _sampleBuffer, 2 * _settings.bufSize);
     return true;
