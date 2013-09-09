@@ -287,7 +287,7 @@ bool IniConfig::readAudio (ini_fd_t ini)
         ret &= readInt (ini, "Channels",  channels);
         if (channels)
         {
-            audio_s.playback = (channels == 1) ? SidConfig::MONO : SidConfig::STEREO;s
+            audio_s.playback = (channels == 1) ? SidConfig::MONO : SidConfig::STEREO;
         }
     }
 
