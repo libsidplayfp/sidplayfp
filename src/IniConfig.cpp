@@ -209,9 +209,8 @@ bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
     }
     else
     {   // Read in MM:SS format
-        int val;
         *sep = '\0';
-        val  = atoi (str);
+        int val  = atoi (str);
         if (val < 0 || val > 99)
             goto IniCofig_readTime_error;
         time = val * 60;
@@ -288,9 +287,7 @@ bool IniConfig::readAudio (ini_fd_t ini)
         ret &= readInt (ini, "Channels",  channels);
         if (channels)
         {
-            audio_s.playback = SidConfig::MONO;
-            if (channels != 1)
-                audio_s.playback = SidConfig::STEREO;
+            audio_s.playback = (channels == 1) ? SidConfig::MONO : SidConfig::STEREO;s
         }
     }
 
