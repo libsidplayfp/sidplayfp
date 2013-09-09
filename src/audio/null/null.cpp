@@ -21,10 +21,8 @@
 #include "null.h"
 
 Audio_Null::Audio_Null() :
-    AudioBase("NULL")
-{
-    isOpen = false;
-}
+    AudioBase("NULL"),
+    isOpen(false) {}
 
 Audio_Null::~Audio_Null ()
 {

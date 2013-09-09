@@ -28,9 +28,10 @@
 #include <mmreg.h>
 
 Audio_MMSystem::Audio_MMSystem() :
-    AudioBase("MMSYSTEM")
+    AudioBase("MMSYSTEM"),
+    waveHandle(0),
+    isOpen(false)
 {
-    isOpen = false;
     for ( int i = 0; i < MAXBUFBLOCKS; i++ )
     {
         blockHeaderHandles[i] = 0;
@@ -38,7 +39,6 @@ Audio_MMSystem::Audio_MMSystem() :
         blockHeaders[i]       = NULL;
         blocks[i]             = NULL;
     }
-    waveHandle = 0;
 }
 
 Audio_MMSystem::~Audio_MMSystem()

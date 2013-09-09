@@ -27,13 +27,11 @@
 #define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p)=NULL; } }
 
 Audio_DirectX::Audio_DirectX() :
-    AudioBase("DIRECTX")
-{
-    isOpen     = false;
-    lpdsNotify = 0;
-    lpDsb      = 0;
-    lpds       = 0;
-}
+    AudioBase("DIRECTX"),
+    lpds(0),
+    lpDsb(0),
+    lpdsNotify(0),
+    isOpen(false) {}
 
 Audio_DirectX::~Audio_DirectX()
 {

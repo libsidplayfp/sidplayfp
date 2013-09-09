@@ -31,13 +31,11 @@ public:
     int            channels;
     uint_least32_t bufSize;       // sample buffer size
 
-    AudioConfig()
-    {
-        frequency = 48000;
-        precision = 16;
-        channels  = 1;
-        bufSize   = 0;
-    }
+    AudioConfig() :
+        frequency(48000),
+        precision(16),
+        channels(1),
+        bufSize(0) {}
 };
 
 #endif  // AUDIOCONFIG_H

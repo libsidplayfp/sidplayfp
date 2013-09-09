@@ -61,10 +61,8 @@ protected:
 
 public:
     AudioBase(const char* name) :
-        _backendName(name)
-    {
-        _sampleBuffer = NULL;
-    }
+        _backendName(name),
+        _sampleBuffer(NULL) {}
     virtual ~AudioBase() {}
 
     short *buffer() const { return _sampleBuffer; }

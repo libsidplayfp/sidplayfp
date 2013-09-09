@@ -35,11 +35,11 @@ const char Audio_OSS::AUDIODEVICE[] = "/dev/dsp";
 #endif
 
 Audio_OSS::Audio_OSS() :
-    AudioBase("OSS")
+    AudioBase("OSS"),
+    _swapEndian(false)
 {
     // Reset everything.
     outOfOrder();
-    _swapEndian  = false;
 }
 
 Audio_OSS::~Audio_OSS ()
