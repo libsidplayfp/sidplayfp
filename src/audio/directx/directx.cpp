@@ -20,6 +20,7 @@
  */
 
 #include "directx.h"
+
 #ifdef   HAVE_DIRECTX
 
 #include <stdio.h>

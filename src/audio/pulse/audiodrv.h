@@ -21,7 +21,9 @@
 #ifndef AUDIO_PULSE_H
 #define AUDIO_PULSE_H
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 
 #ifdef HAVE_PULSE
 

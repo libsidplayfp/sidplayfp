@@ -22,7 +22,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplayfp.h>

@@ -48,29 +48,25 @@ sys/soundcard.h soundcard.h])
 
 AC_CHECK_HEADERS([dsound.h mmsystem.h], [], [], [#include <windows.h>])
 
-if test "$ac_cv_header_dsound_h" = "yes"; then
-    AC_DEFINE([HAVE_DIRECTX], 1, [Define to 1 if you have DirectSound (-ldsound).])
-    audiodrv_libadd="$audiodrv_libadd ./audio/directx/libdirectx.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -ldsound -ldxguid"
-fi
+AS_IF([test "$ac_cv_header_dsound_h" = "yes"],
+    [audiodrv_libadd="$audiodrv_libadd ./audio/directx/libdirectx.a"
+    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -ldsound -ldxguid"]
+)
 
-if test "$ac_cv_header_mmsystem_h" = "yes"; then
-    AC_DEFINE([HAVE_MMSYSTEM], 1, [Define to 1 if you have MMSYSTEM (-lwinmm).])
-    audiodrv_libadd="$audiodrv_libadd ./audio/mmsystem/libmmsystem.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lwinmm"
-fi
+AS_IF([test "$ac_cv_header_mmsystem_h" = "yes"],
+    [audiodrv_libadd="$audiodrv_libadd ./audio/mmsystem/libmmsystem.a"
+    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lwinmm"]
+)
 
 # NetBSD/OpenBSD OSS audio emulation
-if test "x$ac_cv_header_soundcard_h" = "xyes"; then
-    AC_DEFINE([HAVE_OSS], 1, [Define to 1 if you have OSS.])
-    audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lossaudio"
-fi
+AS_IF([test "x$ac_cv_header_soundcard_h" = "xyes"],
+    [audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
+    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lossaudio"]
+)
 
-if test "x$ac_cv_header_machine_soundcard_h" = "xyes" -o "x$ac_cv_header_linux_soundcard_h" = "xyes" -o "x$ac_cv_header_sys_soundcard_h" = "xyes"; then
-    AC_DEFINE([HAVE_OSS], 1, [Define to 1 if you have OSS.])
-    audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
-fi
+AS_IF([test "x$ac_cv_header_machine_soundcard_h" = "xyes" -o "x$ac_cv_header_linux_soundcard_h" = "xyes" -o "x$ac_cv_header_sys_soundcard_h" = "xyes"],
+    [audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"]
+)
 
 AC_SUBST(AUDIO_LDFLAGS)
 

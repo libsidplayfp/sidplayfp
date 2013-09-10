@@ -21,9 +21,13 @@
 #ifndef AUDIO_MMSYSTEM_H
 #define AUDIO_MMSYSTEM_H
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 
-#ifdef HAVE_MMSYSTEM
+#ifdef HAVE_MMSYSTEM_H
+
+#define HAVE_MMSYSTEM
 
 #ifndef AudioDriver
 #  define AudioDriver Audio_MMSystem
@@ -62,5 +66,5 @@ public:  // --------------------------------------------------------- public
     void pause () {}
 };
 
-#endif // HAVE_MMSYSTEM
+#endif // HAVE_MMSYSTEM_H
 #endif // AUDIO_MMSYSTEM_H

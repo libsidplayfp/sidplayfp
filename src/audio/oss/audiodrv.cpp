@@ -19,7 +19,8 @@
  */
 
 #include "audiodrv.h"
-#ifdef   HAVE_OSS
+
+#ifdef HAVE_OSS
 
 #include <stdio.h>
 #include <unistd.h>

@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "stilview/stil.h"
+#include <stilview/stil.h>
 
 STIL myStil;
 char *hvscLoc = NULL;

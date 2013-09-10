@@ -21,9 +21,16 @@
 #ifndef AUDIO_OSS_H
 #define AUDIO_OSS_H
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 
-#ifdef HAVE_OSS
+#if defined(HAVE_SYS_SOUNDCARD_H) \
+    || defined(HAVE_LINUX_SOUNDCARD_H) \
+    || defined(HAVE_MACHINE_SOUNDCARD_H) \
+    || defined(HAVE_SOUNDCARD_H) \
+
+#define HAVE_OSS
 
 #ifndef AudioDriver
 #  define AudioDriver Audio_OSS
@@ -66,5 +73,5 @@ public:  // --------------------------------------------------------- public
     void pause () {}
 };
 
-#endif // HAVE_OSS
+#endif // HAVE_*_SOUNDCARD_H
 #endif // AUDIO_OSS_H

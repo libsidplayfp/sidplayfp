@@ -19,11 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "config.h"
-
 #include "player.h"
-
-#include "utils.h"
 
 #include <iostream>
 #include <iomanip>
@@ -38,9 +34,10 @@ using std::endl;
 #include <stdlib.h>
 
 #ifdef HAVE_UNISTD_H
-#   include <unistd.h>
+#  include <unistd.h>
 #endif
 
+#include "utils.h"
 #include "keyboard.h"
 #include "audio/AudioDrv.h"
 #include "audio/wav/WavFile.h"

@@ -21,9 +21,13 @@
 #ifndef AUDIO_DIRECTX_H
 #define AUDIO_DIRECTX_H
 
-#include "config.h"
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 
-#ifdef HAVE_DIRECTX
+#ifdef HAVE_DIRECTX_H
+
+#define HAVE_DIRECTX
 
 #ifndef AudioDriver
 #  define AudioDriver Audio_DirectX
@@ -74,5 +78,5 @@ public:  // --------------------------------------------------------- public
     void pause ();
 };
 
-#endif // HAVE_DIRECTX
+#endif // HAVE_DIRECTX_H
 #endif // AUDIO_DIRECTX_H

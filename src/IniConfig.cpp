@@ -19,9 +19,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "config.h"
-
-#include "utils.h"
+#ifdef HAVE_CONFIG_H
+#  include "config.h"
+#endif
 
 #include "IniConfig.h"
 
@@ -37,6 +37,8 @@
 #else
 #  include <windows.h>
 #endif
+
+#include "utils.h"
 
 const char *IniConfig::DIR_NAME  = "sidplayfp";
 const char *IniConfig::FILE_NAME = "sidplayfp.ini";
