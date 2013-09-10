@@ -36,7 +36,7 @@ PKG_CHECK_MODULES(ALSA,
 
 PKG_CHECK_MODULES(PULSE,
     [libpulse-simple >= 1.0],
-    [AC_DEFINE([HAVE_ALSA], 1, [Define to 1 if you have libpulse-simple (-lpulse-simple).])
+    [AC_DEFINE([HAVE_PULSE], 1, [Define to 1 if you have libpulse-simple (-lpulse-simple).])
     audiodrv_libadd="$audiodrv_libadd ./audio/pulse/libpulse.a"],
     [AC_MSG_WARN([$PULSE_PKG_ERRORS])]
 )
