@@ -46,13 +46,9 @@ $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
 $(PULSE_LIBS)
-# $(LIBLTDL_LDFLAGS)
 
 stilview_SOURCES = \
 stilview.cpp
 
 stilview_LDADD = \
 $(STILVIEW_LIBS)
-
-# Remove bad default includes
-DEFAULT_INCLUDES=

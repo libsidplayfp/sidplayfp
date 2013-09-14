@@ -30,8 +30,8 @@
 #include "oss/audiodrv.h"
 
 // Windows Sound Drivers
-#include "directx/directx.h"
-#include "mmsystem/mmsystem.h"
+#include "directx/audiodrv.h"
+#include "mmsystem/audiodrv.h"
 
 // Make sure that a sound driver was used
 #ifndef AudioDriver
