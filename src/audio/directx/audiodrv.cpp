@@ -45,13 +45,8 @@ HWND Audio_DirectX::GetConsoleHwnd ()
     // Article ID: Q124103
     #define MY_bufSize 1024 // buffer size for console window totles
 
-#ifdef UNICODE
-    WCHAR pszNewWindowTitle[MY_bufSize]; // contains fabricated WindowTitle
-    WCHAR pszOldWindowTitle[MY_bufSize]; // contains original WindowTitle
-#else
-    char pszNewWindowTitle[MY_bufSize]; // contains fabricated WindowTitle
-    char pszOldWindowTitle[MY_bufSize]; // contains original WindowTitle
-#endif
+    TCHAR  pszNewWindowTitle[MY_bufSize]; // contains fabricated WindowTitle
+    TCHAR  pszOldWindowTitle[MY_bufSize]; // contains original WindowTitle
 
     // fetch curent window title
     GetConsoleTitle (pszOldWindowTitle, MY_bufSize);
