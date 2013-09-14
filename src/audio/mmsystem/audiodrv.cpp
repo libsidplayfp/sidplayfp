@@ -46,7 +46,7 @@ Audio_MMSystem::~Audio_MMSystem()
     close();
 }
 
-bool Audio_MMSystem::open (AudioConfig &cfg)
+bool Audio_MMSystem::open(AudioConfig &cfg)
 {
     WAVEFORMATEX  wfm;
 
@@ -139,7 +139,7 @@ bool Audio_MMSystem::open (AudioConfig &cfg)
     }
 }
 
-bool Audio_MMSystem::write ()
+bool Audio_MMSystem::write()
 {
     if (!isOpen)
     {
@@ -185,7 +185,7 @@ bool Audio_MMSystem::write ()
 }
 
 // Rev 1.2 (saw) - Changed, see AudioBase.h
-void Audio_MMSystem::reset ()
+void Audio_MMSystem::reset()
 {
     if (!isOpen)
         return;
@@ -202,7 +202,7 @@ void Audio_MMSystem::reset ()
     _sampleBuffer = blocks[blockNum];
 }
 
-void Audio_MMSystem::close (void)
+void Audio_MMSystem::close()
 {
     if ( !isOpen )
         return;

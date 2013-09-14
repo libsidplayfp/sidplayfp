@@ -212,7 +212,7 @@ bool IniConfig::readTime (ini_fd_t ini, const char *key, int &value)
     else
     {   // Read in MM:SS format
         *sep = '\0';
-        int val  = atoi (str);
+        int val = atoi (str);
         if (val < 0 || val > 99)
             goto IniCofig_readTime_error;
         time = val * 60;
@@ -235,14 +235,17 @@ IniCofig_readTime_error:
 bool IniConfig::readSidplay2 (ini_fd_t ini)
 {
     bool ret = true;
-    int  time, version = sidplay2_s.version;
 
     (void) ini_locateHeading (ini, "SIDPlayfp");
+
+    int version = sidplay2_s.version;
     ret &= readInt (ini, "Version", version);
     if (version > 0)
         sidplay2_s.version = version;
 
     ret &= readString (ini, "Songlength Database", sidplay2_s.database);
+
+    int time;
     if (readTime (ini, "Default Play Length", time))
         sidplay2_s.playLength   = (uint_least32_t) time;
     if (readTime (ini, "Default Record Length", time))
@@ -348,7 +351,7 @@ bool IniConfig::readEmulation (ini_fd_t ini)
 
 void IniConfig::read ()
 {
-    ini_fd_t ini  = 0;
+    ini_fd_t ini = 0;
 
     std::string configPath;
 
@@ -371,7 +374,6 @@ void IniConfig::read ()
     CreateDirectoryA(configPath.c_str(), NULL);
 #endif
 
-    /* sprintf on top of itself fails nowadays. */
     configPath.append("/").append(FILE_NAME);
 
     // Opens an existing file or creates a new one

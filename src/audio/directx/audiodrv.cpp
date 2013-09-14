@@ -190,7 +190,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
     }
     catch(error &e)
     {
-       setError(e.message());
+        setError(e.message());
 
         SAFE_RELEASE (lpDsbPrimary);
         close ();

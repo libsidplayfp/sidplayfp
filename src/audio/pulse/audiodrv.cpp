@@ -31,18 +31,18 @@ Audio_Pulse::Audio_Pulse() :
     outOfOrder();
 }
 
-Audio_Pulse::~Audio_Pulse ()
+Audio_Pulse::~Audio_Pulse()
 {
     close ();
 }
 
-void Audio_Pulse::outOfOrder ()
+void Audio_Pulse::outOfOrder()
 {
     _sampleBuffer = NULL;
     clearError();
 }
 
-bool Audio_Pulse::open (AudioConfig &cfg)
+bool Audio_Pulse::open(AudioConfig &cfg)
 {
     pa_sample_spec pacfg = {};
 
@@ -99,7 +99,7 @@ bool Audio_Pulse::open (AudioConfig &cfg)
 
 // Close an opened audio device, free any allocated buffers and
 // reset any variables that reflect the current state.
-void Audio_Pulse::close ()
+void Audio_Pulse::close()
 {
     if (_audioHandle != NULL)
     {
@@ -114,7 +114,7 @@ void Audio_Pulse::close ()
     }
 }
 
-bool Audio_Pulse::write ()
+bool Audio_Pulse::write()
 {
     if (_audioHandle == NULL)
     {

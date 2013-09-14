@@ -51,12 +51,12 @@ using std::endl;
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 #  include <sidplayfp/builders/residfp.h>
-const char ConsolePlayer::RESIDFP_ID[]   = "ReSIDfp";
+const char ConsolePlayer::RESIDFP_ID[] = "ReSIDfp";
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
 #  include <sidplayfp/builders/resid.h>
-const char ConsolePlayer::RESID_ID[]   = "ReSID";
+const char ConsolePlayer::RESID_ID[] = "ReSID";
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
@@ -463,7 +463,7 @@ bool ConsolePlayer::open (void)
     // so try the songlength database
     if (!m_timer.valid)
     {
-       const  int_least32_t length = m_database.length (m_tune);
+        const int_least32_t length = m_database.length (m_tune);
         if (length > 0)
             m_timer.length = length;
     }
@@ -490,14 +490,14 @@ bool ConsolePlayer::open (void)
     m_state = playerRunning;
 
     // Update display
-    menu  ();
-    event ();
+    menu();
+    event();
     return true;
 }
 
 void ConsolePlayer::close ()
 {
-    m_engine.stop   ();
+    m_engine.stop();
     if (m_state == playerExit)
     {   // Natural finish
         emuflush ();

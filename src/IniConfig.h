@@ -108,7 +108,7 @@ public:
     void read ();
     operator bool () { return status; }
 
-    // Sidplay2 Specific Section
+    // Sidplayfp Specific Section
     const sidplay2_section&  sidplay2     () { return sidplay2_s; }
     const console_section&   console      () { return console_s; }
     const audio_section&     audio        () { return audio_s; }

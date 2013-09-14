@@ -24,12 +24,12 @@ Audio_Null::Audio_Null() :
     AudioBase("NULL"),
     isOpen(false) {}
 
-Audio_Null::~Audio_Null ()
+Audio_Null::~Audio_Null()
 {
     close();
 }
 
-bool Audio_Null::open (AudioConfig &cfg)
+bool Audio_Null::open(AudioConfig &cfg)
 {
     if (isOpen)
     {
@@ -42,7 +42,7 @@ bool Audio_Null::open (AudioConfig &cfg)
     return true;
 }
 
-bool Audio_Null::write ()
+bool Audio_Null::write()
 {
     if (!isOpen)
     {
@@ -52,7 +52,7 @@ bool Audio_Null::write ()
     return true;
 }
 
-void Audio_Null::close (void)
+void Audio_Null::close(void)
 {
     if (!isOpen)
         return;

@@ -32,12 +32,12 @@ Audio_ALSA::Audio_ALSA() :
     outOfOrder();
 }
 
-Audio_ALSA::~Audio_ALSA ()
+Audio_ALSA::~Audio_ALSA()
 {
     close ();
 }
 
-void Audio_ALSA::outOfOrder ()
+void Audio_ALSA::outOfOrder()
 {
     // Reset everything.
     clearError();
@@ -52,7 +52,7 @@ void Audio_ALSA::checkResult(int err)
     }
 }
 
-bool Audio_ALSA::open (AudioConfig &cfg)
+bool Audio_ALSA::open(AudioConfig &cfg)
 {
     snd_pcm_hw_params_t *hw_params = 0;
 
@@ -125,7 +125,7 @@ bool Audio_ALSA::open (AudioConfig &cfg)
 
 // Close an opened audio device, free any allocated buffers and
 // reset any variables that reflect the current state.
-void Audio_ALSA::close ()
+void Audio_ALSA::close()
 {
     if (_audioHandle != NULL)
     {
@@ -135,7 +135,7 @@ void Audio_ALSA::close ()
     }
 }
 
-bool Audio_ALSA::write ()
+bool Audio_ALSA::write()
 {
     if (_audioHandle == NULL)
     {

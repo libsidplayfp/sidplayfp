@@ -85,7 +85,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
         if (ioctl (_audiofd, SNDCTL_DSP_CHANNELS, &cfg.channels) == (-1))
         {
             throw error("Could not set mono/stereo.");
-         }
+        }
 
         // Verify and accept the number of channels the driver accepted.
         switch (cfg.channels)
