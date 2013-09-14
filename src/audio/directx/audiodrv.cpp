@@ -188,7 +188,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         _sampleBuffer = (short*)lpvData;
         return true;
     }
-    catch(error &e)
+    catch(error const &e)
     {
         setError(e.message());
 

@@ -76,7 +76,7 @@ bool Audio_Pulse::open(AudioConfig &cfg)
         {
             _sampleBuffer = new short[cfg.bufSize];
         }
-        catch (std::bad_alloc& ba)
+        catch (std::bad_alloc const &ba)
         {
             throw error("Unable to allocate memory for sample buffers.");
         }
@@ -85,7 +85,7 @@ bool Audio_Pulse::open(AudioConfig &cfg)
 
         return true;
     }
-    catch(error &e)
+    catch(error const  &e)
     {
         setError(e.message());
 

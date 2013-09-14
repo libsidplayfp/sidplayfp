@@ -359,7 +359,7 @@ void IniConfig::read ()
     {
         configPath = utils::getConfigPath();
     }
-    catch (utils::error &e)
+    catch (utils::error const &e)
     {
         goto IniConfig_read_error;
     }

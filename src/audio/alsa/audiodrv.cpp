@@ -99,7 +99,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
         {
             _sampleBuffer = new short[tmpCfg.bufSize];
         }
-        catch (std::bad_alloc& ba)
+        catch (std::bad_alloc const &ba)
         {
             throw error("Unable to allocate memory for sample buffers.");
         }
@@ -110,7 +110,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
         getConfig (cfg);
         return true;
     }
-    catch(error &e)
+    catch(error const &e)
     {
         setError(e.message());
 

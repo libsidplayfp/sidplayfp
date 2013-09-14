@@ -130,7 +130,7 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char 
     {
         dataPath = utils::getDataPath();
     }
-    catch (utils::error &e)
+    catch (utils::error const &e)
     {
         return 0;
     }
@@ -161,7 +161,7 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char 
             is.close();
             return buffer;
         }
-        catch (std::bad_alloc& ba)
+        catch (std::bad_alloc const &ba)
         {
             goto error;
         }
@@ -230,7 +230,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         {
             m_driver.device = new audioDrv();
         }
-        catch (std::bad_alloc& ba)
+        catch (std::bad_alloc const &ba)
         {
             m_driver.device = 0;
         }
@@ -241,7 +241,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         {
             m_driver.device = getWavFile(tuneInfo);
         }
-        catch (std::bad_alloc& ba)
+        catch (std::bad_alloc const &ba)
         {
             m_driver.device = 0;
         }
@@ -339,7 +339,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             if (m_filter.filterCurve8580)
                 rs->filter8580Curve((double)m_filter.filterCurve8580);
         }
-        catch (std::bad_alloc& ba) {}
+        catch (std::bad_alloc const &ba) {}
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
@@ -358,7 +358,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 
             rs->bias(m_filter.bias);
         }
-        catch (std::bad_alloc& ba) {}
+        catch (std::bad_alloc const &ba) {}
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESID_H
@@ -375,7 +375,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             hs->create ((m_engine.info ()).maxsids());
             if (!hs->getStatus()) goto createSidEmu_error;
         }
-        catch (std::bad_alloc& ba) {}
+        catch (std::bad_alloc const &ba) {}
         break;
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H

@@ -130,7 +130,7 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
         _sampleBuffer = blocks[blockNum];
         return true;
     }
-    catch(error &e)
+    catch(error const &e)
     {
         setError(e.message());
 
