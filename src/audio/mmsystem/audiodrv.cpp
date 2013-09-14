@@ -46,6 +46,46 @@ Audio_MMSystem::~Audio_MMSystem()
     close();
 }
 
+const char* Audio_MMSystem::getErrorMessage(MMRESULT err)
+{
+    switch (err)
+    {
+        default:
+        case MMSYSERR_ERROR:            return "Unspecified error";
+        case MMSYSERR_BADDEVICEID:      return "Device ID out of range";
+        case MMSYSERR_NOTENABLED:       return "Driver failed enable";
+        case MMSYSERR_ALLOCATED:        return "Device already allocated";
+        case MMSYSERR_INVALHANDLE:      return "Device handle is invalid";
+        case MMSYSERR_NODRIVER:         return "No device driver present";
+        case MMSYSERR_NOMEM:            return "Memory allocation error";
+        case MMSYSERR_NOTSUPPORTED:     return "Function isn't supported";
+        case MMSYSERR_BADERRNUM:        return "Error value out of range";
+        case MMSYSERR_INVALFLAG:        return "Invalid flag passed";
+        case MMSYSERR_INVALPARAM:       return "Invalid parameter passed";
+        case MMSYSERR_HANDLEBUSY:       return "Handle being used simultaneously on another thread (eg callback)";
+        case MMSYSERR_INVALIDALIAS:     return "Specified alias not found";
+        case MMSYSERR_BADDB:            return "Bad registry database";
+        case MMSYSERR_KEYNOTFOUND:      return "Registry key not found";
+        case MMSYSERR_READERROR:        return "Registry read error";
+        case MMSYSERR_WRITEERROR:       return "Registry write error";
+        case MMSYSERR_DELETEERROR:      return "Registry delete error";
+        case MMSYSERR_VALNOTFOUND:      return "Registry value not found";
+        case MMSYSERR_NODRIVERCB:       return "Driver does not call DriverCallback";
+    }
+/*
+    TCHAR buffer[MAXERRORLENGTH];
+    waveOutGetErrorText(err, buffer, MAXERRORLENGTH);
+*/
+}
+
+void Audio_MMSystem::checkResult(MMRESULT err)
+{
+    if (err != MMSYSERR_NOERROR)
+    {
+        throw error(getErrorMessage(err));
+    }
+}
+
 bool Audio_MMSystem::open(AudioConfig &cfg)
 {
     WAVEFORMATEX  wfm;
@@ -78,52 +118,46 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
     try
     {
         cfg.bufSize = bufSize / 2;
-        waveOutOpen (&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0);
-        if ( !waveHandle )
-        {
-            throw error("Can't open wave out device.");
-        }
+        checkResult(waveOutOpen(&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0));
 
         _settings = cfg;
 
+        /* Allocate and lock memory for all mixing blocks: */
+        for (int i = 0; i < MAXBUFBLOCKS; i++ )
         {
-            /* Allocate and lock memory for all mixing blocks: */
-            for (int i = 0; i < MAXBUFBLOCKS; i++ )
+            /* Allocate global memory for mixing block: */
+            if ( (blockHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
+                                                bufSize)) == NULL )
             {
-                /* Allocate global memory for mixing block: */
-                if ( (blockHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
-                                                    bufSize)) == NULL )
-                {
-                    throw error("Can't allocate global memory.");
-                }
-
-                /* Lock mixing block memory: */
-                if ( (blocks[i] = (short *)GlobalLock(blockHandles[i])) == NULL )
-                {
-                    throw error("Can't lock global memory.");
-                }
-
-                /* Allocate global memory for mixing block header: */
-                if ( (blockHeaderHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
-                                                        sizeof(WAVEHDR))) == NULL )
-                {
-                    throw error("Can't allocate global memory.");
-                }
-
-                /* Lock mixing block header memory: */
-                WAVEHDR *header;
-                if ( (header = blockHeaders[i] =
-                    (WAVEHDR*)GlobalLock(blockHeaderHandles[i])) == NULL )
-                {
-                    throw error("Can't lock global memory.");
-                }
-
-                /* Reset wave header fields: */
-                memset (header, 0, sizeof (WAVEHDR));
-                header->lpData         = (char*)blocks[i];
-                header->dwBufferLength = bufSize;
-                header->dwFlags        = WHDR_DONE; /* mark the block is done */
+                throw error("Can't allocate global memory.");
             }
+
+            /* Lock mixing block memory: */
+            if ( (blocks[i] = (short *)GlobalLock(blockHandles[i])) == NULL )
+            {
+                throw error("Can't lock global memory.");
+            }
+
+            /* Allocate global memory for mixing block header: */
+            if ( (blockHeaderHandles[i] = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
+                                                    sizeof(WAVEHDR))) == NULL )
+            {
+                throw error("Can't allocate global memory.");
+            }
+
+            /* Lock mixing block header memory: */
+            WAVEHDR *header;
+            if ( (header = blockHeaders[i] =
+                (WAVEHDR*)GlobalLock(blockHeaderHandles[i])) == NULL )
+            {
+                throw error("Can't lock global memory.");
+            }
+
+            /* Reset wave header fields: */
+            memset (header, 0, sizeof (WAVEHDR));
+            header->lpData         = (char*)blocks[i];
+            header->dwBufferLength = bufSize;
+            header->dwFlags        = WHDR_DONE; /* mark the block is done */
         }
 
         blockNum = 0;
@@ -151,19 +185,9 @@ bool Audio_MMSystem::write()
     blockHeaders[blockNum]->dwFlags = 0;
 
     /* Prepare block header: */
-    if ( waveOutPrepareHeader(waveHandle, blockHeaders[blockNum],
-                              sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
-    {
-        setError("Error in waveOutPrepareHeader.");
-        return false;
-    }
+    checkResult(waveOutPrepareHeader(waveHandle, blockHeaders[blockNum], sizeof(WAVEHDR)));
 
-    if ( waveOutWrite(waveHandle, blockHeaders[blockNum],
-                      sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
-    {
-        setError("Error in waveOutWrite.");
-        return false;
-    }
+    checkResult(waveOutWrite(waveHandle, blockHeaders[blockNum], sizeof(WAVEHDR)));
 
     /* Next block, circular buffer style, and I don't like modulo. */
     blockNum++;
@@ -173,12 +197,7 @@ bool Audio_MMSystem::write()
     while ( !(blockHeaders[blockNum]->dwFlags & WHDR_DONE) )
         Sleep(20);
 
-    if ( waveOutUnprepareHeader(waveHandle, blockHeaders[blockNum],
-                                sizeof(WAVEHDR)) != MMSYSERR_NOERROR )
-    {
-        setError("Error in waveOutUnprepareHeader.");
-        return false;
-    }
+    checkResult(waveOutUnprepareHeader(waveHandle, blockHeaders[blockNum], sizeof(WAVEHDR)));
 
     _sampleBuffer = blocks[blockNum];
     return true;
@@ -193,11 +212,7 @@ void Audio_MMSystem::reset()
     // Stop play and kill the current music.
     // Start new music data being added at the begining of
     // the first buffer
-    if ( waveOutReset(waveHandle) != MMSYSERR_NOERROR )
-    {
-        setError("Error in waveOutReset.");
-        return;
-    }
+    checkResult(waveOutReset(waveHandle));
     blockNum = 0;
     _sampleBuffer = blocks[blockNum];
 }

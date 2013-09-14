@@ -43,7 +43,7 @@ private:  // ------------------------------------------------------- private
 
 private:
     void outOfOrder();
-    void checkResult(int err);
+    static void checkResult(int err);
 
 public:  // --------------------------------------------------------- public
     Audio_ALSA();

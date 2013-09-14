@@ -55,6 +55,10 @@ private:  // ------------------------------------------------------- private
     int      bufSize;
     bool     isOpen;
 
+private:
+    static const char* getErrorMessage(MMRESULT err);
+    static void checkResult(MMRESULT err);
+
 public:  // --------------------------------------------------------- public
     Audio_MMSystem();
     ~Audio_MMSystem();
