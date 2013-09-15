@@ -36,8 +36,7 @@ const char Audio_OSS::AUDIODEVICE[] = "/dev/dsp";
 #endif
 
 Audio_OSS::Audio_OSS() :
-    AudioBase("OSS"),
-    _swapEndian(false)
+    AudioBase("OSS")
 {
     // Reset everything.
     outOfOrder();

@@ -59,7 +59,6 @@ private:  // ------------------------------------------------------- private
     static   const char AUDIODEVICE[];
     volatile int   _audiofd;
 
-    bool _swapEndian;
     void outOfOrder ();
 
 public:  // --------------------------------------------------------- public
