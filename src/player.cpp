@@ -518,7 +518,7 @@ void ConsolePlayer::close ()
         // end up in a suitable location
         if ((m_iniCfg.console ()).ansi)
             cerr << '\x1b' << "[0m";
-#ifndef HAVE_MSWINDOWS
+#ifndef _WIN32
         cerr << endl;
 #endif
     }
