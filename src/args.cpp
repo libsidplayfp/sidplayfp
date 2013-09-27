@@ -353,6 +353,10 @@ int ConsolePlayer::args (int argc, const char *argv[])
             {
                 m_driver.sid = EMU_NONE;
             }
+            else if (strcmp (&argv[i][1], "-noaudio") == 0)
+            {
+                m_driver.output = OUT_NULL;
+            }
             else if (strcmp (&argv[i][1], "-cpu-debug") == 0)
             {
                 m_cpudebug = true;
@@ -541,6 +545,7 @@ void ConsolePlayer::displayDebugArgs ()
         << " --cpu-debug   display cpu register and assembly dumps" << endl
         << " --delay=<num> simulate c64 power on delay" << endl
 
-        << " --none        no audio output device" << endl
+        << " --noaudio     no audio output device" << endl
         << " --nosid       no sid emulation" << endl;
+        << " --none        no audio output device and no sid emulation" << endl
 }
