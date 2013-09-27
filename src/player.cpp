@@ -279,7 +279,8 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
                 err = true;
         }
 
-        if (err) {
+        if (err)
+        {
             displayError(m_driver.device->getErrorString());
             return false;
         }
