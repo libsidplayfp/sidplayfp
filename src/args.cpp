@@ -546,6 +546,6 @@ void ConsolePlayer::displayDebugArgs ()
         << " --delay=<num> simulate c64 power on delay" << endl
 
         << " --noaudio     no audio output device" << endl
-        << " --nosid       no sid emulation" << endl;
-        << " --none        no audio output device and no sid emulation" << endl
+        << " --nosid       no sid emulation" << endl
+        << " --none        no audio output device and no sid emulation" << endl;
 }
