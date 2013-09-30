@@ -24,6 +24,7 @@
 #ifdef HAVE_PULSE
 
 #include <new>
+#include <pulse/error.h>
 
 Audio_Pulse::Audio_Pulse() :
     AudioBase("PULSE")
@@ -51,7 +52,7 @@ bool Audio_Pulse::open(AudioConfig &cfg)
     pacfg.format = PA_SAMPLE_S16NE;
 
     // Set sample precision and type of encoding.
-    int error;
+    int err;
     _audioHandle = pa_simple_new(
         NULL,
         "sidplayfp",
@@ -61,13 +62,13 @@ bool Audio_Pulse::open(AudioConfig &cfg)
         &pacfg,
         NULL,
         NULL,
-        &error
+        &err
     );
 
     try
     {
         if (! _audioHandle) {
-            throw error(pa_strerror(error));
+            throw error(pa_strerror(err));
         }
 
         cfg.bufSize = 4096;
@@ -122,10 +123,10 @@ bool Audio_Pulse::write()
         return false;
     }
 
-    int error;
-    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &error) < 0)
+    int err;
+    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &err) < 0)
     {
-        setError(pa_strerror(error));
+        setError(pa_strerror(err));
         // FIXME should we return false here?
     }
     return true;
