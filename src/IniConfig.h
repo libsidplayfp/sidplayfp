@@ -73,7 +73,6 @@ public:
         double        bias;
         double        filterCurve6581;
         int           filterCurve8580;
-        uint_least8_t optimiseLevel;
     };
 
 protected:
