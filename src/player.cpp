@@ -79,6 +79,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 {   // Other defaults
     m_filter.enabled = true;
     m_driver.device  = NULL;
+    m_driver.sid     = EMU_RESIDFP;
     m_timer.start    = 0;
     m_timer.length   = 0; // FOREVER
     m_timer.valid    = false;
@@ -109,6 +110,29 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_filter.bias         = emulation.bias;
         m_filter.filterCurve6581 = emulation.filterCurve6581;
         m_filter.filterCurve8580 = emulation.filterCurve8580;
+
+        if (emulation.engine)
+        {
+            if (strcmp(emulation.engine, "RESIDFP") == 0)
+            {
+                m_driver.sid    = EMU_RESIDFP;
+            }
+            else if (strcmp(emulation.engine, "RESID") == 0)
+            {
+                m_driver.sid    = EMU_RESID;
+            }
+#ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
+            else if (strcmp(emulation.engine, "HARDSID") == 0)
+            {
+                m_driver.sid    = EMU_HARDSID;
+                m_driver.output = OUT_NULL;
+            }
+#endif
+            else if (strcmp(emulation.engine, "NONE") == 0)
+            {
+                m_driver.sid    = EMU_NONE;
+            }
+        }
     }
 
     createOutput (OUT_NULL, NULL);

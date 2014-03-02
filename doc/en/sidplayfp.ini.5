@@ -22,7 +22,7 @@ All options and values (except for file names and paths) are case insensitive, a
 For any of the following parameter, if it's specified more than one time the last entry encountered will be used.
 .LP
 \fBNOTE\fR: if any of these options is specified outside its section, it will be \fIignored\fR.
-.SH SIDPlay2
+.SH SIDPlayfp
 .br
 
 .TP
@@ -146,6 +146,11 @@ Number of bits ber sample, used only for wav output. Using values other than the
 .br
 
 .SH Emulation
+.TP
+\fBEngine\fR=\fI<RESIDFP|RESID|HARDSID|NONE>\fR
+Default SID emulation engine.
+.br
+
 .TP
 \fBC64Model\fR=\fI<PAL|NTSC|OLD_NTSC|DREAN>\fR
 Default c64 model, PAL for european PAL-B model, NTSC for american/japanese NTSC-M models,

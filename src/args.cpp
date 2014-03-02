@@ -95,7 +95,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
     // default arg options
     m_driver.output = OUT_SOUNDCARD;
     m_driver.file   = false;
-    m_driver.sid    = EMU_RESIDFP;
 
     v1mute = v2mute = v3mute = false;
     v4mute = v5mute = v6mute = false;

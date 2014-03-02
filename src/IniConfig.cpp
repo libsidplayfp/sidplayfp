@@ -306,6 +306,8 @@ bool IniConfig::readEmulation (ini_fd_t ini)
     bool ret = true;
     (void) ini_locateHeading (ini, "Emulation");
 
+    ret &= readString (ini, "Engine", emulation_s.engine);
+
     {
         char *str;
         const bool res = readString (ini, "C64Model", str);

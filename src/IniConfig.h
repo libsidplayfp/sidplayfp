@@ -65,6 +65,7 @@ public:
 
     struct emulation_section
     {   // INI Section - [Emulation]
+        char         *engine;
         SidConfig::c64_model_t  modelDefault;
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
