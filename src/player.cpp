@@ -21,6 +21,8 @@
 
 #include "player.h"
 
+#include <cstdlib>
+#include <cstring>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
