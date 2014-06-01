@@ -91,6 +91,7 @@ void IniConfig::clear ()
     emulation_s.sidModel      = SidConfig::MOS6581;
     emulation_s.forceModel    = false;
     emulation_s.filter        = true;
+    emulation_s.engine        = NULL;
 
     emulation_s.bias            = 0.0;
     emulation_s.filterCurve6581 = 0.0;
