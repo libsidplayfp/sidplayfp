@@ -21,6 +21,7 @@
 
 #include "player.h"
 
+#include <cstring>
 #include <ctype.h>
 
 #include <iostream>
@@ -263,24 +264,54 @@ void ConsolePlayer::menu ()
             cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
 
+        const char* romDesc = info.kernalDesc();
+
         consoleTable  (tableSeperator);
         consoleTable  (tableMiddle);
         consoleColour (magenta, true);
         cerr << " Kernal ROM   : ";
-        consoleColour (white, false);
-        cerr << info.kernalDesc() << endl;
+        if (strlen(romDesc) == 0)
+        {
+            consoleColour (red, false);
+            cerr << "None - Some tunes may not play!" << endl;
+        }
+        else
+        {
+            consoleColour (white, false);
+            cerr << romDesc << endl;
+        }
+
+        romDesc = info.basicDesc();
 
         consoleTable  (tableMiddle);
         consoleColour (magenta, true);
         cerr << " BASIC ROM    : ";
-        consoleColour (white, false);
-        cerr << info.basicDesc() << endl;
+        if (strlen(romDesc) == 0)
+        {
+            consoleColour (red, false);
+            cerr << "None - Basic tunes will not play!" << endl;
+        }
+        else
+        {
+            consoleColour (white, false);
+            cerr << romDesc << endl;
+        }
+
+        romDesc = info.chargenDesc();
 
         consoleTable  (tableMiddle);
         consoleColour (magenta, true);
         cerr << " Chargen ROM  : ";
-        consoleColour (white, false);
-        cerr << info.chargenDesc() << endl;
+        if (strlen(romDesc) == 0)
+        {
+            consoleColour (red, false);
+            cerr << "None" << endl;
+        }
+        else
+        {
+            consoleColour (white, false);
+            cerr << romDesc << endl;
+        }
     }
     consoleTable (tableEnd);
 
