@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2013 Leandro Nini
+ * Copyright 2011-2014 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,11 +43,11 @@ using std::setfill;
 // Display console menu
 void ConsolePlayer::menu ()
 {
-    const SidInfo &info         = m_engine.info ();
-    const SidTuneInfo *tuneInfo = m_tune.getInfo();
-
     if (m_quietLevel > 1)
         return;
+
+    const SidInfo &info         = m_engine.info ();
+    const SidTuneInfo *tuneInfo = m_tune.getInfo();
 
     // cerr << (char) 12 << '\f'; // New Page
     if ((m_iniCfg.console ()).ansi)
@@ -76,7 +76,7 @@ void ConsolePlayer::menu ()
     const unsigned int n = tuneInfo->numberOfInfoStrings();
     if (n)
     {
-        consoleTable (tableSeperator);
+        consoleTable (tableSeparator);
 
         consoleTable  (tableMiddle);
         consoleColour (cyan, true);
@@ -107,7 +107,7 @@ void ConsolePlayer::menu ()
         cerr << tuneInfo->commentString(i) << endl;
     }
 
-    consoleTable (tableSeperator);
+    consoleTable (tableSeparator);
 
     if (m_verboseLevel)
     {
@@ -201,7 +201,8 @@ void ConsolePlayer::menu ()
 
     if (m_verboseLevel)
     {
-        consoleTable  (tableSeperator);
+        consoleTable  (tableSeparator);
+
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " Addresses    : " << hex;
@@ -267,20 +268,22 @@ void ConsolePlayer::menu ()
 
     const char* romDesc = info.kernalDesc();
 
-    consoleTable  (tableSeperator);
+    consoleTable  (tableSeparator);
+
     consoleTable  (tableMiddle);
     consoleColour (magenta, true);
     cerr << " Kernal ROM   : ";
     if (strlen(romDesc) == 0)
     {
         consoleColour (red, false);
-        cerr << "None - Some tunes may not play!" << endl;
+        cerr << "None - Some tunes may not play!";
     }
     else
     {
         consoleColour (white, false);
-        cerr << romDesc << endl;
+        cerr << romDesc;
     }
+    cerr << endl;
 
     romDesc = info.basicDesc();
 
@@ -290,13 +293,14 @@ void ConsolePlayer::menu ()
     if (strlen(romDesc) == 0)
     {
         consoleColour (red, false);
-        cerr << "None - Basic tunes will not play!" << endl;
+        cerr << "None - Basic tunes will not play!";
     }
     else
     {
         consoleColour (white, false);
-        cerr << romDesc << endl;
+        cerr << romDesc;
     }
+    cerr << endl;
 
     romDesc = info.chargenDesc();
 
@@ -306,13 +310,14 @@ void ConsolePlayer::menu ()
     if (strlen(romDesc) == 0)
     {
         consoleColour (red, false);
-        cerr << "None" << endl;
+        cerr << "None";
     }
     else
     {
         consoleColour (white, false);
-        cerr << romDesc << endl;
+        cerr << romDesc;
     }
+    cerr << endl;
 
     consoleTable (tableEnd);
 
@@ -374,7 +379,7 @@ void ConsolePlayer::consoleTable (player_table_t table)
              << (m_iniCfg.console ()).vertical;
         return;
 
-    case tableSeperator:
+    case tableSeparator:
         cerr << (m_iniCfg.console ()).junctionRight << setw(tableWidth)
              << setfill ((m_iniCfg.console ()).horizontal) << ""
              << (m_iniCfg.console ()).junctionLeft;

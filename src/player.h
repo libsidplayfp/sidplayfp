@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2013 Leandro Nini
+ * Copyright 2011-2014 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,7 @@
 
 typedef enum { black, red, green, yellow, blue, magenta, cyan, white }
     player_colour_t;
-typedef enum { tableStart, tableMiddle, tableSeperator, tableEnd }
+typedef enum { tableStart, tableMiddle, tableSeparator, tableEnd }
     player_table_t;
 typedef enum
 {
