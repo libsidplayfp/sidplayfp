@@ -263,56 +263,57 @@ void ConsolePlayer::menu ()
             consoleColour (white, false);
             cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
-
-        const char* romDesc = info.kernalDesc();
-
-        consoleTable  (tableSeperator);
-        consoleTable  (tableMiddle);
-        consoleColour (magenta, true);
-        cerr << " Kernal ROM   : ";
-        if (strlen(romDesc) == 0)
-        {
-            consoleColour (red, false);
-            cerr << "None - Some tunes may not play!" << endl;
-        }
-        else
-        {
-            consoleColour (white, false);
-            cerr << romDesc << endl;
-        }
-
-        romDesc = info.basicDesc();
-
-        consoleTable  (tableMiddle);
-        consoleColour (magenta, true);
-        cerr << " BASIC ROM    : ";
-        if (strlen(romDesc) == 0)
-        {
-            consoleColour (red, false);
-            cerr << "None - Basic tunes will not play!" << endl;
-        }
-        else
-        {
-            consoleColour (white, false);
-            cerr << romDesc << endl;
-        }
-
-        romDesc = info.chargenDesc();
-
-        consoleTable  (tableMiddle);
-        consoleColour (magenta, true);
-        cerr << " Chargen ROM  : ";
-        if (strlen(romDesc) == 0)
-        {
-            consoleColour (red, false);
-            cerr << "None" << endl;
-        }
-        else
-        {
-            consoleColour (white, false);
-            cerr << romDesc << endl;
-        }
     }
+
+    const char* romDesc = info.kernalDesc();
+
+    consoleTable  (tableSeperator);
+    consoleTable  (tableMiddle);
+    consoleColour (magenta, true);
+    cerr << " Kernal ROM   : ";
+    if (strlen(romDesc) == 0)
+    {
+        consoleColour (red, false);
+        cerr << "None - Some tunes may not play!" << endl;
+    }
+    else
+    {
+        consoleColour (white, false);
+        cerr << romDesc << endl;
+    }
+
+    romDesc = info.basicDesc();
+
+    consoleTable  (tableMiddle);
+    consoleColour (magenta, true);
+    cerr << " BASIC ROM    : ";
+    if (strlen(romDesc) == 0)
+    {
+        consoleColour (red, false);
+        cerr << "None - Basic tunes will not play!" << endl;
+    }
+    else
+    {
+        consoleColour (white, false);
+        cerr << romDesc << endl;
+    }
+
+    romDesc = info.chargenDesc();
+
+    consoleTable  (tableMiddle);
+    consoleColour (magenta, true);
+    cerr << " Chargen ROM  : ";
+    if (strlen(romDesc) == 0)
+    {
+        consoleColour (red, false);
+        cerr << "None" << endl;
+    }
+    else
+    {
+        consoleColour (white, false);
+        cerr << romDesc << endl;
+    }
+
     consoleTable (tableEnd);
 
     if (m_driver.file)
