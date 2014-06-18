@@ -21,15 +21,11 @@
 
 #include "player.h"
 
-#include <string.h>
-#include <limits.h>
-
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif
-
-#include <cstdlib>
 #include <iostream>
+
+#include <cstring>
+#include <climits>
+#include <cstdlib>
 
 using std::cout;
 using std::cerr;
@@ -425,24 +421,13 @@ int ConsolePlayer::args (int argc, const char *argv[])
         }
         if (!m_timer.valid)
         {
-#if !defined _WIN32 && defined HAVE_UNISTD_H
-            char buffer[PATH_MAX];
-#endif
-            const char *database = (m_iniCfg.sidplay2()).database;
+            const std::string &database = (m_iniCfg.sidplay2()).database;
             m_timer.length = (m_iniCfg.sidplay2()).playLength;
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
-#if !defined _WIN32 && defined HAVE_UNISTD_H
-            if (!database || *database == '\0')
-            {
-                snprintf(buffer, PATH_MAX, "%sSonglengths.txt", PKGDATADIR);
-                if (::access(buffer, R_OK) == 0)
-                    database = buffer;
-            }
-#endif
-            if (database && (*database != '\0'))
+            if (!database.empty())
             {   // Try loading the database specificed by the user
-                if (!m_database.open (database))
+                if (!m_database.open (database.c_str()))
                 {
                     displayError (m_database.error ());
                     return -1;

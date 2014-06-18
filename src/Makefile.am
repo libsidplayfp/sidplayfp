@@ -25,16 +25,9 @@ player.cpp \
 player.h \
 utils.cpp \
 utils.h \
-ini/libini.h \
-ini/headings.h \
-ini/headings.i \
-ini/ini.cpp \
-ini/ini.h \
-ini/keys.h \
-ini/keys.i \
-ini/list.h \
-ini/list.i \
-ini/types.i
+ini/iniHandler.h \
+ini/iniHandler.cpp \
+ini/dataParser.h
 
 sidplayfp_LDADD = \
 ./audio/libaudio.a \

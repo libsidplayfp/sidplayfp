@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2012 Leandro Nini
+ * Copyright 2011-2014 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #ifndef INICONFIG_H
 #define INICONFIG_H
 
-#include "ini/libini.h"
+#include "ini/iniHandler.h"
 
 #include <sidplayfp/SidConfig.h>
 
@@ -35,12 +35,12 @@ public:
     struct sidplay2_section
     {
         int            version;
-        char          *database;
+        std::string    database;
         uint_least32_t playLength;
         uint_least32_t recordLength;
-        char          *kernalRom;
-        char          *basicRom;
-        char          *chargenRom;
+        std::string    kernalRom;
+        std::string    basicRom;
+        std::string    chargenRom;
     };
 
     struct console_section
@@ -65,7 +65,7 @@ public:
 
     struct emulation_section
     {   // INI Section - [Emulation]
-        char         *engine;
+        std::string   engine;
         SidConfig::c64_model_t  modelDefault;
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
@@ -89,17 +89,17 @@ protected:
 protected:
     void  clear ();
 
-    bool  readInt    (ini_fd_t ini, const char *key, int &value);
-    bool  readDouble (ini_fd_t ini, const char *key, double &value);
-    bool  readString (ini_fd_t ini, const char *key, char *&str);
-    bool  readBool   (ini_fd_t ini, const char *key, bool &boolean);
-    bool  readChar   (ini_fd_t ini, const char *key, char &ch);
-    bool  readTime   (ini_fd_t ini, const char *key, int  &time);
+    static bool readInt    (const iniHandler &ini, const char *key, int &value);
+    static bool readDouble (const iniHandler &ini, const char *key, double &value);
+    static bool readString (const iniHandler &ini, const char *key, std::string &str);
+    static bool readBool   (const iniHandler &ini, const char *key, bool &boolean);
+    static bool readChar   (const iniHandler &ini, const char *key, char &ch);
+    static bool readTime   (const iniHandler &ini, const char *key, int  &time);
 
-    bool  readSidplay2  (ini_fd_t ini);
-    bool  readConsole   (ini_fd_t ini);
-    bool  readAudio     (ini_fd_t ini);
-    bool  readEmulation (ini_fd_t ini);
+    bool readSidplay2  (iniHandler &ini);
+    bool readConsole   (iniHandler &ini);
+    bool readAudio     (iniHandler &ini);
+    bool readEmulation (iniHandler &ini);
 
 public:
     IniConfig  ();
@@ -109,10 +109,10 @@ public:
     operator bool () { return status; }
 
     // Sidplayfp Specific Section
-    const sidplay2_section&  sidplay2     () { return sidplay2_s; }
-    const console_section&   console      () { return console_s; }
-    const audio_section&     audio        () { return audio_s; }
-    const emulation_section& emulation    () { return emulation_s; }
+    const sidplay2_section&  sidplay2  () { return sidplay2_s; }
+    const console_section&   console   () { return console_s; }
+    const audio_section&     audio     () { return audio_s; }
+    const emulation_section& emulation () { return emulation_s; }
 };
 
 #endif // INICONFIG_H

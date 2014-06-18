@@ -113,24 +113,24 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_filter.filterCurve6581 = emulation.filterCurve6581;
         m_filter.filterCurve8580 = emulation.filterCurve8580;
 
-        if (emulation.engine)
+        if (!emulation.engine.empty())
         {
-            if (strcmp(emulation.engine, "RESIDFP") == 0)
+            if (emulation.engine.compare("RESIDFP") == 0)
             {
                 m_driver.sid    = EMU_RESIDFP;
             }
-            else if (strcmp(emulation.engine, "RESID") == 0)
+            else if (emulation.engine.compare("RESID") == 0)
             {
                 m_driver.sid    = EMU_RESID;
             }
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
-            else if (strcmp(emulation.engine, "HARDSID") == 0)
+            else if (emulation.engine.compare("HARDSID") == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
                 m_driver.output = OUT_NULL;
             }
 #endif
-            else if (strcmp(emulation.engine, "NONE") == 0)
+            else if (emulation.engine.compare("NONE") == 0)
             {
                 m_driver.sid    = EMU_NONE;
             }
@@ -149,7 +149,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     delete [] chargenRom;
 }
 
-uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char defaultRom[])
+uint8_t* ConsolePlayer::loadRom(const std::string &romPath, const int size, const char defaultRom[])
 {
     std::string dataPath;
     try
@@ -171,7 +171,7 @@ uint8_t* ConsolePlayer::loadRom(const char* romPath, const int size, const char 
     }
 #endif
 
-    std::ifstream is((romPath)?romPath:dataPath.c_str(), std::ios::binary);
+    std::ifstream is((!romPath.empty())?romPath.c_str():dataPath.c_str(), std::ios::binary);
 
     if (is.fail())
         goto error;
