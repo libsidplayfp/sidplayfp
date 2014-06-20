@@ -21,12 +21,13 @@
 
 #include <string>
 #include <map>
+#include <functional>
 
 class iniHandler
 {
 private:
     typedef std::map<std::string, std::string> keys_t;
-    typedef std::map<std::string, keys_t> sections_t;
+    typedef std::map<std::string, keys_t, std::greater<std::string> > sections_t;
 
     class parseError {};
 
@@ -35,12 +36,19 @@ private:
 
     sections_t::iterator curSection;
 
+    std::string fileName;
+
+    bool changed;
+
 private:
     std::string parseSection(const std::string &buffer);
 
     std::pair<std::string, std::string> parseKey(const std::string &buffer);
 
 public:
+    iniHandler();
+    ~iniHandler();
+
     bool open(const char *fName);
     bool write(const char *fName);
     void close();
@@ -49,7 +57,7 @@ public:
     const char *getValue(const char *key) const;
 
     void addSection(const char *section);
-    void addValue(const char *key, const char *value) const;
+    void addValue(const char *key, const char *value);
 };
 
 #endif // INIHANDLER_H

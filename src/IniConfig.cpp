@@ -101,7 +101,7 @@ void IniConfig::clear()
 }
 
 
-bool IniConfig::readDouble(const iniHandler &ini, const char *key, double &result)
+bool IniConfig::readDouble(iniHandler &ini, const char *key, double &result)
 {
     const char* value = ini.getValue(key);
     if (value == 0)
@@ -123,7 +123,7 @@ bool IniConfig::readDouble(const iniHandler &ini, const char *key, double &resul
 }
 
 
-bool IniConfig::readInt(const iniHandler &ini, const char *key, int &result)
+bool IniConfig::readInt(iniHandler &ini, const char *key, int &result)
 {
     const char* value = ini.getValue(key);
     if (value == 0)
@@ -145,7 +145,7 @@ bool IniConfig::readInt(const iniHandler &ini, const char *key, int &result)
 }
 
 
-bool IniConfig::readString(const iniHandler &ini, const char *key, std::string &result)
+bool IniConfig::readString(iniHandler &ini, const char *key, std::string &result)
 {
     const char* value = ini.getValue(key);
     if (value == 0)
@@ -159,7 +159,7 @@ bool IniConfig::readString(const iniHandler &ini, const char *key, std::string &
 }
 
 
-bool IniConfig::readBool(const iniHandler &ini, const char *key, bool &result)
+bool IniConfig::readBool(iniHandler &ini, const char *key, bool &result)
 {
     const char* value = ini.getValue(key);
     if (value == 0)
@@ -181,10 +181,10 @@ bool IniConfig::readBool(const iniHandler &ini, const char *key, bool &result)
 }
 
 
-bool IniConfig::readChar(const iniHandler &ini, const char *key, char &ch)
+bool IniConfig::readChar(iniHandler &ini, const char *key, char &ch)
 {
     std::string str;
-    bool ret = readString (ini, key, str);
+    bool ret = readString(ini, key, str);
     if (!ret)
         return false;
 
@@ -209,7 +209,7 @@ bool IniConfig::readChar(const iniHandler &ini, const char *key, char &ch)
 }
 
 
-bool IniConfig::readTime(const iniHandler &ini, const char *key, int &value)
+bool IniConfig::readTime(iniHandler &ini, const char *key, int &value)
 {
     std::string str;
     bool ret = readString(ini, key, str);

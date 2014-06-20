@@ -89,12 +89,12 @@ protected:
 protected:
     void  clear ();
 
-    static bool readInt    (const iniHandler &ini, const char *key, int &value);
-    static bool readDouble (const iniHandler &ini, const char *key, double &value);
-    static bool readString (const iniHandler &ini, const char *key, std::string &str);
-    static bool readBool   (const iniHandler &ini, const char *key, bool &boolean);
-    static bool readChar   (const iniHandler &ini, const char *key, char &ch);
-    static bool readTime   (const iniHandler &ini, const char *key, int  &time);
+    static bool readInt    (iniHandler &ini, const char *key, int &value);
+    static bool readDouble (iniHandler &ini, const char *key, double &value);
+    static bool readString (iniHandler &ini, const char *key, std::string &str);
+    static bool readBool   (iniHandler &ini, const char *key, bool &boolean);
+    static bool readChar   (iniHandler &ini, const char *key, char &ch);
+    static bool readTime   (iniHandler &ini, const char *key, int  &time);
 
     bool readSidplay2  (iniHandler &ini);
     bool readConsole   (iniHandler &ini);

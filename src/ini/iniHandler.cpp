@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010-2013 Leandro Nini
+ *  Copyright (C) 2010-2014 Leandro Nini
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,15 @@
 #include <iostream>
 #include <string>
 
+iniHandler::iniHandler() :
+    changed(false)
+{}
+
+iniHandler::~iniHandler()
+{
+    close();
+}
+
 std::string iniHandler::parseSection(const std::string &buffer)
 {
     const size_t pos = buffer.find(']');
@@ -45,12 +54,15 @@ std::pair<std::string, std::string> iniHandler::parseKey(const std::string &buff
     }
 
     const std::string key = buffer.substr(0, buffer.find_last_not_of(' ', pos-1) + 1);
-    const std::string value = buffer.substr(pos + 1);
+    const size_t vpos = buffer.find_first_not_of(' ', pos+1);
+    const std::string value = (vpos == std::string::npos) ? "" : buffer.substr(vpos);
     return make_pair(key, value);
 }
 
 bool iniHandler::open(const char *fName)
 {
+    fileName.assign(fName);
+
     std::ifstream iniFile(fName);
 
     if (iniFile.fail())
@@ -103,7 +115,13 @@ bool iniHandler::open(const char *fName)
 
 void iniHandler::close()
 {
+    if (changed)
+    {
+        write(fileName.c_str());
+    }
+
     sections.clear();
+    changed = false;
 }
 
 bool iniHandler::setSection(const char *section)
@@ -122,11 +140,13 @@ void iniHandler::addSection(const char *section)
 {
     const keys_t keys;
     curSection = sections.insert(curSection, make_pair(section, keys));
+    changed = true;
 }
 
-void iniHandler::addValue(const char *key, const char *value) const
+void iniHandler::addValue(const char *key, const char *value)
 {
     (*curSection).second.insert(make_pair(std::string(key), std::string(value)));
+    changed = true;
 }
 
 bool iniHandler::write(const char *fName)
