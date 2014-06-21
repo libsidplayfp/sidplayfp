@@ -20,16 +20,31 @@
 #define INIHANDLER_H
 
 #include <string>
-#include <map>
-#include <functional>
+#include <vector>
 
 class iniHandler
 {
 private:
-    typedef std::map<std::string, std::string> keys_t;
-    typedef std::map<std::string, keys_t, std::greater<std::string> > sections_t;
+    typedef std::pair<std::string, std::string> stringPair_t;
+    typedef std::vector<stringPair_t> keys_t;
+
+    typedef std::pair<std::string, keys_t> keyPair_t;
+    typedef std::vector<keyPair_t> sections_t;
 
     class parseError {};
+
+private:
+    template<class T>
+    class compare
+    {
+    private:
+        std::string s;
+
+    public:
+        compare(const char *str) : s(str) {}
+
+        bool operator () (T const &p) { return s.compare(p.first) == 0; }
+    };
 
 private:
     sections_t sections;
@@ -43,7 +58,7 @@ private:
 private:
     std::string parseSection(const std::string &buffer);
 
-    std::pair<std::string, std::string> parseKey(const std::string &buffer);
+    stringPair_t parseKey(const std::string &buffer);
 
 public:
     iniHandler();

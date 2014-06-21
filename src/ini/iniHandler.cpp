@@ -19,9 +19,10 @@
 #include "iniHandler.h"
 
 #include <cstdlib>
+
 #include <fstream>
 #include <iostream>
-#include <string>
+#include <algorithm>
 
 iniHandler::iniHandler() :
     changed(false)
@@ -44,7 +45,7 @@ std::string iniHandler::parseSection(const std::string &buffer)
     return buffer.substr(1, pos-1);
 }
 
-std::pair<std::string, std::string> iniHandler::parseKey(const std::string &buffer)
+iniHandler::stringPair_t iniHandler::parseKey(const std::string &buffer)
 {
     const size_t pos = buffer.find('=');
 
@@ -70,8 +71,6 @@ bool iniHandler::open(const char *fName)
         return false;
     }
 
-    sections_t::iterator mIt;
-
     while (iniFile.good())
     {
         std::string buffer;
@@ -92,8 +91,7 @@ bool iniHandler::open(const char *fName)
             {
                 const std::string section = parseSection(buffer);
                 const keys_t keys;
-                std::pair<sections_t::iterator, bool> it = sections.insert(make_pair(section, keys));
-                mIt = it.first;
+                sections.push_back(make_pair(section, keys));
             }
             catch (parseError const &e) {}
 
@@ -102,7 +100,11 @@ bool iniHandler::open(const char *fName)
         default:
             try
             {
-                (*mIt).second.insert(parseKey(buffer));
+                if (!sections.empty())
+                {
+                    sections_t::reference lastSect(sections.back());
+                    lastSect.second.push_back(parseKey(buffer));
+                }
             }
             catch (parseError const &e) {}
 
@@ -126,13 +128,13 @@ void iniHandler::close()
 
 bool iniHandler::setSection(const char *section)
 {
-    curSection = sections.find(std::string(section));
+    curSection = std::find_if(sections.begin(), sections.end(), compare<keyPair_t>(section));
     return (curSection != sections.end());
 }
 
 const char *iniHandler::getValue(const char *key) const
 {
-    keys_t::const_iterator keyIt = (*curSection).second.find(std::string(key));
+    keys_t::const_iterator keyIt = std::find_if((*curSection).second.begin(), (*curSection).second.end(), compare<stringPair_t>(key));
     return (keyIt != (*curSection).second.end()) ? keyIt->second.c_str() : 0;
 }
 
@@ -145,7 +147,7 @@ void iniHandler::addSection(const char *section)
 
 void iniHandler::addValue(const char *key, const char *value)
 {
-    (*curSection).second.insert(make_pair(std::string(key), std::string(value)));
+    (*curSection).second.push_back(make_pair(std::string(key), std::string(value)));
     changed = true;
 }
 
