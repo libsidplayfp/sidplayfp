@@ -27,7 +27,9 @@ utils.cpp \
 utils.h \
 ini/iniHandler.h \
 ini/iniHandler.cpp \
-ini/dataParser.h
+ini/dataParser.h \
+ini/sidfstream.h \
+ini/types.h
 
 sidplayfp_LDADD = \
 ./audio/libaudio.a \

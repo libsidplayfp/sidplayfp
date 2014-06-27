@@ -22,13 +22,15 @@
 #include <string>
 #include <vector>
 
+#include "types.h"
+
 class iniHandler
 {
 private:
-    typedef std::pair<std::string, std::string> stringPair_t;
+    typedef std::pair<SID_STRING, SID_STRING> stringPair_t;
     typedef std::vector<stringPair_t> keys_t;
 
-    typedef std::pair<std::string, keys_t> keyPair_t;
+    typedef std::pair<SID_STRING, keys_t> keyPair_t;
     typedef std::vector<keyPair_t> sections_t;
 
     class parseError {};
@@ -38,10 +40,10 @@ private:
     class compare
     {
     private:
-        std::string s;
+        SID_STRING s;
 
     public:
-        compare(const char *str) : s(str) {}
+        compare(const TCHAR *str) : s(str) {}
 
         bool operator () (T const &p) { return s.compare(p.first) == 0; }
     };
@@ -51,28 +53,28 @@ private:
 
     sections_t::iterator curSection;
 
-    std::string fileName;
+    SID_STRING fileName;
 
     bool changed;
 
 private:
-    std::string parseSection(const std::string &buffer);
+    SID_STRING parseSection(const SID_STRING &buffer);
 
-    stringPair_t parseKey(const std::string &buffer);
+    stringPair_t parseKey(const SID_STRING &buffer);
 
 public:
     iniHandler();
     ~iniHandler();
 
-    bool open(const char *fName);
-    bool write(const char *fName);
+    bool open(const TCHAR *fName);
+    bool write(const TCHAR *fName);
     void close();
 
-    bool setSection(const char *section);
-    const char *getValue(const char *key) const;
+    bool setSection(const TCHAR *section);
+    const TCHAR *getValue(const TCHAR *key) const;
 
-    void addSection(const char *section);
-    void addValue(const char *key, const char *value);
+    void addSection(const TCHAR *section);
+    void addValue(const TCHAR *key, const TCHAR *value);
 };
 
 #endif // INIHANDLER_H

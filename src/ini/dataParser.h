@@ -22,6 +22,8 @@
 #include <sstream>
 #include <cstring>
 
+#include "types.h"
+
 class dataParser
 {
 public:
@@ -29,11 +31,11 @@ public:
 
 private:
     template<typename T>
-    static T convertString(const char* data)
+    static T convertString(const TCHAR* data)
     {
         T value;
 
-        std::stringstream stream(data);
+        SID_STRINGTREAM stream(data);
         stream >> std::boolalpha >> value;
         if (stream.fail()) {
             throw parseError();
@@ -42,9 +44,9 @@ private:
     }
 
 public:
-    static double parseDouble(const char* data) { return convertString<double>(data); }
-    static int parseInt(const char* data) { return convertString<int>(data); }
-    static bool parseBool(const char* data) { return convertString<bool>(data); }
+    static double parseDouble(const TCHAR* data) { return convertString<double>(data); }
+    static int parseInt(const TCHAR* data) { return convertString<int>(data); }
+    static bool parseBool(const TCHAR* data) { return convertString<bool>(data); }
 };
 
 #endif // DATAPARSER_H

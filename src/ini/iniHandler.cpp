@@ -33,11 +33,11 @@ iniHandler::~iniHandler()
     close();
 }
 
-std::string iniHandler::parseSection(const std::string &buffer)
+SID_STRING iniHandler::parseSection(const SID_STRING &buffer)
 {
     const size_t pos = buffer.find(']');
 
-    if (pos == std::string::npos)
+    if (pos == SID_STRING::npos)
     {
         throw parseError();
     }
@@ -45,26 +45,26 @@ std::string iniHandler::parseSection(const std::string &buffer)
     return buffer.substr(1, pos-1);
 }
 
-iniHandler::stringPair_t iniHandler::parseKey(const std::string &buffer)
+iniHandler::stringPair_t iniHandler::parseKey(const SID_STRING &buffer)
 {
     const size_t pos = buffer.find('=');
 
-    if (pos == std::string::npos)
+    if (pos == SID_STRING::npos)
     {
         throw parseError();
     }
 
-    const std::string key = buffer.substr(0, buffer.find_last_not_of(' ', pos-1) + 1);
+    const SID_STRING key = buffer.substr(0, buffer.find_last_not_of(' ', pos-1) + 1);
     const size_t vpos = buffer.find_first_not_of(' ', pos+1);
-    const std::string value = (vpos == std::string::npos) ? "" : buffer.substr(vpos);
+    const SID_STRING value = (vpos == SID_STRING::npos) ? TEXT("") : buffer.substr(vpos);
     return make_pair(key, value);
 }
 
-bool iniHandler::open(const char *fName)
+bool iniHandler::open(const TCHAR *fName)
 {
     fileName.assign(fName);
 
-    std::ifstream iniFile(fName);
+    SID_WIFSTREAM iniFile(fName);
 
     if (iniFile.fail())
     {
@@ -73,7 +73,7 @@ bool iniHandler::open(const char *fName)
 
     while (iniFile.good())
     {
-        std::string buffer;
+        SID_STRING buffer;
         getline(iniFile, buffer);
 
         if (buffer.empty())
@@ -89,7 +89,7 @@ bool iniHandler::open(const char *fName)
         case '[':
             try
             {
-                const std::string section = parseSection(buffer);
+                const SID_STRING section = parseSection(buffer);
                 const keys_t keys;
                 sections.push_back(make_pair(section, keys));
             }
@@ -126,34 +126,34 @@ void iniHandler::close()
     changed = false;
 }
 
-bool iniHandler::setSection(const char *section)
+bool iniHandler::setSection(const TCHAR *section)
 {
     curSection = std::find_if(sections.begin(), sections.end(), compare<keyPair_t>(section));
     return (curSection != sections.end());
 }
 
-const char *iniHandler::getValue(const char *key) const
+const TCHAR *iniHandler::getValue(const TCHAR *key) const
 {
     keys_t::const_iterator keyIt = std::find_if((*curSection).second.begin(), (*curSection).second.end(), compare<stringPair_t>(key));
     return (keyIt != (*curSection).second.end()) ? keyIt->second.c_str() : 0;
 }
 
-void iniHandler::addSection(const char *section)
+void iniHandler::addSection(const TCHAR *section)
 {
     const keys_t keys;
     curSection = sections.insert(curSection, make_pair(section, keys));
     changed = true;
 }
 
-void iniHandler::addValue(const char *key, const char *value)
+void iniHandler::addValue(const TCHAR *key, const TCHAR *value)
 {
-    (*curSection).second.push_back(make_pair(std::string(key), std::string(value)));
+    (*curSection).second.push_back(make_pair(SID_STRING(key), SID_STRING(value)));
     changed = true;
 }
 
-bool iniHandler::write(const char *fName)
+bool iniHandler::write(const TCHAR *fName)
 {
-    std::ofstream iniFile(fName);
+    SID_WOFSTREAM iniFile(fName);
 
     if (iniFile.fail())
     {

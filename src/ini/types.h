@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
+ * Copyright 2014 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+ 
+#ifndef TYPES_H
+#define TYPES_H
 
-#ifndef UTILS_H
-#define UTILS_H
+#include "sidfstream.h"
 
-#include <string>
+#  define SID_WIFSTREAM sid_wifstream
+#  define SID_WOFSTREAM sid_wofstream
+#  define SID_IFSTREAM sid_ifstream
+#  define SID_OFSTREAM sid_ofstream
 
-#include "ini/types.h"
-
-class utils
-{
-public:
-    class error {};
-
-private:
-#ifdef _WIN32
-    static SID_STRING getPath();
+#if defined(_WIN32) && defined(UNICODE)
+#  define SID_STRING std::wstring
+#  define SID_STRINGTREAM std::wstringstream
 #else
-    static SID_STRING getPath(const char* id, const char* def);
+#  define SID_STRING std::string
+#  define SID_STRINGTREAM std::stringstream
 #endif
 
-public:
-    static SID_STRING getDataPath();
-    
-    static SID_STRING getConfigPath();
-};
+#ifndef _WIN32
+#  define TCHAR   char
+#  define TEXT(x) x
+#else
+#  include <windows.h>
+#endif
+
 
 #endif

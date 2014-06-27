@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
+ * Copyright 2013-2014 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,42 +26,42 @@
 #  include <windows.h>
 #  include <shlobj.h>
 
-std::string utils::getPath()
+#ifdef UNICODE
+#  define _tgetenv _wgetenv
+#else
+#  define _tgetenv getenv
+#endif
+
+SID_STRING utils::getPath()
 {
-    std::string returnPath;
+    SID_STRING returnPath;
 
     TCHAR szPath[MAX_PATH];
 
     if (SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, szPath)!=S_OK)
     {
-        char *path = getenv("USERPROFILE");
+        TCHAR *path = _tgetenv(TEXT("USERPROFILE"));
         if (!path)
             throw error();
-        returnPath.append(path).append("\\Application Data");
+        returnPath.append(path).append(TEXT("\\Application Data"));
     }
     else
     {
-#ifdef UNICODE
-        char path[MAX_PATH];
-        size_t ret = wcstombs(path, szPath, sizeof(path));
-        returnPath.append(path);
-#else
         returnPath.append(szPath);
-#endif
     }
 
     return returnPath;
 }
 
-std::string utils::getDataPath() { return getPath(); }
+SID_STRING utils::getDataPath() { return getPath(); }
 
-std::string utils::getConfigPath() { return getPath(); }
+SID_STRING utils::getConfigPath() { return getPath(); }
 
 #else
 
-std::string utils::getPath(const char* id, const char* def)
+SID_STRING utils::getPath(const char* id, const char* def)
 {
-    std::string returnPath;
+    SID_STRING returnPath;
 
     char *path = getenv(id);
     if (!path)
@@ -77,8 +77,8 @@ std::string utils::getPath(const char* id, const char* def)
     return returnPath;
 }
 
-std::string utils::getDataPath() { return getPath("XDG_DATA_HOME", "/.local/share"); }
+SID_STRING utils::getDataPath() { return getPath("XDG_DATA_HOME", "/.local/share"); }
 
-std::string utils::getConfigPath() { return getPath("XDG_CONFIG_HOME", "/.config"); }
+SID_STRING utils::getConfigPath() { return getPath("XDG_CONFIG_HOME", "/.config"); }
 
 #endif

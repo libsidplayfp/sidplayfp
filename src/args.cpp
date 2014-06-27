@@ -421,13 +421,22 @@ int ConsolePlayer::args (int argc, const char *argv[])
         }
         if (!m_timer.valid)
         {
-            const std::string &database = (m_iniCfg.sidplay2()).database;
             m_timer.length = (m_iniCfg.sidplay2()).playLength;
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
-            if (!database.empty())
+
+#if defined(WIN32) && defined(UNICODE)
+            // FIXME
+            char database[MAX_PATH];
+            int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
+            if (ret >= MAX_PATH)
+                database[0] = '\0';
+#else
+            const char *database = (m_iniCfg.sidplay2()).database.c_str();
+#endif
+            if (strlen(database) != 0)
             {   // Try loading the database specificed by the user
-                if (!m_database.open (database.c_str()))
+                if (!m_database.open (database))
                 {
                     displayError (m_database.error ());
                     return -1;

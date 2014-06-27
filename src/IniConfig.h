@@ -22,6 +22,7 @@
 #ifndef INICONFIG_H
 #define INICONFIG_H
 
+#include "ini/types.h"
 #include "ini/iniHandler.h"
 
 #include <sidplayfp/SidConfig.h>
@@ -35,12 +36,12 @@ public:
     struct sidplay2_section
     {
         int            version;
-        std::string    database;
+        SID_STRING     database;
         uint_least32_t playLength;
         uint_least32_t recordLength;
-        std::string    kernalRom;
-        std::string    basicRom;
-        std::string    chargenRom;
+        SID_STRING     kernalRom;
+        SID_STRING     basicRom;
+        SID_STRING     chargenRom;
     };
 
     struct console_section
@@ -65,7 +66,7 @@ public:
 
     struct emulation_section
     {   // INI Section - [Emulation]
-        std::string   engine;
+        SID_STRING    engine;
         SidConfig::c64_model_t  modelDefault;
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
@@ -77,8 +78,8 @@ public:
     };
 
 protected:
-    static const char *DIR_NAME;
-    static const char *FILE_NAME;
+    static const TCHAR *DIR_NAME;
+    static const TCHAR *FILE_NAME;
 
     bool      status;
     struct    sidplay2_section  sidplay2_s;
@@ -89,12 +90,12 @@ protected:
 protected:
     void  clear ();
 
-    static bool readInt    (iniHandler &ini, const char *key, int &value);
-    static bool readDouble (iniHandler &ini, const char *key, double &value);
-    static bool readString (iniHandler &ini, const char *key, std::string &str);
-    static bool readBool   (iniHandler &ini, const char *key, bool &boolean);
-    static bool readChar   (iniHandler &ini, const char *key, char &ch);
-    static bool readTime   (iniHandler &ini, const char *key, int  &time);
+    static bool readInt    (iniHandler &ini, const TCHAR *key, int &value);
+    static bool readDouble (iniHandler &ini, const TCHAR *key, double &value);
+    static bool readString (iniHandler &ini, const TCHAR *key, SID_STRING &str);
+    static bool readBool   (iniHandler &ini, const TCHAR *key, bool &boolean);
+    static bool readChar   (iniHandler &ini, const TCHAR *key, char &ch);
+    static bool readTime   (iniHandler &ini, const TCHAR *key, int  &time);
 
     bool readSidplay2  (iniHandler &ini);
     bool readConsole   (iniHandler &ini);

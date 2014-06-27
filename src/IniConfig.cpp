@@ -43,11 +43,11 @@
 #  include <unistd.h>
 #endif
 
-#include "ini/dataParser.h"
 #include "utils.h"
+#include "ini/dataParser.h"
 
-const char *IniConfig::DIR_NAME  = "sidplayfp";
-const char *IniConfig::FILE_NAME = "sidplayfp.ini";
+const TCHAR *IniConfig::DIR_NAME  = TEXT("sidplayfp");
+const TCHAR *IniConfig::FILE_NAME = TEXT("sidplayfp.ini");
 
 #define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
 
@@ -101,12 +101,12 @@ void IniConfig::clear()
 }
 
 
-bool IniConfig::readDouble(iniHandler &ini, const char *key, double &result)
+bool IniConfig::readDouble(iniHandler &ini, const TCHAR *key, double &result)
 {
-    const char* value = ini.getValue(key);
+    const TCHAR* value = ini.getValue(key);
     if (value == 0)
     {   // Doesn't exist, add it
-        ini.addValue(key, "");
+        ini.addValue(key, TEXT(""));
         return false;
     }
 
@@ -123,12 +123,12 @@ bool IniConfig::readDouble(iniHandler &ini, const char *key, double &result)
 }
 
 
-bool IniConfig::readInt(iniHandler &ini, const char *key, int &result)
+bool IniConfig::readInt(iniHandler &ini, const TCHAR *key, int &result)
 {
-    const char* value = ini.getValue(key);
+    const TCHAR* value = ini.getValue(key);
     if (value == 0)
     {   // Doesn't exist, add it
-        ini.addValue(key, "");
+        ini.addValue(key, TEXT(""));
         return false;
     }
 
@@ -145,12 +145,12 @@ bool IniConfig::readInt(iniHandler &ini, const char *key, int &result)
 }
 
 
-bool IniConfig::readString(iniHandler &ini, const char *key, std::string &result)
+bool IniConfig::readString(iniHandler &ini, const TCHAR *key, SID_STRING &result)
 {
-    const char* value = ini.getValue(key);
+    const TCHAR* value = ini.getValue(key);
     if (value == 0)
     {   // Doesn't exist, add it
-        ini.addValue(key, "");
+        ini.addValue(key, TEXT(""));
         return false;
     }
 
@@ -159,12 +159,12 @@ bool IniConfig::readString(iniHandler &ini, const char *key, std::string &result
 }
 
 
-bool IniConfig::readBool(iniHandler &ini, const char *key, bool &result)
+bool IniConfig::readBool(iniHandler &ini, const TCHAR *key, bool &result)
 {
-    const char* value = ini.getValue(key);
+    const TCHAR* value = ini.getValue(key);
     if (value == 0)
     {   // Doesn't exist, add it
-        ini.addValue(key, "");
+        ini.addValue(key, TEXT(""));
         return false;
     }
 
@@ -181,14 +181,14 @@ bool IniConfig::readBool(iniHandler &ini, const char *key, bool &result)
 }
 
 
-bool IniConfig::readChar(iniHandler &ini, const char *key, char &ch)
+bool IniConfig::readChar(iniHandler &ini, const TCHAR *key, char &ch)
 {
-    std::string str;
+    SID_STRING str;
     bool ret = readString(ini, key, str);
     if (!ret)
         return false;
 
-    char c = 0;
+    TCHAR c = 0;
 
     // Check if we have an actual chanracter
     if (str[0] == '\'')
@@ -199,7 +199,7 @@ bool IniConfig::readChar(iniHandler &ini, const char *key, char &ch)
             c = str[1];
     } // Nope is number
     else
-        c = (char) atoi(str.c_str());
+        c = dataParser::parseInt(str.c_str());
 
     // Clip off special characters
     if ((unsigned) c >= 32)
@@ -209,27 +209,27 @@ bool IniConfig::readChar(iniHandler &ini, const char *key, char &ch)
 }
 
 
-bool IniConfig::readTime(iniHandler &ini, const char *key, int &value)
+bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
 {
-    std::string str;
+    SID_STRING str;
     bool ret = readString(ini, key, str);
     if (!ret)
         return false;
 
     int time;
     size_t sep = str.find_first_of(':');
-    if (sep == std::string::npos)
+    if (sep == SID_STRING::npos)
     {   // User gave seconds
-        time = atoi(str.c_str());
+        time = dataParser::parseInt(str.c_str());
     }
     else
     {   // Read in MM:SS format
         str.replace(sep, 1, '\0');
-        int val = atoi(str.c_str());
+        int val = dataParser::parseInt(str.c_str());
         if (val < 0 || val > 99)
             goto IniCofig_readTime_error;
         time = val * 60;
-        val  = atoi(str.c_str()+sep + 1);
+        val  = dataParser::parseInt(str.c_str()+sep + 1);
         if (val < 0 || val > 59)
             goto IniCofig_readTime_error;
         time += val;
@@ -245,17 +245,17 @@ IniCofig_readTime_error:
 
 bool IniConfig::readSidplay2(iniHandler &ini)
 {
-    if (!ini.setSection ("SIDPlayfp"))
+    if (!ini.setSection (TEXT("SIDPlayfp")))
         return false;
 
     bool ret = true;
 
     int version = sidplay2_s.version;
-    ret &= readInt (ini, "Version", version);
+    ret &= readInt (ini, TEXT("Version"), version);
     if (version > 0)
         sidplay2_s.version = version;
 
-    ret &= readString(ini, "Songlength Database", sidplay2_s.database);
+    ret &= readString(ini, TEXT("Songlength Database"), sidplay2_s.database);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
             if (sidplay2_s.database.empty())
@@ -268,14 +268,14 @@ bool IniConfig::readSidplay2(iniHandler &ini)
 #endif
 
     int time;
-    if (readTime (ini, "Default Play Length", time))
+    if (readTime (ini, TEXT("Default Play Length"), time))
         sidplay2_s.playLength   = (uint_least32_t) time;
-    if (readTime (ini, "Default Record Length", time))
+    if (readTime (ini, TEXT("Default Record Length"), time))
         sidplay2_s.recordLength = (uint_least32_t) time;
 
-    ret &= readString(ini, "Kernal Rom", sidplay2_s.kernalRom);
-    ret &= readString(ini, "Basic Rom", sidplay2_s.basicRom);
-    ret &= readString(ini, "Chargen Rom", sidplay2_s.chargenRom);
+    ret &= readString(ini, TEXT("Kernal Rom"), sidplay2_s.kernalRom);
+    ret &= readString(ini, TEXT("Basic Rom"), sidplay2_s.basicRom);
+    ret &= readString(ini, TEXT("Chargen Rom"), sidplay2_s.chargenRom);
 
     return ret;
 }
@@ -283,99 +283,99 @@ bool IniConfig::readSidplay2(iniHandler &ini)
 
 bool IniConfig::readConsole(iniHandler &ini)
 {
-    if (!ini.setSection ("Console"))
+    if (!ini.setSection (TEXT("Console")))
         return false;
 
     bool ret = true;
 
-    ret &= readBool (ini, "Ansi",                console_s.ansi);
-    ret &= readChar (ini, "Char Top Left",       console_s.topLeft);
-    ret &= readChar (ini, "Char Top Right",      console_s.topRight);
-    ret &= readChar (ini, "Char Bottom Left",    console_s.bottomLeft);
-    ret &= readChar (ini, "Char Bottom Right",   console_s.bottomRight);
-    ret &= readChar (ini, "Char Vertical",       console_s.vertical);
-    ret &= readChar (ini, "Char Horizontal",     console_s.horizontal);
-    ret &= readChar (ini, "Char Junction Left",  console_s.junctionLeft);
-    ret &= readChar (ini, "Char Junction Right", console_s.junctionRight);
+    ret &= readBool (ini, TEXT("Ansi"),                console_s.ansi);
+    ret &= readChar (ini, TEXT("Char Top Left"),       console_s.topLeft);
+    ret &= readChar (ini, TEXT("Char Top Right"),      console_s.topRight);
+    ret &= readChar (ini, TEXT("Char Bottom Left"),    console_s.bottomLeft);
+    ret &= readChar (ini, TEXT("Char Bottom Right"),   console_s.bottomRight);
+    ret &= readChar (ini, TEXT("Char Vertical"),       console_s.vertical);
+    ret &= readChar (ini, TEXT("Char Horizontal"),     console_s.horizontal);
+    ret &= readChar (ini, TEXT("Char Junction Left"),  console_s.junctionLeft);
+    ret &= readChar (ini, TEXT("Char Junction Right"), console_s.junctionRight);
     return ret;
 }
 
 
 bool IniConfig::readAudio(iniHandler &ini)
 {
-    if (!ini.setSection ("Audio"))
+    if (!ini.setSection (TEXT("Audio")))
         return false;
 
     bool ret = true;
 
     {
         int frequency = (int) audio_s.frequency;
-        ret &= readInt (ini, "Frequency", frequency);
+        ret &= readInt (ini, TEXT("Frequency"), frequency);
         audio_s.frequency = (unsigned long) frequency;
     }
 
     {
         int channels = 0;
-        ret &= readInt (ini, "Channels",  channels);
+        ret &= readInt (ini, TEXT("Channels"),  channels);
         if (channels)
         {
             audio_s.playback = (channels == 1) ? SidConfig::MONO : SidConfig::STEREO;
         }
     }
 
-    ret &= readInt (ini, "BitsPerSample", audio_s.precision);
+    ret &= readInt (ini, TEXT("BitsPerSample"), audio_s.precision);
     return ret;
 }
 
 
 bool IniConfig::readEmulation(iniHandler &ini)
 {
-    if (!ini.setSection ("Emulation"))
+    if (!ini.setSection (TEXT("Emulation")))
         return false;
 
     bool ret = true;
 
-    ret &= readString (ini, "Engine", emulation_s.engine);
+    ret &= readString (ini, TEXT("Engine"), emulation_s.engine);
 
     {
-        std::string str;
-        const bool res = readString (ini, "C64Model", str);
+        SID_STRING str;
+        const bool res = readString (ini, TEXT("C64Model"), str);
         if (res)
         {
-            if (str.compare("PAL") == 0)
+            if (str.compare(TEXT("PAL")) == 0)
                 emulation_s.modelDefault = SidConfig::PAL;
-            else if (str.compare("NTSC") == 0)
+            else if (str.compare(TEXT("NTSC")) == 0)
                 emulation_s.modelDefault = SidConfig::NTSC;
-            else if (str.compare("OLD_NTSC") == 0)
+            else if (str.compare(TEXT("OLD_NTSC")) == 0)
                 emulation_s.modelDefault = SidConfig::OLD_NTSC;
-            else if (str.compare("DREAN") == 0)
+            else if (str.compare(TEXT("DREAN")) == 0)
                 emulation_s.modelDefault = SidConfig::DREAN;
         }
         ret &= res;
     }
 
-    ret &= readBool (ini, "ForceC64Model", emulation_s.modelForced);
+    ret &= readBool (ini, TEXT("ForceC64Model"), emulation_s.modelForced);
 
     {
-        std::string str;
-        const bool res = readString (ini, "SidModel", str);
+        SID_STRING str;
+        const bool res = readString (ini, TEXT("SidModel"), str);
         if (res)
         {
-            if (str.compare("MOS6581") == 0)
+            if (str.compare(TEXT("MOS6581")) == 0)
                 emulation_s.sidModel = SidConfig::MOS6581;
-            else if (str.compare("MOS8580") == 0)
+            else if (str.compare(TEXT("MOS8580")) == 0)
                 emulation_s.sidModel = SidConfig::MOS8580;
         }
         ret &= res;
     }
 
-    ret &= readBool (ini, "ForceSidModel", emulation_s.forceModel);
+    ret &= readBool (ini, TEXT("ForceSidModel"), emulation_s.forceModel);
 
-    ret &= readBool (ini, "UseFilter", emulation_s.filter);
+    ret &= readBool (ini, TEXT("UseFilter"), emulation_s.filter);
 
-    ret &= readDouble (ini, "FilterBias", emulation_s.bias);
-    ret &= readDouble (ini, "FilterCurve6581", emulation_s.filterCurve6581);
-    ret &= readInt (ini, "FilterCurve8580", emulation_s.filterCurve8580);
+    ret &= readDouble (ini, TEXT("FilterBias"), emulation_s.bias);
+    ret &= readDouble (ini, TEXT("FilterCurve6581"), emulation_s.filterCurve6581);
+    ret &= readInt (ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 
     return ret;
 }
@@ -384,7 +384,7 @@ void IniConfig::read()
 {
     iniHandler ini;
 
-    std::string configPath;
+    SID_STRING configPath;
 
     try
     {
@@ -395,17 +395,17 @@ void IniConfig::read()
         goto IniConfig_read_error;
     }
 
-    configPath.append("/").append(DIR_NAME);
+    configPath.append(TEXT("/")).append(DIR_NAME);
 
 #ifndef _WIN32
     // Make sure the config path exists
     if (!opendir(configPath.c_str()))
         mkdir(configPath.c_str(), 0755);
 #else
-    CreateDirectoryA(configPath.c_str(), NULL);
+    CreateDirectory(configPath.c_str(), NULL);
 #endif
 
-    configPath.append("/").append(FILE_NAME);
+    configPath.append(TEXT("/")).append(FILE_NAME);
 
     // Opens an existing file or creates a new one
     if (!ini.open(configPath.c_str()))

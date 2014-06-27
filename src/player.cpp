@@ -43,6 +43,7 @@ using std::endl;
 #include "keyboard.h"
 #include "audio/AudioDrv.h"
 #include "audio/wav/WavFile.h"
+#include "ini/types.h"
 
 #include <sidplayfp/sidbuilder.h>
 #include <sidplayfp/SidInfo.h>
@@ -115,22 +116,22 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
         if (!emulation.engine.empty())
         {
-            if (emulation.engine.compare("RESIDFP") == 0)
+            if (emulation.engine.compare(TEXT("RESIDFP")) == 0)
             {
                 m_driver.sid    = EMU_RESIDFP;
             }
-            else if (emulation.engine.compare("RESID") == 0)
+            else if (emulation.engine.compare(TEXT("RESID")) == 0)
             {
                 m_driver.sid    = EMU_RESID;
             }
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
-            else if (emulation.engine.compare("HARDSID") == 0)
+            else if (emulation.engine.compare(TEXT("HARDSID")) == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
                 m_driver.output = OUT_NULL;
             }
 #endif
-            else if (emulation.engine.compare("NONE") == 0)
+            else if (emulation.engine.compare(TEXT("NONE")) == 0)
             {
                 m_driver.sid    = EMU_NONE;
             }
@@ -140,18 +141,18 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     createOutput (OUT_NULL, NULL);
     createSidEmu (EMU_NONE);
 
-    uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, "kernal");
-    uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, "basic");
-    uint8_t *chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, "chargen");
+    uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
+    uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, TEXT("basic"));
+    uint8_t *chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, TEXT("chargen"));
     m_engine.setRoms(kernalRom, basicRom, chargenRom);
     delete [] kernalRom;
     delete [] basicRom;
     delete [] chargenRom;
 }
 
-uint8_t* ConsolePlayer::loadRom(const std::string &romPath, const int size, const char defaultRom[])
+uint8_t* ConsolePlayer::loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[])
 {
-    std::string dataPath;
+    SID_STRING dataPath;
     try
     {
         dataPath = utils::getDataPath();
@@ -161,7 +162,7 @@ uint8_t* ConsolePlayer::loadRom(const std::string &romPath, const int size, cons
         return 0;
     }
 
-    dataPath.append("/sidplayfp/").append(defaultRom);
+    dataPath.append(TEXT("/sidplayfp/")).append(defaultRom);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
     if (::access(dataPath.c_str(), R_OK) != 0)
@@ -171,7 +172,7 @@ uint8_t* ConsolePlayer::loadRom(const std::string &romPath, const int size, cons
     }
 #endif
 
-    std::ifstream is((!romPath.empty())?romPath.c_str():dataPath.c_str(), std::ios::binary);
+    SID_IFSTREAM is((!romPath.empty())?romPath.c_str():dataPath.c_str(), std::ios::binary);
 
     if (is.fail())
         goto error;
