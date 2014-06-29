@@ -199,7 +199,16 @@ bool IniConfig::readChar(iniHandler &ini, const TCHAR *key, char &ch)
             c = str[1];
     } // Nope is number
     else
-        c = dataParser::parseInt(str.c_str());
+    {
+        try
+        {
+            c = dataParser::parseInt(str.c_str());
+        }
+        catch (dataParser::parseError const &e)
+        {
+            return false;
+        }
+    }
 
     // Clip off special characters
     if ((unsigned) c >= 32)
@@ -218,21 +227,28 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
 
     int time;
     size_t sep = str.find_first_of(':');
-    if (sep == SID_STRING::npos)
-    {   // User gave seconds
-        time = dataParser::parseInt(str.c_str());
+    try
+    {
+        if (sep == SID_STRING::npos)
+        {   // User gave seconds
+            time = dataParser::parseInt(str.c_str());
+        }
+        else
+        {   // Read in MM:SS format
+            str.replace(sep, 1, '\0');
+            int val = dataParser::parseInt(str.c_str());
+            if (val < 0 || val > 99)
+                goto IniCofig_readTime_error;
+            time = val * 60;
+            val  = dataParser::parseInt(str.c_str()+sep + 1);
+            if (val < 0 || val > 59)
+                goto IniCofig_readTime_error;
+            time += val;
+        }
     }
-    else
-    {   // Read in MM:SS format
-        str.replace(sep, 1, '\0');
-        int val = dataParser::parseInt(str.c_str());
-        if (val < 0 || val > 99)
-            goto IniCofig_readTime_error;
-        time = val * 60;
-        val  = dataParser::parseInt(str.c_str()+sep + 1);
-        if (val < 0 || val > 59)
-            goto IniCofig_readTime_error;
-        time += val;
+    catch (dataParser::parseError const &e)
+    {
+        return false;
     }
 
     value = time;
