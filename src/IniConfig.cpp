@@ -261,8 +261,8 @@ IniCofig_readTime_error:
 
 bool IniConfig::readSidplay2(iniHandler &ini)
 {
-    if (!ini.setSection (TEXT("SIDPlayfp")))
-        return false;
+    if (!ini.setSection(TEXT("SIDPlayfp")))
+        ini.addSection(TEXT("SIDPlayfp"));
 
     bool ret = true;
 
@@ -300,7 +300,7 @@ bool IniConfig::readSidplay2(iniHandler &ini)
 bool IniConfig::readConsole(iniHandler &ini)
 {
     if (!ini.setSection (TEXT("Console")))
-        return false;
+        ini.addSection(TEXT("Console"));
 
     bool ret = true;
 
@@ -320,7 +320,7 @@ bool IniConfig::readConsole(iniHandler &ini)
 bool IniConfig::readAudio(iniHandler &ini)
 {
     if (!ini.setSection (TEXT("Audio")))
-        return false;
+        ini.addSection(TEXT("Audio"));
 
     bool ret = true;
 
@@ -347,7 +347,7 @@ bool IniConfig::readAudio(iniHandler &ini)
 bool IniConfig::readEmulation(iniHandler &ini)
 {
     if (!ini.setSection (TEXT("Emulation")))
-        return false;
+        ini.addSection(TEXT("Emulation"));
 
     bool ret = true;
 
