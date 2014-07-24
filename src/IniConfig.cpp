@@ -423,6 +423,8 @@ void IniConfig::read()
 
     configPath.append(TEXT("/")).append(FILE_NAME);
 
+    //std::wcout << configPath.c_str() << std::endl;
+
     // Opens an existing file or creates a new one
     if (!ini.open(configPath.c_str()))
         goto IniConfig_read_error;
@@ -441,4 +443,5 @@ void IniConfig::read()
 IniConfig_read_error:
     clear ();
     status = false;
+    std::cout << "Error reading config file!" << std::endl;
 }

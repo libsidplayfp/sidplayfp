@@ -66,16 +66,15 @@ bool iniHandler::open(const TCHAR *fName)
 
     SID_WIFSTREAM iniFile(fName);
 
-    if (iniFile.fail())
+    if (!iniFile.is_open())
     {
         return false;
     }
 
-    while (iniFile.good())
-    {
-        SID_STRING buffer;
-        getline(iniFile, buffer);
+    SID_STRING buffer;
 
+    while (getline(iniFile, buffer))
+    {
         if (buffer.empty())
             continue;
 
@@ -112,7 +111,7 @@ bool iniHandler::open(const TCHAR *fName)
         }
     }
 
-    return true;
+    return !iniFile.bad();
 }
 
 void iniHandler::close()
@@ -155,7 +154,7 @@ bool iniHandler::write(const TCHAR *fName)
 {
     SID_WOFSTREAM iniFile(fName);
 
-    if (iniFile.fail())
+    if (!iniFile.is_open())
     {
         return false;
     }

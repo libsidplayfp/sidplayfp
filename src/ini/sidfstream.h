@@ -24,88 +24,88 @@
 #if defined(_WIN32) && defined (UNICODE)
 
 #  include <windows.h>
+#  include <io.h>
+#  include <fcntl.h>
 
 #  ifdef __GLIBCXX__
 #    include <ext/stdio_filebuf.h>
 
-class sid_ifstream : public std::ifstream
+static int getOflag(std::ios_base::openmode mode)
 {
-private:
-    __gnu_cxx::stdio_filebuf<char>  buffer;
-    std::basic_streambuf<char>     *p_original_buf;
+    int flags = (mode & std::ios_base::binary) ? _O_BINARY : 0;
 
+    if ((mode & std::ios_base::in) && (mode & std::ios_base::out))
+            flags |= _O_CREAT | _O_TRUNC | _O_RDWR;
+    else if (mode & std::ios_base::in)
+            flags |= _O_RDONLY;
+    else if (mode & std::ios_base::out)
+            flags |= _O_CREAT | _O_TRUNC | _O_WRONLY;
+
+    return flags;
+}
+
+template<typename T>
+class sid_stream_base
+{
+protected:
+    __gnu_cxx::stdio_filebuf<T> filebuf;
+
+public:
+    sid_stream_base(int fd, std::ios_base::openmode mode) :
+        filebuf(fd, mode)
+    {}
+};
+
+class sid_ifstream : private sid_stream_base<char>, public std::istream
+{
 public:
     sid_ifstream(const TCHAR* filename, ios_base::openmode mode = ios_base::in) :
-        std::ifstream(),
-        buffer(_wfopen(filename, TEXT("r")), mode),
-        p_original_buf(basic_ios::rdbuf(&buffer))
+        sid_stream_base(_wopen(filename, getOflag(mode|ios_base::in)), mode|ios_base::in),
+        std::istream(&filebuf)
     {}
 
-    ~sid_ifstream()
-    {
-        basic_ios::rdbuf(p_original_buf);
-        buffer.close();
-    }
+    bool is_open() { return filebuf.is_open(); }
+
+    void close() { filebuf.close(); }
 };
 
-class sid_ofstream : public std::ofstream
+class sid_ofstream : private sid_stream_base<char>, public std::ostream
 {
-private:
-    __gnu_cxx::stdio_filebuf<char>  buffer;
-    std::basic_streambuf<char>     *p_original_buf;
-
 public:
     sid_ofstream(const TCHAR* filename, ios_base::openmode mode = ios_base::out) :
-        std::ofstream(),
-        buffer(_wfopen(filename, TEXT("w")), mode),
-        p_original_buf(basic_ios::rdbuf(&buffer))
+        sid_stream_base(_wopen(filename, getOflag(mode|ios_base::out)), mode|ios_base::out),
+        std::ostream(&filebuf)
     {}
 
-    ~sid_ofstream()
-    {
-        basic_ios::rdbuf(p_original_buf);
-        buffer.close();
-    }
+    bool is_open() { return filebuf.is_open(); }
+
+    void close() { filebuf.close(); }
 };
 
-class sid_wifstream : public std::wifstream
+class sid_wifstream : private sid_stream_base<TCHAR>, public std::wistream
 {
-private:
-    __gnu_cxx::stdio_filebuf<TCHAR>  buffer;
-    std::basic_streambuf<TCHAR>     *p_original_buf;
-
 public:
     sid_wifstream(const TCHAR* filename, ios_base::openmode mode = ios_base::in) :
-        std::wifstream(),
-        buffer(_wfopen(filename, TEXT("r")), mode),
-        p_original_buf(basic_ios::rdbuf(&buffer))
+        sid_stream_base(_wopen(filename, getOflag(mode|ios_base::in)), mode|ios_base::in),
+        std::wistream(&filebuf)
     {}
 
-    ~sid_wifstream()
-    {
-        basic_ios::rdbuf(p_original_buf);
-        buffer.close();
-    }
+    bool is_open() { return filebuf.is_open(); }
+
+    void close() { filebuf.close(); }
 };
 
-class sid_wofstream : public std::wofstream
+class sid_wofstream : private sid_stream_base<TCHAR>, public std::wostream
 {
-private:
-    __gnu_cxx::stdio_filebuf<TCHAR>  buffer;
-    std::basic_streambuf<TCHAR>     *p_original_buf;
-
 public:
     sid_wofstream(const TCHAR* filename, ios_base::openmode mode = ios_base::out) :
-        std::wofstream(),
-        buffer(_wfopen(filename, TEXT("w")), mode),
-        p_original_buf(basic_ios::rdbuf(&buffer))
+        sid_stream_base(_wopen(filename, getOflag(mode|ios_base::out)), mode|ios_base::out),
+        std::wostream(&filebuf)
     {}
 
-    ~sid_wofstream()
-    {
-        basic_ios::rdbuf(p_original_buf);
-        buffer.close();
-    }
+    bool is_open() { return filebuf.is_open(); }
+
+    void close() { filebuf.close(); }
 };
 
 #  else // _MSC_VER
