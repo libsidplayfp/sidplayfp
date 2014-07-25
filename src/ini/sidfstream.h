@@ -50,62 +50,50 @@ class sid_stream_base
 protected:
     __gnu_cxx::stdio_filebuf<T> filebuf;
 
-public:
     sid_stream_base(int fd, std::ios_base::openmode mode) :
         filebuf(fd, mode)
     {}
+
+public:
+    bool is_open() { return filebuf.is_open(); }
+
+    void close() { filebuf.close(); }
 };
 
-class sid_ifstream : private sid_stream_base<char>, public std::istream
+class sid_ifstream : public sid_stream_base<char>, public std::istream
 {
 public:
     sid_ifstream(const TCHAR* filename, ios_base::openmode mode = ios_base::in) :
         sid_stream_base(_wopen(filename, getOflag(mode|ios_base::in)), mode|ios_base::in),
         std::istream(&filebuf)
     {}
-
-    bool is_open() { return filebuf.is_open(); }
-
-    void close() { filebuf.close(); }
 };
 
-class sid_ofstream : private sid_stream_base<char>, public std::ostream
+class sid_ofstream : public sid_stream_base<char>, public std::ostream
 {
 public:
     sid_ofstream(const TCHAR* filename, ios_base::openmode mode = ios_base::out) :
         sid_stream_base(_wopen(filename, getOflag(mode|ios_base::out)), mode|ios_base::out),
         std::ostream(&filebuf)
     {}
-
-    bool is_open() { return filebuf.is_open(); }
-
-    void close() { filebuf.close(); }
 };
 
-class sid_wifstream : private sid_stream_base<TCHAR>, public std::wistream
+class sid_wifstream : public sid_stream_base<TCHAR>, public std::wistream
 {
 public:
     sid_wifstream(const TCHAR* filename, ios_base::openmode mode = ios_base::in) :
         sid_stream_base(_wopen(filename, getOflag(mode|ios_base::in)), mode|ios_base::in),
         std::wistream(&filebuf)
     {}
-
-    bool is_open() { return filebuf.is_open(); }
-
-    void close() { filebuf.close(); }
 };
 
-class sid_wofstream : private sid_stream_base<TCHAR>, public std::wostream
+class sid_wofstream : public sid_stream_base<TCHAR>, public std::wostream
 {
 public:
     sid_wofstream(const TCHAR* filename, ios_base::openmode mode = ios_base::out) :
         sid_stream_base(_wopen(filename, getOflag(mode|ios_base::out)), mode|ios_base::out),
         std::wostream(&filebuf)
     {}
-
-    bool is_open() { return filebuf.is_open(); }
-
-    void close() { filebuf.close(); }
 };
 
 #  else // _MSC_VER
