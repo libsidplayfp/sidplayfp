@@ -82,7 +82,12 @@ bool iniHandler::open(const TCHAR *fName)
         {
         case ';':
         case '#':
-            // skip comments
+            // Comments
+            if (!sections.empty())
+            {
+                sections_t::reference lastSect(sections.back());
+                lastSect.second.push_back(make_pair(std::string(), buffer));
+            }
             break;
 
         case '[':
@@ -99,7 +104,7 @@ bool iniHandler::open(const TCHAR *fName)
         default:
             try
             {
-                if (!sections.empty())
+                if (!sections.empty()) //FIXME add a default section?
                 {
                     sections_t::reference lastSect(sections.back());
                     lastSect.second.push_back(parseKey(buffer));
@@ -163,9 +168,12 @@ bool iniHandler::write(const TCHAR *fName)
     {
         iniFile << "[" << (*section).first << "]" << std::endl;
 
-        for (keys_t::iterator key = (*section).second.begin(); key != (*section).second.end(); ++key)
+        for (keys_t::iterator entry = (*section).second.begin(); entry != (*section).second.end(); ++entry)
         {
-            iniFile << (*key).first << " = " << (*key).second << std::endl;
+            const std::string key = (*entry).first;
+            if (!key.empty())
+                iniFile << key << " = ";
+            iniFile << (*entry).second << std::endl;
         }
         iniFile << std::endl;
     }
