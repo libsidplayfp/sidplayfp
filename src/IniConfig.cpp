@@ -35,8 +35,10 @@
 #  include <sys/types.h>
 #  include <sys/stat.h>  /* mkdir */
 #  include <dirent.h>    /* opendir */
+#  define SEPARATOR    "/"
 #else
 #  include <windows.h>
+#  define SEPARATOR    TEXT("\\")
 #endif
 
 #ifdef HAVE_UNISTD_H
@@ -411,7 +413,7 @@ void IniConfig::read()
         goto IniConfig_read_error;
     }
 
-    configPath.append(TEXT("/")).append(DIR_NAME);
+    configPath.append(SEPARATOR).append(DIR_NAME);
 
 #ifndef _WIN32
     // Make sure the config path exists
@@ -421,7 +423,7 @@ void IniConfig::read()
     CreateDirectory(configPath.c_str(), NULL);
 #endif
 
-    configPath.append(TEXT("/")).append(FILE_NAME);
+    configPath.append(SEPARATOR).append(FILE_NAME);
 
     //std::wcout << configPath.c_str() << std::endl;
 
