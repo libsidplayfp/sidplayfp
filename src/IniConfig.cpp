@@ -418,9 +418,18 @@ void IniConfig::read()
 #ifndef _WIN32
     // Make sure the config path exists
     if (!opendir(configPath.c_str()))
-        mkdir(configPath.c_str(), 0755);
+    {
+        const int res = mkdir(configPath.c_str(), 0755);
+        if (res < 0)
+        {
+            goto IniConfig_read_error;
+        }
+    }
 #else
-    CreateDirectory(configPath.c_str(), NULL);
+    if (CreateDirectory(configPath.c_str(), NULL) != 0)
+    {
+        goto IniConfig_read_error;
+    }
 #endif
 
     configPath.append(SEPARATOR).append(FILE_NAME);
@@ -445,5 +454,5 @@ void IniConfig::read()
 IniConfig_read_error:
     clear ();
     status = false;
-    std::cout << "Error reading config file!" << std::endl;
+    std::cout << "Error reading config file!" << std::endl; //FIXME remove
 }
