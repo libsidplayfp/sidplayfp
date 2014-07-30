@@ -31,9 +31,11 @@
 #if defined(_WIN32) && defined(UNICODE)
 #  define SID_STRING std::wstring
 #  define SID_STRINGTREAM std::wstringstream
+#  define SID_COUT std::wcout
 #else
 #  define SID_STRING std::string
 #  define SID_STRINGTREAM std::stringstream
+#  define SID_COUT std::cout
 #endif
 
 #ifndef _WIN32

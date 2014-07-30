@@ -30,6 +30,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
+#include <cerrno>
 
 #ifndef _WIN32
 #  include <sys/types.h>
@@ -398,7 +399,7 @@ bool IniConfig::readEmulation(iniHandler &ini)
     return ret;
 }
 
-void IniConfig::read()
+void IniConfig::read() //FIXME clean up debug messages
 {
     iniHandler ini;
 
@@ -415,30 +416,39 @@ void IniConfig::read()
 
     configPath.append(SEPARATOR).append(DIR_NAME);
 
-#ifndef _WIN32
     // Make sure the config path exists
+#ifndef _WIN32
     if (!opendir(configPath.c_str()))
     {
         const int res = mkdir(configPath.c_str(), 0755);
         if (res < 0)
         {
+            std::cout << strerror(errno) << std::endl;
             goto IniConfig_read_error;
         }
     }
 #else
     if (CreateDirectory(configPath.c_str(), NULL) != 0)
     {
+        LPTSTR pBuffer;
+        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
+        SID_COUT << pBuffer << std::endl;
+        LocalFree(pBuffer);
         goto IniConfig_read_error;
     }
 #endif
 
     configPath.append(SEPARATOR).append(FILE_NAME);
 
-    //std::wcout << configPath.c_str() << std::endl;
+    //SID_COUT << configPath.c_str() << std::endl;
 
     // Opens an existing file or creates a new one
     if (!ini.open(configPath.c_str()))
+    {
+        std::cout << "Error reading config file!" << std::endl;
         goto IniConfig_read_error;
+    }
 
     clear ();
 
@@ -454,5 +464,4 @@ void IniConfig::read()
 IniConfig_read_error:
     clear ();
     status = false;
-    std::cout << "Error reading config file!" << std::endl; //FIXME remove
 }
