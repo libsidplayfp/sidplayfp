@@ -100,7 +100,7 @@ bool iniHandler::open(const TCHAR *fName)
             if (!sections.empty())
             {
                 sections_t::reference lastSect(sections.back());
-                lastSect.second.push_back(make_pair(std::string(), buffer));
+                lastSect.second.push_back(make_pair(SID_STRING(), buffer));
             }
             break;
 
@@ -184,7 +184,7 @@ bool iniHandler::write(const TCHAR *fName)
 
         for (keys_t::iterator entry = (*section).second.begin(); entry != (*section).second.end(); ++entry)
         {
-            const std::string key = (*entry).first;
+            const SID_STRING key = (*entry).first;
             if (!key.empty())
                 iniFile << key << " = ";
             iniFile << (*entry).second << std::endl;
