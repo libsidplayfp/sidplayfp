@@ -24,6 +24,10 @@
 #include <iostream>
 #include <algorithm>
 
+#ifdef _WIN32
+#  include <windows.h>
+#endif
+
 iniHandler::iniHandler() :
     changed(false)
 {}
@@ -68,6 +72,16 @@ bool iniHandler::open(const TCHAR *fName)
 
     if (!iniFile.is_open())
     {
+        // Try creating new file
+        SID_WOFSTREAM newIniFile(fName);
+        if (newIniFile.is_open())
+        {
+#ifdef _WIN32
+            // Remove readonly attribute if present
+            SetFileAttributes(fName, GetFileAttributes(fName) & ~FILE_ATTRIBUTE_READONLY);
+#endif
+            return true;
+        }
         return false;
     }
 
