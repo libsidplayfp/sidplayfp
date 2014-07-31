@@ -49,6 +49,13 @@
 #include "utils.h"
 #include "ini/dataParser.h"
 
+void debug(const TCHAR *msg)
+{
+#ifndef NDEBUG
+    SID_COUT << msg << std::endl;
+#endif
+}
+
 const TCHAR *IniConfig::DIR_NAME  = TEXT("sidplayfp");
 const TCHAR *IniConfig::FILE_NAME = TEXT("sidplayfp.ini");
 
@@ -399,7 +406,7 @@ bool IniConfig::readEmulation(iniHandler &ini)
     return ret;
 }
 
-void IniConfig::read() //FIXME clean up debug messages
+void IniConfig::read()
 {
     iniHandler ini;
 
@@ -423,7 +430,7 @@ void IniConfig::read() //FIXME clean up debug messages
         const int res = mkdir(configPath.c_str(), 0755);
         if (res < 0)
         {
-            std::cout << strerror(errno) << std::endl;
+            debug(strerror(errno));
             goto IniConfig_read_error;
         }
     }
@@ -433,7 +440,7 @@ void IniConfig::read() //FIXME clean up debug messages
         LPTSTR pBuffer;
         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
-        SID_COUT << pBuffer << std::endl;
+        debug(pBuffer);
         LocalFree(pBuffer);
         goto IniConfig_read_error;
     }
@@ -446,7 +453,7 @@ void IniConfig::read() //FIXME clean up debug messages
     // Opens an existing file or creates a new one
     if (!ini.open(configPath.c_str()))
     {
-        std::cout << "Error reading config file!" << std::endl;
+        debug(TEXT("Error reading config file!"));
         goto IniConfig_read_error;
     }
 

@@ -7,7 +7,8 @@ AM_CPPFLAGS = \
 $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \
 $(ALSA_CFLAGS) \
-$(PULSE_CFLAGS)
+$(PULSE_CFLAGS) \
+@debug_flags@
 
 # The console user interface.
 

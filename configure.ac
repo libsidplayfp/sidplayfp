@@ -86,6 +86,16 @@ AC_CHECK_HEADERS([sidplayfp/builders/residfp.h sidplayfp/builders/resid.h sidpla
 
 CPPFLAGS=$saveCPPFLAGS
 
+AC_MSG_CHECKING([for debugging])
+AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@default=no@:>@])],
+ [], [enable_debug=no])
+
+AS_IF([test "x$enable_debug" = "xno"],
+  [AC_MSG_RESULT([Build without debugging messages]); debug_flags=-DNDEBUG]
+)
+
+AC_SUBST([debug_flags])
+
 
 AC_CONFIG_FILES([
 Makefile
