@@ -427,15 +427,14 @@ void IniConfig::read()
 #ifndef _WIN32
     if (!opendir(configPath.c_str()))
     {
-        const int res = mkdir(configPath.c_str(), 0755);
-        if (res < 0)
+        if (mkdir(configPath.c_str(), 0755) < 0)
         {
             debug(strerror(errno));
             goto IniConfig_read_error;
         }
     }
 #else
-    if (CreateDirectory(configPath.c_str(), NULL) != 0)
+    if (CreateDirectory(configPath.c_str(), NULL) == 0)
     {
         LPTSTR pBuffer;
         FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
