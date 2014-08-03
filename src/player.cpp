@@ -68,32 +68,33 @@ const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 
 
-uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[])
+uint8_t* loadRom(SID_STRING romPath, const int size, const TCHAR defaultRom[])
 {
-    SID_STRING dataPath;
-    try
+    if (romPath.empty())
     {
-        dataPath = utils::getDataPath();
-    }
-    catch (utils::error const &e)
-    {
-        return 0;
-    }
+        try
+        {
+            romPath = utils::getDataPath();
+        }
+        catch (utils::error const &e)
+        {
+            return 0;
+        }
 
-    dataPath.append(SEPARATOR).append(TEXT("sidplayfp/")).append(SEPARATOR).append(defaultRom);
+        romPath.append(SEPARATOR).append(TEXT("sidplayfp")).append(SEPARATOR).append(defaultRom);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
-    if (::access(dataPath.c_str(), R_OK) != 0)
-    {
-        dataPath = PKGDATADIR;
-        dataPath.append(defaultRom);
-    }
+        if (::access(romPath.c_str(), R_OK) != 0)
+        {
+            romPath = PKGDATADIR;
+            romPath.append(defaultRom);
+        }
 #endif
+    }
 
-    SID_IFSTREAM is((!romPath.empty())?romPath.c_str():dataPath.c_str(), std::ios::binary);
+    SID_IFSTREAM is(romPath.c_str(), std::ios::binary);
 
-    if (is.fail())
-        goto error;
+    if (is.is_open())
     {
         try
         {
