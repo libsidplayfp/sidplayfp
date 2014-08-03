@@ -416,6 +416,7 @@ void IniConfig::read()
     }
     catch (utils::error const &e)
     {
+        debug(TEXT("Cannot get config path!"));
         goto IniConfig_read_error;
     }
 
