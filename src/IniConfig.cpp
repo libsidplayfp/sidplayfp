@@ -282,13 +282,13 @@ bool IniConfig::readSidplay2(iniHandler &ini)
     ret &= readString(ini, TEXT("Songlength Database"), sidplay2_s.database);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
-            if (sidplay2_s.database.empty())
-            {
-            char buffer[PATH_MAX];
-                snprintf(buffer, PATH_MAX, "%sSonglengths.txt", PKGDATADIR);
-                if (::access(buffer, R_OK) == 0)
-                    sidplay2_s.database.assign(buffer);
-            }
+    if (sidplay2_s.database.empty())
+    {
+        char buffer[PATH_MAX];
+        snprintf(buffer, PATH_MAX, "%sSonglengths.txt", PKGDATADIR);
+        if (::access(buffer, R_OK) == 0)
+            sidplay2_s.database.assign(buffer);
+    }
 #endif
 
     int time;
