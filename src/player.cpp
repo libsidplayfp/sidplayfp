@@ -68,6 +68,55 @@ const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 
 
+uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[])
+{
+    SID_STRING dataPath;
+    try
+    {
+        dataPath = utils::getDataPath();
+    }
+    catch (utils::error const &e)
+    {
+        return 0;
+    }
+
+    dataPath.append(SEPARATOR).append(TEXT("sidplayfp/")).append(SEPARATOR).append(defaultRom);
+
+#if !defined _WIN32 && defined HAVE_UNISTD_H
+    if (::access(dataPath.c_str(), R_OK) != 0)
+    {
+        dataPath = PKGDATADIR;
+        dataPath.append(defaultRom);
+    }
+#endif
+
+    SID_IFSTREAM is((!romPath.empty())?romPath.c_str():dataPath.c_str(), std::ios::binary);
+
+    if (is.fail())
+        goto error;
+    {
+        try
+        {
+            uint8_t *buffer = new uint8_t[size];
+
+            is.read((char*)buffer, size);
+            if (is.fail())
+                goto error;
+
+            is.close();
+            return buffer;
+        }
+        catch (std::bad_alloc const &ba)
+        {
+            goto error;
+        }
+    }
+
+error:
+    is.close();
+    return 0;
+}
+
 ConsolePlayer::ConsolePlayer (const char * const name) :
     Event("External Timer\n"),
     m_name(name),
@@ -148,55 +197,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     delete [] kernalRom;
     delete [] basicRom;
     delete [] chargenRom;
-}
-
-uint8_t* ConsolePlayer::loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[])
-{
-    SID_STRING dataPath;
-    try
-    {
-        dataPath = utils::getDataPath();
-    }
-    catch (utils::error const &e)
-    {
-        return 0;
-    }
-
-    dataPath.append(SEPARATOR).append(TEXT("sidplayfp/")).append(SEPARATOR).append(defaultRom);
-
-#if !defined _WIN32 && defined HAVE_UNISTD_H
-    if (::access(dataPath.c_str(), R_OK) != 0)
-    {
-        dataPath = PKGDATADIR;
-        dataPath.append(defaultRom);
-    }
-#endif
-
-    SID_IFSTREAM is((!romPath.empty())?romPath.c_str():dataPath.c_str(), std::ios::binary);
-
-    if (is.fail())
-        goto error;
-    {
-        try
-        {
-            uint8_t *buffer = new uint8_t[size];
-
-            is.read((char*)buffer, size);
-            if (is.fail())
-                goto error;
-
-            is.close();
-            return buffer;
-        }
-        catch (std::bad_alloc const &ba)
-        {
-            goto error;
-        }
-    }
-
-error:
-    is.close();
-    return 0;
 }
 
 IAudio* ConsolePlayer::getWavFile(const SidTuneInfo *tuneInfo)

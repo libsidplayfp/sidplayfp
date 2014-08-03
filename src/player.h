@@ -201,8 +201,6 @@ private:
 
     const char* getModel (SidTuneInfo::model_t model);
 
-    uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[]);
-
     IAudio* getWavFile(const SidTuneInfo *tuneInfo);
 
 public:
