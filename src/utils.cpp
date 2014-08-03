@@ -38,7 +38,7 @@ SID_STRING utils::getPath()
 
     TCHAR szPath[MAX_PATH];
 
-    if (SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, szPath)!=S_OK)
+    if (SHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, szPath)!=S_OK)
     {
         TCHAR *path = _tgetenv(TEXT("USERPROFILE"));
         if (!path)
