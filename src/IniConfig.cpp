@@ -36,10 +36,8 @@
 #  include <sys/types.h>
 #  include <sys/stat.h>  /* mkdir */
 #  include <dirent.h>    /* opendir */
-#  define SEPARATOR    "/"
 #else
 #  include <windows.h>
-#  define SEPARATOR    TEXT("\\")
 #endif
 
 #ifdef HAVE_UNISTD_H

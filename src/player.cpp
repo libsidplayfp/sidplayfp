@@ -162,7 +162,7 @@ uint8_t* ConsolePlayer::loadRom(const SID_STRING &romPath, const int size, const
         return 0;
     }
 
-    dataPath.append(TEXT("/sidplayfp/")).append(defaultRom);
+    dataPath.append(SEPARATOR).append(TEXT("sidplayfp/")).append(SEPARATOR).append(defaultRom);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
     if (::access(dataPath.c_str(), R_OK) != 0)

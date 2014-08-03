@@ -41,8 +41,10 @@
 #ifndef _WIN32
 #  define TCHAR   char
 #  define TEXT(x) x
+#  define SEPARATOR    "/"
 #else
 #  include <windows.h>
+#  define SEPARATOR    TEXT("\\")
 #endif
 
 
