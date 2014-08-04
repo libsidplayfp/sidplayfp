@@ -406,7 +406,8 @@ bool IniConfig::readEmulation(iniHandler &ini)
 
 void IniConfig::read()
 {
-    iniHandler ini;
+    clear();
+    status = false;
 
     SID_STRING configPath;
 
@@ -417,7 +418,7 @@ void IniConfig::read()
     catch (utils::error const &e)
     {
         debug(TEXT("Cannot get config path!"));
-        goto IniConfig_read_error;
+        return;
     }
 
     configPath.append(SEPARATOR).append(DIR_NAME);
@@ -429,44 +430,41 @@ void IniConfig::read()
         if (mkdir(configPath.c_str(), 0755) < 0)
         {
             debug(strerror(errno));
-            goto IniConfig_read_error;
+            return;
         }
     }
 #else
-    if (CreateDirectory(configPath.c_str(), NULL) == 0)
+    if (GetFileAttributes(configPath.c_str()) == INVALID_FILE_ATTRIBUTES)
     {
-        LPTSTR pBuffer;
-        FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
-            NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
-        debug(pBuffer);
-        LocalFree(pBuffer);
-        goto IniConfig_read_error;
+        if (CreateDirectory(configPath.c_str(), NULL) == 0)
+        {
+            LPTSTR pBuffer;
+            FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
+            debug(pBuffer);
+            LocalFree(pBuffer);
+            return;
+        }
     }
 #endif
 
     configPath.append(SEPARATOR).append(FILE_NAME);
 
-    //SID_COUT << configPath.c_str() << std::endl;
+    //debug(configPath.c_str());
+
+    iniHandler ini;
 
     // Opens an existing file or creates a new one
     if (!ini.open(configPath.c_str()))
     {
         debug(TEXT("Error reading config file!"));
-        goto IniConfig_read_error;
+        return;
     }
 
-    clear ();
-
-    // This may not exist here...
+    status = true;
     status &= readSidplay2  (ini);
     status &= readConsole   (ini);
     status &= readAudio     (ini);
     status &= readEmulation (ini);
-    ini.close ();
-
-    return;
-
-IniConfig_read_error:
-    clear ();
-    status = false;
+    ini.close();
 }

@@ -68,30 +68,8 @@ const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 
 
-uint8_t* loadRom(SID_STRING romPath, const int size, const TCHAR defaultRom[])
+uint8_t* loadRom(const SID_STRING &romPath, const int size)
 {
-    if (romPath.empty())
-    {
-        try
-        {
-            romPath = utils::getDataPath();
-        }
-        catch (utils::error const &e)
-        {
-            return 0;
-        }
-
-        romPath.append(SEPARATOR).append(TEXT("sidplayfp")).append(SEPARATOR).append(defaultRom);
-
-#if !defined _WIN32 && defined HAVE_UNISTD_H
-        if (::access(romPath.c_str(), R_OK) != 0)
-        {
-            romPath = PKGDATADIR;
-            romPath.append(defaultRom);
-        }
-#endif
-    }
-
     SID_IFSTREAM is(romPath.c_str(), std::ios::binary);
 
     if (is.is_open())
@@ -101,22 +79,53 @@ uint8_t* loadRom(SID_STRING romPath, const int size, const TCHAR defaultRom[])
             uint8_t *buffer = new uint8_t[size];
 
             is.read((char*)buffer, size);
-            if (is.fail())
-                goto error;
-
-            is.close();
-            return buffer;
+            if (!is.fail())
+            {
+                is.close();
+                return buffer;
+            }
+            delete [] buffer;
         }
-        catch (std::bad_alloc const &ba)
-        {
-            goto error;
-        }
+        catch (std::bad_alloc const &ba) {}
     }
 
-error:
-    is.close();
     return 0;
 }
+
+
+uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[])
+{
+    // Try to load given rom
+    if (!romPath.empty())
+    {
+        uint8_t* buffer = loadRom(romPath, size);
+        if (buffer)
+            return buffer;
+    }
+
+    // Fallback to default rom path
+    try
+    {
+        SID_STRING dataPath(utils::getDataPath());
+
+        dataPath.append(SEPARATOR).append(TEXT("sidplayfp")).append(SEPARATOR).append(defaultRom);
+
+#if !defined _WIN32 && defined HAVE_UNISTD_H
+        if (::access(dataPath.c_str(), R_OK) != 0)
+        {
+            dataPath = PKGDATADIR;
+            dataPath.append(defaultRom);
+        }
+#endif
+
+        return loadRom(dataPath, size);
+    }
+    catch (utils::error const &e)
+    {
+        return 0;
+    }
+}
+
 
 ConsolePlayer::ConsolePlayer (const char * const name) :
     Event("External Timer\n"),
