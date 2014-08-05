@@ -73,15 +73,17 @@ bool iniHandler::open(const TCHAR *fName)
     if (!iniFile.is_open())
     {
         // Try creating new file
-        SID_WOFSTREAM newIniFile(fName);
-        if (newIniFile.is_open())
-        {
 #ifdef _WIN32
-            // Remove readonly attribute if present
-            SetFileAttributes(fName, GetFileAttributes(fName) & ~FILE_ATTRIBUTE_READONLY);
-#endif
+        const HANDLE h = CreateFile(fName, GENERIC_READ|GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+        if (h != INVALID_HANDLE_VALUE)
+        {
+            CloseHandle(h);
             return true;
         }
+#else
+        SID_WOFSTREAM newIniFile(fName);
+        return newIniFile.is_open();
+#endif
         return false;
     }
 
