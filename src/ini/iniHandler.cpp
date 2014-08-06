@@ -175,6 +175,11 @@ bool iniHandler::write(const TCHAR *fName)
 {
     SID_WOFSTREAM iniFile(fName);
 
+#ifdef _WIN32
+    // On Windows XP it seems that opening an ofstream sets the read-only attribute
+    SetFileAttributes(fName, GetFileAttributes(fName) & ~FILE_ATTRIBUTE_READONLY);
+#endif
+
     if (!iniFile.is_open())
     {
         return false;
