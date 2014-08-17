@@ -455,7 +455,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
 #endif
 
     // Configure engine with settings
-    if (m_engine.config (m_engCfg) < 0)
+    if (!m_engine.config (m_engCfg))
     {   // Config failed
         displayError (m_engine.error ());
         return -1;
