@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [1.3.0], [], [], [http://sourceforge.net/projects/sidplay-residfp/])
+AC_INIT([sidplayfp], [1.4.0alpha], [], [], [http://sourceforge.net/projects/sidplay-residfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -24,20 +24,17 @@ AC_C_BIGENDIAN
 
 dnl Audio subsystem
 
-audiodrv_libadd=""
 AUDIO_LDFLAGS=""
 
 PKG_CHECK_MODULES(ALSA,
     [alsa >= 1.0],
-    [AC_DEFINE([HAVE_ALSA], 1, [Define to 1 if you have libasound (-lasound).])
-    audiodrv_libadd="$audiodrv_libadd ./audio/alsa/libalsa.a"],
+    [AC_DEFINE([HAVE_ALSA], 1, [Define to 1 if you have libasound (-lasound).])],
     [AC_MSG_WARN([$ALSA_PKG_ERRORS])]
 )
 
 PKG_CHECK_MODULES(PULSE,
     [libpulse-simple >= 1.0],
-    [AC_DEFINE([HAVE_PULSE], 1, [Define to 1 if you have libpulse-simple (-lpulse-simple).])
-    audiodrv_libadd="$audiodrv_libadd ./audio/pulse/libpulse.a"],
+    [AC_DEFINE([HAVE_PULSE], 1, [Define to 1 if you have libpulse-simple (-lpulse-simple).])],
     [AC_MSG_WARN([$PULSE_PKG_ERRORS])]
 )
 
@@ -49,34 +46,24 @@ sys/soundcard.h soundcard.h])
 AC_CHECK_HEADERS([dsound.h mmsystem.h], [], [], [#include <windows.h>])
 
 AS_IF([test "$ac_cv_header_dsound_h" = "yes"],
-    [audiodrv_libadd="$audiodrv_libadd ./audio/directx/libdirectx.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -ldsound -ldxguid"]
+    [AUDIO_LDFLAGS="$AUDIO_LDFLAGS -ldsound -ldxguid"]
 )
 
 AS_IF([test "$ac_cv_header_mmsystem_h" = "yes"],
-    [audiodrv_libadd="$audiodrv_libadd ./audio/mmsystem/libmmsystem.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lwinmm"]
+    [AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lwinmm"]
 )
 
 # NetBSD/OpenBSD OSS audio emulation
 AS_IF([test "x$ac_cv_header_soundcard_h" = "xyes"],
-    [audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"
-    AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lossaudio"]
-)
-
-AS_IF([test "x$ac_cv_header_machine_soundcard_h" = "xyes" -o "x$ac_cv_header_linux_soundcard_h" = "xyes" -o "x$ac_cv_header_sys_soundcard_h" = "xyes"],
-    [audiodrv_libadd="$audiodrv_libadd ./audio/oss/liboss.a"]
+    [AUDIO_LDFLAGS="$AUDIO_LDFLAGS -lossaudio"]
 )
 
 AC_SUBST(AUDIO_LDFLAGS)
 
-AUDIO_DRV="$audiodrv_libadd"
-AC_SUBST(AUDIO_DRV)
-
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
-PKG_CHECK_MODULES(SIDPLAYFP,[libsidplayfp >= 1.0])
-PKG_CHECK_MODULES(STILVIEW,[libstilview >= 1.0])
+PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
+PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 # hack?
 saveCPPFLAGS=$CPPFLAGS
@@ -87,29 +74,16 @@ AC_CHECK_HEADERS([sidplayfp/builders/residfp.h sidplayfp/builders/resid.h sidpla
 CPPFLAGS=$saveCPPFLAGS
 
 AC_MSG_CHECKING([for debugging])
-AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@default=no@:>@])],
+AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@no/yes, default=no@:>@])],
  [], [enable_debug=no])
 
 AS_IF([test "x$enable_debug" = "xno"],
   [AC_MSG_RESULT([Build without debugging messages]); debug_flags=-DNDEBUG]
 )
 
-AC_SUBST([debug_flags])
-
 
 AC_CONFIG_FILES([
 Makefile
-doc/Makefile
-doc/en/Makefile
-src/Makefile
-src/audio/Makefile
-src/audio/alsa/Makefile
-src/audio/directx/Makefile
-src/audio/mmsystem/Makefile
-src/audio/null/Makefile
-src/audio/oss/Makefile
-src/audio/pulse/Makefile
-src/audio/wav/Makefile
 ])
 
 AC_OUTPUT

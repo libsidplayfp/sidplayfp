@@ -26,6 +26,8 @@
 #  include "config.h"
 #endif
 
+#include <string>
+
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/event.h>
@@ -116,7 +118,7 @@ private:
     player_state_t     m_state;
     const char*        m_outfile;
     EventContext      *m_context;
-    const char*        m_filename;
+    std::string        m_filename;
 
     IniConfig          m_iniCfg;
     SidDatabase        m_database;
