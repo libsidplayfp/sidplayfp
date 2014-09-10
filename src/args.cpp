@@ -382,11 +382,29 @@ int ConsolePlayer::args (int argc, const char *argv[])
 
     // Load the tune
     m_filename = argv[infile];
-    m_tune.load (m_filename);
+    m_tune.load(m_filename.c_str());
     if (!m_tune.getStatus())
     {
-        displayError (m_tune.statusString());
-        return -1;
+        // Try prepending HVSC_BASE
+        const char* hvscBase = getenv("HVSC_BASE");
+        if (hvscBase == 0)
+        {
+            displayError(m_tune.statusString());
+            return -1;
+        }
+
+        // TODO escape slashes on Windows ?
+        std::string newFileName(hvscBase);
+
+        newFileName.append(m_filename); //TODO add separator
+        m_tune.load(newFileName.c_str());
+        if (!m_tune.getStatus())
+        {
+            displayError(m_tune.statusString());
+            return -1;
+        }
+
+        m_filename.assign(newFileName);
     }
 
     // If filename specified we can only convert one song
