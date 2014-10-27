@@ -27,6 +27,8 @@
 #include <climits>
 #include <cstdlib>
 
+#include "ini/types.h"
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -396,7 +398,12 @@ int ConsolePlayer::args (int argc, const char *argv[])
         // TODO escape slashes on Windows ?
         std::string newFileName(hvscBase);
 
-        newFileName.append(m_filename); //TODO add separator
+        if (m_filename.find(SEPARATOR) != 0)
+        {
+            newFileName.append(SEPARATOR);
+        }
+
+        newFileName.append(m_filename);
         m_tune.load(newFileName.c_str());
         if (!m_tune.getStatus())
         {
