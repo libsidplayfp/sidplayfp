@@ -64,7 +64,7 @@ $(ALSA_LIBS) \
 $(PULSE_LIBS)
 
 #=========================================================
-#stilview
+# stilview
 
 src_stilview_SOURCES = \
 src/stilview.cpp
@@ -72,9 +72,23 @@ src/stilview.cpp
 src_stilview_LDADD = \
 $(STILVIEW_LIBS)
 
+#=========================================================
+# docs
+
+EXTRA_DIST =  \
+doc/en/sidplayfp.pod \
+doc/en/sidplayfp.ini.pod \
+doc/en/stilview.pod
 
 dist_man_MANS = \
 doc/en/sidplayfp.1 \
 doc/en/sidplayfp.ini.5 \
 doc/en/stilview.1
 
+DISTCLEANFILES = $(dist_man_MANS)
+
+.pod.1:
+	pod2man -c "User Programs" -s 1 $< > $@
+
+.pod.5:
+	pod2man -c "File formats" -s 5 $< > $@
