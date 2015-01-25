@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2014 Leandro Nini
+ * Copyright 2011-2015 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -234,7 +234,7 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
         return false;
 
     int time;
-    size_t sep = str.find_first_of(':');
+    const size_t sep = str.find_first_of(':');
     try
     {
         if (sep == SID_STRING::npos)
@@ -243,15 +243,15 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
         }
         else
         {   // Read in MM:SS format
-            str.replace(sep, 1, '\0');
-            int val = dataParser::parseInt(str.c_str());
-            if (val < 0 || val > 99)
+            const int min = dataParser::parseInt(str.substr(0, sep).c_str());
+            if (min < 0 || min > 99)
                 goto IniCofig_readTime_error;
-            time = val * 60;
-            val  = dataParser::parseInt(str.c_str()+sep + 1);
-            if (val < 0 || val > 59)
+            time = min * 60;
+
+            const int sec  = dataParser::parseInt(str.substr(sep + 1).c_str());
+            if (sec < 0 || sec > 59)
                 goto IniCofig_readTime_error;
-            time += val;
+            time += sec;
         }
     }
     catch (dataParser::parseError const &e)
