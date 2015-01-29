@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2013 Leandro Nini
+ * Copyright 2011-2015 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -387,11 +387,13 @@ int ConsolePlayer::args (int argc, const char *argv[])
     m_tune.load(m_filename.c_str());
     if (!m_tune.getStatus())
     {
+        std::string errorString(m_tune.statusString());
+
         // Try prepending HVSC_BASE
         const char* hvscBase = getenv("HVSC_BASE");
         if (hvscBase == 0)
         {
-            displayError(m_tune.statusString());
+            displayError(errorString.c_str());
             return -1;
         }
 
@@ -407,7 +409,8 @@ int ConsolePlayer::args (int argc, const char *argv[])
         m_tune.load(newFileName.c_str());
         if (!m_tune.getStatus())
         {
-            displayError(m_tune.statusString());
+            // Display error msg from original tune
+            displayError(errorString.c_str());
             return -1;
         }
 
@@ -450,6 +453,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
 
+            // FIXME use HVSC_BASE
 #if defined(WIN32) && defined(UNICODE)
             // FIXME
             char database[MAX_PATH];
