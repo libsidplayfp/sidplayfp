@@ -30,7 +30,6 @@
 
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplayfp.h>
-#include <sidplayfp/event.h>
 #include <sidplayfp/SidConfig.h>
 #include <sidplayfp/SidTuneInfo.h>
 #include <sidplayfp/SidDatabase.h>
@@ -95,7 +94,7 @@ void displayError (const char *arg0, unsigned int num);
 
 
 // Grouped global variables
-class ConsolePlayer: private Event
+class ConsolePlayer
 {
 private:
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
@@ -117,7 +116,6 @@ private:
     SidTune            m_tune;
     player_state_t     m_state;
     const char*        m_outfile;
-    EventContext      *m_context;
     std::string        m_filename;
 
     IniConfig          m_iniCfg;
@@ -197,7 +195,7 @@ private:
     void displayError   (const char *error);
     void displayError   (unsigned int num) { ::displayError (m_name, num); }
     void decodeKeys     (void);
-    void event          (void);
+    void updateDisplay();
     void emuflush       (void);
     void menu           (void);
 

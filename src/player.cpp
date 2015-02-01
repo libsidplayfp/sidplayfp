@@ -128,12 +128,10 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultR
 
 
 ConsolePlayer::ConsolePlayer (const char * const name) :
-    Event("External Timer\n"),
     m_name(name),
     m_tune(0),
     m_state(playerStopped),
     m_outfile(NULL),
-    m_context(NULL),
     m_filename(""),
     m_quietLevel(0),
     m_verboseLevel(0),
@@ -507,7 +505,6 @@ bool ConsolePlayer::open (void)
     }
 
     // Set up the play timer
-    m_context = m_engine.getEventContext();
     m_timer.stop  = 0;
     m_timer.stop += m_timer.length;
 
@@ -529,7 +526,7 @@ bool ConsolePlayer::open (void)
 
     // Update display
     menu();
-    event();
+    updateDisplay();
     return true;
 }
 
@@ -583,6 +580,8 @@ bool ConsolePlayer::play ()
 {
     if (m_state == playerRunning)
     {
+        updateDisplay();
+
         // Fill buffer
         short *buffer = m_driver.selected->buffer ();
         const uint_least32_t length = m_driver.cfg.bufSize;
@@ -647,52 +646,49 @@ void ConsolePlayer::stop ()
 
 
 // External Timer Event
-void ConsolePlayer::event (void)
+void ConsolePlayer::updateDisplay()
 {
     const uint_least32_t seconds = m_engine.time();
-    if ( !m_quietLevel )
+    if (seconds == m_timer.current)
+        return;
+
+    if (!m_quietLevel)
     {
         cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
              << ((seconds / 60) % 100) << ':' << std::setw(2)
              << std::setfill('0') << (seconds % 60) << std::flush;
     }
 
-    if (seconds != m_timer.current)
-    {
-        m_timer.current = seconds;
+    m_timer.current = seconds;
 
-        if (seconds == m_timer.start)
-        {   // Switch audio drivers.
-            m_driver.selected = m_driver.device;
-            memset (m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
-            m_speed.current = 1;
-            m_engine.fastForward (100);
-            if (m_cpudebug)
-                m_engine.debug (true, NULL);
-        }
-        else if (m_timer.stop && (seconds == m_timer.stop))
-        {
-            m_state = playerExit;
-            for (;;)
-            {
-                if (m_track.single)
-                    return;
-                // Move to next track
-                m_track.selected++;
-                if (m_track.selected > m_track.songs)
-                    m_track.selected = 1;
-                if (m_track.selected == m_track.first)
-                    return;
-                m_state = playerRestart;
-                break;
-            }
-            if (m_track.loop)
-                m_state = playerRestart;
-        }
+    if (seconds == m_timer.start)
+    {   // Switch audio drivers.
+        m_driver.selected = m_driver.device;
+        memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
+        m_speed.current = 1;
+        m_engine.fastForward(100);
+        if (m_cpudebug)
+            m_engine.debug (true, NULL);
     }
-
-    // Units in C64 clock cycles
-    m_context->schedule (*this, 900000, EVENT_CLOCK_PHI1);
+    else if (m_timer.stop && (seconds == m_timer.stop))
+    {
+        m_state = playerExit;
+        for (;;)
+        {
+            if (m_track.single)
+                return;
+            // Move to next track
+            m_track.selected++;
+            if (m_track.selected > m_track.songs)
+                m_track.selected = 1;
+            if (m_track.selected == m_track.first)
+                return;
+            m_state = playerRestart;
+            break;
+        }
+        if (m_track.loop)
+            m_state = playerRestart;
+    }
 }
 
 
