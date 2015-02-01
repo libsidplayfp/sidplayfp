@@ -382,6 +382,8 @@ int ConsolePlayer::args (int argc, const char *argv[])
         i++;  // next index
     }
 
+    const char* hvscBase = getenv("HVSC_BASE");
+
     // Load the tune
     m_filename = argv[infile];
     m_tune.load(m_filename.c_str());
@@ -390,7 +392,6 @@ int ConsolePlayer::args (int argc, const char *argv[])
         std::string errorString(m_tune.statusString());
 
         // Try prepending HVSC_BASE
-        const char* hvscBase = getenv("HVSC_BASE");
         if (hvscBase == 0)
         {
             displayError(errorString.c_str());
@@ -453,22 +454,28 @@ int ConsolePlayer::args (int argc, const char *argv[])
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
 
-            // FIXME use HVSC_BASE
+            // Try load songlength DB from HVSC_BASE
+            std::string newFileName(hvscBase);
+            newFileName.append(SEPARATOR).append("DOCUMENTS").append(SEPARATOR).append("Songlengths.txt");
+            if (!m_database.open(newFileName.c_str()))
+            {
+                // Try load user configured songlength DB
 #if defined(WIN32) && defined(UNICODE)
-            // FIXME
-            char database[MAX_PATH];
-            int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
-            if (ret >= MAX_PATH)
-                database[0] = '\0';
+                // FIXME
+                char database[MAX_PATH];
+                const int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
+                if (ret >= MAX_PATH)
+                    database[0] = '\0';
 #else
-            const char *database = (m_iniCfg.sidplay2()).database.c_str();
+                const char *database = (m_iniCfg.sidplay2()).database.c_str();
 #endif
-            if (strlen(database) != 0)
-            {   // Try loading the database specificed by the user
-                if (!m_database.open (database))
-                {
-                    displayError (m_database.error ());
-                    return -1;
+                if (strlen(database) != 0)
+                {   // Try loading the database specificed by the user
+                    if (!m_database.open(database))
+                    {
+                        displayError (m_database.error ());
+                        return -1;
+                    }
                 }
             }
         }
