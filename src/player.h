@@ -203,7 +203,8 @@ private:
 
     IAudio* getWavFile(const SidTuneInfo *tuneInfo);
 
-    bool tryOpen(const char *hvscBase);
+    inline bool tryOpenTune(const char *hvscBase);
+    inline bool tryOpenDatabase(const char *hvscBase);
 
 public:
     ConsolePlayer (const char * const name);

@@ -37,8 +37,10 @@ using std::endl;
 #  include <sidplayfp/builders/hardsid.h>
 #endif
 
-
-bool ConsolePlayer::tryOpen(const char *hvscBase)
+/**
+ * Try load SID tune from HVSC_BASE
+ */
+bool ConsolePlayer::tryOpenTune(const char *hvscBase)
 {
     std::string newFileName(hvscBase);
 
@@ -51,6 +53,17 @@ bool ConsolePlayer::tryOpen(const char *hvscBase)
 
     m_filename.assign(newFileName);
     return true;
+}
+
+/**
+ * Try load songlength DB from HVSC_BASE
+ */
+bool ConsolePlayer::tryOpenDatabase(const char *hvscBase)
+{
+    std::string newFileName(hvscBase);
+
+    newFileName.append(SEPARATOR).append("DOCUMENTS").append(SEPARATOR).append("Songlengths.txt");
+    return m_database.open(newFileName.c_str());
 }
 
 // Convert time from integer
@@ -407,7 +420,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
         std::string errorString(m_tune.statusString());
 
         // Try prepending HVSC_BASE
-        if (!hvscBase || !tryOpen(hvscBase))
+        if (!hvscBase || !tryOpenTune(hvscBase))
         {
             displayError(errorString.c_str());
             return -1;
@@ -450,10 +463,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
             if (m_driver.file)
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
 
-            // Try load songlength DB from HVSC_BASE
-            std::string newFileName(hvscBase); // FIXME check for nullptr
-            newFileName.append(SEPARATOR).append("DOCUMENTS").append(SEPARATOR).append("Songlengths.txt");
-            if (!m_database.open(newFileName.c_str()))
+            if (!hvscBase || !tryOpenDatabase(hvscBase))
             {
                 // Try load user configured songlength DB
 #if defined(WIN32) && defined(UNICODE)
