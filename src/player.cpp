@@ -591,7 +591,6 @@ bool ConsolePlayer::play ()
             if (m_engine.isPlaying ())
             {
                 m_state = playerError;
-                return false;
             }
             return false;
         }
