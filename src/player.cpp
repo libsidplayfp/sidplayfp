@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2013 Leandro Nini
+ * Copyright 2011-2015 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -670,7 +670,7 @@ void ConsolePlayer::updateDisplay()
         if (m_cpudebug)
             m_engine.debug (true, NULL);
     }
-    else if (m_timer.stop && (seconds == m_timer.stop))
+    else if (m_timer.stop && (seconds >= m_timer.stop))
     {
         m_state = playerExit;
         for (;;)
