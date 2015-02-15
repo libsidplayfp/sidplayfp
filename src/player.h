@@ -203,6 +203,8 @@ private:
 
     IAudio* getWavFile(const SidTuneInfo *tuneInfo);
 
+    bool tryOpen(const char *hvscBase);
+
 public:
     ConsolePlayer (const char * const name);
     virtual ~ConsolePlayer() {}

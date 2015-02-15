@@ -38,6 +38,21 @@ using std::endl;
 #endif
 
 
+bool ConsolePlayer::tryOpen(const char *hvscBase)
+{
+    std::string newFileName(hvscBase);
+
+    newFileName.append(SEPARATOR).append(m_filename);
+    m_tune.load(newFileName.c_str());
+    if (!m_tune.getStatus())
+    {
+        return false;
+    }
+
+    m_filename.assign(newFileName);
+    return true;
+}
+
 // Convert time from integer
 bool ConsolePlayer::parseTime (const char *str, uint_least32_t &time)
 {
@@ -392,30 +407,11 @@ int ConsolePlayer::args (int argc, const char *argv[])
         std::string errorString(m_tune.statusString());
 
         // Try prepending HVSC_BASE
-        if (hvscBase == 0)
+        if (!hvscBase || !tryOpen(hvscBase))
         {
             displayError(errorString.c_str());
             return -1;
         }
-
-        // TODO escape slashes on Windows ?
-        std::string newFileName(hvscBase);
-
-        if (m_filename.find(SEPARATOR) != 0)
-        {
-            newFileName.append(SEPARATOR);
-        }
-
-        newFileName.append(m_filename);
-        m_tune.load(newFileName.c_str());
-        if (!m_tune.getStatus())
-        {
-            // Display error msg from original tune
-            displayError(errorString.c_str());
-            return -1;
-        }
-
-        m_filename.assign(newFileName);
     }
 
     // If filename specified we can only convert one song
@@ -455,7 +451,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 m_timer.length = (m_iniCfg.sidplay2()).recordLength;
 
             // Try load songlength DB from HVSC_BASE
-            std::string newFileName(hvscBase);
+            std::string newFileName(hvscBase); // FIXME check for nullptr
             newFileName.append(SEPARATOR).append("DOCUMENTS").append(SEPARATOR).append("Songlengths.txt");
             if (!m_database.open(newFileName.c_str()))
             {
