@@ -49,7 +49,6 @@ src/audio/pulse/audiodrv.cpp \
 src/audio/pulse/audiodrv.h \
 src/audio/wav/WavFile.cpp \
 src/audio/wav/WavFile.h \
-src/ini/custom_locale.h \
 src/ini/iniHandler.h \
 src/ini/iniHandler.cpp \
 src/ini/dataParser.h \
