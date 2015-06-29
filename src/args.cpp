@@ -122,9 +122,10 @@ int ConsolePlayer::args (int argc, const char *argv[])
     m_driver.output = OUT_SOUNDCARD;
     m_driver.file   = false;
 
-    v1mute = v2mute = v3mute = false;
-    v4mute = v5mute = v6mute = false;
-    v7mute = v8mute = v9mute = false;
+    for (int i=0; i<9; i++)
+    {
+        vMute[i] = false;
+    }
 
     int  infile = 0;
     int  i      = 0;
@@ -210,18 +211,8 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 else
                 {
                     const int voice = atoi(&argv[i][2]);
-                    switch (voice)
-                    {
-                    case 1: v1mute = true; break;
-                    case 2: v2mute = true; break;
-                    case 3: v3mute = true; break;
-                    case 4: v4mute = true; break;
-                    case 5: v5mute = true; break;
-                    case 6: v6mute = true; break;
-                    case 7: v7mute = true; break;
-                    case 8: v8mute = true; break;
-                    case 9: v9mute = true; break;
-                    }
+                    if (voice > 0 && voice <= 9)
+                        vMute[voice-1] = true;
                 }
             }
 

@@ -488,15 +488,15 @@ bool ConsolePlayer::open (void)
     m_speed.current   = m_speed.max;
     m_engine.fastForward (100 * m_speed.current);
 
-    m_engine.mute(0, 0, v1mute);
-    m_engine.mute(0, 1, v2mute);
-    m_engine.mute(0, 2, v3mute);
-    m_engine.mute(1, 0, v4mute);
-    m_engine.mute(1, 1, v5mute);
-    m_engine.mute(1, 2, v6mute);
-    m_engine.mute(2, 0, v7mute);
-    m_engine.mute(2, 1, v8mute);
-    m_engine.mute(2, 2, v9mute);
+    m_engine.mute(0, 0, vMute[0]);
+    m_engine.mute(0, 1, vMute[1]);
+    m_engine.mute(0, 2, vMute[2]);
+    m_engine.mute(1, 0, vMute[3]);
+    m_engine.mute(1, 1, vMute[4]);
+    m_engine.mute(1, 2, vMute[5]);
+    m_engine.mute(2, 0, vMute[6]);
+    m_engine.mute(2, 1, vMute[7]);
+    m_engine.mute(2, 2, vMute[8]);
 
     // As yet we don't have a required songlength
     // so try the songlength database
@@ -775,48 +775,48 @@ void ConsolePlayer::decodeKeys ()
         break;
 
         case A_TOGGLE_VOICE1:
-            v1mute = !v1mute;
-            m_engine.mute(0, 0, v1mute);
+            vMute[0] = !vMute[0];
+            m_engine.mute(0, 0, vMute[0]);
         break;
 
         case A_TOGGLE_VOICE2:
-            v2mute = !v2mute;
-            m_engine.mute(0, 1, v2mute);
+            vMute[1] = !vMute[1];
+            m_engine.mute(0, 1, vMute[1]);
         break;
 
         case A_TOGGLE_VOICE3:
-            v3mute = !v3mute;
-            m_engine.mute(0, 2, v3mute);
+            vMute[2] = !vMute[2];
+            m_engine.mute(0, 2, vMute[2]);
         break;
 
         case A_TOGGLE_VOICE4:
-            v4mute = !v4mute;
-            m_engine.mute(1, 0, v4mute);
+            vMute[3] = !vMute[3];
+            m_engine.mute(1, 0, vMute[3]);
         break;
 
         case A_TOGGLE_VOICE5:
-            v5mute = !v5mute;
-            m_engine.mute(1, 1, v5mute);
+            vMute[4] = !vMute[4];
+            m_engine.mute(1, 1, vMute[4]);
         break;
 
         case A_TOGGLE_VOICE6:
-            v6mute = !v6mute;
-            m_engine.mute(1, 2, v6mute);
+            vMute[5] = !vMute[5];
+            m_engine.mute(1, 2, vMute[5]);
         break;
 
         case A_TOGGLE_VOICE7:
-            v4mute = !v7mute;
-            m_engine.mute(2, 0, v7mute);
+            vMute[6] = !vMute[6];
+            m_engine.mute(2, 0, vMute[6]);
         break;
 
         case A_TOGGLE_VOICE8:
-            v5mute = !v8mute;
-            m_engine.mute(2, 1, v8mute);
+            vMute[7] = !vMute[7];
+            m_engine.mute(2, 1, vMute[7]);
         break;
 
         case A_TOGGLE_VOICE9:
-            v6mute = !v9mute;
-            m_engine.mute(2, 2, v9mute);
+            vMute[8] = !vMute[8];
+            m_engine.mute(2, 2, vMute[8]);
         break;
 
         case A_TOGGLE_FILTER:

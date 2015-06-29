@@ -127,12 +127,9 @@ private:
 
     bool               m_cpudebug;
 
-    // FIXME this sucks! Use an array instead
-    bool    v1mute, v2mute, v3mute;
-    bool    v4mute, v5mute, v6mute;
-    bool    v7mute, v8mute, v9mute;
+    bool vMute[9];
 
-    int     m_precision;
+    int  m_precision;
 
     struct m_filter_t
     {
