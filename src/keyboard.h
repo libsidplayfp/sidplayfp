@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012 Leandro Nini
+ * Copyright 2012-2015 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,6 +52,9 @@ enum
     A_TOGGLE_VOICE4,
     A_TOGGLE_VOICE5,
     A_TOGGLE_VOICE6,
+    A_TOGGLE_VOICE7,
+    A_TOGGLE_VOICE8,
+    A_TOGGLE_VOICE9,
     A_TOGGLE_FILTER
 };
 

@@ -244,8 +244,11 @@ void ConsolePlayer::menu ()
         cerr << ", Model = ";
         cerr << getModel(tuneInfo->sidModel1());
         cerr << endl;
-        
+#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+        if (tuneInfo->sidChips() > 1)
+#else
         if (tuneInfo->isStereo())
+#endif
         {
             consoleTable  (tableMiddle);
             consoleColour (yellow, true);
@@ -254,6 +257,18 @@ void ConsolePlayer::menu ()
             cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2() << dec;
             cerr << ", Model = " << getModel(tuneInfo->sidModel2());
             cerr << endl;
+#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+            if (tuneInfo->sidChips() > 2)
+            {
+                consoleTable  (tableMiddle);
+                consoleColour (yellow, true);
+                cerr << "              : ";
+                consoleColour (white, false);
+                cerr << "3rd SID = $" << hex << tuneInfo->sidChipBase(2) << dec;
+                cerr << ", Model = " << getModel(tuneInfo->sidModel(2));
+                cerr << endl;
+            }
+#endif
         }
 
         if (m_verboseLevel > 1)

@@ -494,6 +494,9 @@ bool ConsolePlayer::open (void)
     m_engine.mute(1, 0, v4mute);
     m_engine.mute(1, 1, v5mute);
     m_engine.mute(1, 2, v6mute);
+    m_engine.mute(2, 0, v7mute);
+    m_engine.mute(2, 1, v8mute);
+    m_engine.mute(2, 2, v9mute);
 
     // As yet we don't have a required songlength
     // so try the songlength database
@@ -799,6 +802,21 @@ void ConsolePlayer::decodeKeys ()
         case A_TOGGLE_VOICE6:
             v6mute = !v6mute;
             m_engine.mute(1, 2, v6mute);
+        break;
+
+        case A_TOGGLE_VOICE7:
+            v4mute = !v7mute;
+            m_engine.mute(2, 0, v7mute);
+        break;
+
+        case A_TOGGLE_VOICE8:
+            v5mute = !v8mute;
+            m_engine.mute(2, 1, v8mute);
+        break;
+
+        case A_TOGGLE_VOICE9:
+            v6mute = !v9mute;
+            m_engine.mute(2, 2, v9mute);
         break;
 
         case A_TOGGLE_FILTER:

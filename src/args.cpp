@@ -124,6 +124,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
 
     v1mute = v2mute = v3mute = false;
     v4mute = v5mute = v6mute = false;
+    v7mute = v8mute = v9mute = false;
 
     int  infile = 0;
     int  i      = 0;
@@ -156,6 +157,13 @@ int ConsolePlayer::args (int argc, const char *argv[])
                 if (!parseAddress (&argv[i][3], m_engCfg.secondSidAddress))
                     err = true;
             }
+#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+            else if (strncmp (&argv[i][1], "ts", 2) == 0)
+            {   // Override sidTune and enable the third sid
+                if (!parseAddress (&argv[i][3], m_engCfg.thirdSidAddress))
+                    err = true;
+            }
+#endif
             else if (argv[i][1] == 'f')
             {
                 if (argv[i][2] == '\0')
@@ -210,6 +218,9 @@ int ConsolePlayer::args (int argc, const char *argv[])
                     case 4: v4mute = true; break;
                     case 5: v5mute = true; break;
                     case 6: v6mute = true; break;
+                    case 7: v7mute = true; break;
+                    case 8: v8mute = true; break;
+                    case 9: v9mute = true; break;
                     }
                 }
             }
@@ -523,6 +534,9 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -ds<addr>    set second sid address (e.g. -ds0xd420)" << endl
+#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+        << " -ts<addr>    set third sid address (e.g. -ts0xd440)" << endl
+#endif
 
         << " -u<num>      mute voice <num> (e.g. -u1 -u2)" << endl
 

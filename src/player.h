@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2014 Leandro Nini
+ * Copyright 2011-2015 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -127,8 +127,10 @@ private:
 
     bool               m_cpudebug;
 
+    // FIXME this sucks! Use an array instead
     bool    v1mute, v2mute, v3mute;
     bool    v4mute, v5mute, v6mute;
+    bool    v7mute, v8mute, v9mute;
 
     int     m_precision;
 

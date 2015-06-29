@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012 Leandro Nini
+ * Copyright 2012-2015 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -84,6 +84,9 @@ static char keytable[] =
     '4',0,                  A_TOGGLE_VOICE4,
     '5',0,                  A_TOGGLE_VOICE5,
     '6',0,                  A_TOGGLE_VOICE6,
+    '7',0,                  A_TOGGLE_VOICE7,
+    '8',0,                  A_TOGGLE_VOICE8,
+    '9',0,                  A_TOGGLE_VOICE9,
     'f',0,                  A_TOGGLE_FILTER,
 
     // General Keys
