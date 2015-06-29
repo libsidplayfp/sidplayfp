@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2014 Leandro Nini
+ * Copyright 2011-2015 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -242,7 +242,11 @@ void ConsolePlayer::menu ()
         cerr << "Filter = "
              << ((m_filter.enabled == true) ? "Yes" : "No");
         cerr << ", Model = ";
+#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+        cerr << getModel(tuneInfo->sidModel(0));
+#else
         cerr << getModel(tuneInfo->sidModel1());
+#endif
         cerr << endl;
 #if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
         if (tuneInfo->sidChips() > 1)
@@ -254,8 +258,13 @@ void ConsolePlayer::menu ()
             consoleColour (yellow, true);
             cerr << "              : ";
             consoleColour (white, false);
+#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase(1) << dec;
+            cerr << ", Model = " << getModel(tuneInfo->sidModel(1));
+#else
             cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2() << dec;
             cerr << ", Model = " << getModel(tuneInfo->sidModel2());
+#endif
             cerr << endl;
 #if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
             if (tuneInfo->sidChips() > 2)
