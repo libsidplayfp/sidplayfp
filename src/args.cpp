@@ -27,7 +27,7 @@
 #include <climits>
 #include <cstdlib>
 
-#include "ini/types.h"
+//#include "ini/types.h"
 
 using std::cout;
 using std::cerr;
@@ -36,6 +36,9 @@ using std::endl;
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #  include <sidplayfp/builders/hardsid.h>
 #endif
+
+#undef SEPARATOR
+#define SEPARATOR "/"
 
 /**
  * Try load SID tune from HVSC_BASE
