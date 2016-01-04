@@ -39,6 +39,7 @@ No filter emulation.  This will reduce CPU overhead at the cost
 of reduced sound quality.
 
 =item B<-o>I<< <num> >>
+
 Select track number (default: preset).
 
 =item B<-s>
@@ -171,7 +172,7 @@ Quit player.
 
 =item Up/Down Arrows
 
-Increase/decrease playback speed.
+Increase/reset playback speed.
 
 =item Left/Right Arrows
 
