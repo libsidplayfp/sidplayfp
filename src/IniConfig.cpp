@@ -129,6 +129,7 @@ bool IniConfig::readDouble(iniHandler &ini, const TCHAR *key, double &result)
     }
     catch (dataParser::parseError const &e)
     {
+        debug(TEXT("Error parsing double"));
         return false;
     }
 
@@ -151,6 +152,7 @@ bool IniConfig::readInt(iniHandler &ini, const TCHAR *key, int &result)
     }
     catch (dataParser::parseError const &e)
     {
+        debug(TEXT("Error parsing int"));
         return false;
     }
 
@@ -162,8 +164,10 @@ bool IniConfig::readString(iniHandler &ini, const TCHAR *key, SID_STRING &result
 {
     const TCHAR* value = ini.getValue(key);
     if (value == 0)
-    {   // Doesn't exist, add it
+    {
+        // Doesn't exist, add it
         ini.addValue(key, TEXT(""));
+        debug(TEXT("Key doesn't exist"));
         return false;
     }
 
@@ -187,6 +191,7 @@ bool IniConfig::readBool(iniHandler &ini, const TCHAR *key, bool &result)
     }
     catch (dataParser::parseError const &e)
     {
+        debug(TEXT("Error parsing bool"));
         return false;
     }
 
@@ -219,6 +224,7 @@ bool IniConfig::readChar(iniHandler &ini, const TCHAR *key, char &ch)
         }
         catch (dataParser::parseError const &e)
         {
+            debug(TEXT("Error parsing int"));
             return false;
         }
     }
@@ -261,6 +267,7 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
     }
     catch (dataParser::parseError const &e)
     {
+        debug(TEXT("Error parsing time"));
         return false;
     }
 
@@ -268,6 +275,7 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
     return ret;
 
 IniCofig_readTime_error:
+    debug(TEXT("Invalid time"));
     return false;
 }
 
@@ -448,7 +456,7 @@ void IniConfig::read()
             LPTSTR pBuffer;
             FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
-            debug(pBuffer);
+            error(pBuffer);
             LocalFree(pBuffer);
             return;
         }
