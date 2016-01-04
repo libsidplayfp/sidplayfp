@@ -348,7 +348,7 @@ void ConsolePlayer::menu ()
     if (m_driver.file)
         cerr << "Creating audio file, please wait...";
     else
-        cerr << "Playing, press ^C to stop...";
+        cerr << "Playing, press ESC to stop...";
 
     // Get all the text to the screen so music playback
     // is not disturbed.
