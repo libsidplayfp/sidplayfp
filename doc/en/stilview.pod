@@ -705,7 +705,7 @@ Current maintainer.
 
 =item Copyright (C) 1998, 2002 LaLa
 
-=item Copyright (C) 2012-2014 Leandro Nini
+=item Copyright (C) 2012-2016 Leandro Nini
 
 =back
 
