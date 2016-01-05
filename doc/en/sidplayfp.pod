@@ -39,6 +39,7 @@ No filter emulation.  This will reduce CPU overhead at the cost
 of reduced sound quality.
 
 =item B<-o>I<< <num> >>
+
 Select track number (default: preset).
 
 =item B<-s>
@@ -148,6 +149,41 @@ Use Antti Lankila's reSIDfp emulation engine.
 Use HardSID device.
 
 =back
+
+=head1 Key bindings
+
+=over
+
+=item 1-9
+
+Mute/unmute voice.
+
+=item f
+
+Toggle filter.
+
+=item p
+
+Pause/unpause playback.
+
+=item Esc
+
+Quit player.
+
+=item Up/Down Arrows
+
+Increase/reset playback speed.
+
+=item Left/Right Arrows
+
+Move to previous/next subtune.
+
+=item Home/End Arrows
+
+Go to first/last subtune.
+
+=back
+
 
 =head1 ENVIRONMENT VARIABLES
 

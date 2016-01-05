@@ -81,6 +81,7 @@ AS_IF([test "x$enable_debug" = "xno"],
   [AC_MSG_RESULT([Build without debugging messages]); debug_flags=-DNDEBUG]
 )
 
+AC_SUBST([debug_flags])
 
 AC_CONFIG_FILES([
 Makefile
