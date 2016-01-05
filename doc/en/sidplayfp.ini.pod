@@ -276,9 +276,9 @@ Wrote the originla man page.
 
 =item Copyright (C) 2007-2010 Antti Lankila
 
-=item Copyright (C) 2009-2014 VICE Project
+=item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2014 Leandro Nini
+=item Copyright (C) 2010-2016 Leandro Nini
 
 =back
 
