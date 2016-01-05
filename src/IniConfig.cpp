@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2015 Leandro Nini
+ * Copyright 2011-2016 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -47,11 +47,16 @@
 #include "utils.h"
 #include "ini/dataParser.h"
 
-void debug(const TCHAR *msg)
+inline void debug(const TCHAR *msg)
 {
 #ifndef NDEBUG
     SID_COUT << msg << std::endl;
 #endif
+}
+
+inline void error(const TCHAR *msg)
+{
+    SID_CERR << msg << std::endl;
 }
 
 const TCHAR *IniConfig::DIR_NAME  = TEXT("sidplayfp");
@@ -417,9 +422,11 @@ void IniConfig::read()
     }
     catch (utils::error const &e)
     {
-        debug(TEXT("Cannot get config path!"));
+        error(TEXT("Cannot get config path!"));
         return;
     }
+
+    debug(configPath.c_str());
 
     configPath.append(SEPARATOR).append(DIR_NAME);
 
@@ -429,7 +436,7 @@ void IniConfig::read()
     {
         if (mkdir(configPath.c_str(), 0755) < 0)
         {
-            debug(strerror(errno));
+            error(strerror(errno));
             return;
         }
     }
@@ -450,14 +457,12 @@ void IniConfig::read()
 
     configPath.append(SEPARATOR).append(FILE_NAME);
 
-    //debug(configPath.c_str());
-
     iniHandler ini;
 
     // Opens an existing file or creates a new one
     if (!ini.open(configPath.c_str()))
     {
-        debug(TEXT("Error reading config file!"));
+        error(TEXT("Error reading config file!"));
         return;
     }
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2014 Leandro Nini
+ * Copyright 2014-2016 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,10 +32,12 @@
 #  define SID_STRING std::wstring
 #  define SID_STRINGTREAM std::wstringstream
 #  define SID_COUT std::wcout
+#  define SID_CERR std::wcerr
 #else
 #  define SID_STRING std::string
 #  define SID_STRINGTREAM std::stringstream
 #  define SID_COUT std::cout
+#  define SID_CERR std::cerr
 #endif
 
 #ifndef _WIN32
