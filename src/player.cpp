@@ -67,6 +67,11 @@ const char ConsolePlayer::RESID_ID[] = "ReSID";
 const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 #endif
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+#   include <sidplayfp/builders/exsid.h>
+const char ConsolePlayer::EXSID_ID[] = "exSID";
+#endif
+
 
 uint8_t* loadRom(const SID_STRING &romPath, const int size)
 {
@@ -185,6 +190,13 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
             else if (emulation.engine.compare(TEXT("HARDSID")) == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
+                m_driver.output = OUT_NULL;
+            }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+            else if (emulation.engine.compare(TEXT("EXSID")) == 0)
+            {
+                m_driver.sid    = EMU_EXSID;
                 m_driver.output = OUT_NULL;
             }
 #endif
@@ -416,6 +428,23 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+    case EMU_EXSID:
+    {
+        try
+        {
+            exSIDBuilder *hs = new exSIDBuilder( EXSID_ID );
+
+            m_engCfg.sidEmulation = hs;
+            if (!hs->getStatus()) goto createSidEmu_error;
+            hs->create ((m_engine.info ()).maxsids());
+            if (!hs->getStatus()) goto createSidEmu_error;
+        }
+        catch (std::bad_alloc const &ba) {}
+        break;
+    }
+#endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+
     default:
         // Emulation Not yet handled
         // This default case results in the default
@@ -571,7 +600,12 @@ void ConsolePlayer::emuflush ()
     case EMU_HARDSID:
         ((HardSIDBuilder *)m_engCfg.sidEmulation)->flush ();
         break;
-#endif // HAVE_LIBHARDSID_BUILDER
+#endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+    case EMU_EXSID:
+        ((exSIDBuilder *)m_engCfg.sidEmulation)->flush ();
+        break;
+#endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
     default:
         break;
     }

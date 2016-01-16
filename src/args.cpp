@@ -37,6 +37,10 @@ using std::endl;
 #  include <sidplayfp/builders/hardsid.h>
 #endif
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+#  include <sidplayfp/builders/exsid.h>
+#endif
+
 /**
  * Try load SID tune from HVSC_BASE
  */
@@ -370,6 +374,14 @@ int ConsolePlayer::args (int argc, const char *argv[])
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+            else if (strcmp (&argv[i][1], "-exsid") == 0)
+            {
+                m_driver.sid    = EMU_EXSID;
+                m_driver.output = OUT_NULL;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+
             // These are for debug
             else if (strcmp (&argv[i][1], "-none") == 0)
             {
@@ -570,6 +582,13 @@ void ConsolePlayer::displayArgs (const char *arg)
         HardSIDBuilder hs("");
         if (hs.availDevices ())
             out << " --hardsid    enable hardsid support" << endl;
+    }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+    {
+        exSIDBuilder hs("");
+        if (hs.availDevices ())
+            out << " --exsid      enable exsid support" << endl;
     }
 #endif
     out << endl

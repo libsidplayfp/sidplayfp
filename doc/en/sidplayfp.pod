@@ -148,6 +148,10 @@ Use Antti Lankila's reSIDfp emulation engine.
 
 Use HardSID device.
 
+=item B<--exsid>
+
+Use exSID device.
+
 =back
 
 =head1 Key bindings

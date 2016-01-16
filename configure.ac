@@ -69,7 +69,10 @@ PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 saveCPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"
 
-AC_CHECK_HEADERS([sidplayfp/builders/residfp.h sidplayfp/builders/resid.h sidplayfp/builders/hardsid.h])
+AC_CHECK_HEADERS([sidplayfp/builders/residfp.h \
+sidplayfp/builders/resid.h \
+sidplayfp/builders/hardsid.h \
+sidplayfp/builders/exsid.h])
 
 CPPFLAGS=$saveCPPFLAGS
 

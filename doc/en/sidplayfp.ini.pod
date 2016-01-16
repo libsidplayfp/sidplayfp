@@ -164,7 +164,7 @@ output.
 
 =over
 
-=item B<Engine>=I<< <RESIDFP|RESID|HARDSID|NONE> >>
+=item B<Engine>=I<< <RESIDFP|RESID|HARDSID|EXSID|NONE> >>
 
 Set the SID emulation engine. Default is RESIDFP.
 

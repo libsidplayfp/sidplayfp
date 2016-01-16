@@ -68,7 +68,7 @@ typedef enum
     /* The following require a soundcard */
     EMU_DEFAULT, EMU_RESIDFP, EMU_RESID,
     /* The following should disable the soundcard */
-    EMU_HARDSID, EMU_SIDSTATION, EMU_COMMODORE,
+    EMU_HARDSID, EMU_EXSID, EMU_SIDSTATION, EMU_COMMODORE,
     EMU_SIDSYN, EMU_END} SIDEMUS;
 
 typedef enum
@@ -105,6 +105,9 @@ private:
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     static const char  HARDSID_ID[];
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+    static const char  EXSID_ID[];
 #endif
 #ifdef HAVE_TSID
     TSID               m_tsid;
