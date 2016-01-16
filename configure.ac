@@ -7,7 +7,15 @@ AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE
 
 
+
 AC_CANONICAL_HOST
+case "$host" in
+    *mingw32* )
+        MINGW32=yes
+        ;;
+esac
+AM_CONDITIONAL([MINGW32], [test "x$MINGW32" = "xyes"])
+
 
 AC_PROG_RANLIB
 

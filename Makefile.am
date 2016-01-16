@@ -1,6 +1,10 @@
 
 AUTOMAKE_OPTIONS = foreign subdir-objects
 
+if MINGW32
+  W32_CPPFLAGS = -DWIN32_LEAN_AND_MEAN
+endif
+
 
 AM_CPPFLAGS = \
 -I $(top_builddir) \
@@ -9,6 +13,7 @@ $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \
 $(ALSA_CFLAGS) \
 $(PULSE_CFLAGS) \
+${W32_CPPFLAGS} \
 @debug_flags@
 
 
