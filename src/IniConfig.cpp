@@ -47,10 +47,10 @@
 #include "utils.h"
 #include "ini/dataParser.h"
 
-inline void debug(const TCHAR *msg)
+inline void debug(const TCHAR *msg, const TCHAR *val)
 {
 #ifndef NDEBUG
-    SID_COUT << msg << std::endl;
+    SID_COUT << msg << val << std::endl;
 #endif
 }
 
@@ -129,7 +129,7 @@ bool IniConfig::readDouble(iniHandler &ini, const TCHAR *key, double &result)
     }
     catch (dataParser::parseError const &e)
     {
-        debug(TEXT("Error parsing double"));
+        debug(TEXT("Error parsing double at "), key);
         return false;
     }
 
@@ -152,7 +152,7 @@ bool IniConfig::readInt(iniHandler &ini, const TCHAR *key, int &result)
     }
     catch (dataParser::parseError const &e)
     {
-        debug(TEXT("Error parsing int"));
+        debug(TEXT("Error parsing int at "), key);
         return false;
     }
 
@@ -167,7 +167,7 @@ bool IniConfig::readString(iniHandler &ini, const TCHAR *key, SID_STRING &result
     {
         // Doesn't exist, add it
         ini.addValue(key, TEXT(""));
-        debug(TEXT("Key doesn't exist"));
+        debug(TEXT("Key doesn't exist: "), key);
         return false;
     }
 
@@ -191,7 +191,7 @@ bool IniConfig::readBool(iniHandler &ini, const TCHAR *key, bool &result)
     }
     catch (dataParser::parseError const &e)
     {
-        debug(TEXT("Error parsing bool"));
+        debug(TEXT("Error parsing bool at "), key);
         return false;
     }
 
@@ -224,7 +224,7 @@ bool IniConfig::readChar(iniHandler &ini, const TCHAR *key, char &ch)
         }
         catch (dataParser::parseError const &e)
         {
-            debug(TEXT("Error parsing int"));
+            debug(TEXT("Error parsing int at "), key);
             return false;
         }
     }
@@ -267,7 +267,7 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
     }
     catch (dataParser::parseError const &e)
     {
-        debug(TEXT("Error parsing time"));
+        debug(TEXT("Error parsing time at "), key);
         return false;
     }
 
@@ -275,7 +275,7 @@ bool IniConfig::readTime(iniHandler &ini, const TCHAR *key, int &value)
     return ret;
 
 IniCofig_readTime_error:
-    debug(TEXT("Invalid time"));
+    debug(TEXT("Invalid time at "), key);
     return false;
 }
 
@@ -434,7 +434,7 @@ void IniConfig::read()
         return;
     }
 
-    debug(configPath.c_str());
+    debug(TEXT("Config path: "), configPath.c_str());
 
     configPath.append(SEPARATOR).append(DIR_NAME);
 
@@ -464,6 +464,8 @@ void IniConfig::read()
 #endif
 
     configPath.append(SEPARATOR).append(FILE_NAME);
+
+    debug(TEXT("Config file: "), configPath.c_str());
 
     iniHandler ini;
 
