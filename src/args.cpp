@@ -588,7 +588,7 @@ void ConsolePlayer::displayArgs (const char *arg)
     {
         exSIDBuilder hs("");
         if (hs.availDevices ())
-            out << " --exsid      enable exsid support" << endl;
+            out << " --exsid      enable exSID support" << endl;
     }
 #endif
     out << endl
