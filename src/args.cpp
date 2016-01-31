@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2015 Leandro Nini
+ * Copyright 2011-2016 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -40,6 +40,10 @@ using std::endl;
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
 #  include <sidplayfp/builders/exsid.h>
 #endif
+
+// Wide-chars are not yet supported here
+#undef SEPARATOR
+#define SEPARATOR "/"
 
 /**
  * Try load SID tune from HVSC_BASE
