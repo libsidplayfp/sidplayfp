@@ -2,6 +2,7 @@
  * This file is part of sidplayfp, a console SID player.
  *
  * Copyright 2000 Simon White
+ * Copyright 2013-2016 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +34,11 @@
 #include "directx/audiodrv.h"
 #include "mmsystem/audiodrv.h"
 
-// Make sure that a sound driver was used
+// Warn if a sound driver is not found
+// and fall back to the null driver
 #ifndef AudioDriver
-#  warning Audio hardware not recognised, please check configuration files.
+#  warning Audio hardware not recognised, only null driver will be available.
+#  include "null/null.h"
 #endif
 
 bool audioDrv::open(AudioConfig &cfg)
@@ -73,6 +76,13 @@ bool audioDrv::open(AudioConfig &cfg)
     if(!res)
     {
         audio.reset(new Audio_MMSystem());
+        res = audio->open(cfg);
+    }
+#endif
+#ifndef AudioDriver
+    if(!res)
+    {
+        audio.reset(new Audio_Null());
         res = audio->open(cfg);
     }
 #endif
