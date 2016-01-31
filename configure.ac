@@ -25,6 +25,8 @@ AC_PROG_CXX
 dnl Use C++ for tests.
 AC_LANG([C++])
 
+SID_CXX_COMPILE_STDCXX_11
+
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN
