@@ -1,6 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
+ * Copyright 2016 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,7 +26,7 @@
 #  include "config.h"
 #endif
 
-#ifdef HAVE_HARDSID
+#if defined(HAVE_SIDPLAYFP_BUILDERS_HARDSID_H) || defined(HAVE_SIDPLAYFP_BUILDERS_EXSID_H)
 #  ifndef AudioDriver
 #    define AudioDriver Audio_Null
 #  endif
@@ -34,7 +35,7 @@
 #include "../AudioBase.h"
 
 /*
- * Null audio driver used for hardsid
+ * Null audio driver used for hardsid, exSID
  * and songlength detection
  */
 class Audio_Null: public AudioBase
