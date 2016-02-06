@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2015 Leandro Nini
+ * Copyright 2011-2016 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -432,6 +432,7 @@ const char* ConsolePlayer::getModel (SidTuneInfo::model_t model)
 {
     switch (model)
     {
+    default:
     case SidTuneInfo::SIDMODEL_UNKNOWN:
         return "UNKNOWN";
     case SidTuneInfo::SIDMODEL_6581:
