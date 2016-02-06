@@ -39,6 +39,7 @@
 #ifndef AudioDriver
 #  warning Audio hardware not recognised, only null driver will be available.
 #  include "null/null.h"
+#  define HAVE_NULL
 #endif
 
 bool audioDrv::open(AudioConfig &cfg)
@@ -79,7 +80,7 @@ bool audioDrv::open(AudioConfig &cfg)
         res = audio->open(cfg);
     }
 #endif
-#ifndef AudioDriver
+#ifdef HAVE_NULL
     if(!res)
     {
         audio.reset(new Audio_Null());
