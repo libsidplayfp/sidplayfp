@@ -110,9 +110,9 @@ static char keytable[] =
  */
 static int keyboard_search (char *cmd)
 {
-    register char *p;
-    register char *q;
-    register int   a;
+    char *p;
+    char *q;
+    int   a;
 
     for (p = keytable, q = cmd;;  p++, q++)
     {
