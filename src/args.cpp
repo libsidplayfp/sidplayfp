@@ -29,6 +29,8 @@
 
 #include "ini/types.h"
 
+#include "sidcxx11.h"
+
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -140,7 +142,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
     bool err    = false;
 
     // parse command line arguments
-    while ((i < argc) && (argv[i] != NULL))
+    while ((i < argc) && (argv[i] != nullptr))
     {
         if ((argv[i][0] == '-') && (argv[i][1] != '\0'))
         {
@@ -446,7 +448,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
     }
 
     // If filename specified we can only convert one song
-    if (m_outfile != NULL)
+    if (m_outfile != nullptr)
         m_track.single = true;
 
     // Can only loop if not creating audio files

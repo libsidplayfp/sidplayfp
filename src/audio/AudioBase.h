@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
+ * Copyright 2013-2016 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,8 @@
 
 #include "IAudio.h"
 #include "AudioConfig.h"
+
+#include "sidcxx11.h"
 
 class AudioBase : public IAudio
 {
@@ -62,17 +64,17 @@ protected:
 public:
     AudioBase(const char* name) :
         _backendName(name),
-        _sampleBuffer(NULL) {}
+        _sampleBuffer(nullptr) {}
     virtual ~AudioBase() {}
 
-    short *buffer() const { return _sampleBuffer; }
+    short *buffer() const override { return _sampleBuffer; }
 
-    void getConfig(AudioConfig &cfg) const
+    void getConfig(AudioConfig &cfg) const override
     {
         cfg = _settings;
     }
 
-    const char *getErrorString() const
+    const char *getErrorString() const override
     {
         return _errorString.c_str();
     }

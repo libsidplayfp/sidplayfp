@@ -8,6 +8,7 @@ endif
 
 AM_CPPFLAGS = \
 -I $(top_builddir) \
+-I $(top_srcdir)/src \
 -DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \

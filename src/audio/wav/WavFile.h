@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a SID player.
  *
- * Copyright 2011-2013 Leandro Nini <drfiemost@users.sourceforge.net>
+ * Copyright 2011-2016 Leandro Nini <drfiemost@users.sourceforge.net>
  * Copyright 2007-2010 Antti Lankila
  * Copyright 2000-2004 Simon White
  * Copyright 2000 Michael Schwendt
@@ -81,14 +81,14 @@ public:
     // If number of sample bytes is given, this can speed up the
     // process of closing a huge file on slow storage media.
 
-    bool open(AudioConfig &cfg);
+    bool open(AudioConfig &cfg) override;
 
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
-    bool write();
-    void close();
-    void pause() {}
-    void reset() {}
+    bool write() override;
+    void close() override;
+    void pause() override {}
+    void reset() override {}
 
     // Stream state.
     bool fail() const { return (file->fail() != 0); }

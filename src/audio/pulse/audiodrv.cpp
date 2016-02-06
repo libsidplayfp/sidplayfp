@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
+ * Copyright 2013-2016 Leandro Nini
  * Copyright 2008 Antti Lankila
  *
  * This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,7 @@ Audio_Pulse::~Audio_Pulse()
 
 void Audio_Pulse::outOfOrder()
 {
-    _sampleBuffer = NULL;
+    _sampleBuffer = nullptr;
     clearError();
 }
 
@@ -54,14 +54,14 @@ bool Audio_Pulse::open(AudioConfig &cfg)
     // Set sample precision and type of encoding.
     int err;
     _audioHandle = pa_simple_new(
-        NULL,
+        nullptr,
         "sidplayfp",
         PA_STREAM_PLAYBACK,
-        NULL,
+        nullptr,
         "sidplayfp",
         &pacfg,
-        NULL,
-        NULL,
+        nullptr,
+        nullptr,
         &err
     );
 
@@ -92,7 +92,7 @@ bool Audio_Pulse::open(AudioConfig &cfg)
 
         if (_audioHandle)
             pa_simple_free(_audioHandle);
-        _audioHandle = NULL;
+        _audioHandle = nullptr;
 
         return false;
     }
@@ -102,13 +102,13 @@ bool Audio_Pulse::open(AudioConfig &cfg)
 // reset any variables that reflect the current state.
 void Audio_Pulse::close()
 {
-    if (_audioHandle != NULL)
+    if (_audioHandle != nullptr)
     {
         pa_simple_free(_audioHandle);
-        _audioHandle = NULL;
+        _audioHandle = nullptr;
     }
 
-    if (_sampleBuffer != NULL)
+    if (_sampleBuffer != nullptr)
     {
         delete [] _sampleBuffer;
         outOfOrder ();
@@ -117,7 +117,7 @@ void Audio_Pulse::close()
 
 bool Audio_Pulse::write()
 {
-    if (_audioHandle == NULL)
+    if (_audioHandle == nullptr)
     {
         setError("Device not open.");
         return false;

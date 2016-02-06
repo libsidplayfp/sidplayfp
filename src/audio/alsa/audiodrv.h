@@ -49,11 +49,11 @@ public:  // --------------------------------------------------------- public
     Audio_ALSA();
     ~Audio_ALSA();
 
-    bool open  (AudioConfig &cfg);
-    void close ();
-    void reset () {}
-    bool write ();
-    void pause () {}
+    bool open  (AudioConfig &cfg) override;
+    void close () override;
+    void reset () override {}
+    bool write () override;
+    void pause () override {}
 };
 
 #endif // HAVE_ALSA

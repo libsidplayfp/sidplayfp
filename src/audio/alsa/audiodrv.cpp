@@ -41,7 +41,7 @@ void Audio_ALSA::outOfOrder()
 {
     // Reset everything.
     clearError();
-    _audioHandle = NULL;
+    _audioHandle = nullptr;
 }
 
 void Audio_ALSA::checkResult(int err)
@@ -58,7 +58,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 
     try
     {
-        if (_audioHandle != NULL)
+        if (_audioHandle != nullptr)
         {
             throw error("Device already in use");
         }
@@ -116,7 +116,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 
         if (hw_params)
             snd_pcm_hw_params_free(hw_params);
-        if (_audioHandle != NULL)
+        if (_audioHandle != nullptr)
             close();
 
         return false;
@@ -127,7 +127,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 // reset any variables that reflect the current state.
 void Audio_ALSA::close()
 {
-    if (_audioHandle != NULL)
+    if (_audioHandle != nullptr)
     {
         snd_pcm_close(_audioHandle);
         delete[] _sampleBuffer;
@@ -137,7 +137,7 @@ void Audio_ALSA::close()
 
 bool Audio_ALSA::write()
 {
-    if (_audioHandle == NULL)
+    if (_audioHandle == nullptr)
     {
         setError("Device not open.");
         return false;

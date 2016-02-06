@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a SID player.
  *
- * Copyright 2011-2013 Leandro Nini <drfiemost@users.sourceforge.net>
+ * Copyright 2011-2016 Leandro Nini <drfiemost@users.sourceforge.net>
  * Copyright 2007-2010 Antti Lankila
  * Copyright 2000-2004 Simon White
  * Copyright 2000 Michael Schwendt
@@ -88,7 +88,7 @@ WavFile::WavFile(const char *name) :
     AudioBase("WAVFILE"),
     name(name),
     wavHdr(defaultWavHdr),
-    file(0),
+    file(nullptr),
     headerWritten(false),
     precision(32)
 {}
@@ -192,7 +192,7 @@ void WavFile::close()
             file->write((char*)&wavHdr, sizeof(wavHeader));
             delete file;
         }
-        file = 0;
+        file = nullptr;
         delete[] _sampleBuffer;
     }
 }

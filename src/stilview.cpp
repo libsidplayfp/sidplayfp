@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012 Leandro Nini
+ * Copyright 2012-2016 Leandro Nini
  * Copyright 1998, 2002 LaLa <LaLa@C64.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -32,9 +32,11 @@
 
 #include <stilview/stil.h>
 
+#include "sidcxx11.h"
+
 STIL myStil;
-char *hvscLoc = NULL;
-char *entryStr = NULL;
+char *hvscLoc = nullptr;
+char *entryStr = nullptr;
 int tuneNo = 0;
 STIL::STILField field = STIL::all;
 bool showBug = true;
@@ -120,14 +122,14 @@ char *getArgValue(char *argStr)
 {
     char *temp = (char *)strchr(argStr, '=');
 
-    if (temp == NULL)
+    if (temp == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
 
     if (*(temp+1) == '\0')
     {
-        return NULL;
+        return nullptr;
     }
 
     return (temp+1);
@@ -148,7 +150,7 @@ void processArguments(int argc, char **argv)
                 case 'e':
                 case 'E':
                     entryStr = getArgValue(argv[i]);
-                    if (entryStr == NULL) {
+                    if (entryStr == nullptr) {
                         cerr << "ERROR: STIL entry was not specified correctly!" << endl;
                         printUsage();
                     }
@@ -165,7 +167,7 @@ void processArguments(int argc, char **argv)
                 case 'L':
                 {
                     char *tempLoc = getArgValue(argv[i]);
-                    if (tempLoc != NULL) {
+                    if (tempLoc != nullptr) {
                         hvscLoc = tempLoc;
                     }
                 }
@@ -174,7 +176,7 @@ void processArguments(int argc, char **argv)
                 case 'T':
                 {
                     char *tuneStr = getArgValue(argv[i]);
-                    if (tuneStr == NULL) {
+                    if (tuneStr == nullptr) {
                         cerr << "ERROR: tune number was not specified correctly!" << endl;
                         printUsage();
                     }
@@ -201,7 +203,7 @@ void processArguments(int argc, char **argv)
                 case 'F':
                 {
                     char *fieldStr = getArgValue(argv[i]);
-                    if (fieldStr == NULL) {
+                    if (fieldStr == nullptr) {
                         cerr << "ERROR: field was not specified correctly!" << endl;
                         printUsage();
                     }
@@ -251,7 +253,7 @@ void processArguments(int argc, char **argv)
 
 void checkArguments(void)
 {
-    if (hvscLoc == NULL)
+    if (hvscLoc == nullptr)
     {
         if (interactive || demo)
         {
@@ -275,7 +277,7 @@ void checkArguments(void)
         }
     }
 
-    if (entryStr == NULL)
+    if (entryStr == nullptr)
     {
         if ((!interactive) && (!demo))
         {
@@ -320,10 +322,10 @@ int main(int argc, char **argv)
     }
     else
     {
-        if (showVersion && (hvscLoc == NULL))
+        if (showVersion && (hvscLoc == nullptr))
         {
             versionPtr = myStil.getVersion();
-            if (versionPtr == NULL)
+            if (versionPtr == nullptr)
             {
                 cerr << "ERROR: No STIL version string was found!" << endl;
             }
@@ -352,7 +354,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            versionPtr = NULL;
+            versionPtr = nullptr;
         }
 
         if (showSection) {
@@ -360,7 +362,7 @@ int main(int argc, char **argv)
         }
         else
         {
-            sectionPtr = NULL;
+            sectionPtr = nullptr;
         }
 
         if (showEntry)
@@ -368,7 +370,7 @@ int main(int argc, char **argv)
             entryPtr = myStil.getEntry(entryStr, tuneNo, field);
         }
         else {
-            entryPtr = NULL;
+            entryPtr = nullptr;
         }
 
         if (showBug)
@@ -376,38 +378,38 @@ int main(int argc, char **argv)
             bugPtr = myStil.getBug(entryStr, tuneNo);
         }
         else {
-            bugPtr = NULL;
+            bugPtr = nullptr;
         }
 
-        if (versionPtr != NULL)
+        if (versionPtr != nullptr)
         {
-            if ((sectionPtr != NULL) || (entryPtr != NULL) || (bugPtr != NULL))
+            if ((sectionPtr != nullptr) || (entryPtr != nullptr) || (bugPtr != nullptr))
             {
                 cout << "--- STILView  VERSION ---" << endl;
             }
             cout << versionPtr;
         }
 
-        if (sectionPtr != NULL)
+        if (sectionPtr != nullptr)
         {
-            if ((versionPtr != NULL) || (entryPtr != NULL) || (bugPtr != NULL))
+            if ((versionPtr != nullptr) || (entryPtr != nullptr) || (bugPtr != nullptr))
             {
                 cout << "---- GLOBAL  COMMENT ----" << endl;
             }
             cout << sectionPtr;
         }
 
-        if (entryPtr != NULL)
+        if (entryPtr != nullptr)
         {
-            if ((versionPtr != NULL) || (sectionPtr != NULL) || (bugPtr != NULL))
+            if ((versionPtr != nullptr) || (sectionPtr != nullptr) || (bugPtr != nullptr))
             {
                 cout << "------ STIL  ENTRY ------" << endl;
             }
             cout << entryPtr;
         }
 
-        if (bugPtr != NULL) {
-            if ((versionPtr != NULL) || (sectionPtr != NULL) || (entryPtr != NULL))
+        if (bugPtr != nullptr) {
+            if ((versionPtr != nullptr) || (sectionPtr != nullptr) || (entryPtr != nullptr))
             {
                 cout << "---------- BUG ----------" << endl;
             }
@@ -428,7 +430,7 @@ int main(int argc, char **argv)
         // This gets printed regardless.
 
         versionPtr = myStil.getVersion();
-        if (versionPtr == NULL)
+        if (versionPtr == nullptr)
         {
             cerr << "ERROR: No STIL version string was found!" << endl;
         }
@@ -482,7 +484,7 @@ int main(int argc, char **argv)
                     cout << "---- ONE STRING ----" << endl;
 
                     versionPtr = myStil.getVersion();
-                    if (versionPtr == NULL)
+                    if (versionPtr == nullptr)
                     {
                         cerr << "ERROR: No STIL version string was found!" << endl;
                     }
@@ -531,7 +533,7 @@ int main(int argc, char **argv)
 
             tmpptr = myStil.getAbsGlobalComment(temp);
 
-            if (tmpptr == NULL)
+            if (tmpptr == nullptr)
             {
                 cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
             }
@@ -544,7 +546,7 @@ int main(int argc, char **argv)
 
             tmpptr = myStil.getAbsEntry(temp, 0, STIL::comment);
 
-            if (tmpptr == NULL)
+            if (tmpptr == nullptr)
             {
                 cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
             }
@@ -558,7 +560,7 @@ int main(int argc, char **argv)
 
             tmpptr = myStil.getAbsEntry(temp, 1, STIL::all);
 
-            if (tmpptr == NULL)
+            if (tmpptr == nullptr)
             {
                 cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
             }
@@ -571,7 +573,7 @@ int main(int argc, char **argv)
 
             tmpptr = myStil.getAbsBug(temp, tuneNo);
 
-            if (tmpptr == NULL)
+            if (tmpptr == nullptr)
             {
                 cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
             }
@@ -593,7 +595,7 @@ int main(int argc, char **argv)
 
                 tmpptr = myStil.getAbsEntry(temp, tuneNo, STIL::all);
 
-                if (tmpptr == NULL)
+                if (tmpptr == nullptr)
                 {
                     cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
                 }

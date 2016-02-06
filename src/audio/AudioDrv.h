@@ -30,7 +30,7 @@
 class audioDrv : public IAudio
 {
 private:
-    std::auto_ptr<AudioBase> audio;
+    std::unique_ptr<AudioBase> audio;
 
 public:
     virtual ~audioDrv() {}

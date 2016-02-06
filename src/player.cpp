@@ -45,6 +45,8 @@ using std::endl;
 #include "audio/wav/WavFile.h"
 #include "ini/types.h"
 
+#include "sidcxx11.h"
+
 #include <sidplayfp/sidbuilder.h>
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
@@ -94,7 +96,7 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size)
         catch (std::bad_alloc const &ba) {}
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -127,14 +129,14 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultR
     }
     catch (utils::error const &e)
     {
-        return 0;
+        return nullptr;
     }
 }
 
 
 ConsolePlayer::ConsolePlayer (const char * const name) :
     m_name(name),
-    m_tune(0),
+    m_tune(nullptr),
     m_state(playerStopped),
     m_outfile(NULL),
     m_filename(""),
@@ -207,7 +209,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         }
     }
 
-    createOutput (OUT_NULL, NULL);
+    createOutput (OUT_NULL, nullptr);
     createSidEmu (EMU_NONE);
 
     uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
@@ -224,7 +226,7 @@ IAudio* ConsolePlayer::getWavFile(const SidTuneInfo *tuneInfo)
     const char *title = m_outfile;
 
     // Generate a name for the wav file
-    if (title == NULL)
+    if (title == nullptr)
     {
         title = tuneInfo->dataFileName();
         const size_t length = strlen(title);
@@ -258,11 +260,11 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     // Remove old audio driver
     m_driver.null.close ();
     m_driver.selected = &m_driver.null;
-    if (m_driver.device != NULL)
+    if (m_driver.device != nullptr)
     {
         if (m_driver.device != &m_driver.null)
             delete m_driver.device;
-        m_driver.device = NULL;
+        m_driver.device = nullptr;
     }
 
     // Create audio driver
@@ -279,7 +281,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         }
         catch (std::bad_alloc const &ba)
         {
-            m_driver.device = 0;
+            m_driver.device = nullptr;
         }
     break;
 
@@ -290,7 +292,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         }
         catch (std::bad_alloc const &ba)
         {
-            m_driver.device = 0;
+            m_driver.device = nullptr;
         }
     break;
 
@@ -362,7 +364,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     if (m_engCfg.sidEmulation)
     {
         sidbuilder *builder   = m_engCfg.sidEmulation;
-        m_engCfg.sidEmulation = NULL;
+        m_engCfg.sidEmulation = nullptr;
         m_engine.config (m_engCfg);
         delete builder;
     }
@@ -471,7 +473,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
 createSidEmu_error:
     displayError (m_engCfg.sidEmulation->error ());
     delete m_engCfg.sidEmulation;
-    m_engCfg.sidEmulation = NULL;
+    m_engCfg.sidEmulation = nullptr;
     return false;
 }
 
@@ -575,9 +577,9 @@ void ConsolePlayer::close ()
         m_driver.selected->reset ();
 
     // Shutdown drivers, etc
-    createOutput    (OUT_NULL, NULL);
+    createOutput    (OUT_NULL, nullptr);
     createSidEmu    (EMU_NONE);
-    m_engine.load   (NULL);
+    m_engine.load   (nullptr);
     m_engine.config (m_engCfg);
 
     if (m_quietLevel < 2)
@@ -704,7 +706,7 @@ void ConsolePlayer::updateDisplay()
         m_speed.current = 1;
         m_engine.fastForward(100);
         if (m_cpudebug)
-            m_engine.debug (true, NULL);
+            m_engine.debug (true, nullptr);
     }
     else if (m_timer.stop && (seconds >= m_timer.stop))
     {

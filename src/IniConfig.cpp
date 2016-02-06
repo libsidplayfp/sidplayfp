@@ -47,6 +47,8 @@
 #include "utils.h"
 #include "ini/dataParser.h"
 
+#include "sidcxx11.h"
+
 inline void debug(const TCHAR *msg, const TCHAR *val)
 {
 #ifndef NDEBUG
@@ -62,7 +64,7 @@ inline void error(const TCHAR *msg)
 const TCHAR *IniConfig::DIR_NAME  = TEXT("sidplayfp");
 const TCHAR *IniConfig::FILE_NAME = TEXT("sidplayfp.ini");
 
-#define SAFE_FREE(p) { if(p) { free (p); (p)=NULL; } }
+#define SAFE_FREE(p) { if(p) { free (p); (p)=nullptr; } }
 
 IniConfig::IniConfig() :
     status(true)

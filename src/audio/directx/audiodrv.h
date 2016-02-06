@@ -70,12 +70,12 @@ public:  // --------------------------------------------------------- public
 
     // This first one assumes progrm is built as a
     // console application
-    bool open  (AudioConfig &cfg);
+    bool open  (AudioConfig &cfg) override;
     bool open  (AudioConfig &cfg, HWND hwnd);
-    void close ();
-    void reset ();
-    bool write ();
-    void pause ();
+    void close () override;
+    void reset () override;
+    bool write () override;
+    void pause () override;
 };
 
 #endif // HAVE_DIRECTX_H

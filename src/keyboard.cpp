@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012-2015 Leandro Nini
+ * Copyright 2012-2016 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  */
 
 #include "keyboard.h"
+
+#include "sidcxx11.h"
 
 #ifndef _WIN32
 // Unix console headers
@@ -229,7 +231,7 @@ int _kbhit (void)
         // See if key has been pressed
         FD_ZERO (&rdfs);
         FD_SET  (infd, &rdfs);
-        if (select  (infd + 1, &rdfs, NULL, NULL, &tv) <= 0)
+        if (select  (infd + 1, &rdfs, nullptr, nullptr, &tv) <= 0)
             return 0;
         if (FD_ISSET (infd, &rdfs))
             return 1;
