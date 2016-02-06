@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2015 Leandro Nini
+ * Copyright 2011-2016 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -491,7 +491,7 @@ bool ConsolePlayer::open (void)
 
     // Select the required song
     m_track.selected = m_tune.selectSong (m_track.selected);
-    if (m_engine.load (&m_tune) < 0)
+    if (!m_engine.load (&m_tune))
     {
         displayError (m_engine.error ());
         return false;
