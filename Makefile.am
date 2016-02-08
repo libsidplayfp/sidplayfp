@@ -35,6 +35,7 @@ src/main.cpp \
 src/menu.cpp \
 src/player.cpp \
 src/player.h \
+src/sidcxx11.h \
 src/utils.cpp \
 src/utils.h \
 src/audio/AudioBase.h \
