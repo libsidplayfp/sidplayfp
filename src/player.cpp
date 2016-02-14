@@ -530,21 +530,21 @@ bool ConsolePlayer::open (void)
     m_engine.mute(2, 2, vMute[8]);
 
     // As yet we don't have a required songlength
-    // so try the songlength database
+    // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-        const int_least32_t length = m_database.length (m_tune);
+        const int_least32_t length = m_database.length(m_tune);
         if (length > 0)
             m_timer.length = length;
     }
 
     // Set up the play timer
-    m_timer.stop  = 0;
-    m_timer.stop += m_timer.length;
+    m_timer.stop = m_timer.length;
 
     if (m_timer.valid)
     {   // Length relative to start
-        m_timer.stop += m_timer.start;
+        if (m_timer.stop > 0)
+            m_timer.stop += m_timer.start;
     }
     else
     {   // Check to make start time dosen't exceed end
