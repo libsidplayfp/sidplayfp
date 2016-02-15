@@ -455,7 +455,7 @@ int ConsolePlayer::args (int argc, const char *argv[])
         m_track.songs = 1;
 
     // If user provided no time then load songlength database
-    // and set default lengths incase it's not found in there.
+    // and set default lengths in case it's not found in there.
     {
         if (m_driver.file && m_timer.valid && !m_timer.length)
         {   // Time of 0 provided for wav generation
@@ -464,9 +464,9 @@ int ConsolePlayer::args (int argc, const char *argv[])
         }
         if (!m_timer.valid)
         {
-            m_timer.length = (m_iniCfg.sidplay2()).playLength;
-            if (m_driver.file)
-                m_timer.length = (m_iniCfg.sidplay2()).recordLength;
+            m_timer.length = m_driver.file
+                ? (m_iniCfg.sidplay2()).recordLength
+                : (m_iniCfg.sidplay2()).playLength;
 
             if (!hvscBase || !tryOpenDatabase(hvscBase))
             {
