@@ -3,7 +3,7 @@ AC_INIT([sidplayfp], [1.5.0alpha], [], [], [http://sourceforge.net/projects/sidp
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([src/config.h])
 AM_INIT_AUTOMAKE
 
 
