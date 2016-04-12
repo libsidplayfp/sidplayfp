@@ -70,7 +70,7 @@ private:
     int precision;
 
 public:
-    WavFile(const char *name);
+    WavFile(const std::string &name);
     ~WavFile() { close(); }
 
     static const char *extension () { return ".wav"; }

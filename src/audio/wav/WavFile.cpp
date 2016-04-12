@@ -84,7 +84,7 @@ const wavHeader WavFile::defaultWavHdr = {
     {0x64,0x61,0x74,0x61}, {0,0,0,0}
 };
 
-WavFile::WavFile(const char *name) :
+WavFile::WavFile(const std::string &name) :
     AudioBase("WAVFILE"),
     name(name),
     wavHdr(defaultWavHdr),

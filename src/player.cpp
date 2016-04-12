@@ -223,32 +223,27 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
 IAudio* ConsolePlayer::getWavFile(const SidTuneInfo *tuneInfo)
 {
-    const char *title = m_outfile;
+    std::string title;
 
-    // Generate a name for the wav file
-    if (title == nullptr)
+    if (m_outfile != NULL)
     {
+        title = m_outfile;
+    }
+    else
+    {
+        // Generate a name for the wav file
         title = tuneInfo->dataFileName();
-        const size_t length = strlen(title);
-        size_t i = length;
-        while (i > 0)
-        {
-            if (title[--i] == '.')
-                break;
-        }
-        if (!i) i = length;
 
-        std::string name(title, i);
+        title.erase(title.find_last_of('.'));
 
         // Change name based on subtune
         if (tuneInfo->songs() > 1)
         {
             std::ostringstream sstream;
             sstream << "[" << tuneInfo->currentSong() << "]";
-            name.append(sstream.str());
+            title.append(sstream.str());
         }
-        name.append(WavFile::extension());
-        title = name.c_str();
+        title.append(WavFile::extension());
     }
 
     return new WavFile(title);
