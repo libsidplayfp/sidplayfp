@@ -200,13 +200,13 @@ approximately -500 to 500, the default value is 0.
 =item B<FilterCurve6581>=I<< <number> >>
 
 Controls the filter curve for the 6581 model in the ReSIDfp
-emulation.  Ranges from 0.0 (light) to 1.0 (dark), the default
+emulation.  Ranges from 0.0 (light) to 1.0 (dark), the default.
 value is 0.5.
 
 =item B<FilterCurve8580>=I<< <number> >>
 
 Controls the filter curve for the 8580 model in the ReSIDfp
-emulation.  Value is expressed in Hertz and the default is 12500.
+emulation.  Ranges from 0.0 (light) to 1.0 (dark), the default.
 
 =back
 

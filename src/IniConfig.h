@@ -74,7 +74,7 @@ public:
         bool          filter;
         double        bias;
         double        filterCurve6581;
-        int           filterCurve8580;
+        double        filterCurve8580;
     };
 
 protected:

@@ -140,7 +140,7 @@ private:
         double         bias;
         // Filter parameters for reSIDfp
         double         filterCurve6581;
-        int            filterCurve8580;
+        double         filterCurve8580;
 
         bool           enabled;
     } m_filter;

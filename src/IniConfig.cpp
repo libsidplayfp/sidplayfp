@@ -112,7 +112,7 @@ void IniConfig::clear()
 
     emulation_s.bias            = 0.0;
     emulation_s.filterCurve6581 = 0.0;
-    emulation_s.filterCurve8580 = 0;
+    emulation_s.filterCurve8580 = 0.0;
 }
 
 
@@ -414,7 +414,7 @@ bool IniConfig::readEmulation(iniHandler &ini)
 
     ret &= readDouble (ini, TEXT("FilterBias"), emulation_s.bias);
     ret &= readDouble (ini, TEXT("FilterCurve6581"), emulation_s.filterCurve6581);
-    ret &= readInt (ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
+    ret &= readDouble (ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 
     return ret;
 }
