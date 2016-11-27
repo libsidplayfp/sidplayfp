@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [2.0.0alpha1], [], [], [http://sourceforge.net/projects/sidplay-residfp/])
+AC_INIT([sidplayfp], [2.0.0alpha3], [], [], [http://sourceforge.net/projects/sidplay-residfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -72,7 +72,7 @@ AC_SUBST(AUDIO_LDFLAGS)
 
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
-PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
+PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 # hack?
