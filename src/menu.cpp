@@ -68,7 +68,9 @@ void ConsolePlayer::menu ()
     consoleTable  (tableMiddle);
     consoleColour (white, false);
     {
-        cerr << setw(19) << "Sidplayfp" << " V" << VERSION << ", ";
+        size_t len = 11 + strlen(VERSION) + 2 + strlen(info.name()) + 3
+            + strlen(info.version());
+        cerr << setw(62 - len) << "Sidplayfp" << " V" << VERSION << ", ";
         cerr << (char) toupper (*info.name());
         cerr << info.name() + 1 << " V" << info.version() << endl;
     }
