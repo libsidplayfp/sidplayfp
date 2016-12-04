@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <string>
 
 using std::cout;
 using std::cerr;
@@ -35,6 +36,7 @@ using std::hex;
 using std::flush;
 using std::setw;
 using std::setfill;
+using std::string;
 
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
@@ -68,9 +70,10 @@ void ConsolePlayer::menu ()
     consoleTable  (tableMiddle);
     consoleColour (white, false);
     {
-        cerr << setw(19) << "Sidplayfp" << " V" << VERSION << ", ";
-        cerr << (char) toupper (*info.name());
-        cerr << info.name() + 1 << " V" << info.version() << endl;
+        string version;
+        version.reserve(54);
+        version.append("Sidplayfp V" VERSION ", ").append(1, toupper(*info.name())).append(info.name() + 1).append(" V").append(info.version());
+        cerr << setw(54/2 + version.length()/2) << version << endl;
     }
 
     const unsigned int n = tuneInfo->numberOfInfoStrings();
