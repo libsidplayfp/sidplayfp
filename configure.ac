@@ -75,6 +75,12 @@ AC_CHECK_FUNCS([strncasecmp strcasecmp])
 PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
+USE_LIBOUT123=no
+AC_ARG_WITH([out123], AS_HELP_STRING([--with-out123], [Build with out123 library (default: disabled)]))
+AS_IF([test "x$with_out123" = "xyes"], [PKG_CHECK_MODULES([OUT123], [libout123 >= 0.1], [USE_LIBOUT123=yes])])
+
+AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
+
 # hack?
 saveCPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"

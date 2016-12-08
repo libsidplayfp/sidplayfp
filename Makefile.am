@@ -5,6 +5,11 @@ if MINGW32
   W32_CPPFLAGS = -DWIN32_LEAN_AND_MEAN
 endif
 
+if USE_LIBOUT123
+  OUT123_SOURCES = \
+src/audio/out123/audiodrv.cpp \
+src/audio/out123/audiodrv.h
+endif
 
 AM_CPPFLAGS = \
 -I $(top_builddir)/src \
@@ -14,6 +19,7 @@ $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \
 $(ALSA_CFLAGS) \
 $(PULSE_CFLAGS) \
+$(OUT123_CFLAGS) \
 ${W32_CPPFLAGS} \
 @debug_flags@
 
@@ -53,6 +59,7 @@ src/audio/null/null.cpp \
 src/audio/null/null.h \
 src/audio/oss/audiodrv.cpp \
 src/audio/oss/audiodrv.h \
+$(OUT123_SOURCES) \
 src/audio/pulse/audiodrv.cpp \
 src/audio/pulse/audiodrv.h \
 src/audio/wav/WavFile.cpp \
@@ -68,7 +75,8 @@ $(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
-$(PULSE_LIBS)
+$(PULSE_LIBS) \
+$(OUT123_LIBS)
 
 #=========================================================
 # stilview
