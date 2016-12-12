@@ -77,7 +77,13 @@ PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 USE_LIBOUT123=no
 AC_ARG_WITH([out123], AS_HELP_STRING([--with-out123], [Build with out123 library (default: disabled)]))
-AS_IF([test "x$with_out123" = "xyes"], [PKG_CHECK_MODULES([OUT123], [libout123 >= 0.1], [USE_LIBOUT123=yes])])
+AS_IF([test "x$with_out123" = "xyes"],
+    [PKG_CHECK_MODULES([OUT123],
+        [libout123 >= 1],
+        [USE_LIBOUT123=yes
+        AC_DEFINE([HAVE_OUT123], [1], [Use libout123])]
+    )]
+)
 
 AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
 
