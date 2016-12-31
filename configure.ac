@@ -13,6 +13,9 @@ case "$host" in
     *mingw32* )
         MINGW32=yes
         ;;
+    *darwin* )
+        MACOSX=yes
+        ;;
 esac
 AM_CONDITIONAL([MINGW32], [test "x$MINGW32" = "xyes"])
 
@@ -77,7 +80,8 @@ PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 USE_LIBOUT123=no
 AC_ARG_WITH([out123], AS_HELP_STRING([--with-out123], [Build with out123 library (default: disabled)]))
-AS_IF([test "x$with_out123" = "xyes"],
+# enable ou123 by default only on Mac OSX since we don't have any audio backend there
+AS_IF([test "x$MACOSX" = "xyes" -o "x$with_out123" = "xyes"],
     [PKG_CHECK_MODULES([OUT123],
         [libout123 >= 1],
         [USE_LIBOUT123=yes
