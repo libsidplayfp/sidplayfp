@@ -279,7 +279,7 @@ Wrote the originla man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2016 Leandro Nini
+=item Copyright (C) 2010-2017 Leandro Nini
 
 =back
 
