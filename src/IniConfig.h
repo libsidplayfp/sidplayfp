@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2014 Leandro Nini
+ * Copyright 2011-2017 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -78,10 +78,6 @@ public:
     };
 
 protected:
-    static const TCHAR *DIR_NAME;
-    static const TCHAR *FILE_NAME;
-
-    bool      status;
     struct    sidplay2_section  sidplay2_s;
     struct    console_section   console_s;
     struct    audio_section     audio_s;
@@ -107,7 +103,6 @@ public:
     ~IniConfig ();
 
     void read ();
-    operator bool () { return status; }
 
     // Sidplayfp Specific Section
     const sidplay2_section&  sidplay2  () { return sidplay2_s; }

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2016 Leandro Nini
+ * Copyright 2011-2017 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -61,13 +61,11 @@ inline void error(const TCHAR *msg)
     SID_CERR << msg << std::endl;
 }
 
-const TCHAR *IniConfig::DIR_NAME  = TEXT("sidplayfp");
-const TCHAR *IniConfig::FILE_NAME = TEXT("sidplayfp.ini");
+const TCHAR *DIR_NAME = TEXT("sidplayfp");
+const TCHAR *FILE_NAME = TEXT("sidplayfp.ini");
 
-#define SAFE_FREE(p) { if(p) { free (p); (p)=nullptr; } }
 
-IniConfig::IniConfig() :
-    status(true)
+IniConfig::IniConfig()
 {   // Initialise everything else
     clear();
 }
@@ -422,7 +420,6 @@ bool IniConfig::readEmulation(iniHandler &ini)
 void IniConfig::read()
 {
     clear();
-    status = false;
 
     SID_STRING configPath;
 
@@ -478,7 +475,7 @@ void IniConfig::read()
         return;
     }
 
-    status = true;
+    bool status = true;
     status &= readSidplay2  (ini);
     status &= readConsole   (ini);
     status &= readAudio     (ini);
