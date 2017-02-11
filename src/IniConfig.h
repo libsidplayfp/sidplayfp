@@ -59,7 +59,7 @@ public:
 
     struct audio_section
     {   // INI Section - [Audio]
-        long frequency;
+        int frequency;
         SidConfig::playback_t playback;
         int  precision;
     };
@@ -86,17 +86,10 @@ protected:
 protected:
     void  clear ();
 
-    static bool readInt    (iniHandler &ini, const TCHAR *key, int &value);
-    static bool readDouble (iniHandler &ini, const TCHAR *key, double &value);
-    static bool readString (iniHandler &ini, const TCHAR *key, SID_STRING &str);
-    static bool readBool   (iniHandler &ini, const TCHAR *key, bool &boolean);
-    static bool readChar   (iniHandler &ini, const TCHAR *key, char &ch);
-    static bool readTime   (iniHandler &ini, const TCHAR *key, int  &time);
-
-    bool readSidplay2  (iniHandler &ini);
-    bool readConsole   (iniHandler &ini);
-    bool readAudio     (iniHandler &ini);
-    bool readEmulation (iniHandler &ini);
+    void readSidplay2  (iniHandler &ini);
+    void readConsole   (iniHandler &ini);
+    void readAudio     (iniHandler &ini);
+    void readEmulation (iniHandler &ini);
 
 public:
     IniConfig  ();
