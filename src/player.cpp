@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2016 Leandro Nini
+ * Copyright 2011-2017 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -113,6 +113,16 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultR
     // Fallback to default rom path
     try
     {
+#ifdef _WIN32
+        {
+            // Try exec dir first
+            SID_STRING execPath(utils::getExecPath());
+            execPath.append(SEPARATOR).append(defaultRom);
+            uint8_t* buffer = loadRom(execPath, size);
+            if (buffer)
+                return buffer;
+        }
+#endif
         SID_STRING dataPath(utils::getDataPath());
 
         dataPath.append(SEPARATOR).append(TEXT("sidplayfp")).append(SEPARATOR).append(defaultRom);

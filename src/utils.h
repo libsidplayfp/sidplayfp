@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
+ * Copyright 2013-2017 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,10 @@ public:
     static SID_STRING getDataPath();
     
     static SID_STRING getConfigPath();
+
+#ifdef _WIN32
+    static SID_STRING getExecPath();
+#endif
 };
 
 #endif

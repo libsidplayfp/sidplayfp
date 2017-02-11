@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013-2014 Leandro Nini
+ * Copyright 2013-2017 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,12 +25,22 @@
 #ifdef _WIN32
 #  include <windows.h>
 #  include <shlobj.h>
+#  include <Shlwapi.h>
 
 #ifdef UNICODE
 #  define _tgetenv _wgetenv
 #else
 #  define _tgetenv getenv
 #endif
+
+SID_STRING utils::getExecPath()
+{
+    HMODULE hModule = GetModuleHandle(NULL);
+    TCHAR path[MAX_PATH];
+    GetModuleFileName(hModule, path, MAX_PATH);
+    PathRemoveFileSpec(path);
+    return path;
+}
 
 SID_STRING utils::getPath()
 {
