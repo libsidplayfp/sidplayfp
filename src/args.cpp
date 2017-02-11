@@ -499,7 +499,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             if (!hvscBase || !tryOpenDatabase(hvscBase))
             {
                 // Try load user configured songlength DB
-#if defined(WIN32) && defined(UNICODE)
+#if defined(_WIN32) && defined(UNICODE)
                 // FIXME
                 char database[MAX_PATH];
                 const int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
