@@ -399,10 +399,18 @@ void IniConfig::readEmulation(iniHandler &ini)
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 }
 
-void IniConfig::read()
+class iniError
 {
-    clear();
+private:
+    const SID_STRING msg;
 
+public:
+    iniError(const TCHAR* msg) : msg(msg) {}
+    const SID_STRING message() const { return msg; }
+};
+
+SID_STRING getConfigPath()
+{
     SID_STRING configPath;
 
     try
@@ -411,8 +419,7 @@ void IniConfig::read()
     }
     catch (utils::error const &e)
     {
-        error(TEXT("Cannot get config path!"));
-        return;
+        throw iniError(TEXT("Cannot get config path!"));
     }
 
     debug(TEXT("Config path: "), configPath.c_str());
@@ -425,8 +432,7 @@ void IniConfig::read()
     {
         if (mkdir(configPath.c_str(), 0755) < 0)
         {
-            error(strerror(errno));
-            return;
+            throw iniError(strerror(errno));
         }
     }
 #else
@@ -437,9 +443,9 @@ void IniConfig::read()
             LPTSTR pBuffer;
             FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
-            error(pBuffer);
+            iniError err(pBuffer);
             LocalFree(pBuffer);
-            return;
+            throw err;
         }
     }
 #endif
@@ -448,13 +454,45 @@ void IniConfig::read()
 
     debug(TEXT("Config file: "), configPath.c_str());
 
+    return configPath;
+}
+
+bool tryOpen(iniHandler &ini)
+{
+#ifdef _WIN32
+    {
+        // Try exec dir first
+        SID_STRING execPath(utils::getExecPath());
+        execPath.append(SEPARATOR).append(FILE_NAME);
+        if (ini.open(execPath.c_str()))
+            return true;
+    }
+#endif
+    return false;
+}
+
+void IniConfig::read()
+{
+    clear();
+
     iniHandler ini;
 
-    // Opens an existing file or creates a new one
-    if (!ini.open(configPath.c_str()))
+    if (!tryOpen(ini))
     {
-        error(TEXT("Error reading config file!"));
-        return;
+        try
+        {
+            SID_STRING configPath = getConfigPath();
+
+            // Opens an existing file or creates a new one
+            if (!ini.open(configPath.c_str()))
+            {
+                error(TEXT("Error reading config file!"));
+                return;
+            }
+        } catch (iniError const &e) {
+            error(e.message().c_str());
+            return;
+        }
     }
 
     readSidplay2  (ini);
