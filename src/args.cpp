@@ -77,7 +77,7 @@ bool ConsolePlayer::tryOpenDatabase(const char *hvscBase)
 }
 
 // Convert time from integer
-bool ConsolePlayer::parseTime (const char *str, uint_least32_t &time)
+bool parseTime(const char *str, uint_least32_t &time)
 {
     // Check for empty string
     if (*str == '\0')
@@ -108,7 +108,7 @@ bool ConsolePlayer::parseTime (const char *str, uint_least32_t &time)
     return true;
 }
 
-bool ConsolePlayer::parseAddress (const char *str, uint_least16_t &address)
+bool parseAddress(const char *str, uint_least16_t &address)
 {
     if (*str == '\0')
         return false;
@@ -119,8 +119,21 @@ bool ConsolePlayer::parseAddress (const char *str, uint_least16_t &address)
     return true;
 }
 
+void displayDebugArgs()
+{
+    std::ostream &out = cout;
+
+    out << "Debug Options:" << endl
+        << " --cpu-debug   display cpu register and assembly dumps" << endl
+        << " --delay=<num> simulate c64 power on delay" << endl
+
+        << " --noaudio     no audio output device" << endl
+        << " --nosid       no sid emulation" << endl
+        << " --none        no audio output device and no sid emulation" << endl;
+}
+
 // Parse command line arguments
-int ConsolePlayer::args (int argc, const char *argv[])
+int ConsolePlayer::args(int argc, const char *argv[])
 {
     if (argc == 0) // at least one argument required
     {
@@ -599,18 +612,4 @@ void ConsolePlayer::displayArgs (const char *arg)
 #endif
     out << endl
         << "Home Page: " PACKAGE_URL << endl;
-}
-
-
-void ConsolePlayer::displayDebugArgs ()
-{
-    std::ostream &out = cout;
-
-    out << "Debug Options:" << endl
-        << " --cpu-debug   display cpu register and assembly dumps" << endl
-        << " --delay=<num> simulate c64 power on delay" << endl
-
-        << " --noaudio     no audio output device" << endl
-        << " --nosid       no sid emulation" << endl
-        << " --none        no audio output device and no sid emulation" << endl;
 }

@@ -41,6 +41,22 @@ using std::string;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
+const char* getModel (SidTuneInfo::model_t model)
+{
+    switch (model)
+    {
+    default:
+    case SidTuneInfo::SIDMODEL_UNKNOWN:
+        return "UNKNOWN";
+    case SidTuneInfo::SIDMODEL_6581:
+        return "6581";
+    case SidTuneInfo::SIDMODEL_8580:
+        return "8580";
+    case SidTuneInfo::SIDMODEL_ANY:
+        return "ANY";
+    }
+}
+
 
 // Display console menu
 void ConsolePlayer::menu ()
@@ -429,20 +445,4 @@ void ConsolePlayer::consoleRestore ()
 {
     if ((m_iniCfg.console ()).ansi)
         cerr << '\x1b' << "[0m";
-}
-
-const char* ConsolePlayer::getModel (SidTuneInfo::model_t model)
-{
-    switch (model)
-    {
-    default:
-    case SidTuneInfo::SIDMODEL_UNKNOWN:
-        return "UNKNOWN";
-    case SidTuneInfo::SIDMODEL_6581:
-        return "6581";
-    case SidTuneInfo::SIDMODEL_8580:
-        return "8580";
-    case SidTuneInfo::SIDMODEL_ANY:
-        return "ANY";
-    }
 }

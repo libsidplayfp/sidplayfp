@@ -187,10 +187,7 @@ private:
     void consoleRestore (void);
 
     // Command line args
-    bool parseTime        (const char *str, uint_least32_t &time);
-    bool parseAddress      (const char *str, uint_least16_t &address);
-    void displayArgs      (const char *arg = NULL);
-    void displayDebugArgs ();
+    void displayArgs    (const char *arg = NULL);
 
     bool createOutput   (OUTPUTS driver, const SidTuneInfo *tuneInfo);
     bool createSidEmu   (SIDEMUS emu);
@@ -201,8 +198,6 @@ private:
     void emuflush       (void);
     void menu           (void);
 
-    const char* getModel (SidTuneInfo::model_t model);
-
     IAudio* getWavFile(const SidTuneInfo *tuneInfo);
 
     inline bool tryOpenTune(const char *hvscBase);
@@ -212,12 +207,13 @@ public:
     ConsolePlayer (const char * const name);
     virtual ~ConsolePlayer() {}
 
-    int            args  (int argc, const char *argv[]);
-    bool           open  (void);
-    void           close (void);
-    bool           play  (void);
-    void           stop  (void);
-    player_state_t state (void) { return m_state; }
+    int  args  (int argc, const char *argv[]);
+    bool open  (void);
+    void close (void);
+    bool play  (void);
+    void stop  (void);
+
+    player_state_t state (void) const { return m_state; }
 };
 
 #endif // PLAYER_H
