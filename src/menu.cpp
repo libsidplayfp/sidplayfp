@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2016 Leandro Nini
+ * Copyright 2011-2017 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -305,7 +305,6 @@ void ConsolePlayer::menu ()
             consoleColour (yellow, true);
             cerr << " Delay        : ";
             consoleColour (white, false);
-            cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
     }
 

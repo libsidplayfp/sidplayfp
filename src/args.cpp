@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2016 Leandro Nini
+ * Copyright 2011-2017 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -341,10 +341,6 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     m_verboseLevel = 1;
                 else
                     m_verboseLevel = atoi(&argv[i][2]);
-            }
-            else if (strncmp (&argv[i][1], "-delay=", 7) == 0)
-            {
-                m_engCfg.powerOnDelay = (uint_least16_t) atoi(&argv[i][8]);
             }
 
             // File format conversions
