@@ -25,7 +25,7 @@
 #ifdef _WIN32
 #  include <windows.h>
 #  include <shlobj.h>
-#  include <Shlwapi.h>
+#  include <shlwapi.h>
 
 #ifdef UNICODE
 #  define _tgetenv _wgetenv

@@ -3,6 +3,7 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 
 if MINGW32
   W32_CPPFLAGS = -DWIN32_LEAN_AND_MEAN
+  W32_LIBS = -lshlwapi
 endif
 
 if USE_LIBOUT123
@@ -76,7 +77,8 @@ $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
 $(PULSE_LIBS) \
-$(OUT123_LIBS)
+$(OUT123_LIBS) \
+$(W32_LIBS)
 
 #=========================================================
 # stilview
