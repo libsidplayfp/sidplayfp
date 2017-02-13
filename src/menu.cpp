@@ -298,14 +298,6 @@ void ConsolePlayer::menu ()
             }
 #endif
         }
-
-        if (m_verboseLevel > 1)
-        {
-            consoleTable  (tableMiddle);
-            consoleColour (yellow, true);
-            cerr << " Delay        : ";
-            consoleColour (white, false);
-        }
     }
 
     const char* romDesc = info.kernalDesc();
