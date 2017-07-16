@@ -41,10 +41,9 @@ Configuration version
 
 =item B<Songlength Database>=I<< <path> >>
 
-Path for the Songlength DB.  Should point to the F<DOCUMENTS/Songlengths.txt>
-file under the HVSC collection path.
-On *NIX systems if this value is not set, L<sidplayfp(1)> will try
-F<$PREFIX/share/sidplayfp/Songlengths.txt>.
+Full path for the Songlength DB.
+By default the program will look for a file named F<DOCUMENTS/Songlengths.txt> under the HVSC collection path, if the HVSC_BASE environment variable is defined.
+On *NIX systems, if this value is not set, L<sidplayfp(1)> will try F<$PREFIX/share/sidplayfp/Songlengths.txt>.
 
 =item B<Default Play Length>=I<mm:ss>
 
@@ -57,7 +56,7 @@ Default recording time when writing wave files if Songlength Database is not fou
 =item B<Kernal Rom>=I<< <path> >>
 
 Full path for the Kernal Rom file. This is the most important rom and should always be provided, although many tunes will still work without.
-By default the program will look for a F<kernal> file under the following locations:
+By default the program will look for a file named F<kernal> under the following locations:
 
 =over
 
@@ -86,12 +85,12 @@ on Windows systems where CSIDL_APPDATA is not defined.
 =item B<Basic Rom>=I<< <path> >>
 
 Full path for the Basic Rom file. This is mostly useful for playing BASIC tunes.
-By default the program will look for a F<basic> file under the same locations as above.
+By default the program will look for a file named F<basic> under the same locations as above.
 
 =item B<Chargen Rom>=I<< <path> >>
 
 Full path for the Character generator Rom file. Almost useless for playback of tunes, but included for completeness.
-By default the program will look for a F<chargen> file under the same locations as above.
+By default the program will look for a file named F<chargen> under the same locations as above.
 
 =back
 

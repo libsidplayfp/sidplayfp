@@ -31,12 +31,12 @@ Display help.
 
 =item B<-f>I<< <num> >>
 
-Set frequency in Hz (default: 48000).
+Set audio output frequency in Hz (default: 48000).
 
 =item B<-nf>
 
 No filter emulation.  This will reduce CPU overhead at the cost
-of reduced sound quality.
+of reduced emulation quality.
 
 =item B<-o>I<< <num> >>
 
@@ -58,8 +58,8 @@ Set start time in [mins:]secs format (compatible with sid2wav).
 =item B<-ds>I<< <addr> >>
 
 Force dual sid environment by adding a second chip at specified
-address.   This forces emulation of 2 sid-chips for stereo
-playback even if datafile is  identified as only being mono.
+address.  This forces emulation of 2 sid-chips for stereo
+playback even if datafile is identified as only being mono.
 This occurs in the case of the stereo prg format as currently
 there is no way to identify them.  Stereo MUS and SID files are
 however automatically detected.  The second sid may be installed
@@ -78,13 +78,13 @@ may  be specified in exadecimal (e.g -ts0xd440) or decimal (e.g.
 
 Mute a channel.  May be used more than one time.  Channel 1 to 3
 are for the first SID chip while channels from 4 to 6 are for
-the second one on stereo tunes.
+the second one and 7 to 9 for the third.
 
 =item B<-p>I<< <num> >>
 
 Set bit precision for wav saving. The default is 32 (32 bit
 float), but can be set to 16 to create 16 bit little endian
-wavs. Other values cause invalid output.
+wavs. Other values will cause invalid output.
 
 =item B<-o>I<< <l|s> >>
 
@@ -116,7 +116,7 @@ Options can be written as: -vnf or -vn -vf.
 
 Set SID chip model.  'o' is the old 6581 and 'n' is the new 8580.
 Providing an 'f' will force the selected model overriding
-the one specified from the tune.
+the one specified by the tune.
 
 =item B<-r>I<< <i|r>[f] >>
 
@@ -128,21 +128,21 @@ only for reSID emulation.  Options can be written as: -rif or
 
 =item B<-w, --wav>I<< [name] >>
 
-Create   WAV-file.  The default output filename is
+Create WAV-file.  The default output filename is
 <datafile>[n].wav where [n] is the tune number should there be
 more than one in the sid.  This allows batch conversion of sid
-tunes  without them overwriting each other.  By providing a name
-you override this default behavior.  The output file will be
-<name> with no tune number is added and <name> IS NOT checked
-for or appended with a legal wav file extension.
+tunes without them overwriting each other.  By providing a name
+it is possible to override this default behavior.  The output
+file will be <name> with no tune number added and <name> IS NOT
+checked for or appended with a legal wav file extension.
 
 =item B<--resid>
 
-Use Dag Lem's reSID emulation engine.
+Use VICE's original reSID emulation engine.
 
 =item B<--residfp>
 
-Use Antti Lankila's reSIDfp emulation engine.
+Use reSIDfp emulation engine.
 
 =item B<--hardsid>
 
@@ -207,7 +207,7 @@ and relative SID tune paths are accepted.
 
 =item F<sidplayfp.ini>
 
-The per-user configuration file. See L<sidplayfp.ini(5)> for further details.
+The configuration file. See L<sidplayfp.ini(5)> for further details.
 
 =item F<kernal>
 
@@ -236,7 +236,8 @@ L<sidplayfp.ini(5)>
 
 =head1 NOTES
 
-ROM dumps are no longer embedded but must be supplied by the user.
+ROM dumps are not embedded due to copyright issues and must be
+supplied by the user.
 Check the L<sidplayfp.ini(5)> documentation for configuration details
 and default search paths.
 
