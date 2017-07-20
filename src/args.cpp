@@ -358,6 +358,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][5] != '\0')
                     m_outfile = &argv[i][5];
             }
+#ifdef AU_OUTPUT
             else if (strncmp (&argv[i][1], "-au", 3) == 0)
             {
                 m_driver.output = OUT_AU;
@@ -365,7 +366,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][4] != '\0')
                     m_outfile = &argv[i][4];
             }
-
+#endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
             else if (strcmp (&argv[i][1], "-residfp") == 0)
             {
@@ -564,10 +565,10 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -o<num>      start track (default: preset)" << endl
 
         << " -p<num>      set format for wav output (16 = signed 16 bit, 32 = 32 bit float)"
-        << "(default: " << 16 << ")" << endl
+        << "(default: 16)" << endl
 
 #if !defined(DISALLOW_STEREO_SOUND)
-        << " -s[l|r]      stereo sid support or [left/right] channel only" << endl
+        << " -s           stereo sid support" << endl
 #endif
 
         << " -t<num>      set play length in [m:]s format (0 is endless)" << endl
@@ -583,6 +584,9 @@ void ConsolePlayer::displayArgs (const char *arg)
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
 
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl;
+#ifdef AU_OUTPUT
+        << " -au[name]    create au file (default: <datafile>[n].au)" << endl;
+#endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     out << " --residfp    use reSIDfp emulation (default)" << endl;

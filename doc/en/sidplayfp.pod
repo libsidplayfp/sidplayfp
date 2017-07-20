@@ -96,10 +96,6 @@ combined with the track selection to form -ols<num>.
 
 Quiet output while playing (opposite of verbose).
 
-=item B<-s>I<< <l|r> >>
-
-Playback the left or right stereo channel only.
-
 =item B<-t>I<< <num> >>
 
 Set play length in [mins:]secs format (0 is endless).
