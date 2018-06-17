@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2017 Leandro Nini
+ * Copyright 2011-2018 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -41,7 +41,7 @@ using std::string;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
-const char* getModel (SidTuneInfo::model_t model)
+const char* getModel(SidTuneInfo::model_t model)
 {
     switch (model)
     {
@@ -53,6 +53,22 @@ const char* getModel (SidTuneInfo::model_t model)
     case SidTuneInfo::SIDMODEL_8580:
         return "8580";
     case SidTuneInfo::SIDMODEL_ANY:
+        return "ANY";
+    }
+}
+
+const char* getClock(SidTuneInfo::clock_t clock)
+{
+    switch (clock)
+    {
+    default:
+    case SidTuneInfo::CLOCK_UNKNOWN:
+        return "UNKNOWN";
+    case SidTuneInfo::CLOCK_PAL:
+        return "PAL";
+    case SidTuneInfo::CLOCK_NTSC:
+        return "NTSC";
+    case SidTuneInfo::CLOCK_ANY:
         return "ANY";
     }
 }
@@ -197,7 +213,7 @@ void ConsolePlayer::menu ()
         consoleColour (green, true);
         cerr << " Song Speed   : ";
         consoleColour (white, true);
-        cerr << info.speedString() << endl;
+        cerr << getClock(tuneInfo->clockSpeed()) << endl;
     }
 
     consoleTable  (tableMiddle);
@@ -298,6 +314,18 @@ void ConsolePlayer::menu ()
             }
 #endif
         }
+
+        consoleTable  (tableMiddle);
+        consoleColour (yellow, true);
+        cerr << " Play speed   : ";
+        consoleColour (white, false);
+        cerr << info.speedString() << endl;
+
+        consoleTable  (tableMiddle);
+        consoleColour (yellow, true);
+        cerr << " Play mode    : ";
+        consoleColour (white, false);
+        cerr << (info.channels() == 1 ? "Mono" : "Stereo") << endl;
     }
 
     const char* romDesc = info.kernalDesc();
