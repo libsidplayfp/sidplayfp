@@ -75,7 +75,7 @@ AC_SUBST(AUDIO_LDFLAGS)
 
 AC_CHECK_FUNCS([strncasecmp strcasecmp])
 
-PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
+PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 USE_LIBOUT123=no

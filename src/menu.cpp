@@ -314,7 +314,16 @@ void ConsolePlayer::menu ()
             }
 #endif
         }
-
+#if LIBSIDPLAYFP_VERSION_MAJ <= 1
+        if (m_verboseLevel > 1)
+        {
+            consoleTable  (tableMiddle);
+            consoleColour (yellow, true);
+            cerr << " Delay        : ";
+            consoleColour (white, false);
+            cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
+        }
+#endif
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " Play speed   : ";

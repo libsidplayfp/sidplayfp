@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2017 Leandro Nini
+ * Copyright 2011-2018 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -125,8 +125,9 @@ void displayDebugArgs()
 
     out << "Debug Options:" << endl
         << " --cpu-debug   display cpu register and assembly dumps" << endl
+#if LIBSIDPLAYFP_VERSION_MAJ <= 1
         << " --delay=<num> simulate c64 power on delay" << endl
-
+#endif
         << " --noaudio     no audio output device" << endl
         << " --nosid       no sid emulation" << endl
         << " --none        no audio output device and no sid emulation" << endl;
@@ -342,7 +343,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 else
                     m_verboseLevel = atoi(&argv[i][2]);
             }
-
+#if LIBSIDPLAYFP_VERSION_MAJ <= 1
+            else if (strncmp (&argv[i][1], "-delay=", 7) == 0)
+            {
+                m_engCfg.powerOnDelay = (uint_least16_t) atoi(&argv[i][8]);
+            }
+#endif
             // File format conversions
             else if (argv[i][1] == 'w')
             {
