@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2017 Leandro Nini
+ * Copyright 2011-2018 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -42,6 +42,7 @@ using std::endl;
 #include "utils.h"
 #include "keyboard.h"
 #include "audio/AudioDrv.h"
+#include "audio/au/auFile.h"
 #include "audio/wav/WavFile.h"
 #include "ini/types.h"
 
@@ -231,7 +232,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     delete [] chargenRom;
 }
 
-IAudio* ConsolePlayer::getWavFile(const SidTuneInfo *tuneInfo)
+std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo)
 {
     std::string title;
 
@@ -253,10 +254,9 @@ IAudio* ConsolePlayer::getWavFile(const SidTuneInfo *tuneInfo)
             sstream << "[" << tuneInfo->currentSong() << "]";
             title.append(sstream.str());
         }
-        title.append(WavFile::extension());
     }
 
-    return new WavFile(title);
+    return title;
 }
 
 // Create the output object to process sound buffer
@@ -293,7 +293,22 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     case OUT_WAV:
         try
         {
-            m_driver.device = getWavFile(tuneInfo);
+            std::string title = getFileName(tuneInfo);
+            title.append(WavFile::extension());
+            m_driver.device = new WavFile(title);
+        }
+        catch (std::bad_alloc const &ba)
+        {
+            m_driver.device = nullptr;
+        }
+    break;
+
+    case OUT_AU:
+        try
+        {
+            std::string title = getFileName(tuneInfo);
+            title.append(auFile::extension());
+            m_driver.device = new auFile(title);
         }
         catch (std::bad_alloc const &ba)
         {

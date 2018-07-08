@@ -52,6 +52,8 @@ src/audio/AudioDrv.h \
 src/audio/IAudio.h \
 src/audio/alsa/audiodrv.cpp \
 src/audio/alsa/audiodrv.h \
+src/audio/au/auFile.cpp \
+src/audio/au/auFile.h \
 src/audio/directx/audiodrv.cpp \
 src/audio/directx/audiodrv.h \
 src/audio/mmsystem/audiodrv.cpp \

@@ -82,9 +82,9 @@ the second one and 7 to 9 for the third.
 
 =item B<-p>I<< <num> >>
 
-Set bit precision for wav saving. The default is 32 (32 bit
-float), but can be set to 16 to create 16 bit little endian
-wavs. Other values will cause invalid output.
+Set bit precision for file saving. The default is 32 (32 bit
+float), but can be set to 16 to create 16 bit signed
+samples. Other values will cause invalid output.
 
 =item B<-o>I<< <l|s> >>
 
@@ -131,6 +131,11 @@ tunes without them overwriting each other.  By providing a name
 it is possible to override this default behavior.  The output
 file will be <name> with no tune number added and <name> IS NOT
 checked for or appended with a legal wav file extension.
+
+=item B<--au>I<< [name] >>
+
+Create AU-file.  The default output filename is
+<datafile>[n].au.
 
 =item B<--resid>
 
@@ -300,7 +305,7 @@ Wrote the original man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2017 Leandro Nini
+=item Copyright (C) 2010-2018 Leandro Nini
 
 =back
 

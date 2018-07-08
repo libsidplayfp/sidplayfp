@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2015 Leandro Nini
+ * Copyright 2011-2018 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -198,7 +198,7 @@ private:
     void emuflush       (void);
     void menu           (void);
 
-    IAudio* getWavFile(const SidTuneInfo *tuneInfo);
+    std::string getFileName(const SidTuneInfo *tuneInfo);
 
     inline bool tryOpenTune(const char *hvscBase);
     inline bool tryOpenDatabase(const char *hvscBase);
