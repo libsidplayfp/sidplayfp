@@ -41,6 +41,9 @@ using std::string;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
+const char SID6581[] = "MOS6581";
+const char SID8580[] = "CSG8580";
+
 const char* getModel(SidTuneInfo::model_t model)
 {
     switch (model)
@@ -49,11 +52,23 @@ const char* getModel(SidTuneInfo::model_t model)
     case SidTuneInfo::SIDMODEL_UNKNOWN:
         return "UNKNOWN";
     case SidTuneInfo::SIDMODEL_6581:
-        return "6581";
+        return SID6581;
     case SidTuneInfo::SIDMODEL_8580:
-        return "8580";
+        return SID8580;
     case SidTuneInfo::SIDMODEL_ANY:
         return "ANY";
+    }
+}
+
+const char* getModel(SidConfig::sid_model_t model)
+{
+    switch (model)
+    {
+    default:
+    case SidConfig::MOS6581:
+        return SID6581;
+    case SidConfig::MOS8580:
+        return SID8580;
     }
 }
 
@@ -274,9 +289,7 @@ void ConsolePlayer::menu ()
         consoleColour (yellow, true);
         cerr << " SID Details  : ";
         consoleColour (white, false);
-        cerr << "Filter = "
-             << ((m_filter.enabled == true) ? "Yes" : "No");
-        cerr << ", Model = ";
+        cerr << "Model = ";
 #if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
         cerr << getModel(tuneInfo->sidModel(0));
 #else
@@ -314,16 +327,9 @@ void ConsolePlayer::menu ()
             }
 #endif
         }
-#if LIBSIDPLAYFP_VERSION_MAJ <= 1
-        if (m_verboseLevel > 1)
-        {
-            consoleTable  (tableMiddle);
-            consoleColour (yellow, true);
-            cerr << " Delay        : ";
-            consoleColour (white, false);
-            cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
-        }
-#endif
+
+        consoleTable  (tableSeparator);
+
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " Play speed   : ";
@@ -335,6 +341,34 @@ void ConsolePlayer::menu ()
         cerr << " Play mode    : ";
         consoleColour (white, false);
         cerr << (info.channels() == 1 ? "Mono" : "Stereo") << endl;
+
+        consoleTable  (tableMiddle);
+        consoleColour (yellow, true);
+        cerr << " SID Filter   : ";
+        consoleColour (white, false);
+        cerr << (m_filter.enabled ? "Yes" : "No") << endl;
+        
+        consoleTable  (tableMiddle);
+        consoleColour (yellow, true);
+        cerr << " SID Model    : ";
+        consoleColour (white, false);
+        if (m_engCfg.forceSidModel)
+            cerr << "Forced ";
+        else
+            cerr << "from tune, default = ";
+        cerr << getModel(m_engCfg.defaultSidModel) << endl;
+    
+    
+
+#if LIBSIDPLAYFP_VERSION_MAJ <= 1
+        if (m_verboseLevel > 1)
+        {
+            consoleTable  (tableMiddle);
+            consoleColour (yellow, true);
+            cerr << " Delay        : ";
+            consoleColour (white, false);
+        }
+#endif
     }
 
     const char* romDesc = info.kernalDesc();
