@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a SID player.
  *
- * Copyright 2011-2016 Leandro Nini <drfiemost@users.sourceforge.net>
+ * Copyright 2011-2018 Leandro Nini <drfiemost@users.sourceforge.net>
  * Copyright 2007-2010 Antti Lankila
  * Copyright 2000-2004 Simon White
  * Copyright 2000 Michael Schwendt
@@ -29,26 +29,48 @@
 
 #include "../AudioBase.h"
 
-struct wavHeader                        // little endian format
+struct riffHeader                       // little endian format
 {
     char mainChunkID[4];                // 'RIFF' (ASCII)
-
     unsigned char length[4];            // file length
-
     char chunkID[4];                    // 'WAVE' (ASCII)
-    char subChunkID[4];                    // 'fmt ' (ASCII)
-    char subChunkLen[4];                // length of subChunk, always 16 bytes
-    unsigned char format[2];            // currently always = 1 = PCM-Code
+};
 
-    unsigned char channels[2];            // 1 = mono, 2 = stereo
+struct wavHeader                        // little endian format
+{
+    char subChunkID[4];                 // 'fmt ' (ASCII)
+    char subChunkLen[4];                // length of subChunk, always 16 bytes
+    unsigned char format[2];            // 1 = PCM, 3 = IEEE float
+
+    unsigned char channels[2];          // 1 = mono, 2 = stereo
     unsigned char sampleFreq[4];        // sample-frequency
-    unsigned char bytesPerSec[4];        // sampleFreq * blockAlign
+    unsigned char bytesPerSec[4];       // sampleFreq * blockAlign
     unsigned char blockAlign[2];        // bytes per sample * channels
     unsigned char bitsPerSample[2];
 
     char dataChunkID[4];                // keyword, begin of data chunk; = 'data' (ASCII)
 
-    unsigned char dataChunkLen[4];        // length of data
+    unsigned char dataChunkLen[4];      // length of data
+};
+
+struct listInfo                         // little endian format
+{
+    char mainChunkID[4];                // 'LIST' (ASCII)
+
+    unsigned char length[4];            // chunk length
+
+    char chunkID[4];                    // 'INFO' (ASCII)
+    char namChunkID[4];                 // 'INAM' (ASCII)
+    char namChunkLen[4];                // length of subChunk, always 32 bytes
+    char name[32];
+
+    char artChunkID[4];                 // 'IART' (ASCII)
+    char artChunkLen[4];                // length of subChunk, always 32 bytes
+    char artist[32];
+
+    char copChunkID[4];                 // 'ICOP' (ASCII)
+    char copChunkLen[4];                // length of subChunk, always 32 bytes
+    char released[32];
 };
 
 /*
@@ -60,13 +82,20 @@ class WavFile: public AudioBase
 private:
     std::string name;
 
-    unsigned long int byteCount;
+    unsigned long int dataSize;
+
+    static const riffHeader defaultRiffHdr;
+    riffHeader riffHdr;
 
     static const wavHeader defaultWavHdr;
     wavHeader wavHdr;
 
+    static const listInfo defaultListInfo;
+    listInfo listHdr;
+
     std::ostream *file;
-    bool headerWritten;  // whether final header has been written
+    bool headerWritten;
+    bool hasListInfo;
     int precision;
 
 public:
@@ -93,6 +122,8 @@ public:
     // Stream state.
     bool fail() const { return (file->fail() != 0); }
     bool bad()  const { return (file->bad()  != 0); }
+
+    void setInfo(const char* title, const char* author, const char* released);
 };
 
 #endif /* WAV_FILE_H */

@@ -295,7 +295,10 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         {
             std::string title = getFileName(tuneInfo);
             title.append(WavFile::extension());
-            m_driver.device = new WavFile(title);
+            WavFile* wav = new WavFile(title);
+            if (tuneInfo->numberOfInfoStrings() == 3)
+                wav->setInfo(tuneInfo->infoString(0), tuneInfo->infoString(1), tuneInfo->infoString(2));
+            m_driver.device = wav;
         }
         catch (std::bad_alloc const &ba)
         {
