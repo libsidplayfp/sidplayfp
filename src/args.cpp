@@ -145,6 +145,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
     // default arg options
     m_driver.output = OUT_SOUNDCARD;
     m_driver.file   = false;
+    m_driver.info   = false;
 
     for (int i=0; i<9; i++)
     {
@@ -371,6 +372,10 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][4] != '\0')
                     m_outfile = &argv[i][4];
             }
+            else if (strncmp (&argv[i][1], "-info", 5) == 0)
+            {
+                m_driver.info   = true;
+            }
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
             else if (strcmp (&argv[i][1], "-residfp") == 0)
             {
@@ -475,6 +480,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
     {
         displayError ("ERROR: Cannot generate audio files using hardware emulations");
         return -1;
+    }
+
+    if (m_driver.info && m_driver.file)
+    {
+        displayError ("WARNING: metadata can bve added only to wav files");
     }
 
     // Select the desired track
@@ -588,7 +598,8 @@ void ConsolePlayer::displayArgs (const char *arg)
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
 
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl
-        << " --au[name]   create au file (default: <datafile>[n].au)" << endl;
+        << " --au[name]   create au file (default: <datafile>[n].au)" << endl
+        << " --info       add metadata to wav file" << endl;
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     out << " --residfp    use reSIDfp emulation (default)" << endl;

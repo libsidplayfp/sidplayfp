@@ -150,6 +150,7 @@ private:
         OUTPUTS        output;   // Selected output type
         SIDEMUS        sid;      // Sid emulation
         bool           file;     // File based driver
+        bool           info;     // File metadata
         AudioConfig    cfg;
         IAudio*        selected; // Selected Output Driver
         IAudio*        device;   // HW/File Driver
