@@ -186,6 +186,10 @@ Default SID chip model, old MOS 6581 or newer MOS 8580.
 
 Force the configured SID chip model even if the tune specifies one.
 
+=item B<DigiBoost>=I<true|false>
+
+Enable digiboost for 8580 model.
+
 =item B<UseFilter>=I<true|false>
 
 Enable/disable the emulation of the SID filter.
@@ -278,7 +282,7 @@ Wrote the originla man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2017 Leandro Nini
+=item Copyright (C) 2010-2019 Leandro Nini
 
 =back
 

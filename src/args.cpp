@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2018 Leandro Nini
+ * Copyright 2011-2019 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -313,6 +313,10 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS8580;
             }
+            else if (strcmp (&argv[i][1], "-digiboost") == 0)
+            {
+                m_engCfg.digiBoost = true;
+            }
 
             // Video/Verbose Options
             else if (strcmp (&argv[i][1], "vnf") == 0)
@@ -593,6 +597,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
         << "              Use 'f' to force the model" << endl
+        << " --digiboost  Enable digiboost for 8580 model" << endl
 
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl

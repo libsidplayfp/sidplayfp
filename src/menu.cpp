@@ -354,6 +354,12 @@ void ConsolePlayer::menu ()
 
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
+        cerr << " DigiBoost    : ";
+        consoleColour (white, false);
+        cerr << (m_engCfg.digiBoost ? "Yes" : "No") << endl;
+
+        consoleTable  (tableMiddle);
+        consoleColour (yellow, true);
         cerr << " SID Model    : ";
         consoleColour (white, false);
         if (m_engCfg.forceSidModel)

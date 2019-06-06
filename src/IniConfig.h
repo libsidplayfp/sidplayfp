@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2017 Leandro Nini
+ * Copyright 2011-2019 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -71,6 +71,7 @@ public:
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
         bool          forceModel;
+        bool          digiboost;
         bool          filter;
         double        bias;
         double        filterCurve6581;

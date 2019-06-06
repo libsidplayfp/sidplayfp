@@ -114,6 +114,10 @@ Set SID chip model.  'o' is the old 6581 and 'n' is the new 8580.
 Providing an 'f' will force the selected model overriding
 the one specified by the tune.
 
+=item B<--digiboost>
+
+Enable digiboost for 8580 model.
+
 =item B<-r>I<< <i|r>[f] >>
 
 Set resampling mode.  'i' is interpolation (less expensive) and
@@ -305,7 +309,7 @@ Wrote the original man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2018 Leandro Nini
+=item Copyright (C) 2010-2019 Leandro Nini
 
 =back
 

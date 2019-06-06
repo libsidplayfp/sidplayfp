@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2017 Leandro Nini
+ * Copyright 2011-2019 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -378,6 +378,7 @@ void IniConfig::readEmulation(iniHandler &ini)
     }
 
     readBool(ini, TEXT("ForceC64Model"), emulation_s.modelForced);
+    readBool(ini, TEXT("DigiBoost"), emulation_s.digiboost);
 
     {
         SID_STRING str = readString(ini, TEXT("SidModel"));
