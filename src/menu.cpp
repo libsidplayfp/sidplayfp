@@ -375,6 +375,7 @@ void ConsolePlayer::menu ()
             consoleColour (yellow, true);
             cerr << " Delay        : ";
             consoleColour (white, false);
+            cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
 #endif
     }
