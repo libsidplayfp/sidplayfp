@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2018 Leandro Nini
+ * Copyright 2011-2019 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -52,8 +52,8 @@ using std::endl;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
-// Previous song select timeout (3 secs)
-#define SID2_PREV_SONG_TIMEOUT 4
+// Previous song select timeout (4 secs)
+#define SID2_PREV_SONG_TIMEOUT 4000
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 #  include <sidplayfp/builders/residfp.h>
@@ -341,13 +341,13 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
     {   // Open the hardware
         bool err = false;
-        if (!m_driver.device->open (m_driver.cfg))
+        if (!m_driver.device->open(m_driver.cfg))
             err = true;
 
         // Can't open the same driver twice
         if (driver != OUT_NULL)
         {
-            if (!m_driver.null.open (m_driver.cfg))
+            if (!m_driver.null.open(m_driver.cfg))
                 err = true;
         }
 
@@ -388,7 +388,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
     {
         sidbuilder *builder   = m_engCfg.sidEmulation;
         m_engCfg.sidEmulation = nullptr;
-        m_engine.config (m_engCfg);
+        m_engine.config(m_engCfg);
         delete builder;
     }
 
@@ -513,26 +513,26 @@ bool ConsolePlayer::open (void)
     }
 
     // Select the required song
-    m_track.selected = m_tune.selectSong (m_track.selected);
+    m_track.selected = m_tune.selectSong(m_track.selected);
     if (!m_engine.load (&m_tune))
     {
-        displayError (m_engine.error ());
+        displayError (m_engine.error());
         return false;
     }
 
     // Get tune details
-    const SidTuneInfo *tuneInfo = m_tune.getInfo ();
+    const SidTuneInfo *tuneInfo = m_tune.getInfo();
     if (!m_track.single)
         m_track.songs = tuneInfo->songs();
-    if (!createOutput (m_driver.output, tuneInfo))
+    if (!createOutput(m_driver.output, tuneInfo))
         return false;
-    if (!createSidEmu (m_driver.sid))
+    if (!createSidEmu(m_driver.sid))
         return false;
 
     // Configure engine with settings
-    if (!m_engine.config (m_engCfg))
+    if (!m_engine.config(m_engCfg))
     {   // Config failed
-        displayError (m_engine.error ());
+        displayError(m_engine.error ());
         return false;
     }
 
@@ -556,7 +556,7 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-        const int_least32_t length = m_database.length(m_tune);
+        const int_least32_t length = m_database.lengthMs(m_tune);
         if (length > 0)
             m_timer.length = length;
     }
@@ -571,7 +571,7 @@ bool ConsolePlayer::open (void)
     }
     else
     {   // Check to make start time dosen't exceed end
-        if (m_timer.stop & (m_timer.start >= m_timer.stop))
+        if ((m_timer.stop != 0) && (m_timer.start >= m_timer.stop))
         {
             displayError ("ERROR: Start time exceeds song length!");
             return false;
@@ -677,20 +677,19 @@ bool ConsolePlayer::play ()
 #if HAVE_TSID == 1
         if (m_tsid)
         {
-            m_tsid.addTime ((int) m_timer.current, m_track.selected,
-                            m_filename);
+            m_tsid.addTime((int)(m_timer.current/1000), m_track.selected, m_filename);
         }
 #elif HAVE_TSID == 2
         if (m_tsid)
         {
             char md5[SidTune::MD5_LENGTH + 1];
             m_tune.createMD5 (md5);
-            int_least32_t length = m_database.length (md5, m_track.selected);
+            int_least32_t length = m_database.lengthMs(md5, m_track.selected);
             // ignore errors
             if (length < 0)
                 length = 0;
-            m_tsid.addTime (md5, m_filename, (uint) m_timer.current,
-                            m_track.selected, (uint) length);
+            m_tsid.addTime(md5, m_filename, (uint)(m_timer.current/1000),
+                            m_track.selected, (uint)(length/1000));
         }
 #endif
         break;
@@ -709,20 +708,21 @@ void ConsolePlayer::stop ()
 // External Timer Event
 void ConsolePlayer::updateDisplay()
 {
-    const uint_least32_t seconds = m_engine.time();
-    if (seconds == m_timer.current)
+    const uint_least32_t milliseconds = m_engine.timeMs();
+    if (milliseconds == m_timer.current)
         return;
 
     if (!m_quietLevel)
     {
+        const uint_least32_t seconds = milliseconds / 1000;
         cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
              << ((seconds / 60) % 100) << ':' << std::setw(2)
              << std::setfill('0') << (seconds % 60) << std::flush;
     }
 
-    m_timer.current = seconds;
+    m_timer.current = milliseconds;
 
-    if (seconds == m_timer.start)
+    if (milliseconds == m_timer.start)
     {   // Switch audio drivers.
         m_driver.selected = m_driver.device;
         memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
@@ -731,7 +731,7 @@ void ConsolePlayer::updateDisplay()
         if (m_cpudebug)
             m_engine.debug (true, nullptr);
     }
-    else if (m_timer.stop && (seconds >= m_timer.stop))
+    else if ((m_timer.stop != 0) && (milliseconds >= m_timer.stop))
     {
         m_state = playerExit;
         for (;;)
@@ -752,12 +752,10 @@ void ConsolePlayer::updateDisplay()
     }
 }
 
-
 void ConsolePlayer::displayError (const char *error)
 {
     cerr << m_name << ": " << error << endl;
 }
-
 
 // Keyboard handling
 void ConsolePlayer::decodeKeys ()
@@ -785,7 +783,7 @@ void ConsolePlayer::decodeKeys ()
             if (!m_track.single)
             {   // Only select previous song if less than timeout
                 // else restart current song
-                if ((m_engine.time()) < SID2_PREV_SONG_TIMEOUT)
+                if ((m_engine.timeMs()) < SID2_PREV_SONG_TIMEOUT)
                 {
                     m_track.selected--;
                     if (m_track.selected < 1)

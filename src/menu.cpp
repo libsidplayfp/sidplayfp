@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2018 Leandro Nini
+ * Copyright 2011-2019 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -236,16 +236,20 @@ void ConsolePlayer::menu ()
     cerr << " Song Length  : ";
     consoleColour (white, true);
     if (m_timer.stop)
-        cerr << setw(2) << setfill('0') << ((m_timer.stop / 60) % 100)
-             << ':' << setw(2) << setfill('0') << (m_timer.stop % 60);
+    {
+        const uint_least32_t seconds = m_timer.stop / 1000;
+        cerr << setw(2) << setfill('0') << ((seconds / 60) % 100)
+             << ':' << setw(2) << setfill('0') << (seconds % 60);
+    }
     else if (m_timer.valid)
         cerr << "FOREVER";
     else
         cerr << "UNKNOWN";
     if (m_timer.start)
     {   // Show offset
-        cerr << " (+" << setw(2) << setfill('0') << ((m_timer.start / 60) % 100)
-             << ':' << setw(2) << setfill('0') << (m_timer.start % 60) << ")";
+        const uint_least32_t seconds = m_timer.start / 1000;
+        cerr << " (+" << setw(2) << setfill('0') << ((seconds / 60) % 100)
+             << ':' << setw(2) << setfill('0') << (seconds % 60) << ")";
     }
     cerr << endl;
 
@@ -347,7 +351,7 @@ void ConsolePlayer::menu ()
         cerr << " SID Filter   : ";
         consoleColour (white, false);
         cerr << (m_filter.enabled ? "Yes" : "No") << endl;
-        
+
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " SID Model    : ";
@@ -357,8 +361,6 @@ void ConsolePlayer::menu ()
         else
             cerr << "from tune, default = ";
         cerr << getModel(m_engCfg.defaultSidModel) << endl;
-    
-    
 
 #if LIBSIDPLAYFP_VERSION_MAJ <= 1
         if (m_verboseLevel > 1)
