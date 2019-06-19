@@ -368,7 +368,6 @@ void ConsolePlayer::menu ()
             cerr << "from tune, default = ";
         cerr << getModel(m_engCfg.defaultSidModel) << endl;
 
-#if LIBSIDPLAYFP_VERSION_MAJ <= 1
         if (m_verboseLevel > 1)
         {
             consoleTable  (tableMiddle);
@@ -377,7 +376,6 @@ void ConsolePlayer::menu ()
             consoleColour (white, false);
             cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
-#endif
     }
 
     const char* romDesc = info.kernalDesc();
