@@ -71,6 +71,7 @@ public:
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
         bool          forceModel;
+        SidConfig::cia_model_t  ciaModel;
         bool          digiboost;
         bool          filter;
         double        bias;

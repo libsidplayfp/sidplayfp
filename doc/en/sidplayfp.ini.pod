@@ -178,6 +178,10 @@ for argentinian PAL-N model. Default is PAL.
 
 Force the configured c64 model even if the tune specifies one.
 
+=item B<CiaModel>=I<< <MOS6526|MOS8521> >>
+
+Select CIA chip model, old MOS 6526 or newer MOS 8521.
+
 =item B<SidModel>=I<< <MOS6581|MOS8580> >>
 
 Default SID chip model, old MOS 6581 or newer MOS 8580.

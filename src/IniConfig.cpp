@@ -110,6 +110,7 @@ void IniConfig::clear()
     emulation_s.modelForced   = false;
     emulation_s.sidModel      = SidConfig::MOS6581;
     emulation_s.forceModel    = false;
+    emulation_s.ciaModel      = SidConfig::MOS6526;
     emulation_s.filter        = true;
     emulation_s.engine.clear();
 
@@ -379,6 +380,17 @@ void IniConfig::readEmulation(iniHandler &ini)
 
     readBool(ini, TEXT("ForceC64Model"), emulation_s.modelForced);
     readBool(ini, TEXT("DigiBoost"), emulation_s.digiboost);
+
+    {
+        SID_STRING str = readString(ini, TEXT("CiaModel"));
+        if (!str.empty())
+        {
+            if (str.compare(TEXT("MOS6526")) == 0)
+                emulation_s.ciaModel = SidConfig::MOS6526;
+            else if (str.compare(TEXT("MOS8521")) == 0)
+                emulation_s.ciaModel = SidConfig::MOS8521;
+        }
+    }
 
     {
         SID_STRING str = readString(ini, TEXT("SidModel"));
