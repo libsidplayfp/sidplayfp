@@ -181,7 +181,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.defaultC64Model = emulation.modelDefault;
         m_engCfg.defaultSidModel = emulation.sidModel;
         m_engCfg.forceSidModel   = emulation.forceModel;
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
         m_engCfg.ciaModel        = emulation.ciaModel;
+#endif
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.playback     = audio.playback;
         m_precision           = audio.precision;
