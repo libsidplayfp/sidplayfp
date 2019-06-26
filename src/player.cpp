@@ -153,7 +153,8 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_filename(""),
     m_quietLevel(0),
     m_verboseLevel(0),
-    m_cpudebug(false)
+    m_cpudebug(false),
+    newSonglengthDB(false)
 {   // Other defaults
     m_filter.enabled = true;
     m_driver.device  = NULL;
@@ -559,7 +560,7 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-        const int_least32_t length = m_database.lengthMs(m_tune);
+        const int_least32_t length = newSonglengthDB ? m_database.lengthMs(m_tune) : m_database.length(m_tune) * 1000;
         if (length > 0)
             m_timer.length = length;
     }
@@ -686,7 +687,10 @@ bool ConsolePlayer::play ()
         if (m_tsid)
         {
             char md5[SidTune::MD5_LENGTH + 1];
-            m_tune.createMD5 (md5);
+            if (newSonglengthDB)
+                m_tune.createMD5New(md5);
+            else
+                m_tune.createMD5(md5);
             int_least32_t length = m_database.lengthMs(md5, m_track.selected);
             // ignore errors
             if (length < 0)

@@ -68,11 +68,11 @@ bool ConsolePlayer::tryOpenTune(const char *hvscBase)
 /**
  * Try load songlength DB from HVSC_BASE
  */
-bool ConsolePlayer::tryOpenDatabase(const char *hvscBase)
+bool ConsolePlayer::tryOpenDatabase(const char *hvscBase, const char *suffix)
 {
     std::string newFileName(hvscBase);
 
-    newFileName.append(SEPARATOR).append("DOCUMENTS").append(SEPARATOR).append("Songlengths.txt");
+    newFileName.append(SEPARATOR).append("DOCUMENTS").append(SEPARATOR).append("Songlengths.").append(suffix);
     return m_database.open(newFileName.c_str());
 }
 
@@ -507,7 +507,22 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 ? (m_iniCfg.sidplay2()).recordLength
                 : (m_iniCfg.sidplay2()).playLength;
 
-            if (!hvscBase || !tryOpenDatabase(hvscBase))
+
+            bool dbOpened = false;
+            if (hvscBase)
+            {
+                if (tryOpenDatabase(hvscBase, "md5"))
+                {
+                    dbOpened = true;
+                    newSonglengthDB = true;
+                }
+                else if (tryOpenDatabase(hvscBase, "txt"))
+                {
+                    dbOpened = true;
+                }
+            }
+
+            if (!dbOpened)
             {
                 // Try load user configured songlength DB
 #if defined(_WIN32) && defined(UNICODE)
@@ -526,6 +541,9 @@ int ConsolePlayer::args(int argc, const char *argv[])
                         displayError (m_database.error ());
                         return -1;
                     }
+
+                    if (strstr(database, ".md5") != nullptr)
+                        newSonglengthDB = true;
                 }
             }
         }

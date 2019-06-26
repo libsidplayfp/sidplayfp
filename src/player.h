@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2018 Leandro Nini
+ * Copyright 2011-2019 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -130,6 +130,8 @@ private:
 
     bool               m_cpudebug;
 
+    bool               newSonglengthDB;
+
     bool vMute[9];
 
     int  m_precision;
@@ -202,7 +204,7 @@ private:
     std::string getFileName(const SidTuneInfo *tuneInfo);
 
     inline bool tryOpenTune(const char *hvscBase);
-    inline bool tryOpenDatabase(const char *hvscBase);
+    inline bool tryOpenDatabase(const char *hvscBase, const char *suffix);
 
 public:
     ConsolePlayer (const char * const name);
