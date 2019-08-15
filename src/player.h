@@ -166,6 +166,7 @@ private:
         uint_least32_t stop;
         uint_least32_t length;
         bool           valid;
+        bool           starting;
     } m_timer;
 
     struct m_track_t

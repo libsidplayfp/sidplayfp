@@ -92,6 +92,7 @@ bool parseTime(const char *str, uint_least32_t &time)
     }
     else
     {   // Read in MM:SS format
+        // TODO parse milliseconds too
         int val;
         *sep = '\0';
         val  = atoi (str);
@@ -104,7 +105,7 @@ bool parseTime(const char *str, uint_least32_t &time)
         _time += (uint_least32_t) val;
     }
 
-    time = _time;
+    time = _time * 1000;
     return true;
 }
 

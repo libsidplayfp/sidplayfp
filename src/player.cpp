@@ -162,6 +162,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_timer.start    = 0;
     m_timer.length   = 0; // FOREVER
     m_timer.valid    = false;
+    m_timer.starting = false;
     m_track.first    = 0;
     m_track.selected = 0;
     m_track.loop     = false;
@@ -560,7 +561,7 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-        const int_least32_t length = newSonglengthDB ? m_database.lengthMs(m_tune) : m_database.length(m_tune) * 1000;
+        const int_least32_t length = newSonglengthDB ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
         if (length > 0)
             m_timer.length = length;
     }
@@ -583,6 +584,7 @@ bool ConsolePlayer::open (void)
     }
 
     m_timer.current = ~0;
+    m_timer.starting = true;
     m_state = playerRunning;
 
     // Update display
@@ -716,12 +718,10 @@ void ConsolePlayer::stop ()
 void ConsolePlayer::updateDisplay()
 {
     const uint_least32_t milliseconds = m_engine.timeMs();
-    if (milliseconds == m_timer.current)
-        return;
+    const uint_least32_t seconds = milliseconds / 1000;
 
-    if (!m_quietLevel)
+    if (!m_quietLevel && (seconds != (m_timer.current / 1000)))
     {
-        const uint_least32_t seconds = milliseconds / 1000;
         cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
              << ((seconds / 60) % 100) << ':' << std::setw(2)
              << std::setfill('0') << (seconds % 60) << std::flush;
@@ -729,8 +729,9 @@ void ConsolePlayer::updateDisplay()
 
     m_timer.current = milliseconds;
 
-    if (milliseconds == m_timer.start)
+    if (m_timer.starting && (milliseconds >= m_timer.start))
     {   // Switch audio drivers.
+        m_timer.starting = false;
         m_driver.selected = m_driver.device;
         memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
         m_speed.current = 1;
@@ -799,10 +800,11 @@ void ConsolePlayer::decodeKeys ()
             }
         break;
 
-        case A_UP_ARROW:
+        case A_UP_ARROW:     
             m_speed.current *= 2;
             if (m_speed.current > m_speed.max)
                 m_speed.current = m_speed.max;
+std::cout << "---" <<  (int)m_speed.current << std::endl;   
             m_engine.fastForward (100 * m_speed.current);
         break;
 
