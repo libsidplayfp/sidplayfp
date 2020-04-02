@@ -485,7 +485,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
 
     if (m_driver.info && m_driver.file)
     {
-        displayError ("WARNING: metadata can bve added only to wav files");
+        displayError ("WARNING: metadata can be added only to wav files");
     }
 
     // Select the desired track
