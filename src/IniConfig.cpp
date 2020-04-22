@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2019 Leandro Nini
+ * Copyright 2011-2020 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -114,9 +114,9 @@ void IniConfig::clear()
     emulation_s.filter        = true;
     emulation_s.engine.clear();
 
-    emulation_s.bias            = 0.0;
-    emulation_s.filterCurve6581 = 0.0;
-    emulation_s.filterCurve8580 = 0.0;
+    emulation_s.bias            = 0.5;
+    emulation_s.filterCurve6581 = 0.5;
+    emulation_s.filterCurve8580 = 0.5;
 }
 
 
