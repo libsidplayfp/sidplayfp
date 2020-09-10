@@ -29,9 +29,13 @@ allow playback on low specification machines at the cost of accuracy.
 
 Display help.
 
+=item B<-h, --help-debug>
+
+Display additional options helpful for debugging.
+
 =item B<-f>I<< <num> >>
 
-Set audio output frequency in Hz (default: 48000).
+Set audio output frequency in Hz (default: 44100).
 
 =item B<-nf>
 
@@ -46,10 +50,11 @@ Select track number (default: preset).
 
 Stereo playback.  If the tune is identified as stereo then sid 1
 and 2 become the left and right channels respectively.
+For three sid tunes the chips are mixed as left, center and right.
+ 
+=item B<-v|q>
 
-=item B<-v>I<[num]>
-
-Verbose output while playing.
+Verbose or quiet (no time display) console output while playing.
 
 =item B<-b>I<< <num> >>
 
@@ -82,9 +87,9 @@ the second one and 7 to 9 for the third.
 
 =item B<-p>I<< <num> >>
 
-Set bit precision for file saving. The default is 32 (32 bit
-float), but can be set to 16 to create 16 bit signed
-samples. Other values will cause invalid output.
+Set bit precision for file saving. The default is 16
+to create 16 bit signed samples, but can be set to 32
+(32 bit float). Other values will cause invalid output.
 
 =item B<-o>I<< <l|s> >>
 
@@ -116,7 +121,8 @@ the one specified by the tune.
 
 =item B<--digiboost>
 
-Enable digiboost for 8580 model.
+Enable digiboost hack for 8580 model so the digi samples
+become audible.
 
 =item B<-r>I<< <i|r>[f] >>
 
@@ -156,6 +162,29 @@ Use HardSID device.
 =item B<--exsid>
 
 Use exSID device.
+
+=item B<--cpu-debug>
+
+Display cpu register and assembly dumps, available only
+for debug builds.
+
+=item B<--delay=>I<< [num] >>
+
+Simulate c64 power on delay as number of cpu cycles.
+If greater than 8191 the delay will be random.
+This is the default.
+
+=item B<--noaudio>
+
+Run without an audio output device.
+
+=item B<--nosid>
+
+Run without sid emulation.
+
+=item B<--none>
+
+Run with no audio output device and no sid emulation.
 
 =back
 
