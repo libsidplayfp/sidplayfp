@@ -422,6 +422,41 @@ public:
     const SID_STRING message() const { return msg; }
 };
 
+void createDir(const SID_STRING& path)
+{
+#ifndef _WIN32
+	DIR *dir = opendir(path.c_str());
+    if (dir)
+	{
+		closedir(dir);
+	}
+	else if (errno == ENOENT)
+	{
+        if (mkdir(path.c_str(), 0755) < 0)
+        {
+            throw iniError(strerror(errno));
+        }
+    }
+	else
+	{
+		throw iniError(strerror(errno));
+	}
+#else
+    if (GetFileAttributes(path.c_str()) == INVALID_FILE_ATTRIBUTES)
+    {
+        if (CreateDirectory(path.c_str(), NULL) == 0)
+        {
+            LPTSTR pBuffer;
+            FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
+                NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
+            iniError err(pBuffer);
+            LocalFree(pBuffer);
+            throw err;
+        }
+    }
+#endif
+}
+
 SID_STRING getConfigPath()
 {
     SID_STRING configPath;
@@ -437,31 +472,13 @@ SID_STRING getConfigPath()
 
     debug(TEXT("Config path: "), configPath.c_str());
 
+    // Make sure the config path exists
+	createDir(configPath);
+
     configPath.append(SEPARATOR).append(DIR_NAME);
 
-    // Make sure the config path exists
-#ifndef _WIN32
-    if (!opendir(configPath.c_str()))
-    {
-        if (mkdir(configPath.c_str(), 0755) < 0)
-        {
-            throw iniError(strerror(errno));
-        }
-    }
-#else
-    if (GetFileAttributes(configPath.c_str()) == INVALID_FILE_ATTRIBUTES)
-    {
-        if (CreateDirectory(configPath.c_str(), NULL) == 0)
-        {
-            LPTSTR pBuffer;
-            FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
-            iniError err(pBuffer);
-            LocalFree(pBuffer);
-            throw err;
-        }
-    }
-#endif
+    // Make sure the app config path exists
+	createDir(configPath);
 
     configPath.append(SEPARATOR).append(FILE_NAME);
 
