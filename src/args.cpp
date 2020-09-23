@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2019 Leandro Nini
+ * Copyright 2011-2020 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -126,7 +126,7 @@ void displayDebugArgs()
 
     out << "Debug Options:" << endl
         << " --cpu-debug   display cpu register and assembly dumps" << endl
-        << " --delay=<num> simulate c64 power on delay" << endl
+        << " --delay=<num> simulate c64 power on delay (default: random)" << endl
         << " --noaudio     no audio output device" << endl
         << " --nosid       no sid emulation" << endl
         << " --none        no audio output device and no sid emulation" << endl;
@@ -581,7 +581,7 @@ void ConsolePlayer::displayArgs (const char *arg)
     out << "Options:" << endl
         << " --help|-h    display this screen" << endl
         << " --help-debug debug help menu" << endl
-        << " -b<num>      set start time in [m:]s format (default 0)" << endl
+        << " -b<num>      set start time in [m:]s format (default: 0)" << endl
 
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
