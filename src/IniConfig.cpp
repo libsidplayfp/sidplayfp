@@ -494,7 +494,7 @@ bool tryOpen(iniHandler &ini)
         // Try exec dir first
         SID_STRING execPath(utils::getExecPath());
         execPath.append(SEPARATOR).append(FILE_NAME);
-        if (ini.open(execPath.c_str()))
+        if (ini.tryOpen(execPath.c_str()))
             return true;
     }
 #endif

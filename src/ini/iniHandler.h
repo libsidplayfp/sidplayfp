@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010-2014 Leandro Nini
+ *  Copyright (C) 2010-2020 Leandro Nini
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,6 +66,7 @@ public:
     iniHandler();
     ~iniHandler();
 
+    bool tryOpen(const TCHAR *fName);
     bool open(const TCHAR *fName);
     bool write(const TCHAR *fName);
     void close();
