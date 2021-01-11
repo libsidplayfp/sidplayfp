@@ -66,21 +66,21 @@ iniHandler::stringPair_t iniHandler::parseKey(const SID_STRING &buffer)
 
 bool iniHandler::open(const TCHAR *fName)
 {
-	if (tryOpen(fName))
-		return true;
+    if (tryOpen(fName))
+        return true;
 
-	// Try creating new file
+    // Try creating new file
 #ifdef _WIN32
-	const HANDLE h = CreateFile(fName, GENERIC_READ|GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (h != INVALID_HANDLE_VALUE)
-	{
-		CloseHandle(h);
-		return true;
-	}
+    const HANDLE h = CreateFile(fName, GENERIC_READ|GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+    if (h != INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(h);
+        return true;
+    }
     return false;
 #else
-	SID_WOFSTREAM newIniFile(fName);
-	return newIniFile.is_open();
+    SID_WOFSTREAM newIniFile(fName);
+    return newIniFile.is_open();
 #endif
 }
 
