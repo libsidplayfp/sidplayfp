@@ -77,6 +77,7 @@ bool iniHandler::open(const TCHAR *fName)
 		CloseHandle(h);
 		return true;
 	}
+    return false;
 #else
 	SID_WOFSTREAM newIniFile(fName);
 	return newIniFile.is_open();
