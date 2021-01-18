@@ -1,7 +1,8 @@
 sidplayfp
 =========
 
-http://sourceforge.net/projects/sidplay-residfp/
+https://github.com/libsidplayfp/sidplayfp
+https://sourceforge.net/projects/sidplay-residfp/
 
 sidplayfp is a fork of SIDPLAY2, a C64 music player which integrates
 the reSID SID chip emulation into a cycle-based emulator environment,
@@ -10,7 +11,7 @@ and the SID chips.
 
 Copyright (c) 2000 Simon White
 Copyright (c) 2007-2010 Antti Lankila
-Copyright (c) 2010-2019 Leandro Nini <drfiemost@users.sourceforge.net>
+Copyright (c) 2010-2021 Leandro Nini <drfiemost@users.sourceforge.net>
 
 
 NOTE:
