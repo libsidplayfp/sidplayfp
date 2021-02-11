@@ -59,5 +59,7 @@ enum
 };
 
 int  keyboard_decode      ();
+#ifndef _WIN32
 void keyboard_enable_raw  ();
 void keyboard_disable_raw ();
+#endif
