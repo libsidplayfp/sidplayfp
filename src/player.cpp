@@ -561,7 +561,11 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
         const int_least32_t length = newSonglengthDB ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
+#else
+        const int_least32_t length = m_database.length(m_tune) * 1000;
+#endif
         if (length > 0)
             m_timer.length = length;
     }
@@ -717,9 +721,13 @@ void ConsolePlayer::stop ()
 // External Timer Event
 void ConsolePlayer::updateDisplay()
 {
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
     const uint_least32_t milliseconds = m_engine.timeMs();
     const uint_least32_t seconds = milliseconds / 1000;
-
+#else
+    const uint_least32_t seconds = m_engine.time();
+    const uint_least32_t milliseconds = seconds * 1000;
+#endif
     if (!m_quietLevel && (seconds != (m_timer.current / 1000)))
     {
         cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
@@ -791,7 +799,12 @@ void ConsolePlayer::decodeKeys ()
             if (!m_track.single)
             {   // Only select previous song if less than timeout
                 // else restart current song
-                if ((m_engine.timeMs()) < SID2_PREV_SONG_TIMEOUT)
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
+    const uint_least32_t milliseconds = m_engine.timeMs();
+#else
+    const uint_least32_t milliseconds = m_engine.time() * 1000;
+#endif
+                if (milliseconds < SID2_PREV_SONG_TIMEOUT)
                 {
                     m_track.selected--;
                     if (m_track.selected < 1)

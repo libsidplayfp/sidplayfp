@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2019 Leandro Nini
+ * Copyright 2011-2021 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -351,13 +351,13 @@ void ConsolePlayer::menu ()
         cerr << " SID Filter   : ";
         consoleColour (white, false);
         cerr << (m_filter.enabled ? "Yes" : "No") << endl;
-
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " DigiBoost    : ";
         consoleColour (white, false);
         cerr << (m_engCfg.digiBoost ? "Yes" : "No") << endl;
-
+#endif
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " SID Model    : ";

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2020 Leandro Nini
+ * Copyright 2011-2021 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -110,7 +110,9 @@ void IniConfig::clear()
     emulation_s.modelForced   = false;
     emulation_s.sidModel      = SidConfig::MOS6581;
     emulation_s.forceModel    = false;
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
     emulation_s.ciaModel      = SidConfig::MOS6526;
+#endif
     emulation_s.filter        = true;
     emulation_s.engine.clear();
 
@@ -380,7 +382,7 @@ void IniConfig::readEmulation(iniHandler &ini)
 
     readBool(ini, TEXT("ForceC64Model"), emulation_s.modelForced);
     readBool(ini, TEXT("DigiBoost"), emulation_s.digiboost);
-
+#if LIBSIDPLAYFP_VERSION_MAJ > 1
     {
         SID_STRING str = readString(ini, TEXT("CiaModel"));
         if (!str.empty())
@@ -391,7 +393,7 @@ void IniConfig::readEmulation(iniHandler &ini)
                 emulation_s.ciaModel = SidConfig::MOS8521;
         }
     }
-
+#endif
     {
         SID_STRING str = readString(ini, TEXT("SidModel"));
         if (!str.empty())
