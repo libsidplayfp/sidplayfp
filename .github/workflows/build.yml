@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: deps
-      run: sudo apt-get install libsidplayfp-dev
+      run: sudo apt-get install libsidplayfp-dev libmpg123-dev
     - uses: actions/checkout@v2
     - name: bootstrap
       run: autoreconf -vfi
