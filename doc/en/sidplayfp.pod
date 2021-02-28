@@ -260,7 +260,7 @@ The c64 character generator rom dump file.
 
 =head1 BUGS
 
-The upstream bug tracker can be found at L<http://sourceforge.net/p/sidplay-residfp/bugs/>.
+The upstream bug tracker can be found at L<https://github.com/libsidplayfp/sidplayfp/issues/>.
 
 
 =head1 SEE ALSO
@@ -319,7 +319,7 @@ Wrote the original man page.
 
 =over
 
-=item SourceForge project: L<http://sourceforge.net/projects/sidplay-residfp/>
+=item Home page: L<https://github.com/libsidplayfp/>
 
 =item Sidplay2 homepage: L<http://sidplay2.sourceforge.net/>
 

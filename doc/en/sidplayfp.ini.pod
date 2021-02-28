@@ -267,7 +267,7 @@ Wrote the originla man page.
 
 =over
 
-=item SourceForge project: L<http://sourceforge.net/projects/sidplay-residfp/>
+=item Home page: L<https://github.com/libsidplayfp/>
 
 =item Sidplay2 homepage: L<http://sidplay2.sourceforge.net/>
 

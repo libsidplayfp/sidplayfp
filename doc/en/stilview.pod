@@ -692,7 +692,7 @@ Current maintainer.
 
 =over
 
-=item SourceForge project: L<http://sourceforge.net/projects/sidplay-residfp/>
+=item Home page: L<https://github.com/libsidplayfp/>
 
 =item High Voltage Sid Collection (HVSC): L<http://hvsc.c64.org/>
 
