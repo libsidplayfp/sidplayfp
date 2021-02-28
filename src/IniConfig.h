@@ -25,6 +25,7 @@
 #include "ini/types.h"
 #include "ini/iniHandler.h"
 
+#include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/SidConfig.h>
 
 /*
