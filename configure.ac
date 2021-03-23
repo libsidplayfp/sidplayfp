@@ -10,7 +10,7 @@ AM_INIT_AUTOMAKE
 
 AC_CANONICAL_HOST
 case "$host" in
-    *mingw32* )
+    *mingw* )
         MINGW32=yes
         ;;
     *darwin* )
