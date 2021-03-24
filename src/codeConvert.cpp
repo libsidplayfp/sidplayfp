@@ -44,6 +44,12 @@ const char* codeConvert::convert(const char* src)
             break;
     }
 
+    // flush
+    iconv(cd, NULL, &srcLeft, &outPtr, &outLeft);
+
+    // terminate buffer string
+    *outPtr = 0;
+
     return buffer;
 #else
     return src;
