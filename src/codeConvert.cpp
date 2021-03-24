@@ -20,9 +20,11 @@
 
 #include "codeConvert.h"
 
-#ifdef HAVE_ICONV
+#if defined HAVE_ICONV && defined _WIN32
 #  include "codepages.h"
 #endif
+
+#include <cstring>
 
 const char* codeConvert::convert(const char* src)
 {
