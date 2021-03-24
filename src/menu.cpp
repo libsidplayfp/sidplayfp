@@ -21,6 +21,8 @@
 
 #include "player.h"
 
+#include "codeConvert.h"
+
 #include <cstring>
 #include <ctype.h>
 
@@ -40,6 +42,7 @@ using std::string;
 
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
+
 
 const char SID6581[] = "MOS6581";
 const char SID8580[] = "CSG8580";
@@ -88,7 +91,6 @@ const char* getClock(SidTuneInfo::clock_t clock)
     }
 }
 
-
 // Display console menu
 void ConsolePlayer::menu ()
 {
@@ -126,25 +128,27 @@ void ConsolePlayer::menu ()
     const unsigned int n = tuneInfo->numberOfInfoStrings();
     if (n)
     {
+        codeConvert codeset;
+
         consoleTable (tableSeparator);
 
         consoleTable  (tableMiddle);
         consoleColour (cyan, true);
         cerr << " Title        : ";
         consoleColour (magenta, true);
-        cerr << tuneInfo->infoString(0) << endl;
+        cerr << codeset.convert(tuneInfo->infoString(0)) << endl;
         if (n>1)
         {
             consoleTable  (tableMiddle);
             consoleColour (cyan, true);
             cerr << " Author       : ";
             consoleColour (magenta, true);
-            cerr << tuneInfo->infoString(1) << endl;
+            cerr << codeset.convert(tuneInfo->infoString(1)) << endl;
             consoleTable  (tableMiddle);
             consoleColour (cyan, true);
             cerr << " Released     : ";
             consoleColour (magenta, true);
-            cerr << tuneInfo->infoString(2) << endl;
+            cerr << codeset.convert(tuneInfo->infoString(2)) << endl;
         }
     }
 

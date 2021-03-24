@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [2.1.1], [], [], [https://github.com/libsidplayfp/sidplayfp/])
+AC_INIT([sidplayfp], [2.2.0], [], [], [https://github.com/libsidplayfp/sidplayfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,7 +10,7 @@ AM_INIT_AUTOMAKE
 
 AC_CANONICAL_HOST
 case "$host" in
-    *mingw32* )
+    *mingw* )
         MINGW32=yes
         ;;
     *darwin* )
@@ -34,6 +34,8 @@ SID_CXX_COMPILE_STDCXX_11
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN
 
+AM_ICONV
+AM_CONDITIONAL([USE_ICONV], [test "x$am_cv_func_iconv" = "xyes"])
 
 dnl Audio subsystem
 
