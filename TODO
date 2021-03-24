@@ -4,6 +4,5 @@ TODO:
 * display the config path used as it may vary across systems and add it to the man page
 * support unicode filenames on Windows (depends on libsidplayfp)
 * add playlist support (pls)
-* try to correctly display non-ascii credits
 
 * fix building on Cygwin

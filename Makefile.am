@@ -12,6 +12,11 @@ src/audio/out123/audiodrv.cpp \
 src/audio/out123/audiodrv.h
 endif
 
+if USE_ICONV
+  ICONV_SOURCES = \
+src/codepages.h
+endif
+
 AM_CPPFLAGS = \
 -I $(top_builddir)/src \
 -I $(top_srcdir)/src \
@@ -45,6 +50,9 @@ src/player.h \
 src/sidcxx11.h \
 src/utils.cpp \
 src/utils.h \
+src/codeConvert.cpp \
+src/codeConvert.h \
+$(ICONV_SOURCES) \
 src/audio/AudioBase.h \
 src/audio/AudioConfig.h \
 src/audio/AudioDrv.cpp \
@@ -74,6 +82,7 @@ src/ini/sidfstream.h \
 src/ini/types.h
 
 src_sidplayfp_LDADD = \
+$(LIBICONV) \
 $(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
