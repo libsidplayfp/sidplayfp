@@ -1,7 +1,9 @@
 aclocal.m4
 autom4te.cache
-build-aux
+build-aux/*
+!build-aux/config.rpath
 configure
+configure~
 config.log
 config.status
 Makefile
@@ -13,6 +15,7 @@ src/config.h.in
 *.la
 *.lo
 src/config.h
+src/config.h.in~
 src/stamp-h1
 doc/en/*.1
 doc/en/*.5
