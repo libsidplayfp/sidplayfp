@@ -819,7 +819,7 @@ void ConsolePlayer::decodeKeys ()
             m_speed.current *= 2;
             if (m_speed.current > m_speed.max)
                 m_speed.current = m_speed.max;
-std::cout << "---" <<  (int)m_speed.current << std::endl;   
+  
             m_engine.fastForward (100 * m_speed.current);
         break;
 
