@@ -48,6 +48,7 @@ src/menu.cpp \
 src/player.cpp \
 src/player.h \
 src/sidcxx11.h \
+src/sidlib_features.h \
 src/utils.cpp \
 src/utils.h \
 src/codeConvert.cpp \

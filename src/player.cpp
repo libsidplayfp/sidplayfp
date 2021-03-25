@@ -21,6 +21,8 @@
 
 #include "player.h"
 
+#include "sidlib_features.h"
+
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -183,7 +185,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.defaultC64Model = emulation.modelDefault;
         m_engCfg.defaultSidModel = emulation.sidModel;
         m_engCfg.forceSidModel   = emulation.forceModel;
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_CONFIG_CIAMODEL
         m_engCfg.ciaModel        = emulation.ciaModel;
 #endif
         m_engCfg.frequency    = audio.frequency;
@@ -561,7 +563,7 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_NEW_SONLEGTH_DB
         const int_least32_t length = newSonglengthDB ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
 #else
         const int_least32_t length = m_database.length(m_tune) * 1000;
@@ -721,7 +723,7 @@ void ConsolePlayer::stop ()
 // External Timer Event
 void ConsolePlayer::updateDisplay()
 {
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_NEW_SONLEGTH_DB
     const uint_least32_t milliseconds = m_engine.timeMs();
     const uint_least32_t seconds = milliseconds / 1000;
 #else
@@ -799,7 +801,7 @@ void ConsolePlayer::decodeKeys ()
             if (!m_track.single)
             {   // Only select previous song if less than timeout
                 // else restart current song
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_NEW_SONLEGTH_DB
     const uint_least32_t milliseconds = m_engine.timeMs();
 #else
     const uint_least32_t milliseconds = m_engine.time() * 1000;

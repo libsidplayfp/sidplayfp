@@ -29,6 +29,8 @@
 
 #include "ini/types.h"
 
+#include "sidlib_features.h"
+
 #include "sidcxx11.h"
 
 using std::cout;
@@ -182,7 +184,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (!parseAddress (&argv[i][3], m_engCfg.secondSidAddress))
                     err = true;
             }
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+#ifdef FEAT_THIRD_SID
             else if (strncmp (&argv[i][1], "ts", 2) == 0)
             {   // Override sidTune and enable the third sid
                 if (!parseAddress (&argv[i][3], m_engCfg.thirdSidAddress))
@@ -312,7 +314,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS8580;
             }
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_DIGIBOOST
             else if (strcmp (&argv[i][1], "-digiboost") == 0)
             {
                 m_engCfg.digiBoost = true;
@@ -587,7 +589,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -ds<addr>    set second sid address (e.g. -ds0xd420)" << endl
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+#ifdef FEAT_THIRD_SID
         << " -ts<addr>    set third sid address (e.g. -ts0xd440)" << endl
 #endif
 
@@ -613,7 +615,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
         << "              Use 'f' to force the model" << endl
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_DIGIBOOST
         << " --digiboost  Enable digiboost for 8580 model" << endl
 #endif
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl

@@ -21,6 +21,8 @@
 
 #include "player.h"
 
+#include "sidlib_features.h"
+
 #include "codeConvert.h"
 
 #include <cstring>
@@ -298,13 +300,13 @@ void ConsolePlayer::menu ()
         cerr << " SID Details  : ";
         consoleColour (white, false);
         cerr << "Model = ";
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+#ifdef FEAT_NEW_TUNEINFO_API
         cerr << getModel(tuneInfo->sidModel(0));
 #else
         cerr << getModel(tuneInfo->sidModel1());
 #endif
         cerr << endl;
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+#ifdef FEAT_NEW_TUNEINFO_API
         if (tuneInfo->sidChips() > 1)
 #else
         if (tuneInfo->isStereo())
@@ -314,7 +316,7 @@ void ConsolePlayer::menu ()
             consoleColour (yellow, true);
             cerr << "              : ";
             consoleColour (white, false);
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+#ifdef FEAT_NEW_TUNEINFO_API
             cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase(1) << dec;
             cerr << ", Model = " << getModel(tuneInfo->sidModel(1));
 #else
@@ -322,7 +324,7 @@ void ConsolePlayer::menu ()
             cerr << ", Model = " << getModel(tuneInfo->sidModel2());
 #endif
             cerr << endl;
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || LIBSIDPLAYFP_VERSION_MIN >= 8
+#ifdef FEAT_NEW_TUNEINFO_API
             if (tuneInfo->sidChips() > 2)
             {
                 consoleTable  (tableMiddle);
@@ -355,7 +357,7 @@ void ConsolePlayer::menu ()
         cerr << " SID Filter   : ";
         consoleColour (white, false);
         cerr << (m_filter.enabled ? "Yes" : "No") << endl;
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_DIGIBOOST
         consoleTable  (tableMiddle);
         consoleColour (yellow, true);
         cerr << " DigiBoost    : ";

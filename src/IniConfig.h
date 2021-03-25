@@ -25,6 +25,8 @@
 #include "ini/types.h"
 #include "ini/iniHandler.h"
 
+#include "sidlib_features.h"
+
 #include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/SidConfig.h>
 
@@ -72,7 +74,7 @@ public:
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
         bool          forceModel;
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
+#ifdef FEAT_CONFIG_CIAMODEL
         SidConfig::cia_model_t  ciaModel;
 #endif
         bool          digiboost;
