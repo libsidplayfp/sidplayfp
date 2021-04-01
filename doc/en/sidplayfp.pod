@@ -52,9 +52,10 @@ Stereo playback.  If the tune is identified as stereo then sid 1
 and 2 become the left and right channels respectively.
 For three sid tunes the chips are mixed as left, center and right.
  
-=item B<-v|q>
+=item B<-v|q>[level]
 
 Verbose or quiet (no time display) console output while playing.
+Can include an optional level, defaults to 1.
 
 =item B<-b>I<< <num> >>
 
@@ -96,10 +97,6 @@ to create 16 bit signed samples, but can be set to 32
 Option 'l' will select continuous track looping while 's' will
 select the current track instead of all.  This option can be
 combined with the track selection to form -ols<num>.
-
-=item B<-q>
-
-Quiet output while playing (opposite of verbose).
 
 =item B<-t>I<< <num> >>
 

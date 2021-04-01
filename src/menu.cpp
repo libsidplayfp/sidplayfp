@@ -21,8 +21,6 @@
 
 #include "player.h"
 
-#include "sidlib_features.h"
-
 #include "codeConvert.h"
 
 #include <cstring>
@@ -45,6 +43,19 @@ using std::string;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
+#ifdef FEAT_REGS_DUMP_SID
+const char *noteName[] =
+{
+    "C-0", "C#0", "D-0", "D#0", "E-0", "F-0", "F#0", "G-0", "G#0", "A-0", "A#0", "B-0",
+    "C-1", "C#1", "D-1", "D#1", "E-1", "F-1", "F#1", "G-1", "G#1", "A-1", "A#1", "B-1",
+    "C-2", "C#2", "D-2", "D#2", "E-2", "F-2", "F#2", "G-2", "G#2", "A-2", "A#2", "B-2",
+    "C-3", "C#3", "D-3", "D#3", "E-3", "F-3", "F#3", "G-3", "G#3", "A-3", "A#3", "B-3",
+    "C-4", "C#4", "D-4", "D#4", "E-4", "F-4", "F#4", "G-4", "G#4", "A-4", "A#4", "B-4",
+    "C-5", "C#5", "D-5", "D#5", "E-5", "F-5", "F#5", "G-5", "G#5", "A-5", "A#5", "B-5",
+    "C-6", "C#6", "D-6", "D#6", "E-6", "F-6", "F#6", "G-6", "G#6", "A-6", "A#6", "B-6",
+    "C-7", "C#7", "D-7", "D#7", "E-7", "F-7", "F#7", "G-7", "G#7", "A-7", "A#7", "B-7",
+};
+#endif
 
 const char SID6581[] = "MOS6581";
 const char SID8580[] = "CSG8580";
@@ -92,7 +103,25 @@ const char* getClock(SidTuneInfo::clock_t clock)
         return "ANY";
     }
 }
+#ifdef FEAT_REGS_DUMP_SID
+const char *ConsolePlayer::getNote(uint16_t freq)
+{
+    if (freq)
+    {
+        int distance = 0xffff;
+        for (int i=0; i<(12 * 8); i++)
+        {
+            int d = abs(freq - m_freqTable[i]);
+            if (d < distance)
+                distance = d;
+            else
+                return noteName[i];
+        }
+    }
 
+    return "---";
+}
+#endif
 // Display console menu
 void ConsolePlayer::menu ()
 {
@@ -437,6 +466,19 @@ void ConsolePlayer::menu ()
     }
     cerr << endl;
 
+#ifdef FEAT_REGS_DUMP_SID
+    if (m_verboseLevel > 1)
+    {
+        consoleTable  (tableSeparator);
+        consoleTable (tableMiddle); cerr << "         NOTE PW         CONTROL          WAVEFORMS" << endl;
+
+        for (int i=0; i < tuneInfo->sidChips() * 3; i++)
+        {
+            consoleTable (tableMiddle); cerr << endl; // reserve space for the Voice 3 status
+        }
+    }
+#endif
+
     consoleTable (tableEnd);
 
     if (m_driver.file)
@@ -448,6 +490,106 @@ void ConsolePlayer::menu ()
     // is not disturbed.
     if ( !m_quietLevel )
         cerr << "00:00";
+    cerr << flush;
+}
+
+void ConsolePlayer::refreshRegDump()
+{
+#ifdef FEAT_REGS_DUMP_SID
+    if (m_verboseLevel > 1)
+    {
+        const SidTuneInfo *tuneInfo = m_tune.getInfo();
+
+        cerr << "\x1b[" << tuneInfo->sidChips() * 3 + 1 << "A\r"; // Moves cursor X lines up
+
+        for (int j=0; j < tuneInfo->sidChips(); j++)
+        {
+            uint8_t* registers = m_registers[j];
+            uint8_t oldCtl[3];
+            oldCtl[0] = registers[0x04];
+            oldCtl[1] = registers[0x0b];
+            oldCtl[2] = registers[0x12];
+
+            if (m_engine.getSidStatus(j, registers))
+            {
+                oldCtl[0] ^= registers[0x04];
+                oldCtl[1] ^= registers[0x0b];
+                oldCtl[2] ^= registers[0x12];
+
+                for (int i=0; i < 3; i++)
+                {
+                    consoleTable (tableMiddle);
+                    consoleColour (red, true);
+
+                    cerr << " Voice " << (j * 3 + i+1) << hex;
+
+                    consoleColour (yellow, true);
+                    ;
+                    cerr << " " << getNote(registers[0x00 + i * 0x07] | ((registers[0x01 + i * 0x07] & 0x0f) << 8))
+                         << " $" << setw(3) << setfill('0') << (registers[0x02 + i * 0x07] | ((registers[0x03 + i * 0x07] & 0x0f) << 8));
+
+                    // gate changed ?
+                    consoleColour((oldCtl[i] & 0x01) ? green : red, true);
+                    // gate on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x01) ? " GATE" : " gate");
+
+                    // sync changed ?
+                    consoleColour((oldCtl[i] & 0x02) ? green : red, true);
+                    // sync on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x02) ? " SYNC" : " sync");
+
+                    // ring changed ?
+                    consoleColour((oldCtl[i] & 0x04) ? green : red, true);
+                    // ring on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x04) ? " RING" : " ring");
+
+                    // test changed ?
+                    consoleColour((oldCtl[i] & 0x08) ? green : red, true);
+                    // test on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x08) ? " TEST" : " test");
+
+                    // triangle changed ?
+                    consoleColour((oldCtl[i] & 0x10) ? green : red, true);
+                    // triangle on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x10) ? " TRI" : " ___");
+
+                    // sawtooth changed ?
+                    consoleColour((oldCtl[i] & 0x20) ? green : red, true);
+                    // sawtooth on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x20) ? " SAW" : " ___");
+
+                    // pulse changed ?
+                    consoleColour((oldCtl[i] & 0x40) ? green : red, true);
+                    // pulse on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x40) ? " PUL" : " ___");
+
+                    // noise changed ?
+                    consoleColour((oldCtl[i] & 0x80) ? green : red, true);
+                    // noise on ?
+                    cerr << ((registers[0x04 + i * 0x07] & 0x80) ? " NOI" : " ___");
+
+                    cerr << dec << endl;
+                }
+            }
+            else
+            {
+                consoleTable (tableMiddle); cerr << "???" << endl;
+                consoleTable (tableMiddle); cerr << "???" << endl;
+                consoleTable (tableMiddle); cerr << "???" << endl;
+            }
+        }
+
+        consoleTable (tableEnd);
+    }
+    else
+#endif
+        cerr << "\r";
+
+    if (m_driver.file)
+        cerr << "Creating audio file, please wait...";
+    else
+        cerr << "Playing, press ESC to stop...";
+
     cerr << flush;
 }
 

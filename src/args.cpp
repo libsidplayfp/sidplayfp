@@ -609,7 +609,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -t<num>      set play length in [m:]s format (0 is endless)" << endl
 
-        << " -<v|q>       verbose or quiet (no time display) output" << endl
+        << " -<v|q>[x]    verbose or quiet output. x is the optional level, default=1" << endl
         << " -v[p|n][f]   set VIC PAL/NTSC clock speed (default: defined by song)" << endl
         << "              Use 'f' to force the clock by preventing speed fixing" << endl
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2019 Leandro Nini
+ * Copyright 2011-2021 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,8 +20,6 @@
  */
 
 #include "player.h"
-
-#include "sidlib_features.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -77,6 +75,33 @@ const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 const char ConsolePlayer::EXSID_ID[] = "exSID";
 #endif
 
+#ifdef FEAT_REGS_DUMP_SID
+uint16_t freqTablePal[]
+{
+    // C       C#      D       D#      E       F       F#      G       G#      A       A#      B
+    0x0117, 0x0127, 0x0139, 0x014b, 0x015f, 0x0174, 0x018a, 0x01a1, 0x01ba, 0x01d4, 0x01f0, 0x020e, // 1
+    0x022d, 0x024e, 0x0271, 0x0296, 0x02be, 0x02e8, 0x0314, 0x0343, 0x0374, 0x03a9, 0x03e1, 0x041c, // 2
+    0x045a, 0x049c, 0x04e2, 0x052d, 0x057c, 0x05cf, 0x0628, 0x0685, 0x06e8, 0x0752, 0x07c1, 0x0837, // 3
+    0x08b4, 0x0939, 0x09c5, 0x0a5a, 0x0af7, 0x0b9e, 0x0c4f, 0x0d0a, 0x0dd1, 0x0ea3, 0x0f82, 0x106e, // 4
+    0x1168, 0x1271, 0x138a, 0x14b3, 0x15ee, 0x173c, 0x189e, 0x1a15, 0x1ba2, 0x1d46, 0x1f04, 0x20dc, // 5
+    0x22d0, 0x24e2, 0x2714, 0x2967, 0x2bdd, 0x2e79, 0x313c, 0x3429, 0x3744, 0x3a8d, 0x3e08, 0x41b8, // 6
+    0x45a1, 0x49c5, 0x4e28, 0x52cd, 0x57ba, 0x5cf1, 0x6278, 0x6853, 0x6e87, 0x751a, 0x7c10, 0x8371, // 7
+    0x8b42, 0x9389, 0x9c4f, 0xa59b, 0xaf74, 0xb9e2, 0xc4f0, 0xd0a6, 0xdd0e, 0xea33, 0xf820, 0xffff, // 8
+};
+
+uint16_t freqTableNtsc[]
+{
+    // C       C#      D       D#      E       F       F#      G       G#      A       A#      B
+    0x010c, 0x011c, 0x012d, 0x013f, 0x0152, 0x0166, 0x017b, 0x0192, 0x01aa, 0x01c3, 0x01de, 0x01fa, // 1
+    0x0218, 0x0238, 0x025a, 0x027e, 0x02a4, 0x02cc, 0x02f7, 0x0324, 0x0354, 0x0386, 0x03bc, 0x03f5, // 2
+    0x0431, 0x0471, 0x04b5, 0x04fc, 0x0548, 0x0598, 0x05ee, 0x0648, 0x06a9, 0x070d, 0x0779, 0x07ea, // 3
+    0x0862, 0x08e2, 0x096a, 0x09f8, 0x0a90, 0x0b30, 0x0bdc, 0x0c90, 0x0d52, 0x0e1a, 0x0ef2, 0x0fd4, // 4
+    0x10c4, 0x11c4, 0x12d4, 0x13f0, 0x1520, 0x1660, 0x17b8, 0x1920, 0x1aa4, 0x1c34, 0x1de4, 0x1fa8, // 5
+    0x2188, 0x2388, 0x25a8, 0x27e0, 0x2a40, 0x2cc0, 0x2f70, 0x3240, 0x3548, 0x3868, 0x3bc8, 0x3f50, // 6
+    0x4310, 0x4710, 0x4b50, 0x4fc0, 0x5480, 0x5980, 0x5ee0, 0x6480, 0x6a90, 0x70d0, 0x7790, 0x7ea0, // 7
+    0x8620, 0x8e20, 0x96a0, 0x9f80, 0xa900, 0xb300, 0xbdc0, 0xc900, 0xd520, 0xe1a0, 0xef20, 0xfd40, // 8
+};
+#endif
 
 uint8_t* loadRom(const SID_STRING &romPath, const int size)
 {
@@ -157,7 +182,11 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_verboseLevel(0),
     m_cpudebug(false),
     newSonglengthDB(false)
-{   // Other defaults
+{
+#ifdef FEAT_REGS_DUMP_SID
+    memset(m_registers, 0, 32*3);
+#endif
+    // Other defaults
     m_filter.enabled = true;
     m_driver.device  = NULL;
     m_driver.sid     = EMU_RESIDFP;
@@ -337,6 +366,9 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         displayError (ERR_NOT_ENOUGH_MEMORY);
         return false;
     }
+
+    if (tuneInfo && (tuneInfo->sidChips() > 1))
+        m_engCfg.playback = SidConfig::STEREO;
 
     // Configure with user settings
     m_driver.cfg.frequency = m_engCfg.frequency;
@@ -542,7 +574,9 @@ bool ConsolePlayer::open (void)
         displayError(m_engine.error ());
         return false;
     }
-
+#ifdef FEAT_REGS_DUMP_SID
+    m_freqTable = (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC) ? freqTableNtsc : freqTablePal;
+#endif
     // Start the player.  Do this by fast
     // forwarding to the start position
     m_driver.selected = &m_driver.null;
@@ -730,9 +764,13 @@ void ConsolePlayer::updateDisplay()
     const uint_least32_t seconds = m_engine.time();
     const uint_least32_t milliseconds = seconds * 1000;
 #endif
+
+    refreshRegDump();
+
     if (!m_quietLevel && (seconds != (m_timer.current / 1000)))
     {
-        cerr << "\b\b\b\b\b" << std::setw(2) << std::setfill('0')
+        //cerr << "\b\b\b\b\b";
+        cerr << std::setw(2) << std::setfill('0')
              << ((seconds / 60) % 100) << ':' << std::setw(2)
              << std::setfill('0') << (seconds % 60) << std::flush;
     }

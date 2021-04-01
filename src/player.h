@@ -39,6 +39,8 @@
 #include "audio/null/null.h"
 #include "IniConfig.h"
 
+#include "sidlib_features.h"
+
 #ifdef HAVE_TSID
 #  if HAVE_TSID > 1
 #    include <tsid2/tsid2.h>
@@ -124,6 +126,9 @@ private:
     IniConfig          m_iniCfg;
     SidDatabase        m_database;
 
+    uint8_t            m_registers[3][32];
+    uint16_t*          m_freqTable;
+
     // Display parameters
     uint_least8_t      m_quietLevel;
     uint_least8_t      m_verboseLevel;
@@ -201,6 +206,9 @@ private:
     void updateDisplay();
     void emuflush       (void);
     void menu           (void);
+    void refreshRegDump ();
+
+    const char *getNote(uint16_t freq);
 
     std::string getFileName(const SidTuneInfo *tuneInfo);
 
