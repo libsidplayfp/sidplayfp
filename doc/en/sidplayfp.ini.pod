@@ -148,7 +148,8 @@ Playback frequency expressed in Hertz. Default is 48000.
 
 =item B<Channels>=I<< <number> >>
 
-Number of channels, 1 for mono and 2 for stereo playback Default is 1.
+Number of channels, 1 for mono and 2 for stereo playback.
+Default is 1 for standard tunes and 2 for multi SID tunes.
 
 =item B<BitsPerSample>=I<< <16|32> >>
 

@@ -52,6 +52,10 @@ Stereo playback.  If the tune is identified as stereo then sid 1
 and 2 become the left and right channels respectively.
 For three sid tunes the chips are mixed as left, center and right.
  
+=item B<-m>
+
+Mono playback. 
+
 =item B<-v|q>[level]
 
 Verbose or quiet (no time display) console output while playing.

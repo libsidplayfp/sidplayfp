@@ -268,6 +268,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_engCfg.playback = SidConfig::STEREO;
             }
 
+            else if (argv[i][1] == 'm')
+            {   // Mono Playback
+                m_engCfg.playback = SidConfig::MONO;
+            }
+
             else if (argv[i][1] == 't')
             {
                 if (!parseTime (&argv[i][2], m_timer.length))
@@ -603,9 +608,8 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -p<num>      set format for file output (16 = signed 16 bit, 32 = 32 bit float)"
         << "(default: 16)" << endl
 
-#if !defined(DISALLOW_STEREO_SOUND)
-        << " -s           stereo sid support" << endl
-#endif
+        << " -s           force stereo output" << endl
+        << " -m           force mono output" << endl
 
         << " -t<num>      set play length in [m:]s format (0 is endless)" << endl
 
