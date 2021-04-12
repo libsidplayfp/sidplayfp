@@ -534,24 +534,28 @@ int ConsolePlayer::args(int argc, const char *argv[])
             if (!dbOpened)
             {
                 // Try load user configured songlength DB
+                if ((m_iniCfg.sidplay2()).database.length() != 0)
+                {
+                    // Try loading the database specificed by the user
 #if defined(_WIN32) && defined(UNICODE)
-                // FIXME
-                char database[MAX_PATH];
-                const int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
-                if (ret >= MAX_PATH)
-                    database[0] = '\0';
+#  ifdef FEAT_DB_WCHAR_OPEN
+                    const wchar_t *database = (m_iniCfg.sidplay2()).database.c_str();
+#  else
+                    char database[MAX_PATH];
+                    const int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
+                    if (ret >= MAX_PATH)
+                        database[0] = '\0';
+#  endif
 #else
-                const char *database = (m_iniCfg.sidplay2()).database.c_str();
+                    const char *database = (m_iniCfg.sidplay2()).database.c_str();
 #endif
-                if (strlen(database) != 0)
-                {   // Try loading the database specificed by the user
                     if (!m_database.open(database))
                     {
                         displayError (m_database.error ());
                         return -1;
                     }
 
-                    if (strstr(database, ".md5") != nullptr)
+                    if ((m_iniCfg.sidplay2()).database.find(TEXT(".md5")) != SID_STRING::npos)
                         newSonglengthDB = true;
                 }
             }
