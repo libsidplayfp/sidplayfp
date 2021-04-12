@@ -139,6 +139,7 @@ private:
 
     bool vMute[9];
 
+    int  m_channels;
     int  m_precision;
 
     struct m_filter_t

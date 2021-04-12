@@ -63,8 +63,8 @@ public:
     struct audio_section
     {   // INI Section - [Audio]
         int frequency;
-        SidConfig::playback_t playback;
-        int  precision;
+        int channels;
+        int precision;
     };
 
     struct emulation_section

@@ -265,12 +265,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
 
             else if (argv[i][1] == 's')
             {   // Stereo Playback
-                m_engCfg.playback = SidConfig::STEREO;
+                m_channels = 2;
             }
 
             else if (argv[i][1] == 'm')
             {   // Mono Playback
-                m_engCfg.playback = SidConfig::MONO;
+                m_channels = 1;
             }
 
             else if (argv[i][1] == 't')

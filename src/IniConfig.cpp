@@ -103,7 +103,7 @@ void IniConfig::clear()
     console_s.junctionRight = '+';
 
     audio_s.frequency = SidConfig::DEFAULT_SAMPLING_FREQ;
-    audio_s.playback  = SidConfig::MONO;
+    audio_s.channels  = 0;
     audio_s.precision = 16;
 
     emulation_s.modelDefault  = SidConfig::PAL;
@@ -339,20 +339,9 @@ void IniConfig::readAudio(iniHandler &ini)
     if (!ini.setSection (TEXT("Audio")))
         ini.addSection(TEXT("Audio"));
 
-    {
-        int frequency = (int) audio_s.frequency;
-        readInt(ini, TEXT("Frequency"), frequency);
-        audio_s.frequency = (unsigned long) frequency;
-    }
+    readInt(ini, TEXT("Frequency"), audio_s.frequency);
 
-    {
-        int channels = 0;
-        readInt(ini, TEXT("Channels"),  channels);
-        if (channels)
-        {
-            audio_s.playback = (channels == 1) ? SidConfig::MONO : SidConfig::STEREO;
-        }
-    }
+    readInt(ini, TEXT("Channels"),  audio_s.channels);
 
     readInt(ini, TEXT("BitsPerSample"), audio_s.precision);
 }

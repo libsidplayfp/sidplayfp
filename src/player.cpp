@@ -218,7 +218,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.ciaModel        = emulation.ciaModel;
 #endif
         m_engCfg.frequency    = audio.frequency;
-        m_engCfg.playback     = audio.playback;
+        m_channels            = audio.channels;
         m_precision           = audio.precision;
         m_filter.enabled      = emulation.filter;
         m_filter.bias         = emulation.bias;
@@ -367,16 +367,13 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         return false;
     }
 
-    if (tuneInfo && (tuneInfo->sidChips() > 1))
-        m_engCfg.playback = SidConfig::STEREO;
+    int tuneChannels = (tuneInfo && (tuneInfo->sidChips() > 1)) ? 2 : 1;
 
     // Configure with user settings
     m_driver.cfg.frequency = m_engCfg.frequency;
+    m_driver.cfg.channels = m_channels ? m_channels : tuneChannels;
     m_driver.cfg.precision = m_precision;
-    m_driver.cfg.channels  = 1; // Mono
     m_driver.cfg.bufSize   = 0; // Recalculate
-    if (m_engCfg.playback == SidConfig::STEREO)
-        m_driver.cfg.channels = 2;
 
     {   // Open the hardware
         bool err = false;
@@ -399,19 +396,16 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
     // See what we got
     m_engCfg.frequency = m_driver.cfg.frequency;
-    m_precision = m_driver.cfg.precision;
     switch (m_driver.cfg.channels)
     {
     case 1:
-        if (m_engCfg.playback == SidConfig::STEREO)
-            m_engCfg.playback  = SidConfig::MONO;
+        m_engCfg.playback  = SidConfig::MONO;
         break;
     case 2:
-        if (m_engCfg.playback != SidConfig::STEREO)
-            m_engCfg.playback  = SidConfig::STEREO;
+        m_engCfg.playback  = SidConfig::STEREO;
         break;
     default:
-        cerr << m_name << ": " << "ERROR: " << m_driver.cfg.channels
+        cerr << m_name << ": " << "ERROR: " << m_channels
              << " audio channels not supported" << endl;
         return false;
     }
