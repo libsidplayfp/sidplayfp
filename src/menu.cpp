@@ -275,6 +275,9 @@ void ConsolePlayer::menu ()
         const uint_least32_t seconds = m_timer.stop / 1000;
         cerr << setw(2) << setfill('0') << ((seconds / 60) % 100)
              << ':' << setw(2) << setfill('0') << (seconds % 60);
+#ifdef FEAT_NEW_SONLEGTH_DB
+        cerr << '.' << setw(3) << m_timer.stop % 1000;
+#endif
     }
     else if (m_timer.valid)
         cerr << "FOREVER";
