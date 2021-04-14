@@ -86,6 +86,7 @@ bool parseTime(const char *str, uint_least32_t &time)
         return false;
 
     uint_least32_t _time;
+    uint_least32_t milliseconds = 0;
 
     char *sep = (char *) strstr (str, ":");
     if (!sep)
@@ -93,21 +94,41 @@ bool parseTime(const char *str, uint_least32_t &time)
         _time = atoi (str);
     }
     else
-    {   // Read in MM:SS format
-        // TODO parse milliseconds too
+    {   // Read in MM:SS[.mmm] format
         int val;
         *sep = '\0';
         val  = atoi (str);
         if (val < 0 || val > 99)
             return false;
         _time = (uint_least32_t) val * 60;
+        // parse milliseconds
+        char *milli = (char *) strstr (sep+1, ".");
+        if (milli)
+        {
+            char *start = milli + 1;
+            char *end;
+            milliseconds = strtol(start, &end, 10);
+            switch (end - start)
+            {
+            case 1: milliseconds *= 100; break;
+            case 2: milliseconds *= 10; break;
+            case 3: break;
+            default: return false;
+            }
+
+            if (milliseconds < 0 || milliseconds > 999)
+                return false;
+
+            *milli = '\0';
+        }
         val   = atoi (sep + 1);
         if (val < 0 || val > 59)
             return false;
         _time += (uint_least32_t) val;
     }
 
-    time = _time * 1000;
+    time = _time * 1000 + milliseconds;
+std::cout << time << std::endl;
     return true;
 }
 

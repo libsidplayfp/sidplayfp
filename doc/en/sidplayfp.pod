@@ -63,7 +63,7 @@ Can include an optional level, defaults to 1.
 
 =item B<-b>I<< <num> >>
 
-Set start time in [mins:]secs format (compatible with sid2wav).
+Set start time in [mins:]secs[.milli] format (compatible with sid2wav).
 
 =item B<-ds>I<< <addr> >>
 
@@ -104,7 +104,7 @@ combined with the track selection to form -ols<num>.
 
 =item B<-t>I<< <num> >>
 
-Set play length in [mins:]secs format (0 is endless).
+Set play length in [mins:]secs[.milli] format (0 is endless).
 
 =item B<-v>I<< <n|p>[f] >>
 
