@@ -274,7 +274,7 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
         return false;
     }
 
-    value = time;
+    value = time * 1000;
     return true;
 
 IniCofig_readTime_error:
