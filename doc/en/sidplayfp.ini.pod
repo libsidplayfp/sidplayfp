@@ -45,11 +45,11 @@ Full path for the Songlength DB.
 By default the program will look for a file named F<DOCUMENTS/Songlengths.txt> under the HVSC collection path, if the HVSC_BASE environment variable is defined.
 On *NIX systems, if this value is not set, L<sidplayfp(1)> will try F<$PREFIX/share/sidplayfp/Songlengths.txt>.
 
-=item B<Default Play Length>=I<mm:ss>
+=item B<Default Play Length>=I<MM:SS.mmm>
 
 Default play time if Songlength Database is not found.
 
-=item B<Default Record Length>=I<mm:ss>
+=item B<Default Record Length>=I<MM:SS.mmm>
 
 Default recording time when writing wave files if Songlength Database is not found.
 

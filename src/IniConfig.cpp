@@ -248,7 +248,9 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
         return false;
 
     int time;
+    int milliseconds = 0;
     const size_t sep = str.find_first_of(':');
+    const size_t dot = str.find_first_of('.');
     try
     {
         if (sep == SID_STRING::npos)
@@ -256,13 +258,31 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
             time = dataParser::parseInt(str.c_str());
         }
         else
-        {   // Read in MM:SS format
+        {   // Read in MM:SS.mmm format
             const int min = dataParser::parseInt(str.substr(0, sep).c_str());
             if (min < 0 || min > 99)
                 goto IniCofig_readTime_error;
             time = min * 60;
 
-            const int sec  = dataParser::parseInt(str.substr(sep + 1).c_str());
+            int sec;
+            if (dot == SID_STRING::npos)
+            {
+                sec  = dataParser::parseInt(str.substr(sep + 1).c_str());
+            }
+            else
+            {
+                sec  = dataParser::parseInt(str.substr(sep + 1, dot - sep).c_str());
+                SID_STRING msec = str.substr(dot + 1);
+                milliseconds = dataParser::parseInt(msec.c_str());
+                switch (msec.length())
+                {
+                case 1: milliseconds *= 100; break;
+                case 2: milliseconds *= 10; break;
+                case 3: break;
+                default: goto IniCofig_readTime_error;
+                }
+            }
+
             if (sec < 0 || sec > 59)
                 goto IniCofig_readTime_error;
             time += sec;
@@ -274,7 +294,7 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
         return false;
     }
 
-    value = time * 1000;
+    value = time * 1000 + milliseconds;
     return true;
 
 IniCofig_readTime_error:
