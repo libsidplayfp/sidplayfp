@@ -128,7 +128,6 @@ bool parseTime(const char *str, uint_least32_t &time)
     }
 
     time = _time * 1000 + milliseconds;
-std::cout << time << std::endl;
     return true;
 }
 
