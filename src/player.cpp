@@ -680,7 +680,7 @@ void ConsolePlayer::emuflush ()
 
 
 // Out play loop to be externally called
-bool ConsolePlayer::play ()
+bool ConsolePlayer::play()
 {
     uint_least32_t retSize = 0;
     if (m_state == playerRunning)
@@ -688,12 +688,12 @@ bool ConsolePlayer::play ()
         updateDisplay();
 
         // Fill buffer
-        short *buffer = m_driver.selected->buffer ();
-        const uint_least32_t length = m_driver.cfg.bufSize; // FIXME
-        retSize = m_engine.play (buffer, length);
+        short *buffer = m_driver.selected->buffer();
+        const uint_least32_t length = getBufSize();
+        retSize = m_engine.play(buffer, length);
         if (retSize < length)
         {
-            if (m_engine.isPlaying ())
+            if (m_engine.isPlaying())
             {
                 m_state = playerError;
             }
@@ -704,7 +704,7 @@ bool ConsolePlayer::play ()
     switch (m_state)
     {
     case playerRunning:
-        m_driver.selected->write (retSize);
+        m_driver.selected->write(retSize);
         // fall-through
     case playerPaused:
         // Check for a keypress (approx 250ms rate, but really depends
@@ -751,6 +751,49 @@ void ConsolePlayer::stop ()
 }
 
 
+uint_least32_t ConsolePlayer::getBufSize()
+{
+    if (m_timer.starting && (m_timer.current >= m_timer.start))
+    {   // Switch audio drivers.
+        m_timer.starting = false;
+        m_driver.selected = m_driver.device;
+        memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
+        m_speed.current = 1;
+        m_engine.fastForward(100);
+        if (m_cpudebug)
+            m_engine.debug (true, nullptr);
+    }
+    else if ((m_timer.stop != 0) && (m_timer.current >= m_timer.stop))
+    {
+        m_state = playerExit;
+        for (;;)
+        {
+            if (m_track.single)
+                return 0;
+            // Move to next track
+            m_track.selected++;
+            if (m_track.selected > m_track.songs)
+                m_track.selected = 1;
+            if (m_track.selected == m_track.first)
+                return 0;
+            m_state = playerRestart;
+            break;
+        }
+        if (m_track.loop)
+            m_state = playerRestart;
+    }
+    else
+    {
+        uint_least32_t remaining = m_timer.stop - m_timer.current;
+        uint_least32_t bufSize = remaining * m_driver.cfg.bytesPerMillis();
+        if (bufSize < m_driver.cfg.bufSize)
+            return bufSize;
+    }
+
+    return m_driver.cfg.bufSize;
+}
+
+
 // External Timer Event
 void ConsolePlayer::updateDisplay()
 {
@@ -773,36 +816,6 @@ void ConsolePlayer::updateDisplay()
     }
 
     m_timer.current = milliseconds;
-
-    if (m_timer.starting && (milliseconds >= m_timer.start))
-    {   // Switch audio drivers.
-        m_timer.starting = false;
-        m_driver.selected = m_driver.device;
-        memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
-        m_speed.current = 1;
-        m_engine.fastForward(100);
-        if (m_cpudebug)
-            m_engine.debug (true, nullptr);
-    }
-    else if ((m_timer.stop != 0) && (milliseconds >= m_timer.stop))
-    {
-        m_state = playerExit;
-        for (;;)
-        {
-            if (m_track.single)
-                return;
-            // Move to next track
-            m_track.selected++;
-            if (m_track.selected > m_track.songs)
-                m_track.selected = 1;
-            if (m_track.selected == m_track.first)
-                return;
-            m_state = playerRestart;
-            break;
-        }
-        if (m_track.loop)
-            m_state = playerRestart;
-    }
 }
 
 void ConsolePlayer::displayError (const char *error)
