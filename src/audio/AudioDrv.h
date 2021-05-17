@@ -37,7 +37,7 @@ public:
 
     bool open(AudioConfig &cfg);
     void reset() { audio->reset(); }
-    bool write() { return audio->write(); }
+    bool write(uint_least32_t size) { return audio->write(size); }
     void close() { audio->close(); }
     void pause() { audio->pause(); }
     short *buffer() const { return audio->buffer(); }

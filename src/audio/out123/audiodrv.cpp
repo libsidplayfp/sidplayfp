@@ -126,7 +126,7 @@ void Audio_OUT123::reset()
     }
 }
 
-bool Audio_OUT123::write()
+bool Audio_OUT123::write(uint_least32_t size)
 {
     if (_audiofd == nullptr)
     {
@@ -134,7 +134,7 @@ bool Audio_OUT123::write()
         return false;
     }
 
-    out123_play(_audiofd, _sampleBuffer, 2 * _settings.bufSize);
+    out123_play(_audiofd, _sampleBuffer, 2 * size);
     // FIXME check return value?
     return true;
 }

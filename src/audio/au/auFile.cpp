@@ -238,11 +238,11 @@ bool auFile::open(AudioConfig &cfg)
     return true;
 }
 
-bool auFile::write()
+bool auFile::write(uint_least32_t size)
 {
     if (file && !file->fail())
     {
-        unsigned long int bytes = _settings.bufSize;
+        unsigned long int bytes = size;
         if (!headerWritten)
         {
             file->write((char*)&auHdr, sizeof(auHeader));
@@ -251,9 +251,9 @@ bool auFile::write()
 
         if (precision == 16)
         {
-            std::vector<uint_least16_t> buffer(_settings.bufSize);
+            std::vector<uint_least16_t> buffer(size);
             bytes *= 2;
-            for (unsigned long i=0; i<_settings.bufSize; i++)
+            for (unsigned long i=0; i<size; i++)
             {
                 uint_least16_t temp = _sampleBuffer[i];
                 buffer[i] = endian_big16((uint8_t*)&temp);
@@ -262,10 +262,10 @@ bool auFile::write()
         }
         else
         {
-            std::vector<float> buffer(_settings.bufSize);
+            std::vector<float> buffer(size);
             bytes *= 4;
             // normalize floats
-            for (unsigned long i=0; i<_settings.bufSize; i++)
+            for (unsigned long i=0; i<size; i++)
             {
                 float temp = ((float)_sampleBuffer[i])/32768.f;
                 buffer[i] = endian_big32((uint8_t*)&temp);

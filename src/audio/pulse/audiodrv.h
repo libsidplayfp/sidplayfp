@@ -48,7 +48,7 @@ public:  // --------------------------------------------------------- public
     bool open  (AudioConfig &cfg) override;
     void close () override;
     void reset () override {}
-    bool write () override;
+    bool write (uint_least32_t size) override;
     void pause () override {}
 };
 

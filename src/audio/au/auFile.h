@@ -72,7 +72,7 @@ public:
 
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
-    bool write() override;
+    bool write(uint_least32_t size) override;
     void close() override;
     void pause() override {}
     void reset() override {}

@@ -183,11 +183,11 @@ bool WavFile::open(AudioConfig &cfg)
     return true;
 }
 
-bool WavFile::write()
+bool WavFile::write(uint_least32_t size)
 {
     if (file && !file->fail())
     {
-        unsigned long int bytes = _settings.bufSize;
+        unsigned long int bytes = size;
         if (!headerWritten)
         {
             file->write((char*)&riffHdr, sizeof(riffHeader));
@@ -205,10 +205,10 @@ bool WavFile::write()
         }
         else
         {
-            std::vector<float> buffer(_settings.bufSize);
+            std::vector<float> buffer(size);
             bytes *= 4;
             // normalize floats
-            for (unsigned long i=0; i<_settings.bufSize; i++)
+            for (unsigned long i=0; i<size; i++)
             {
                 buffer[i] = ((float)_sampleBuffer[i])/32768.f;
             }
