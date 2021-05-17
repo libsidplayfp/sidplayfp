@@ -115,7 +115,7 @@ void Audio_Pulse::close()
     }
 }
 
-bool Audio_Pulse::write()
+bool Audio_Pulse::write(uint_least32_t size)
 {
     if (_audioHandle == nullptr)
     {
@@ -124,7 +124,7 @@ bool Audio_Pulse::write()
     }
 
     int err;
-    if (pa_simple_write(_audioHandle, _sampleBuffer, _settings.bufSize * 2, &err) < 0)
+    if (pa_simple_write(_audioHandle, _sampleBuffer, size * 2, &err) < 0)
     {
         setError(pa_strerror(err));
         // FIXME should we return false here?

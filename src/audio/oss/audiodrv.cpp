@@ -155,7 +155,7 @@ void Audio_OSS::reset ()
     }
 }
 
-bool Audio_OSS::write ()
+bool Audio_OSS::write (uint_least32_t size)
 {
     if (_audiofd == -1)
     {
@@ -163,7 +163,7 @@ bool Audio_OSS::write ()
         return false;
     }
 
-    ::write (_audiofd, _sampleBuffer, 2 * _settings.bufSize);
+    ::write (_audiofd, _sampleBuffer, 2 * size);
     return true;
 }
 

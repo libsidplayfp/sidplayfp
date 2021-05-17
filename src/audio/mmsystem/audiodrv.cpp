@@ -173,7 +173,7 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
     }
 }
 
-bool Audio_MMSystem::write()
+bool Audio_MMSystem::write(uint_least32_t size)
 {
     if (!isOpen)
     {
@@ -183,6 +183,7 @@ bool Audio_MMSystem::write()
 
     /* Reset wave header fields: */
     blockHeaders[blockNum]->dwFlags = 0;
+    blockHeaders[blockNum]->dwBufferLength = size * 2;
 
     /* Prepare block header: */
     checkResult(waveOutPrepareHeader(waveHandle, blockHeaders[blockNum], sizeof(WAVEHDR)));

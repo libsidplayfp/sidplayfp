@@ -198,7 +198,7 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
     }
 }
 
-bool Audio_DirectX::write ()
+bool Audio_DirectX::write (uint_least32_t size)
 {
     if (!isOpen)
     {
@@ -206,7 +206,7 @@ bool Audio_DirectX::write ()
         return false;
     }
     // Unlock the current buffer for playing
-    lpDsb->Unlock (lpvData, bufSize, NULL, 0);
+    lpDsb->Unlock (lpvData, size, NULL, 0);
 
     // Check to see of the buffer is playing
     // and if not start it off
@@ -233,7 +233,7 @@ bool Audio_DirectX::write ()
 
     // Lock the next buffer for filling
     DWORD dwBytes;
-    if (FAILED (lpDsb->Lock (bufSize * dwEvt, bufSize, &lpvData, &dwBytes, NULL, NULL, 0)))
+    if (FAILED (lpDsb->Lock (size * dwEvt, size, &lpvData, &dwBytes, NULL, NULL, 0)))
     {
         setError("Unable to lock sound buffer.");
         return false;

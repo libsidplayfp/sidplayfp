@@ -682,15 +682,16 @@ void ConsolePlayer::emuflush ()
 // Out play loop to be externally called
 bool ConsolePlayer::play ()
 {
+    uint_least32_t retSize = 0;
     if (m_state == playerRunning)
     {
         updateDisplay();
 
         // Fill buffer
         short *buffer = m_driver.selected->buffer ();
-        const uint_least32_t length = m_driver.cfg.bufSize;
-        const uint_least32_t ret = m_engine.play (buffer, length);
-        if (ret < length)
+        const uint_least32_t length = m_driver.cfg.bufSize; // FIXME
+        retSize = m_engine.play (buffer, length);
+        if (retSize < length)
         {
             if (m_engine.isPlaying ())
             {
@@ -703,7 +704,7 @@ bool ConsolePlayer::play ()
     switch (m_state)
     {
     case playerRunning:
-        m_driver.selected->write ();
+        m_driver.selected->write (retSize);
         // fall-through
     case playerPaused:
         // Check for a keypress (approx 250ms rate, but really depends
