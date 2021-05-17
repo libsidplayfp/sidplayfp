@@ -209,6 +209,8 @@ private:
     void menu           (void);
     void refreshRegDump ();
 
+    uint_least32_t getBufSize();
+
     const char *getNote(uint16_t freq);
 
     std::string getFileName(const SidTuneInfo *tuneInfo, const char* ext);
