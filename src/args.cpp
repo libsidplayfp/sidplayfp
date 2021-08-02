@@ -283,16 +283,6 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     m_quietLevel = atoi(&argv[i][2]);
             }
 
-            else if (argv[i][1] == 's')
-            {   // Stereo Playback
-                m_channels = 2;
-            }
-
-            else if (argv[i][1] == 'm')
-            {   // Mono Playback
-                m_channels = 1;
-            }
-
             else if (argv[i][1] == 't')
             {
                 if (!parseTime (&argv[i][2], m_timer.length))
@@ -339,6 +329,16 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS8580;
             }
+
+            else if (argv[i][1] == 's')
+            {   // Stereo Playback
+                m_channels = 2;
+            }
+            else if (argv[i][1] == 'm')
+            {   // Mono Playback
+                m_channels = 1;
+            }
+
 #ifdef FEAT_DIGIBOOST
             else if (strcmp (&argv[i][1], "-digiboost") == 0)
             {
