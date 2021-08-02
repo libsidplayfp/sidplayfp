@@ -259,7 +259,7 @@ Wrote the original SidTune library and MD5 class (based on work by L. Peter Deut
 
 =item Mikko Kilponen
 
-Wrote the originla man page.
+Wrote the original man page.
 
 =back
 

@@ -11,6 +11,13 @@ Copyright (c) 2007-2010 Antti Lankila
 Copyright (c) 2010-2021 Leandro Nini <drfiemost@users.sourceforge.net>
 
 
+
+Documentation
+-------------
+https://github.com/libsidplayfp/sidplayfp/wiki
+
+
+
 NOTE:
 -----
 ROM dumps are not embedded but must be supplied by the user.
