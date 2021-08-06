@@ -103,6 +103,19 @@ const char* getClock(SidTuneInfo::clock_t clock)
         return "ANY";
     }
 }
+
+string trimString(const char* str, int maxLen)
+{
+    string data(str);
+    // avoid too long file names
+    if (data.length() > maxLen)
+    {
+        data.resize(maxLen - 3);
+        data.append("...");
+    }
+    return data;
+}
+
 #ifdef FEAT_REGS_DUMP_SID
 const char *ConsolePlayer::getNote(uint16_t freq)
 {
@@ -205,7 +218,7 @@ void ConsolePlayer::menu ()
         consoleColour (green, true);
         cerr << " Filename(s)  : ";
         consoleColour (white, true);
-        cerr << tuneInfo->dataFileName() << endl;
+        cerr << trimString(tuneInfo->dataFileName(), 37) << endl;
         // Second file is only sometimes present
         if (tuneInfo->infoFileName())
         {
