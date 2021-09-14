@@ -53,18 +53,20 @@ const char* codepageName(UINT codepage)
     case 1250:
         return "CP1250";
     case 1251:
-        return "CP1252";
+        return "CP1251";
     case 1252:
-        return "CP1253";
+        return "CP1252";
     case 1253:
-        return "CP1254";
+        return "CP1253";
     case 1254:
-        return "CP1255";
+        return "CP1254";
     case 1255:
-        return "CP1256";
+        return "CP1255";
     case 1256:
-        return "CP1257";
+        return "CP1256";
     case 1257:
+        return "CP1257";
+    case 1258:
         return "CP1258";
     case 1361:
         return "CP1361";
