@@ -2,6 +2,8 @@
 #ifndef CODEPAGES_H
 #define CODEPAGES_H
 
+// https://docs.microsoft.com/en-us/windows/win32/intl/code-page-identifiers
+
 const char* codepageName(UINT codepage)
 {
     switch (codepage)
@@ -43,13 +45,15 @@ const char* codepageName(UINT codepage)
     case 874:
         return "CP874";
     case 932:
-        return "CP932";
+        return "CP932"; // SHIFT_JIS
     case 936:
-        return "CP936";
+        return "CP936"; // GB2312
     case 949:
-        return "CP949";
+        return "CP949"; // KS_C_5601-1987
     case 950:
-        return "CP950";
+        return "CP950"; // BIG5
+    case 1200:
+        return "UTF-16";
     case 1250:
         return "CP1250";
     case 1251:
@@ -69,7 +73,43 @@ const char* codepageName(UINT codepage)
     case 1258:
         return "CP1258";
     case 1361:
-        return "CP1361";
+        return "CP1361"; // JOHAB
+    case 10000:
+        return "MACINTOSH";
+    case 10004:
+        return "MACARABIC";
+    case 10005:
+        return "MACHEBREW";
+    case 10006:
+        return "MACGREEK";
+    case 10007:
+        return "MACCYRILLIC";
+    case 10010:
+        return "MACROMANIA";
+    case 10017:
+        return "MACUKRAINE";
+    case 10021:
+        return "MACTHAI";
+    case 10029:
+        return "MACCENTRALEUROPE";
+    case 10079:
+        return "MACICELAND";
+    case 10081:
+        return "MACTURKISH";
+    case 10082:
+        return "MACCROATIAN";
+    case 12000:
+        return "UTF-32";
+    case 12001:
+        return "UTF-32BE";
+    case 20127:
+        return "US-ASCII";
+    case 20866:
+        return "KOI8-R";
+    case 20932:
+        return "EUC-JP";
+    case 21866:
+        return "KOI8-U";
     case 28591:
         return "ISO-8859-1";
     case 28592:
@@ -92,6 +132,24 @@ const char* codepageName(UINT codepage)
         return "ISO-8859-13";
     case 28605:
         return "ISO-8859-15";
+    case 50220:
+        return "ISO-2022-JP";
+    case 50221:
+        return "CSISO2022JP";
+    case 50222:
+        return "ISO-2022-JP";
+    case 50225:
+        return "ISO-2022-KR";
+    case 51932:
+        return "EUC-JP";
+    case 51936:
+        return "EUC-CN";
+    case 51949:
+        return "EUC-KR";
+    case 52936:
+        return "HZ-GB-2312";
+    case 54936:
+        return "GB18030";
     case 65000:
         return "UTF-7";
     case 65001:
