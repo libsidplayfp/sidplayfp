@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2021 Leandro Nini
+ * Copyright 2011-2022 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -268,13 +268,15 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     delete [] chargenRom;
 }
 
-std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo)
+std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo, const char* ext)
 {
     std::string title;
 
     if (m_outfile != NULL)
     {
         title = m_outfile;
+        if (title.find_last_of('.') == std::string::npos)
+            title.append(ext);
     }
     else
     {
@@ -290,6 +292,7 @@ std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo)
             sstream << "[" << tuneInfo->currentSong() << "]";
             title.append(sstream.str());
         }
+        title.append(ext);
     }
 
     return title;
@@ -329,8 +332,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     case OUT_WAV:
         try
         {
-            std::string title = getFileName(tuneInfo);
-            title.append(WavFile::extension());
+            std::string title = getFileName(tuneInfo, WavFile::extension());
             WavFile* wav = new WavFile(title);
             if (m_driver.info && (tuneInfo->numberOfInfoStrings() == 3))
                 wav->setInfo(tuneInfo->infoString(0), tuneInfo->infoString(1), tuneInfo->infoString(2));
@@ -345,8 +347,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     case OUT_AU:
         try
         {
-            std::string title = getFileName(tuneInfo);
-            title.append(auFile::extension());
+            std::string title = getFileName(tuneInfo, auFile::extension());
             m_driver.device = new auFile(title);
         }
         catch (std::bad_alloc const &ba)

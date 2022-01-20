@@ -140,13 +140,13 @@ Create WAV-file.  The default output filename is
 more than one in the sid.  This allows batch conversion of sid
 tunes without them overwriting each other.  By providing a name
 it is possible to override this default behavior.  The output
-file will be <name> with no tune number added and <name> IS NOT
-checked for or appended with a legal wav file extension.
+file will be <name> with no tune number added and the extension
+.wav appended if no extension is given.
 
 =item B<--au>I<< [name] >>
 
 Create AU-file.  The default output filename is
-<datafile>[n].au.
+<datafile>[n].au. Same notes as the wav file applies.
 
 =item B<--resid>
 
@@ -339,7 +339,7 @@ Wrote the original man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2021 Leandro Nini
+=item Copyright (C) 2010-2022 Leandro Nini
 
 =back
 

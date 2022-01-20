@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2019 Leandro Nini
+ * Copyright 2011-2022 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -211,7 +211,7 @@ private:
 
     const char *getNote(uint16_t freq);
 
-    std::string getFileName(const SidTuneInfo *tuneInfo);
+    std::string getFileName(const SidTuneInfo *tuneInfo, const char* ext);
 
     inline bool tryOpenTune(const char *hvscBase);
     inline bool tryOpenDatabase(const char *hvscBase, const char *suffix);
