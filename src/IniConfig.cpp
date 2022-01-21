@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2021 Leandro Nini
+ * Copyright 2011-2022 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -87,7 +87,7 @@ void IniConfig::clear()
     sidplay2_s.version      = 1;           // INI File Version
     sidplay2_s.database.clear();
     sidplay2_s.playLength   = 0;           // INFINITE
-    sidplay2_s.recordLength = 3 * 60 + 30; // 3.5 minutes
+    sidplay2_s.recordLength = (3 * 60 + 30) * 1000; // 3.5 minutes
     sidplay2_s.kernalRom.clear();
     sidplay2_s.basicRom.clear();
     sidplay2_s.chargenRom.clear();
