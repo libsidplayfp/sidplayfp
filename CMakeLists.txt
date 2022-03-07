@@ -231,6 +231,7 @@ if (PERL_FOUND)
                 VERBATIM
             )
             list(APPEND MAN_FILES ${MANFILE})
+            INSTALL(FILES ${MANFILE} DESTINATION ${CMAKE_INSTALL_MANDIR}/man${SECTION})
         endforeach()
 
         add_custom_target(man ALL DEPENDS ${MAN_FILES})
