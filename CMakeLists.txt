@@ -18,6 +18,10 @@ ENDIF()
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} $ENV{CPPFLAGS}")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} $ENV{CPPFLAGS}")
 
+if (WIN32)
+    add_compile_definitions(WIN32_LEAN_AND_MEAN)
+endif()
+
 set(SIDPLAYFP_SOURCES
     src/IniConfig.cpp
     src/IniConfig.h
@@ -125,14 +129,14 @@ endif(ALSA_FOUND)
 #####################################################
 INCLUDE (CheckIncludeFiles)
 
-if(WIN32 OR MINGW)
+if(WIN32)
     CHECK_INCLUDE_FILES("windows.h;dsound.h" HAVE_DIRECTX_H)
     CHECK_INCLUDE_FILES("windows.h;mmsystem.h" HAVE_MMSYSTEM_H)
     if(HAVE_DIRECTX_H)
         target_link_libraries(sidplayfp dsound dxguid)
     endif()
     if(HAVE_MMSYSTEM_H)
-        target_link_libraries(sidplayfp ossaudio)
+        target_link_libraries(sidplayfp winmm)
     endif()
 else()
     CHECK_INCLUDE_FILES("sys/soundcard.h" HAVE_SYS_SOUNDCARD_H)
@@ -140,7 +144,7 @@ else()
     CHECK_INCLUDE_FILES("machine/soundcard.h" HAVE_MACHINE_SOUNDCARD_H)
     CHECK_INCLUDE_FILES("soundcard.h" HAVE_SOUNDCARD_H)
     if(HAVE_SOUNDCARD_H)
-        target_link_libraries(sidplayfp dsound dxguid)
+        target_link_libraries(sidplayfp ossaudio)
     endif()
 endif()
 
@@ -177,7 +181,7 @@ if(libsidplayfp_FOUND)
 endif(libsidplayfp_FOUND)
 
 ##################################################################
-# Check if we need STIL support
+# Check for STIL
 
 if(libsidplayfp_FOUND)
     pkg_check_modules(libstilview IMPORTED_TARGET libstilview>=1.0)
@@ -189,9 +193,16 @@ endif()
 
 ##################################################################
 
+if (WIN32)
+    target_link_libraries(sidplayfp shlwapi)
+endif()
+
+##################################################################
+
 find_program(POD2MAN pod2man)
 
 if(POD2MAN)
+    message(STATUS "Found pod2man - man pages enabled")
     set(MAN_NAMES
         doc/en/sidplayfp.1
         doc/en/sidplayfp.ini.5
@@ -199,27 +210,26 @@ if(POD2MAN)
     )
     set(MAN_FILES)
     file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/doc/en")
-    foreach(m IN LISTS MAN_NAMES)
-        set(mf ${CMAKE_BINARY_DIR}/${m})
-        string(REGEX REPLACE "\.[0-9]$" ".pod" mp ${m})
-        set(ms ${CMAKE_SOURCE_DIR}/${mp})
-        string(REGEX MATCH "[0-9]$" man ${m})
-        if(${man} STREQUAL "1")
-            set(SECTION 1)
+    foreach(MANNAME IN LISTS MAN_NAMES)
+        set(MANFILE ${CMAKE_BINARY_DIR}/${MANNAME})
+        string(REGEX REPLACE "\.[0-9]$" ".pod" PODNAME ${MANNAME})
+        set(PODFILE ${CMAKE_SOURCE_DIR}/${PODNAME})
+        string(REGEX MATCH "[0-9]$" SECTION ${MANNAME})
+        if(${SECTION} STREQUAL "1")
             set(CENTER "User Programs")
-        elseif(${man} STREQUAL "5")
-            set(SECTION 5)
+        elseif(${SECTION} STREQUAL "5")
             set(CENTER "File formats")
         endif()
         add_custom_command(
-            OUTPUT ${mf}
-            COMMAND pod2man -c ${CENTER} -s ${SECTION} ${ms} > ${mf}
-            DEPENDS ${ms}
+            OUTPUT ${MANFILE}
+            COMMAND ${POD2MAN}
+            ARGS -c ${CENTER} -s ${SECTION} ${PODFILE} > ${MANFILE}
+            DEPENDS ${PODFILE}
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Building manpage ${mf}"
+            COMMENT "Building manpage ${MANFILE}"
             VERBATIM
         )
-        list(APPEND MAN_FILES ${mf})
+        list(APPEND MAN_FILES ${MANFILE})
     endforeach()
 
     add_custom_target(man ALL DEPENDS ${MAN_FILES})
