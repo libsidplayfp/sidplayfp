@@ -6,6 +6,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(HAVE_CXX11 1) # TODO remove this
 
 IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
         "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -74,15 +75,10 @@ set(STILVIEW_SOURCES
 
 include(GNUInstallDirs)
 
-set(PACKAGE "${PROJECT_NAME}")
-set(PACKAGE_NAME "${PROJECT_NAME}")
-set(PACKAGE_TARNAME "${PROJECT_NAME}")
-set(PACKAGE_STRING "${PROJECT_NAME} ${CMAKE_PROJECT_VERSION}")
-set(PACKAGE_VERSION "${CMAKE_PROJECT_VERSION}")
-set(PACKAGE_URL "${PROJECT_HOMEPAGE_URL}")
-set(PACKAGE_BUGREPORT "${PROJECT_HOMEPAGE_URL}/issues")
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 
+set(VERSION "${CMAKE_PROJECT_VERSION}")
+set(PACKAGE_URL "${PROJECT_HOMEPAGE_URL}")
 add_compile_definitions(PKGDATADIR="${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_NAME}")
 
 #####################################################
@@ -111,6 +107,7 @@ endif(IS_BIGENDIAN)
 
 find_package(Iconv)
 if (Iconv_FOUND)
+    SET(HAVE_ICONV 1)
     list(APPEND SIDPLAYFP_SOURCES
         src/codepages.h
     )
@@ -130,13 +127,14 @@ endif(ALSA_FOUND)
 INCLUDE (CheckIncludeFiles)
 
 if(WIN32)
-    CHECK_INCLUDE_FILES("windows.h;dsound.h" HAVE_DIRECTX_H)
     CHECK_INCLUDE_FILES("windows.h;mmsystem.h" HAVE_MMSYSTEM_H)
-    if(HAVE_DIRECTX_H)
-        target_link_libraries(sidplayfp dsound dxguid)
-    endif()
     if(HAVE_MMSYSTEM_H)
         target_link_libraries(sidplayfp winmm)
+
+        CHECK_INCLUDE_FILES("windows.h;dsound.h" HAVE_DSOUND_H)
+        if(HAVE_DSOUND_H)
+            target_link_libraries(sidplayfp dsound dxguid)
+        endif()
     endif()
 else()
     CHECK_INCLUDE_FILES("sys/soundcard.h" HAVE_SYS_SOUNDCARD_H)
@@ -199,46 +197,50 @@ endif()
 
 ##################################################################
 
-find_program(POD2MAN pod2man)
+find_package(Perl)
+if (PERL_FOUND)
+    get_filename_component(PERL_DIR ${PERL_EXECUTABLE} DIRECTORY)
+    find_program(POD2MAN pod2man HINTS ${PERL_DIR})
 
-if(POD2MAN)
-    message(STATUS "Found pod2man - man pages enabled")
-    set(MAN_NAMES
-        doc/en/sidplayfp.1
-        doc/en/sidplayfp.ini.5
-        doc/en/stilview.1
-    )
-    set(MAN_FILES)
-    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/doc/en")
-    foreach(MANNAME IN LISTS MAN_NAMES)
-        set(MANFILE ${CMAKE_BINARY_DIR}/${MANNAME})
-        string(REGEX REPLACE "\.[0-9]$" ".pod" PODNAME ${MANNAME})
-        set(PODFILE ${CMAKE_SOURCE_DIR}/${PODNAME})
-        string(REGEX MATCH "[0-9]$" SECTION ${MANNAME})
-        if(${SECTION} STREQUAL "1")
-            set(CENTER "User Programs")
-        elseif(${SECTION} STREQUAL "5")
-            set(CENTER "File formats")
-        endif()
-        add_custom_command(
-            OUTPUT ${MANFILE}
-            COMMAND ${POD2MAN}
-            ARGS -c ${CENTER} -s ${SECTION} ${PODFILE} > ${MANFILE}
-            DEPENDS ${PODFILE}
-            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-            COMMENT "Building manpage ${MANFILE}"
-            VERBATIM
+    if(POD2MAN)
+        message(STATUS "Found pod2man - man pages enabled")
+        set(MAN_NAMES
+            doc/en/sidplayfp.1
+            doc/en/sidplayfp.ini.5
+            doc/en/stilview.1
         )
-        list(APPEND MAN_FILES ${MANFILE})
-    endforeach()
+        set(MAN_FILES)
+        file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/doc/en")
+        foreach(MANNAME IN LISTS MAN_NAMES)
+            set(MANFILE ${CMAKE_BINARY_DIR}/${MANNAME})
+            string(REGEX REPLACE "\.[0-9]$" ".pod" PODNAME ${MANNAME})
+            set(PODFILE ${CMAKE_SOURCE_DIR}/${PODNAME})
+            string(REGEX MATCH "[0-9]$" SECTION ${MANNAME})
+            if(${SECTION} STREQUAL "1")
+                set(CENTER "User Programs")
+            elseif(${SECTION} STREQUAL "5")
+                set(CENTER "File formats")
+            endif()
+            add_custom_command(
+                OUTPUT ${MANFILE}
+                COMMAND ${PERL_EXECUTABLE} ${POD2MAN}
+                ARGS -c ${CENTER} -s ${SECTION} ${PODFILE} > ${MANFILE}
+                DEPENDS ${PODFILE}
+                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                COMMENT "Building manpage ${MANFILE}"
+                VERBATIM
+            )
+            list(APPEND MAN_FILES ${MANFILE})
+        endforeach()
 
-    add_custom_target(man ALL DEPENDS ${MAN_FILES})
-else()
-    message(STATUS "Could not find pod2man - man pages disabled")
-endif(POD2MAN)
+        add_custom_target(man ALL DEPENDS ${MAN_FILES})
+    else()
+        message(STATUS "Could not find pod2man - man pages disabled")
+    endif(POD2MAN)
+endif()
 
 ##################################################################
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/config.h @ONLY)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/src/config.h.template ${CMAKE_CURRENT_BINARY_DIR}/src/config.h @ONLY)
 
 add_compile_definitions(HAVE_CONFIG_H)
