@@ -25,7 +25,7 @@
 #  include "config.h"
 #endif
 
-#ifdef HAVE_DIRECTX_H
+#ifdef HAVE_DSOUND_H
 
 #define HAVE_DIRECTX
 
@@ -38,8 +38,9 @@
 #   define DIRECTSOUND_VERSION 0x0500       /* version 5.0 */
 #endif
 
-#include <dsound.h>
+#include <windows.h>
 #include <mmsystem.h>
+#include <dsound.h>
 
 #include "../AudioBase.h"
 #define AUDIO_DIRECTX_BUFFERS 2
@@ -78,5 +79,5 @@ public:  // --------------------------------------------------------- public
     void pause () override;
 };
 
-#endif // HAVE_DIRECTX_H
+#endif // HAVE_DSOUND_H
 #endif // AUDIO_DIRECTX_H
