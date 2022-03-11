@@ -124,6 +124,15 @@ if (ALSA_FOUND)
 endif(ALSA_FOUND)
 
 #####################################################
+# Check for Pulse
+
+pkg_check_modules(pulse IMPORTED_TARGET libpulse-simple>=1.0)
+if (pulse_FOUND)
+    SET(HAVE_PULSE 1)
+    target_link_libraries(sidplayfp PkgConfig::libpulse-simple)
+endif(pulse_FOUND)
+
+#####################################################
 INCLUDE (CheckIncludeFiles)
 
 if(WIN32)
