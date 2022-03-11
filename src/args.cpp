@@ -116,7 +116,7 @@ bool parseTime(const char *str, uint_least32_t &time)
             default: return false;
             }
 
-            if (milliseconds < 0 || milliseconds > 999)
+            if (milliseconds > 999)
                 return false;
 
             *milli = '\0';

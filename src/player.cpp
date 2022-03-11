@@ -703,7 +703,7 @@ bool ConsolePlayer::play ()
     {
     case playerRunning:
         m_driver.selected->write ();
-        // Deliberate run on
+        // fall-through
     case playerPaused:
         // Check for a keypress (approx 250ms rate, but really depends
         // on music buffer sizes).  Don't do this for high quiet levels

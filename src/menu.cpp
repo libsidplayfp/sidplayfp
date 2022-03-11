@@ -104,7 +104,7 @@ const char* getClock(SidTuneInfo::clock_t clock)
     }
 }
 
-string trimString(const char* str, int maxLen)
+string trimString(const char* str, unsigned int maxLen)
 {
     string data(str);
     // avoid too long file names
