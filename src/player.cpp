@@ -275,7 +275,8 @@ std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo, const char* 
     if (m_outfile != NULL)
     {
         title = m_outfile;
-        if (title.find_last_of('.') == std::string::npos)
+        if (title.compare("-") != 0
+                && title.find_last_of('.') == std::string::npos)
             title.append(ext);
     }
     else
