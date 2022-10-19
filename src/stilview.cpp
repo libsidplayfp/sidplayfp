@@ -259,6 +259,7 @@ void checkArguments(void)
         {
             hvscLoc = new char[STIL_MAX_PATH_SIZE];
             cout << "Enter HVSC base directory: ";
+            cin.width(STIL_MAX_PATH_SIZE);
             cin >> hvscLoc;
         }
         else
@@ -620,6 +621,7 @@ int main(int argc, char **argv)
             {
                 cout << "Enter desired entry (relative path) or 'q' to exit." << endl;
                 cout << "Entry: ";
+                cin.width(STIL_MAX_PATH_SIZE);
                 cin >> temp;
 
                 if (*temp == '/')
