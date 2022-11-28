@@ -613,7 +613,7 @@ void ConsolePlayer::displayArgs (const char *arg)
     out << "Options:" << endl
         << " --help|-h    display this screen" << endl
         << " --help-debug debug help menu" << endl
-        << " -b<num>      set start time in [m:]s format (default: 0)" << endl
+        << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
 
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
@@ -635,7 +635,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -s           force stereo output" << endl
         << " -m           force mono output" << endl
 
-        << " -t<num>      set play length in [m:]s format (0 is endless)" << endl
+        << " -t<num>      set play length in [mins:]secs[.milli] format (0 is endless)" << endl
 
         << " -<v|q>[x]    verbose or quiet output. x is the optional level, default=1" << endl
         << " -v[p|n][f]   set VIC PAL/NTSC clock speed (default: defined by song)" << endl
