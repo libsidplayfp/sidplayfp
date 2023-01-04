@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [2.4.0], [], [], [https://github.com/libsidplayfp/sidplayfp/])
+AC_INIT([sidplayfp], [2.5.0a], [], [], [https://github.com/libsidplayfp/sidplayfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -28,8 +28,13 @@ AC_PROG_CXX
 dnl Use C++ for tests.
 AC_LANG([C++])
 
-SID_CXX_COMPILE_STDCXX_11
-
+AX_CXX_COMPILE_STDCXX_17([noext], [optional])
+AS_IF([test $ax_cv_cxx_compile_cxx17__std_cpp17 != "yes"],
+    AX_CXX_COMPILE_STDCXX_14([noext], [optional])
+    AS_IF([test $ax_cv_cxx_compile_cxx14__std_cpp14 != "yes"],
+        AX_CXX_COMPILE_STDCXX_11([noext], [optional])
+    )
+)
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN

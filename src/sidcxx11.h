@@ -25,6 +25,17 @@
 #  include "config.h"
 #endif
 
+#ifdef HAVE_CXX17
+#  define HAVE_CXX14
+#  define MAYBE_UNUSED [[ maybe_unused ]]
+#else
+#  define MAYBE_UNUSED
+#endif
+
+#ifdef HAVE_CXX14
+#  define HAVE_CXX11
+#endif
+
 #ifndef HAVE_CXX11
 #  define nullptr    0
 #  define override

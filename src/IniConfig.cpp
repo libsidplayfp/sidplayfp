@@ -498,7 +498,7 @@ SID_STRING getConfigPath()
     return configPath;
 }
 
-bool tryOpen(iniHandler &ini)
+bool tryOpen(MAYBE_UNUSED iniHandler &ini)
 {
 #ifdef _WIN32
     {
