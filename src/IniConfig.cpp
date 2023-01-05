@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2022 Leandro Nini
+ * Copyright 2011-2023 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -49,7 +49,7 @@
 
 #include "sidcxx11.h"
 
-inline void debug(const TCHAR *msg, const TCHAR *val)
+inline void debug(MAYBE_UNUSED const TCHAR *msg, MAYBE_UNUSED const TCHAR *val)
 {
 #ifndef NDEBUG
     SID_COUT << msg << val << std::endl;
