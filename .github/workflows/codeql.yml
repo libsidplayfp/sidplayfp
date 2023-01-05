@@ -24,7 +24,7 @@ jobs:
 
     steps:
     - name: deps
-      run: sudo apt-get install gettext libsidplayfp-dev libmpg123-dev
+      run: sudo apt-get install gettext libsidplayfp-dev libstilview-dev libmpg123-dev
     - name: Checkout repository
       uses: actions/checkout@v3
 

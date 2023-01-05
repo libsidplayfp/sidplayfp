@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: deps
-      run: sudo apt-get install gettext libsidplayfp-dev
+      run: sudo apt-get install gettext libsidplayfp-dev libstilview-dev
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.ref }}
