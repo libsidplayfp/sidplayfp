@@ -98,9 +98,14 @@ protected:
     void readAudio     (iniHandler &ini);
     void readEmulation (iniHandler &ini);
 
+private:
+    SID_STRING m_fileName;
+
 public:
     IniConfig  ();
     ~IniConfig ();
+
+    SID_STRING getFilename() const { return m_fileName; }
 
     void read ();
 

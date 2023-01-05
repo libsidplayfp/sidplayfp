@@ -540,5 +540,8 @@ void IniConfig::read()
     readConsole   (ini);
     readAudio     (ini);
     readEmulation (ini);
+
+    m_fileName = ini.getFilename();
+
     ini.close();
 }

@@ -66,6 +66,8 @@ public:
     iniHandler();
     ~iniHandler();
 
+    SID_STRING getFilename() const { return fileName; }
+
     bool tryOpen(const TCHAR *fName);
     bool open(const TCHAR *fName);
     bool write(const TCHAR *fName);

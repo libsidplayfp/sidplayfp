@@ -152,6 +152,12 @@ void ConsolePlayer::menu ()
         cerr << '\x1b' << "[0;0H"; // Move cursor to 0,0
     }
 
+    if (m_verboseLevel > 1)
+    {
+        cerr << "Config loaded from" << endl;
+        cerr << m_iniCfg.getFilename() << endl;
+    }
+
     consoleTable (tableStart);
     consoleTable (tableMiddle);
     consoleColour (red, true);
