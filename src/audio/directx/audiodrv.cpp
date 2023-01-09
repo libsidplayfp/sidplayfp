@@ -205,6 +205,9 @@ bool Audio_DirectX::write (uint_least32_t size)
         setError("Device not open.");
         return false;
     }
+    
+    size *= 2;
+
     // Unlock the current buffer for playing
     lpDsb->Unlock (lpvData, size, NULL, 0);
 
