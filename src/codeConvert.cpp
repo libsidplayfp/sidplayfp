@@ -41,7 +41,7 @@ const char* codeConvert::convert(const char* src)
     {
         size_t ret = iconv(cd, &srcPtr, &srcLeft, &outPtr, &outLeft);
         if (ret == (size_t) -1)
-            break;
+            return src;
     }
 
     // flush
