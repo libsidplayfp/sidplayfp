@@ -96,6 +96,9 @@ $(W32_LIBS)
 # stilview
 
 src_stilview_SOURCES = \
+src/codeConvert.cpp \
+src/codeConvert.h \
+$(ICONV_SOURCES) \
 src/stilview.cpp
 
 src_stilview_LDADD = \

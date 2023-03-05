@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012-2016 Leandro Nini
+ * Copyright 2012-2023 Leandro Nini
  * Copyright 1998, 2002 LaLa <LaLa@C64.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <codeConvert.h>
 
 #include <stilview/stil.h>
 
@@ -318,6 +320,8 @@ int main(int argc, char **argv)
 
     checkArguments();
 
+    codeConvert cvt;
+
     if (interactive || demo) {
         cout << "Reading STIL..." << endl;
     }
@@ -397,7 +401,7 @@ int main(int argc, char **argv)
             {
                 cout << "---- GLOBAL  COMMENT ----" << endl;
             }
-            cout << sectionPtr;
+            cout << cvt.convert(sectionPtr);
         }
 
         if (entryPtr != nullptr)
@@ -406,7 +410,7 @@ int main(int argc, char **argv)
             {
                 cout << "------ STIL  ENTRY ------" << endl;
             }
-            cout << entryPtr;
+            cout << cvt.convert(entryPtr);
         }
 
         if (bugPtr != nullptr) {
@@ -414,7 +418,7 @@ int main(int argc, char **argv)
             {
                 cout << "---------- BUG ----------" << endl;
             }
-            cout << bugPtr;
+            cout << cvt.convert(bugPtr);
         }
     }
     else {
@@ -540,7 +544,7 @@ int main(int argc, char **argv)
             }
             else
             {
-                cout << tmpptr;
+                cout << cvt.convert(tmpptr);
             }
 
             cout << "-- TUNE GLOBAL COMMENT --" << endl;
@@ -553,7 +557,7 @@ int main(int argc, char **argv)
             }
             else
             {
-                cout << tmpptr;
+                cout << cvt.convert(tmpptr);
             }
 
             cout << "------ STIL  ENTRY ------" << endl;
@@ -567,7 +571,7 @@ int main(int argc, char **argv)
             }
             else
             {
-                cout << tmpptr;
+                cout << cvt.convert(tmpptr);
             }
 
             cout << "---------- BUG ----------" << endl;
@@ -580,7 +584,7 @@ int main(int argc, char **argv)
             }
             else
             {
-                cout << tmpptr;
+                cout << cvt.convert(tmpptr);
             }
 
             cout << "==== END OF ENTRY ====" << endl;
@@ -602,7 +606,7 @@ int main(int argc, char **argv)
                 }
                 else
                 {
-                    cout << tmpptr;
+                    cout << cvt.convert(tmpptr);
                 }
             }
             else
@@ -672,7 +676,7 @@ int main(int argc, char **argv)
 
                     if (tmpptr)
                     {
-                        cout << tmpptr;
+                        cout << cvt.convert(tmpptr);
                     }
                     else
                     {
@@ -685,7 +689,7 @@ int main(int argc, char **argv)
 
                     if (tmpptr)
                     {
-                        cout << tmpptr;
+                        cout << cvt.convert(tmpptr);
                     }
                     else
                     {
@@ -698,7 +702,7 @@ int main(int argc, char **argv)
 
                     if (tmpptr)
                     {
-                        cout << tmpptr;
+                        cout << cvt.convert(tmpptr);
                     }
                     else
                     {

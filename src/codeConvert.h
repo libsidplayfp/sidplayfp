@@ -41,7 +41,7 @@ private:
 #ifdef HAVE_ICONV
     iconv_t cd;
 
-    char buffer[128];
+    char buffer[1024];
 #endif
 
 public:
