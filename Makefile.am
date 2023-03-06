@@ -102,6 +102,7 @@ $(ICONV_SOURCES) \
 src/stilview.cpp
 
 src_stilview_LDADD = \
+$(LIBICONV) \
 $(STILVIEW_LIBS)
 
 #=========================================================
