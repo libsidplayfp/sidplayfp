@@ -35,7 +35,7 @@ const char* codeConvert::convert(const char* src)
     char *srcPtr = const_cast<char*>(src);
     size_t srcLeft = strlen(src);
     char *outPtr = buffer;
-    size_t outLeft = 128;
+    size_t outLeft = sizeof (buffer)-1;
 
     while (srcLeft > 0)
     {
