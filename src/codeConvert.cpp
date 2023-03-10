@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2021 Leandro Nini
+ * Copyright 2021-2023 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,9 +59,9 @@ const char* codeConvert::convert(const char* src)
 codeConvert::codeConvert()
 {
 #ifdef HAVE_ICONV
-    setlocale(LC_ALL, "");
     const char* encoding;
 #  ifndef _WIN32
+    setlocale(LC_ALL, "");
     encoding = nl_langinfo(CODESET);
 #  else
     UINT codepage = GetConsoleOutputCP();
