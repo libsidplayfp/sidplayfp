@@ -155,7 +155,7 @@ void ConsolePlayer::menu ()
     if (m_verboseLevel > 1)
     {
         cerr << "Config loaded from" << endl;
-        cerr << m_iniCfg.getFilename() << endl;
+        SID_CERR << m_iniCfg.getFilename() << endl;
     }
 
     consoleTable (tableStart);
