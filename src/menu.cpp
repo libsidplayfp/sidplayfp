@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2021 Leandro Nini
+ * Copyright 2011-2023 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -128,8 +128,9 @@ const char *ConsolePlayer::getNote(uint16_t freq)
             if (d < distance)
                 distance = d;
             else
-                return noteName[i];
+                return noteName[i-1];
         }
+        return noteName[(12 * 8)-1];
     }
 
     return "---";
