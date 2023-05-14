@@ -227,6 +227,15 @@ value is 0.5.
 The c64 power on delay as number of cpu cycles.
 If greater than 8191 the delay will be random.
 
+=item B<Sampling>=I<< <INTERPOLATE|RESAMPLE> >>
+
+Set resampling mode.  'Interpolation (less expensive) or
+resampling (accurate).
+
+=item B<FastSampling>=I<< <true|false> >>
+
+Fast resampling, available only for reSID emulation.
+
 =back
 
 

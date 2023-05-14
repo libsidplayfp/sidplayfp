@@ -84,6 +84,8 @@ public:
         double        filterCurve6581;
         double        filterCurve8580;
         int           powerOnDelay;
+        SidConfig::sampling_method_t  samplingMethod;
+        bool          fastSampling;
     };
 
 protected:

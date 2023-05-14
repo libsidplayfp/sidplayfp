@@ -121,6 +121,8 @@ void IniConfig::clear()
     emulation_s.filterCurve6581 = 0.5;
     emulation_s.filterCurve8580 = 0.5;
     emulation_s.powerOnDelay = -1;
+    emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
+    emulation_s.fastSampling = false;
 }
 
 
@@ -427,6 +429,19 @@ void IniConfig::readEmulation(iniHandler &ini)
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 
     readInt(ini, TEXT("PowerOnDelay"), emulation_s.powerOnDelay);
+
+    {
+        SID_STRING str = readString(ini, TEXT("Sampling"));
+        if (!str.empty())
+        {
+            if (str.compare(TEXT("INTERPOLATE")) == 0)
+                emulation_s.samplingMethod = SidConfig::INTERPOLATE;
+            else if (str.compare(TEXT("RESAMPLE")) == 0)
+                emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
+        }
+    }
+
+    readBool(ini, TEXT("FastSampling"), emulation_s.fastSampling);
 }
 
 class iniError
