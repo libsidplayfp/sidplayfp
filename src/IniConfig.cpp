@@ -91,6 +91,7 @@ void IniConfig::clear()
     sidplay2_s.kernalRom.clear();
     sidplay2_s.basicRom.clear();
     sidplay2_s.chargenRom.clear();
+    sidplay2_s.verboseLevel = 0;
 
     console_s.ansi          = false;
     console_s.topLeft       = '+';
@@ -119,6 +120,7 @@ void IniConfig::clear()
     emulation_s.bias            = 0.5;
     emulation_s.filterCurve6581 = 0.5;
     emulation_s.filterCurve8580 = 0.5;
+    emulation_s.powerOnDelay = -1;
 }
 
 
@@ -334,6 +336,8 @@ void IniConfig::readSidplay2(iniHandler &ini)
     sidplay2_s.kernalRom = readString(ini, TEXT("Kernal Rom"));
     sidplay2_s.basicRom = readString(ini, TEXT("Basic Rom"));
     sidplay2_s.chargenRom = readString(ini, TEXT("Chargen Rom"));
+
+    readInt(ini, TEXT("VerboseLevel"), sidplay2_s.verboseLevel);
 }
 
 
@@ -421,6 +425,8 @@ void IniConfig::readEmulation(iniHandler &ini)
     readDouble(ini, TEXT("FilterBias"), emulation_s.bias);
     readDouble(ini, TEXT("FilterCurve6581"), emulation_s.filterCurve6581);
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
+
+    readInt(ini, TEXT("PowerOnDelay"), emulation_s.powerOnDelay);
 }
 
 class iniError

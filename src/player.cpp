@@ -179,7 +179,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_outfile(NULL),
     m_filename(""),
     m_quietLevel(0),
-    m_verboseLevel(0),
     m_cpudebug(false),
     newSonglengthDB(false)
 {
@@ -225,6 +224,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_filter.filterCurve6581 = emulation.filterCurve6581;
         m_filter.filterCurve8580 = emulation.filterCurve8580;
 
+        if (emulation.powerOnDelay >= 0)
+            m_engCfg.powerOnDelay    = emulation.powerOnDelay;
+
         if (!emulation.engine.empty())
         {
             if (emulation.engine.compare(TEXT("RESIDFP")) == 0)
@@ -255,6 +257,8 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
             }
         }
     }
+
+    m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
 
     createOutput (OUT_NULL, nullptr);
     createSidEmu (EMU_NONE);

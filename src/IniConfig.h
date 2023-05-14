@@ -45,6 +45,7 @@ public:
         SID_STRING     kernalRom;
         SID_STRING     basicRom;
         SID_STRING     chargenRom;
+        int            verboseLevel;
     };
 
     struct console_section
@@ -82,6 +83,7 @@ public:
         double        bias;
         double        filterCurve6581;
         double        filterCurve8580;
+        int           powerOnDelay;
     };
 
 protected:
