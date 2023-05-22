@@ -441,7 +441,7 @@ void IniConfig::readEmulation(iniHandler &ini)
         }
     }
 
-    readBool(ini, TEXT("FastSampling"), emulation_s.fastSampling);
+    readBool(ini, TEXT("ResidFastSampling"), emulation_s.fastSampling);
 }
 
 class iniError
