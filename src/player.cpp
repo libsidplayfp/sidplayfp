@@ -52,6 +52,16 @@ using std::endl;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
+#ifdef HAVE_CXX11
+#  include <unordered_map>
+    typedef std::unordered_map<std::string, double> filter_map_t;
+    typedef std::unordered_map<std::string, double>::const_iterator filter_map_iter_t;
+#else
+#  include <map>
+    typedef std::map<std::string, double> filter_map_t;
+    typedef std::map<std::string, double>::const_iterator filter_map_iter_t;
+#endif
+
 // Previous song select timeout (4 secs)
 #define SID2_PREV_SONG_TIMEOUT 4000
 
@@ -102,6 +112,26 @@ uint16_t freqTableNtsc[]
     0x8620, 0x8e20, 0x96a0, 0x9f80, 0xa900, 0xb300, 0xbdc0, 0xc900, 0xd520, 0xe1a0, 0xef20, 0xfd40, // 8
 };
 #endif
+
+static const filter_map_t filterCurveMap =
+{
+    { "David Dunn",                 1.1 },
+    { "David Dunn & Aidan Bell",    1.1 },
+//  { "Martin Galway",              0.6 },    // Any other setting higher than 0.5 makes "Wizball" misbehave
+    { "Chris H\xFClsbeck",          0.6 },
+    { "Georg Feil",                 0.6 },
+    { "Jeroen Tel",                 0.6 },
+    { "Rob Hubbard",                0.6 },
+    { "Rob Hubbard & Ben Daglish",  0.6 },
+    { "Fred Gray",                  1.1 },    // He only used the filter in "Frankie Goes to Hollywood"
+    { "Geir Tjelta",                0.6 },
+};
+
+double getRecommendedFilterCurve(const std::string& author)
+{
+    filter_map_iter_t it = filterCurveMap.find(author);
+    return (it != filterCurveMap.end()) ? it->second : 0.5;
+}
 
 uint8_t* loadRom(const SID_STRING &romPath, const int size)
 {
@@ -178,9 +208,11 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_state(playerStopped),
     m_outfile(NULL),
     m_filename(""),
+    m_fcurve(-1.0),
     m_quietLevel(0),
     m_cpudebug(false),
-    newSonglengthDB(false)
+    newSonglengthDB(false),
+    m_autofilter(false)
 {
 #ifdef FEAT_REGS_DUMP_SID
     memset(m_registers, 0, 32*3);
@@ -263,7 +295,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
 
     createOutput (OUT_NULL, nullptr);
-    createSidEmu (EMU_NONE);
+    createSidEmu (EMU_NONE, nullptr);
 
     uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
     uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, TEXT("basic"));
@@ -422,7 +454,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
 
 
 // Create the sid emulation
-bool ConsolePlayer::createSidEmu (SIDEMUS emu)
+bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 {
     // Remove old driver and emulation
     if (m_engCfg.sidEmulation)
@@ -448,10 +480,43 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu)
             rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
 
-            if (m_filter.filterCurve6581)
-                rs->filter6581Curve(m_filter.filterCurve6581);
-            if (m_filter.filterCurve8580)
-                rs->filter8580Curve((double)m_filter.filterCurve8580);
+            double fcurve;
+            if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
+            {
+                fcurve = getRecommendedFilterCurve(tuneInfo->infoString(1));
+            }
+            else if (m_fcurve >= 0.0)
+            {
+                fcurve = m_fcurve;
+            }
+            else if (m_filter.filterCurve6581 >= 0.0)
+            {
+                fcurve = m_filter.filterCurve6581;
+            }
+
+            if (fcurve >= 0.0)
+            {
+                if (m_verboseLevel > 1)
+                    cerr << "6581 filter curve: " << fcurve << endl;
+                rs->filter6581Curve(fcurve);
+            }
+
+            fcurve = -1.0;
+            if (m_fcurve >= 0.0)
+            {
+                fcurve = m_fcurve;
+            }
+            if (m_filter.filterCurve8580 >= 0.0)
+            {
+                fcurve = m_filter.filterCurve8580;
+            }
+
+            if (fcurve >= 0.0)
+            {
+                if (m_verboseLevel > 1)
+                    cerr << "8580 filter curve: " << fcurve << endl;
+                rs->filter8580Curve(fcurve);
+            }
         }
         catch (std::bad_alloc const &ba) {}
         break;
@@ -567,7 +632,7 @@ bool ConsolePlayer::open (void)
         m_track.songs = tuneInfo->songs();
     if (!createOutput(m_driver.output, tuneInfo))
         return false;
-    if (!createSidEmu(m_driver.sid))
+    if (!createSidEmu(m_driver.sid, tuneInfo))
         return false;
 
     // Configure engine with settings
@@ -649,7 +714,7 @@ void ConsolePlayer::close ()
 
     // Shutdown drivers, etc
     createOutput    (OUT_NULL, nullptr);
-    createSidEmu    (EMU_NONE);
+    createSidEmu    (EMU_NONE, nullptr);
     m_engine.load   (nullptr);
     m_engine.config (m_engCfg);
 

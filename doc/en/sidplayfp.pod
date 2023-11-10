@@ -175,6 +175,13 @@ Simulate c64 power on delay as number of cpu cycles.
 If greater than 8191 the delay will be random.
 This is the default.
 
+=item B<--fcurve=>I<< <num>|auto >>
+
+Controls the filter curve in the ReSIDfp mulation.
+Ranges from 0.0 (light) to 1.0 (dark), the default
+value is 0.5.  If set to auto it will choose a
+predefined value for 6581 depending on the tune author.
+
 =item B<--noaudio>
 
 Run without an audio output device.
