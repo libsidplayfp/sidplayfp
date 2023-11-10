@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2022 Leandro Nini
+ * Copyright 2011-2023 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -126,6 +126,8 @@ private:
     IniConfig          m_iniCfg;
     SidDatabase        m_database;
 
+    double             m_fcurve;
+
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
 
@@ -136,6 +138,8 @@ private:
     bool               m_cpudebug;
 
     bool               newSonglengthDB;
+
+    bool               m_autofilter;
 
     bool vMute[9];
 
@@ -200,7 +204,7 @@ private:
     void displayArgs    (const char *arg = NULL);
 
     bool createOutput   (OUTPUTS driver, const SidTuneInfo *tuneInfo);
-    bool createSidEmu   (SIDEMUS emu);
+    bool createSidEmu   (SIDEMUS emu, const SidTuneInfo *tuneInfo);
     void displayError   (const char *error);
     void displayError   (unsigned int num) { ::displayError (m_name, num); }
     void decodeKeys     (void);

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2021 Leandro Nini
+ * Copyright 2011-2023 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -378,6 +378,17 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (strncmp (&argv[i][1], "-delay=", 7) == 0)
             {
                 m_engCfg.powerOnDelay = (uint_least16_t) atoi(&argv[i][8]);
+            }
+            else if (strncmp (&argv[i][1], "-fcurve=", 8) == 0)
+            {
+                if (strncmp (&argv[i][9], "auto", 4) == 0)
+                {
+                    m_autofilter = true;
+                }
+                else
+                {
+                    m_fcurve = atof(&argv[i][9]);
+                }
             }
             // File format conversions
             else if (argv[i][1] == 'w')

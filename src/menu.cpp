@@ -161,12 +161,8 @@ void ConsolePlayer::menu ()
 
     consoleTable (tableStart);
     consoleTable (tableMiddle);
-    consoleColour (red, true);
-    cerr << "  SID";
-    consoleColour (blue, true);
-    cerr << "PLAYFP";
     consoleColour (white, true);
-    cerr << " - Music Player and C64 SID Chip Emulator" << endl;
+    cerr << "  SIDPLAYFP - Music Player and C64 SID Chip Emulator" << endl;
     consoleTable  (tableMiddle);
     consoleColour (white, false);
     {
