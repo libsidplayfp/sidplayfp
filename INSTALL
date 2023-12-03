@@ -48,7 +48,7 @@ may remove or edit it.
    The simplest way to compile this package is:
 
   0. `cd' to the directory containing the package's source code and type
-          `./autoconf' to configure the package for your system.
+          `./autoconf' to create the configure script.
 
      The file `configure.ac' (or `configure.in') is used to create
      `configure' by a program called `autoconf'.  You need `configure.ac' if
