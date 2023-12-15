@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2022 Leandro Nini
+ * Copyright 2011-2023 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -113,18 +113,62 @@ uint16_t freqTableNtsc[]
 };
 #endif
 
+// This table contains chip-profiles which allow us to adjust
+// certain settings that varied wildly between 6581 chips, even
+// made in the same factory on the same day.
+//
+// This works under the assumption that the authors used the
+// same SID chip their entire career.
+//
+// based on https://github.com/reFX/libSidplayEZ/blob/modernized/src/chip-profiles.h
 static const filter_map_t filterCurveMap =
 {
-    { "David Dunn",                 1.1 },
-    { "David Dunn & Aidan Bell",    1.1 },
-//  { "Martin Galway",              0.6 },    // Any other setting higher than 0.5 makes "Wizball" misbehave
-    { "Chris H\xFClsbeck",          0.6 },
-    { "Georg Feil",                 0.6 },
-    { "Jeroen Tel",                 0.6 },
-    { "Rob Hubbard",                0.6 },
-    { "Rob Hubbard & Ben Daglish",  0.6 },
-    { "Fred Gray",                  1.1 },    // He only used the filter in "Frankie Goes to Hollywood"
-    { "Geir Tjelta",                0.6 },
+    { "Anthony Lees",                        0.450 },
+    { "Antony Crowther (Ratt)",              0.400 },
+    { "Ben Daglish",                         0.900 },
+    { "Charles Deenen",                      1.000 },
+    { "Chris H\xFClsbeck",                   0.600 },
+    { "David Dunn",                          1.100 },
+    { "David Dunn & Aidan Bell",             1.100 },
+    { "David Whittaker",                     1.000 },
+    { "Thomas Mogensen (DRAX)",              0.450 },
+    { "Edwin van Santen",                    0.650 },
+    { "Falco Paul",                          1.100 },
+    { "Figge Wasberger (Fegolhuzz)",         1.100 },
+    { "Fred Gray",                           1.250 },
+    { "Geir Tjelta",                         0.700 },
+    { "Georg Feil",                          1.250 },
+    { "Glenn Rune Gallefoss",                1.250 },
+    { "Graham Jarvis & Rob Hartshorne",      1.000 },
+    { "Jason Page",                          1.000 },
+    { "Jeroen Tel",                          0.825 },
+    { "Johannes Bjerregaard",                0.700 },
+    { "Jonathan Dunn",                       0.750 },
+    { "Jouni Ikonen (Mixer)",                0.600 },
+    { "Kim Christensen (Future Freak)",      0.300 },
+    { "Linus \xC5kesson (lft)",              0.900 },
+    { "Mark Cooksey",                        1.250 },
+    { "Markus M\xFCller (Superbrain)",       0.800 },
+    { "Martin Walker",                       1.000 },
+    { "Matt Gray",                           1.100 },
+    { "Michael Hendriks",                    0.900 },
+    { "M. Nilsson-Vonderburgh (Mic)",        0.700 },
+    { "M. Nilsson-Vonderburgh (Mitch)",      0.700 },
+    { "M. Nilsson-Vonderburgh (Yankee)",     0.700 },
+    { "Neil Brennan",                        0.750 },
+    { "Peter Clarke",                        0.600 },
+    { "Pex Tufvesson (Mahoney)",             0.400 },
+    { "Pex Tufvesson (Zax)",                 0.400 },
+    { "Renato Brosowski (Zoci-Joe)",         1.400 },
+    { "Reyn Ouwehand",                       1.000 },
+    { "Richard Joseph",                      0.700 },
+    { "Rob Hubbard",                         0.700 },
+    { "Russell Lieblich",                    0.400 },
+    { "Stellan Andersson (Dane)",            0.350 },
+    { "Steve Turner",                        0.550 },
+    { "Tim Follin",                          0.300 },
+    { "Thomas E. Petersen (Laxity)",         1.550 },
+    { "Thomas E. Petersen (TSS)",            1.550 },
 };
 
 double getRecommendedFilterCurve(const std::string& author)
@@ -484,6 +528,8 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
                 fcurve = getRecommendedFilterCurve(tuneInfo->infoString(1));
+                if (m_verboseLevel > 1)
+                    cerr << "Recommended filter curve: " << fcurve << endl;
             }
             else if (m_fcurve >= 0.0)
             {
@@ -496,7 +542,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if (fcurve >= 0.0)
             {
-                if (m_verboseLevel > 1)
+                if (m_verboseLevel)
                     cerr << "6581 filter curve: " << fcurve << endl;
                 rs->filter6581Curve(fcurve);
             }
@@ -513,7 +559,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if (fcurve >= 0.0)
             {
-                if (m_verboseLevel > 1)
+                if (m_verboseLevel)
                     cerr << "8580 filter curve: " << fcurve << endl;
                 rs->filter8580Curve(fcurve);
             }
