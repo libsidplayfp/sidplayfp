@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [2.5.1], [], [], [https://github.com/libsidplayfp/sidplayfp/])
+AC_INIT([sidplayfp], [2.6.0], [], [], [https://github.com/libsidplayfp/sidplayfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])

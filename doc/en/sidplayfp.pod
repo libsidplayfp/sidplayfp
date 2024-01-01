@@ -346,7 +346,7 @@ Wrote the original man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2022 Leandro Nini
+=item Copyright (C) 2010-2024 Leandro Nini
 
 =back
 
