@@ -524,7 +524,8 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
 
-            double fcurve;
+            // 6581
+            double fcurve = -1.0;
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
                 fcurve = getRecommendedFilterCurve(tuneInfo->infoString(1));
@@ -547,6 +548,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 rs->filter6581Curve(fcurve);
             }
 
+            // 8580
             fcurve = -1.0;
             if (m_fcurve >= 0.0)
             {
