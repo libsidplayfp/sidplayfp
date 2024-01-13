@@ -82,6 +82,9 @@ public:
         bool          filter;
         double        bias;
         double        filterCurve6581;
+#ifdef FEAT_FILTER_RANGE
+        double        filterRange6581;
+#endif
         double        filterCurve8580;
         int           powerOnDelay;
         SidConfig::sampling_method_t  samplingMethod;

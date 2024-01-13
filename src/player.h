@@ -152,6 +152,9 @@ private:
         double         bias;
         // Filter parameters for reSIDfp
         double         filterCurve6581;
+#ifdef FEAT_FILTER_RANGE
+        double         filterRange6581;
+#endif
         double         filterCurve8580;
 
         bool           enabled;

@@ -119,6 +119,9 @@ void IniConfig::clear()
 
     emulation_s.bias            = 0.5;
     emulation_s.filterCurve6581 = 0.5;
+#ifdef FEAT_FILTER_RANGE
+    emulation_s.filterRange6581 = 0.5;
+#endif
     emulation_s.filterCurve8580 = 0.5;
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
@@ -426,6 +429,9 @@ void IniConfig::readEmulation(iniHandler &ini)
 
     readDouble(ini, TEXT("FilterBias"), emulation_s.bias);
     readDouble(ini, TEXT("FilterCurve6581"), emulation_s.filterCurve6581);
+#ifdef FEAT_FILTER_RANGE
+    readDouble(ini, TEXT("filterRange6581"), emulation_s.filterRange6581);
+#endif
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 
     readInt(ini, TEXT("PowerOnDelay"), emulation_s.powerOnDelay);
