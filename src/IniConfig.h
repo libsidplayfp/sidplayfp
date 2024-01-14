@@ -86,6 +86,7 @@ public:
         double        filterRange6581;
 #endif
         double        filterCurve8580;
+        SidConfig::sid_cw_t combinedWaveformsStrength;
         int           powerOnDelay;
         SidConfig::sampling_method_t  samplingMethod;
         bool          fastSampling;

@@ -128,6 +128,8 @@ private:
 
     double             m_fcurve;
 
+    SidConfig::sid_cw_t m_combinedWaveformsStrength;
+
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
 

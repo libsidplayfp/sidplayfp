@@ -228,6 +228,11 @@ Controls the filter curve for the 8580 model in the ReSIDfp
 emulation.  Ranges from 0.0 (light) to 1.0 (dark), the default
 value is 0.5.
 
+=item B<CombinedWaveforms>=I<< <AVERAGE|WEAK|STRONG> >>
+
+Controls the combined waveforms strength in the ReSIDfp
+emulation.  The default value is AVERAGE.
+
 =item B<PowerOnDelay>=I<< <number> >>
 
 The c64 power on delay as number of cpu cycles.

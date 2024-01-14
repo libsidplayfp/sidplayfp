@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2023 Leandro Nini
+ * Copyright 2011-2024 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -123,6 +123,7 @@ void IniConfig::clear()
     emulation_s.filterRange6581 = 0.5;
 #endif
     emulation_s.filterCurve8580 = 0.5;
+    emulation_s.combinedWaveformsStrength = SidConfig::AVERAGE;
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
     emulation_s.fastSampling = false;
@@ -433,6 +434,19 @@ void IniConfig::readEmulation(iniHandler &ini)
     readDouble(ini, TEXT("filterRange6581"), emulation_s.filterRange6581);
 #endif
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
+
+    {
+        SID_STRING str = readString(ini, TEXT("CombinedWaveforms"));
+        if (!str.empty())
+        {
+            if (str.compare(TEXT("AVERAGE")) == 0)
+                emulation_s.combinedWaveformsStrength = SidConfig::AVERAGE;
+            else if (str.compare(TEXT("WEAK")) == 0)
+                emulation_s.combinedWaveformsStrength = SidConfig::WEAK;
+            else if (str.compare(TEXT("STRONG")) == 0)
+                emulation_s.combinedWaveformsStrength = SidConfig::STRONG;
+        }
+    }
 
     readInt(ini, TEXT("PowerOnDelay"), emulation_s.powerOnDelay);
 
