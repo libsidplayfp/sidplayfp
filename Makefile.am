@@ -121,7 +121,9 @@ doc/en/stilview.1
 DISTCLEANFILES = $(dist_man_MANS)
 
 .pod.1:
+	@mkdir -p $(@D)
 	pod2man -c "User Programs" -s 1 $< > $@
 
 .pod.5:
+	@mkdir -p $(@D)
 	pod2man -c "File formats" -s 5 $< > $@
