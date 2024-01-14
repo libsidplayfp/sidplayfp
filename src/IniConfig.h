@@ -86,7 +86,9 @@ public:
         double        filterRange6581;
 #endif
         double        filterCurve8580;
+#ifdef FEAT_CW_STRENGTH
         SidConfig::sid_cw_t combinedWaveformsStrength;
+#endif
         int           powerOnDelay;
         SidConfig::sampling_method_t  samplingMethod;
         bool          fastSampling;

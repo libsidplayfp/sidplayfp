@@ -123,7 +123,9 @@ void IniConfig::clear()
     emulation_s.filterRange6581 = 0.5;
 #endif
     emulation_s.filterCurve8580 = 0.5;
+#ifdef FEAT_CW_STRENGTH
     emulation_s.combinedWaveformsStrength = SidConfig::AVERAGE;
+#endif
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
     emulation_s.fastSampling = false;
@@ -435,6 +437,7 @@ void IniConfig::readEmulation(iniHandler &ini)
 #endif
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 
+#ifdef FEAT_CW_STRENGTH
     {
         SID_STRING str = readString(ini, TEXT("CombinedWaveforms"));
         if (!str.empty())
@@ -447,6 +450,7 @@ void IniConfig::readEmulation(iniHandler &ini)
                 emulation_s.combinedWaveformsStrength = SidConfig::STRONG;
         }
     }
+#endif
 
     readInt(ini, TEXT("PowerOnDelay"), emulation_s.powerOnDelay);
 

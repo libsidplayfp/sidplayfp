@@ -372,7 +372,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_filter.filterRange6581 = emulation.filterRange6581;
 #endif
         m_filter.filterCurve8580 = emulation.filterCurve8580;
+#ifdef FEAT_CW_STRENGTH
         m_combinedWaveformsStrength = emulation.combinedWaveformsStrength;
+#endif
 
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;
@@ -596,7 +598,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
 
+#ifdef FEAT_CW_STRENGTH
             rs->combinedWaveformsStrength(m_combinedWaveformsStrength);
+#endif
 
 #ifdef FEAT_FILTER_RANGE
             double frange = -1.0;

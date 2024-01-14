@@ -128,7 +128,9 @@ private:
 
     double             m_fcurve;
 
+#ifdef FEAT_CW_STRENGTH
     SidConfig::sid_cw_t m_combinedWaveformsStrength;
+#endif
 
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
