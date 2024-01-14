@@ -42,7 +42,7 @@ bool Audio_Null::open(AudioConfig &cfg)
     return true;
 }
 
-bool Audio_Null::write(uint_least32_t size)
+bool Audio_Null::write(uint_least32_t)
 {
     if (!isOpen)
     {
