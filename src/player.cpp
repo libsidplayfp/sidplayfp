@@ -603,28 +603,22 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 #endif
 
 #ifdef FEAT_FILTER_RANGE
-            double frange = -1.0;
+            double frange = m_filter.filterRange6581;
+
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
                 frange = getRecommendedFilterRange(tuneInfo->infoString(1));
                 if (m_verboseLevel > 1)
                     cerr << "Recommended filter range: " << frange << endl;
             }
-            if (m_filter.filterRange6581 >= 0.0)
-            {
-                frange = m_filter.filterRange6581;
-            }
 
-            if (frange >= 0.0)
-            {
-                if (m_verboseLevel)
-                    cerr << "6581 filter range: " << frange << endl;
-                rs->filter6581Range(frange);
-            }
+            if (m_verboseLevel)
+                cerr << "6581 filter range: " << frange << endl;
+            rs->filter6581Range(frange);
 #endif
 
             // 6581
-            double fcurve = -1.0;
+            double fcurve = m_filter.filterCurve6581;
 #ifndef FEAT_FILTER_RANGE
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
@@ -637,35 +631,21 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             {
                 fcurve = m_fcurve;
             }
-            else if (m_filter.filterCurve6581 >= 0.0)
-            {
-                fcurve = m_filter.filterCurve6581;
-            }
 
-            if (fcurve >= 0.0)
-            {
-                if (m_verboseLevel)
-                    cerr << "6581 filter curve: " << fcurve << endl;
-                rs->filter6581Curve(fcurve);
-            }
+            if (m_verboseLevel)
+                cerr << "6581 filter curve: " << fcurve << endl;
+            rs->filter6581Curve(fcurve);
 
             // 8580
-            fcurve = -1.0;
+            fcurve = m_filter.filterCurve8580;
             if (m_fcurve >= 0.0)
             {
                 fcurve = m_fcurve;
             }
-            if (m_filter.filterCurve8580 >= 0.0)
-            {
-                fcurve = m_filter.filterCurve8580;
-            }
 
-            if (fcurve >= 0.0)
-            {
-                if (m_verboseLevel)
-                    cerr << "8580 filter curve: " << fcurve << endl;
-                rs->filter8580Curve(fcurve);
-            }
+            if (m_verboseLevel)
+                cerr << "8580 filter curve: " << fcurve << endl;
+            rs->filter8580Curve(fcurve);
         }
         catch (std::bad_alloc const &ba) {}
         break;
