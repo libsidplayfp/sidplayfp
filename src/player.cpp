@@ -554,7 +554,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             {
                 fcurve = m_fcurve;
             }
-            if (m_filter.filterCurve8580 >= 0.0)
+            else if (m_filter.filterCurve8580 >= 0.0)
             {
                 fcurve = m_filter.filterCurve8580;
             }
