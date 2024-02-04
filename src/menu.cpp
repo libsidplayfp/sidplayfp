@@ -544,7 +544,7 @@ void ConsolePlayer::refreshRegDump()
 
                     consoleColour (yellow, true);
                     ;
-                    cerr << " " << getNote(registers[0x00 + i * 0x07] | ((registers[0x01 + i * 0x07] & 0x0f) << 8))
+                    cerr << " " << getNote(registers[0x00 + i * 0x07] | (registers[0x01 + i * 0x07] << 8))
                          << " $" << setw(3) << setfill('0') << (registers[0x02 + i * 0x07] | ((registers[0x03 + i * 0x07] & 0x0f) << 8));
 
                     // gate changed ?
