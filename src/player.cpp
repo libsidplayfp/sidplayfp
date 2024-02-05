@@ -120,64 +120,64 @@ uint16_t freqTableNtsc[]
 // This works under the assumption that the authors used the
 // same SID chip their entire career.
 //
-// based on https://github.com/reFX/libSidplayEZ/blob/modernized/src/chip-profiles.h
+// taken from https://github.com/reFX/libSidplayEZ/blob/modernized/src/chip-profiles.h
 #ifdef FEAT_FILTER_RANGE
 static const filter_map_t filterRangeMap =
 {
-    { "Anthony Lees",                        0.641 },
-    { "Antony Crowther (Ratt)",              0.538 },
-    { "Barry Leitch (The Jackal)",           0.000 },
-    { "Ben Daglish",                         0.282 },
-    { "Charles Deenen",                      0.077 },
-    { "Chris H\xFClsbeck",                   0.231 },
-    { "David Dunn",                          0.051 },
-    { "David Dunn & Aidan Bell",             0.051 },
-    { "David Whittaker",                     0.051 },
-    { "Thomas Mogensen (DRAX)",              0.128 },
-    { "Edwin van Santen",                    0.231 },
-    { "Edwin van Santen & Falco Paul",       0.179 },
-    { "Edwin van Santen & Venom",            0.179 },
-    { "Falco Paul",                          0.051 },
-    { "Falco Paul & Edwin van Santen",       0.179 },
-    { "Figge Wasberger (Fegolhuzz)",         0.103 },
-    { "Fred Gray",                           0.067 },
-    { "Geir Tjelta",                         0.231 },
-    { "Georg Feil",                          0.077 },
-    { "Glenn Rune Gallefoss",                0.077 },
-    { "Graham Jarvis & Rob Hartshorne",      0.103 },
-    { "Jason Page",                          0.134 },
-    { "Jeroen Tel",                          0.134 },
-    { "Johannes Bjerregaard",                0.134 },
-    { "Jonathan Dunn",                       0.103 },
-    { "Jouni Ikonen (Mixer)",                0.103 },
-    { "Jori Olkkonen",                       0.038 },
-    { "Jori Olkkonen (Yip)",                 0.038 },
-    { "Kim Christensen (Future Freak)",      0.154 },
-    { "Linus \xC5kesson (lft)",              0.128 },
-    { "Mark Cooksey",                        0.103 },
-    { "Markus M\xFCller (Superbrain)",       0.128 },
-    { "Martin Galway",                       0.487 },
-    { "Martin Walker",                       0.051 },
-    { "Matt Gray",                           0.128 },
-    { "Michael Hendriks",                    0.103 },
-    { "Mitch & Dane",                        0.359 },
-    { "M. Nilsson-Vonderburgh (Mic)",        0.103 },
-    { "M. Nilsson-Vonderburgh (Mitch)",      0.103 },
-    { "M. Nilsson-Vonderburgh (Yankee)",     0.103 },
-    { "Neil Brennan",                        0.103 },
-    { "Peter Clarke",                        0.077 },
-    { "Pex Tufvesson (Mahoney)",             0.154 },
-    { "Pex Tufvesson (Zax)",                 0.154 },
-    { "Renato Brosowski (Zoci-Joe)",         0.128 },
-    { "Reyn Ouwehand",                       0.103 },
-    { "Richard Joseph",                      0.128 },
-    { "Rob Hubbard",                         0.154 },
-    { "Russell Lieblich",                    0.103 },
-    { "Stellan Andersson (Dane)",            0.359 },
-    { "Steve Turner",                        0.282 },
-    { "Tim Follin",                          0.231 },
-    { "Thomas E. Petersen (Laxity)",         0.128 },
-    { "Thomas E. Petersen (TSS)",            0.128 },
+    { "Anthony Lees",                        1.3 },
+    { "Antony Crowther (Ratt)",              1.1 },
+    { "Barry Leitch (The Jackal)",           0.05 },
+    { "Ben Daglish",                         0.6 },
+    { "Charles Deenen",                      0.2 },
+    { "Chris H\xFClsbeck",                   0.6 },
+    { "David Dunn",                          0.15 },
+    { "David Dunn & Aidan Bell",             0.15 },
+    { "David Whittaker",                     0.15 },
+    { "Thomas Mogensen (DRAX)",              0.3 },
+    { "Edwin van Santen",                    0.5 },
+    { "Edwin van Santen & Falco Paul",       0.4 }, // 20th Century Composers
+    { "Edwin van Santen & Venom",            0.4 }, // 20th Century Composers
+    { "Falco Paul",                          0.15 },
+    { "Falco Paul & Edwin van Santen",       0.4 }, // 20th Century Composers
+    { "Figge Wasberger (Fegolhuzz)",         0.25 },
+    { "Fred Gray",                           0.18 },
+    { "Geir Tjelta",                         0.5 },
+    { "Georg Feil",                          0.2 },
+    { "Glenn Rune Gallefoss",                0.2 },
+    { "Graham Jarvis & Rob Hartshorne",      0.25 },
+    { "Jason Page",                          0.35 },
+    { "Jeroen Tel",                          0.35 },
+    { "Johannes Bjerregaard",                0.35 },
+    { "Jonathan Dunn",                       0.25 },
+    { "Jouni Ikonen (Mixer)",                0.25 },
+    { "Jori Olkkonen",                       0.15 },
+    { "Jori Olkkonen (Yip)",                 0.15 },
+    { "Kim Christensen (Future Freak)",      0.35 },
+    { "Linus \xC5kesson (lft)",              0.3 },
+    { "Mark Cooksey",                        0.25 },
+    { "Markus M\xFCller (Superbrain)",       0.3 },
+    { "Martin Galway",                       1.0 },
+    { "Martin Walker",                       0.15 },
+    { "Matt Gray",                           0.3 },
+    { "Michael Hendriks",                    0.25 },
+    { "Mitch & Dane",                        0.75 },
+    { "M. Nilsson-Vonderburgh (Mic)",        0.25 },
+    { "M. Nilsson-Vonderburgh (Mitch)",      0.25 },
+    { "M. Nilsson-Vonderburgh (Yankee)",     0.25 },
+    { "Neil Brennan",                        0.25 },
+    { "Peter Clarke",                        0.2 },
+    { "Pex Tufvesson (Mahoney)",             0.35 },
+    { "Pex Tufvesson (Zax)",                 0.35 },
+    { "Renato Brosowski (Zoci-Joe)",         0.3 },
+    { "Reyn Ouwehand",                       0.25 },
+    { "Richard Joseph",                      0.3 },
+    { "Rob Hubbard",                         0.35 },
+    { "Russell Lieblich",                    0.25 },
+    { "Stellan Andersson (Dane)",            0.75 },
+    { "Steve Turner",                        0.6 },
+    { "Tim Follin",                          0.5 },
+    { "Thomas E. Petersen (Laxity)",         0.3 },
+    { "Thomas E. Petersen (TSS)",            0.3 },
 };
 #else
 static const filter_map_t filterCurveMap =
@@ -235,7 +235,12 @@ static const filter_map_t filterCurveMap =
 double getRecommendedFilterRange(const std::string& author)
 {
     filter_map_iter_t it = filterRangeMap.find(author);
-    return (it != filterRangeMap.end()) ? it->second : -1.;
+    if (it != filterRangeMap.end())
+    {
+        double adjustment = it->second;
+        return (adjustment * 20. - 1.) / 39.;
+    }
+    return -1;
 }
 #else
 double getRecommendedFilterCurve(const std::string& author)
