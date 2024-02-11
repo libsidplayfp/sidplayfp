@@ -81,6 +81,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
         {   // Gentoo bug #98769, comment 4
             unsigned int rate = tmpCfg.frequency;
             checkResult(snd_pcm_hw_params_set_rate_near(_audioHandle, hw_params, &rate, 0));
+            tmpCfg.frequency = rate;
         }
 
         _alsa_to_frames_divisor = tmpCfg.channels;
