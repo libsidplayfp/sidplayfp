@@ -31,6 +31,9 @@
 #  define AudioDriver Audio_ALSA
 #endif
 
+#define ALSA_PCM_NEW_HW_PARAMS_API
+
+
 #include <alsa/asoundlib.h>
 #include "../AudioBase.h"
 
@@ -39,7 +42,6 @@ class Audio_ALSA: public AudioBase
 {
 private:  // ------------------------------------------------------- private
     snd_pcm_t *_audioHandle;
-    int _alsa_to_frames_divisor;
 
 private:
     void outOfOrder();
