@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
+ * Copyright 2013-2024 Leandro Nini
  * Copyright 2000-2006 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -84,21 +84,21 @@ bool Audio_ALSA::open(AudioConfig &cfg)
             tmpCfg.frequency = rate;
         }
 
-        _alsa_to_frames_divisor = tmpCfg.channels;
-        snd_pcm_uframes_t buffer_frames = 4096;
-        checkResult(snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &buffer_frames, 0));
+        snd_pcm_uframes_t buffer_size = tmpCfg.frequency / 5;
+        checkResult(snd_pcm_hw_params_set_buffer_size_near(_audioHandle, hw_params, &buffer_size));
+        tmpCfg.bufSize = buffer_size;
+
+        snd_pcm_uframes_t period_size = buffer_size / 3;
+        checkResult(snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &period_size, 0));
 
         checkResult(snd_pcm_hw_params(_audioHandle, hw_params));
 
         snd_pcm_hw_params_free(hw_params);
         hw_params = 0;
 
-        checkResult(snd_pcm_prepare(_audioHandle));
-        tmpCfg.bufSize = buffer_frames * _alsa_to_frames_divisor;
-
         try
         {
-            _sampleBuffer = new short[tmpCfg.bufSize];
+            _sampleBuffer = new short[snd_pcm_frames_to_bytes(_audioHandle, tmpCfg.bufSize)];
         }
         catch (std::bad_alloc const &ba)
         {
@@ -144,7 +144,7 @@ bool Audio_ALSA::write(uint_least32_t size)
         return false;
     }
 
-    int err = snd_pcm_writei(_audioHandle, _sampleBuffer, size / _alsa_to_frames_divisor);
+    int err = snd_pcm_writei(_audioHandle, _sampleBuffer, size);
     if (err < 0)
     {
         err = snd_pcm_recover(_audioHandle, err, 0);
