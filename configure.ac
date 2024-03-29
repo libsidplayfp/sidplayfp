@@ -84,17 +84,9 @@ PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 USE_LIBOUT123=no
-AC_ARG_WITH([out123], AS_HELP_STRING([--with-out123], [Build with out123 library (default: disabled)]))
-# enable ou123 by default only on Mac OSX since we don't have any audio backend there
-CHECK_OUT123=no
-AS_IF([test "x$MACOSX" = "xyes" -a "x$with_out123" != "xno"],
-[CHECK_OUT123=yes],
-[AS_IF([test "x$with_out123" = "xyes"],
-[CHECK_OUT123=yes]
-)]
-)
+AC_ARG_WITH([out123], AS_HELP_STRING([--with-out123], [Build with out123 library (default: enabled)]))
 
-AS_IF([test "x$CHECK_OUT123" = "xyes"],
+AS_IF([test "x$with_out123" != "xno"],
     [PKG_CHECK_MODULES([OUT123],
         [libout123 >= 1],
         [USE_LIBOUT123=yes
