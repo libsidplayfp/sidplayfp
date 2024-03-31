@@ -68,4 +68,4 @@ disabled by default
 
 --with-out123
 Build with out123 library providing support for additional audio interfaces
-disabled by default
+enabled by default
