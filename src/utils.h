@@ -39,7 +39,7 @@ private:
 
 public:
     static SID_STRING getDataPath();
-    
+
     static SID_STRING getConfigPath();
 
 #ifdef _WIN32
