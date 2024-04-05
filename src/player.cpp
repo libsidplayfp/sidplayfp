@@ -909,7 +909,12 @@ bool ConsolePlayer::play()
     switch (m_state)
     {
     case playerRunning:
-        m_driver.selected->write(retSize);
+        if (!m_driver.selected->write(retSize))
+        {
+            cerr << m_driver.selected->getErrorString();
+            m_state = playerError;
+            return false;
+        }
         // fall-through
     case playerPaused:
         // Check for a keypress (approx 250ms rate, but really depends
