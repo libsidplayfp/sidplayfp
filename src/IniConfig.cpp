@@ -481,22 +481,22 @@ public:
 void createDir(const SID_STRING& path)
 {
 #ifndef _WIN32
-	DIR *dir = opendir(path.c_str());
+    DIR *dir = opendir(path.c_str());
     if (dir)
-	{
-		closedir(dir);
-	}
-	else if (errno == ENOENT)
-	{
+    {
+        closedir(dir);
+    }
+    else if (errno == ENOENT)
+    {
         if (mkdir(path.c_str(), 0755) < 0)
         {
             throw iniError(strerror(errno));
         }
     }
-	else
-	{
-		throw iniError(strerror(errno));
-	}
+    else
+    {
+        throw iniError(strerror(errno));
+    }
 #else
     if (GetFileAttributes(path.c_str()) == INVALID_FILE_ATTRIBUTES)
     {
@@ -529,12 +529,12 @@ SID_STRING getConfigPath()
     debug(TEXT("Config path: "), configPath.c_str());
 
     // Make sure the config path exists
-	createDir(configPath);
+    createDir(configPath);
 
     configPath.append(SEPARATOR).append(DIR_NAME);
 
     // Make sure the app config path exists
-	createDir(configPath);
+    createDir(configPath);
 
     configPath.append(SEPARATOR).append(FILE_NAME);
 
