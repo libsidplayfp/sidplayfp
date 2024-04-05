@@ -328,7 +328,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_fcurve(-1.0),
     m_quietLevel(0),
     m_cpudebug(false),
-    newSonglengthDB(false),
+    songlengthDB(SLDB_NONE),
     m_autofilter(false)
 {
 #ifdef FEAT_REGS_DUMP_SID
@@ -799,7 +799,7 @@ bool ConsolePlayer::open (void)
     if (!m_timer.valid)
     {
 #ifdef FEAT_NEW_SONLEGTH_DB
-        const int_least32_t length = newSonglengthDB ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
+        const int_least32_t length = songlengthDB == SLDB_MD5 ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
 #else
         const int_least32_t length = m_database.length(m_tune) * 1000;
 #endif

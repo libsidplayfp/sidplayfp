@@ -547,18 +547,19 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 ? (m_iniCfg.sidplay2()).recordLength
                 : (m_iniCfg.sidplay2()).playLength;
 
-
+            songlengthDB = SLDB_NONE;
             bool dbOpened = false;
             if (hvscBase)
             {
                 if (tryOpenDatabase(hvscBase, "md5"))
                 {
                     dbOpened = true;
-                    newSonglengthDB = true;
+                    songlengthDB = SLDB_MD5;
                 }
                 else if (tryOpenDatabase(hvscBase, "txt"))
                 {
                     dbOpened = true;
+                    songlengthDB = SLDB_TXT;
                 }
             }
 
@@ -587,7 +588,9 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     }
 
                     if ((m_iniCfg.sidplay2()).database.find(TEXT(".md5")) != SID_STRING::npos)
-                        newSonglengthDB = true;
+                        songlengthDB = SLDB_MD5;
+                    else
+                        songlengthDB = SLDB_TXT;
                 }
             }
         }

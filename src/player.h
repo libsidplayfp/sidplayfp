@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2023 Leandro Nini
+ * Copyright 2011-2024 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -92,6 +92,14 @@ enum
     ERR_FILE_OPEN
 };
 
+// Songlength DB.
+typedef enum
+{
+    SLDB_NONE = 0,
+    SLDB_TXT,
+    SLDB_MD5
+} sldb_t;
+
 void displayError (const char *arg0, unsigned int num);
 
 
@@ -139,9 +147,9 @@ private:
     uint_least8_t      m_quietLevel;
     uint_least8_t      m_verboseLevel;
 
-    bool               m_cpudebug;
+    sldb_t             songlengthDB;
 
-    bool               newSonglengthDB;
+    bool               m_cpudebug;
 
     bool               m_autofilter;
 

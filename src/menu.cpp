@@ -297,6 +297,8 @@ void ConsolePlayer::menu ()
     }
     else if (m_timer.valid)
         cerr << "FOREVER";
+    else if (songlengthDB == SLDB_NONE)
+        cerr << "NO SLDB";
     else
         cerr << "UNKNOWN";
     if (m_timer.start)
