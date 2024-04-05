@@ -328,8 +328,8 @@ void IniConfig::readSidplay2(iniHandler &ini)
 #if !defined _WIN32
     if (sidplay2_s.database.empty())
     {
-        SID_STRING buffer(PKGDATADIR);
-        buffer.append("Songlengths.txt");
+        SID_STRING buffer(utils::getDataPath());
+        buffer.append(SEPARATOR).append(DIR_NAME).append(SEPARATOR).append("Songlengths.txt");
         if (::access(buffer.c_str(), R_OK) == 0)
             sidplay2_s.database.assign(buffer);
     }
