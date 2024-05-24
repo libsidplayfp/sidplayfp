@@ -327,8 +327,8 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_filename(""),
     m_fcurve(-1.0),
     m_quietLevel(0),
-    m_cpudebug(false),
     songlengthDB(SLDB_NONE),
+    m_cpudebug(false),
     m_autofilter(false)
 {
 #ifdef FEAT_REGS_DUMP_SID
