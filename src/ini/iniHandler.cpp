@@ -193,11 +193,11 @@ bool iniHandler::write(const TCHAR *fName)
         return false;
     }
 
-    for (sections_t::iterator section = sections.begin(); section != sections.end(); ++section)
+    for (auto & section : sections)
     {
-        iniFile << "[" << (*section).first << "]" << std::endl;
+        iniFile << "[" << section.first << "]" << std::endl;
 
-        for (keys_t::iterator entry = (*section).second.begin(); entry != (*section).second.end(); ++entry)
+        for (keys_t::iterator entry = section.second.begin(); entry != section.second.end(); ++entry)
         {
             const SID_STRING key = (*entry).first;
             if (!key.empty())
