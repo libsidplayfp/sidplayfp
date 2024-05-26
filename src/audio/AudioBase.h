@@ -65,7 +65,7 @@ public:
     AudioBase(const char* name) :
         _backendName(name),
         _sampleBuffer(nullptr) {}
-    virtual ~AudioBase() {}
+    ~AudioBase() override {}
 
     short *buffer() const override { return _sampleBuffer; }
 

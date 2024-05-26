@@ -49,7 +49,7 @@ private:
 
 public:  // --------------------------------------------------------- public
     Audio_ALSA();
-    ~Audio_ALSA();
+    ~Audio_ALSA() override;
 
     bool open  (AudioConfig &cfg) override;
     void close () override;

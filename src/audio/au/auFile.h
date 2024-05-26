@@ -61,7 +61,7 @@ private:
 
 public:
     auFile(const std::string &name);
-    ~auFile() { close(); }
+    ~auFile() override { close(); }
 
     static const char *extension () { return ".au"; }
 

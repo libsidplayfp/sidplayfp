@@ -63,7 +63,7 @@ private:  // ------------------------------------------------------- private
 
 public:  // --------------------------------------------------------- public
     Audio_OSS();
-    ~Audio_OSS();
+    ~Audio_OSS() override;
 
     bool open  (AudioConfig &cfg) override;
     void close () override;

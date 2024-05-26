@@ -41,7 +41,7 @@ private:  // ------------------------------------------------------- private
 
 public:  // --------------------------------------------------------- public
     Audio_OUT123();
-    ~Audio_OUT123();
+    ~Audio_OUT123() override;
 
     bool open  (AudioConfig &cfg) override;
     void close () override;

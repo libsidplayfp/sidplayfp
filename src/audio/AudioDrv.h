@@ -33,16 +33,16 @@ private:
     std::unique_ptr<AudioBase> audio;
 
 public:
-    virtual ~audioDrv() {}
+    ~audioDrv() override {}
 
-    bool open(AudioConfig &cfg);
-    void reset() { audio->reset(); }
-    bool write(uint_least32_t size) { return audio->write(size); }
-    void close() { audio->close(); }
-    void pause() { audio->pause(); }
-    short *buffer() const { return audio->buffer(); }
-    void getConfig(AudioConfig &cfg) const { audio->getConfig(cfg); }
-    const char *getErrorString() const { return audio->getErrorString(); }
+    bool open(AudioConfig &cfg) override;
+    void reset() override { audio->reset(); }
+    bool write(uint_least32_t size) override { return audio->write(size); }
+    void close() override { audio->close(); }
+    void pause() override { audio->pause(); }
+    short *buffer() const override { return audio->buffer(); }
+    void getConfig(AudioConfig &cfg) const override { audio->getConfig(cfg); }
+    const char *getErrorString() const override { return audio->getErrorString(); }
 };
 
 #endif // AUDIODRV_H

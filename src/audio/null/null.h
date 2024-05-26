@@ -45,7 +45,7 @@ private:  // ------------------------------------------------------- private
 
 public:  // --------------------------------------------------------- public
     Audio_Null();
-    ~Audio_Null();
+    ~Audio_Null() override;
 
     bool open  (AudioConfig &cfg) override;
     void close () override;

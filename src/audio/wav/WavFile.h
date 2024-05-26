@@ -100,7 +100,7 @@ private:
 
 public:
     WavFile(const std::string &name);
-    ~WavFile() { close(); }
+    ~WavFile() override { close(); }
 
     static const char *extension () { return ".wav"; }
 
