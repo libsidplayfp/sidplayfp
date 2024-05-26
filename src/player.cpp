@@ -33,7 +33,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>

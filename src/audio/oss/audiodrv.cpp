@@ -22,10 +22,10 @@
 
 #ifdef HAVE_OSS
 
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/ioctl.h>
+#include <cstdio>
 #include <fcntl.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 
 #include <new>
 

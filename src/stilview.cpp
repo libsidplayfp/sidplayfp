@@ -26,9 +26,9 @@
 #include <fstream>
 #include <iostream>
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 #include <codeConvert.h>
 

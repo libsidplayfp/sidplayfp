@@ -25,14 +25,14 @@
 
 #ifndef _WIN32
 // Unix console headers
-#  include <ctype.h>
+#  include <cctype>
 // bzero requires memset on some platforms
-#  include <string.h>
-#  include <termios.h>
+#  include <cstring>
+#  include <fcntl.h>
+#  include <sys/stat.h>
 #  include <sys/time.h>
 #  include <sys/types.h>
-#  include <sys/stat.h>
-#  include <fcntl.h>
+#  include <termios.h>
 #  include <unistd.h>
 int _getch (void);
 #endif

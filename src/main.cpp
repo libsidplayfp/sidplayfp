@@ -21,8 +21,8 @@
 
 #include "player.h"
 
-#include <stdlib.h>
-#include <signal.h>
+#include <csignal>
+#include <cstdlib>
 
 #include <iostream>
 
