@@ -239,7 +239,7 @@ private:
 
 public:
     ConsolePlayer (const char * const name);
-    virtual ~ConsolePlayer() {}
+    virtual ~ConsolePlayer() = default;
 
     int  args  (int argc, const char *argv[]);
     bool open  (void);

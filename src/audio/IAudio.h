@@ -29,7 +29,7 @@ class AudioConfig;
 class IAudio
 {
 public:
-    virtual ~IAudio() {}
+    virtual ~IAudio() = default;
 
     virtual bool open(AudioConfig &cfg) = 0;
     virtual void reset() = 0;

@@ -33,7 +33,7 @@ private:
     std::unique_ptr<AudioBase> audio;
 
 public:
-    ~audioDrv() override {}
+    ~audioDrv() override = default;
 
     bool open(AudioConfig &cfg) override;
     void reset() override { audio->reset(); }
