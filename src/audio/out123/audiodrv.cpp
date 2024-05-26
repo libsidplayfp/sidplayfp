@@ -51,12 +51,12 @@ bool Audio_OUT123::open(AudioConfig &cfg)
 
     try
     {
-        if ((_audiofd = out123_new()) == NULL)
+        if ((_audiofd = out123_new()) == nullptr)
         {
             throw error("Could not init audio driver.");
         }
 
-        if (out123_open(_audiofd, NULL, NULL) == (-1))
+        if (out123_open(_audiofd, nullptr, nullptr) == (-1))
         {
             throw error(out123_strerror(_audiofd));
         }

@@ -323,7 +323,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_name(name),
     m_tune(nullptr),
     m_state(playerStopped),
-    m_outfile(NULL),
+    m_outfile(nullptr),
     m_filename(""),
     m_fcurve(-1.0),
     m_quietLevel(0),
@@ -336,7 +336,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 #endif
     // Other defaults
     m_filter.enabled = true;
-    m_driver.device  = NULL;
+    m_driver.device  = nullptr;
     m_driver.sid     = EMU_RESIDFP;
     m_timer.start    = 0;
     m_timer.length   = 0; // FOREVER
@@ -433,7 +433,7 @@ std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo, const char* 
 {
     std::string title;
 
-    if (m_outfile != NULL)
+    if (m_outfile != nullptr)
     {
         title = m_outfile;
         if (title.compare("-") != 0

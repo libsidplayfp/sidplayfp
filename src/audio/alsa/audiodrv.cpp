@@ -54,7 +54,7 @@ void Audio_ALSA::checkResult(int err)
 
 bool Audio_ALSA::open(AudioConfig &cfg)
 {
-    snd_pcm_hw_params_t *hw_params = 0;
+    snd_pcm_hw_params_t *hw_params = nullptr;
 
     try
     {
@@ -80,7 +80,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 
         {   // Gentoo bug #98769, comment 4
             unsigned int rate = tmpCfg.frequency;
-            checkResult(snd_pcm_hw_params_set_rate_near(_audioHandle, hw_params, &rate, 0));
+            checkResult(snd_pcm_hw_params_set_rate_near(_audioHandle, hw_params, &rate, nullptr));
             tmpCfg.frequency = rate;
         }
 
@@ -89,12 +89,12 @@ bool Audio_ALSA::open(AudioConfig &cfg)
         tmpCfg.bufSize = buffer_size;
 
         snd_pcm_uframes_t period_size = buffer_size / 3;
-        checkResult(snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &period_size, 0));
+        checkResult(snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &period_size, nullptr));
 
         checkResult(snd_pcm_hw_params(_audioHandle, hw_params));
 
         snd_pcm_hw_params_free(hw_params);
-        hw_params = 0;
+        hw_params = nullptr;
 
         try
         {

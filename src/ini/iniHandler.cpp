@@ -163,7 +163,7 @@ bool iniHandler::setSection(const TCHAR *section)
 const TCHAR *iniHandler::getValue(const TCHAR *key) const
 {
     keys_t::const_iterator keyIt = std::find_if((*curSection).second.begin(), (*curSection).second.end(), compare<stringPair_t>(key));
-    return (keyIt != (*curSection).second.end()) ? keyIt->second.c_str() : 0;
+    return (keyIt != (*curSection).second.end()) ? keyIt->second.c_str() : nullptr;
 }
 
 void iniHandler::addSection(const TCHAR *section)

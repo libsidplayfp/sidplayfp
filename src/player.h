@@ -216,7 +216,7 @@ private:
     void consoleRestore (void);
 
     // Command line args
-    void displayArgs    (const char *arg = NULL);
+    void displayArgs    (const char *arg = nullptr);
 
     bool createOutput   (OUTPUTS driver, const SidTuneInfo *tuneInfo);
     bool createSidEmu   (SIDEMUS emu, const SidTuneInfo *tuneInfo);

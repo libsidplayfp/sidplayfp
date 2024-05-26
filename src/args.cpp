@@ -136,7 +136,7 @@ bool parseAddress(const char *str, uint_least16_t &address)
     if (*str == '\0')
         return false;
 
-    long x = strtol(str, 0, 0);
+    long x = strtol(str, nullptr, 0);
 
     address = x;
     return true;
