@@ -142,6 +142,7 @@ static const filter_map_t filterRangeMap =
     { "Figge Wasberger (Fegolhuzz)",         0.25 },
     { "Fred Gray",                           0.18 },
     { "Geir Tjelta",                         0.5 },
+    { "Geoff Follin",                        0.85 },
     { "Georg Feil",                          0.2 },
     { "Glenn Rune Gallefoss",                0.2 },
     { "Graham Jarvis & Rob Hartshorne",      0.25 },
