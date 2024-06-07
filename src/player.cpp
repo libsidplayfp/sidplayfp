@@ -618,6 +618,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                     cerr << "Recommended filter range: " << frange << endl;
             }
 
+            if ((frange < 0.0) || (frange > 1.0))
+            {
+                cerr << "Invalid 6581 filter range: " << frange << endl;
+                exit(EXIT_FAILURE);
+            }
+
             if (m_verboseLevel)
                 cerr << "6581 filter range: " << frange << endl;
             rs->filter6581Range(frange);
@@ -638,6 +644,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 fcurve = m_fcurve;
             }
 
+            if ((fcurve < 0.0) || (fcurve > 1.0))
+            {
+                cerr << "Invalid 6581 filter curve: " << fcurve << endl;
+                exit(EXIT_FAILURE);
+            }
+
             if (m_verboseLevel)
                 cerr << "6581 filter curve: " << fcurve << endl;
             rs->filter6581Curve(fcurve);
@@ -647,6 +659,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             if (m_fcurve >= 0.0)
             {
                 fcurve = m_fcurve;
+            }
+
+            if ((fcurve < 0.0) || (fcurve > 1.0))
+            {
+                cerr << "Invalid 8580 filter curve: " << fcurve << endl;
+                exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
