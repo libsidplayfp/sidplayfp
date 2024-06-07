@@ -662,7 +662,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 #endif
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
-        << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation" << endl
+        << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
 
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl
         << " --au[name]   create au file (default: <datafile>[n].au)" << endl
