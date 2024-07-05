@@ -798,7 +798,16 @@ bool ConsolePlayer::open (void)
         return false;
     }
 #ifdef FEAT_REGS_DUMP_SID
-    m_freqTable = (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC) ? freqTableNtsc : freqTablePal;
+    if (
+            (
+                (m_engCfg.defaultC64Model == SidConfig::NTSC) &&
+                (m_engCfg.forceC64Model || (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL))
+            ) ||
+            (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC)
+    )
+        m_freqTable = freqTableNtsc;
+    else
+        m_freqTable = freqTablePal;
 #endif
     // Start the player.  Do this by fast
     // forwarding to the start position
