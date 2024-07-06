@@ -886,8 +886,10 @@ void ConsolePlayer::close ()
     if (m_quietLevel < 2)
     {   // Correctly leave ansi mode and get prompt to
         // end up in a suitable location
-        if ((m_iniCfg.console ()).ansi)
+        if ((m_iniCfg.console ()).ansi) {
+            cerr << '\x1b' << "[?25h";
             cerr << '\x1b' << "[0m";
+        }
 #ifndef _WIN32
         cerr << endl;
 #endif
