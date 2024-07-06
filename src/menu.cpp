@@ -151,10 +151,12 @@ void ConsolePlayer::menu ()
         cerr << '\x1b' << "[40m";  // Background black
         cerr << '\x1b' << "[2J";   // Clear screen
         cerr << '\x1b' << "[0;0H"; // Move cursor to 0,0
+		cerr << '\x1b' << "[?25l"; // and hide it
     }
 
     if (m_verboseLevel > 1)
     {
+		cerr << '\x1b' << "[0m";
         cerr << "Config loaded from" << endl;
         SID_CERR << m_iniCfg.getFilename() << endl;
     }
@@ -681,6 +683,8 @@ void ConsolePlayer::consoleTable (player_table_t table)
 // Restore Ansi Console to defaults
 void ConsolePlayer::consoleRestore ()
 {
-    if ((m_iniCfg.console ()).ansi)
+    if ((m_iniCfg.console ()).ansi) {
+		cerr << '\x1b' << "[?25h";
         cerr << '\x1b' << "[0m";
+	}
 }
