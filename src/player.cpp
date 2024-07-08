@@ -889,7 +889,7 @@ void ConsolePlayer::close ()
         if ((m_iniCfg.console ()).ansi) {
             cerr << '\x1b' << "[?25h";
             cerr << '\x1b' << "[0m";
-		}
+        }
 #ifndef _WIN32
         cerr << endl;
 #endif
