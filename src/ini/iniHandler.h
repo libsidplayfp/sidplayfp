@@ -36,19 +36,6 @@ private:
     class parseError {};
 
 private:
-    template<class T>
-    class compare
-    {
-    private:
-        SID_STRING s;
-
-    public:
-        compare(const TCHAR *str) : s(str) {}
-
-        bool operator () (T const &p) { return s.compare(p.first) == 0; }
-    };
-
-private:
     sections_t sections;
 
     sections_t::iterator curSection;
