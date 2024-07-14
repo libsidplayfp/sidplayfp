@@ -27,11 +27,11 @@
 class iniHandler
 {
 private:
-    typedef std::pair<SID_STRING, SID_STRING> stringPair_t;
-    typedef std::vector<stringPair_t> keys_t;
+    using stringPair_t = std::pair<SID_STRING, SID_STRING>;
+    using keys_t = std::vector<stringPair_t>;
 
-    typedef std::pair<SID_STRING, keys_t> keyPair_t;
-    typedef std::vector<keyPair_t> sections_t;
+    using keyPair_t = std::pair<SID_STRING, keys_t>;
+    using sections_t = std::vector<keyPair_t>;
 
     class parseError {};
 
