@@ -179,6 +179,13 @@ void iniHandler::addValue(const TCHAR *key, const TCHAR *value)
     changed = true;
 }
 
+void iniHandler::removeValue(const TCHAR *key)
+{
+    auto section = &(*curSection).second;
+    section->erase(std::remove_if(section->begin(), section->end(), compare<stringPair_t>(key)));
+    changed = true;
+}
+
 bool iniHandler::write(const TCHAR *fName)
 {
     SID_WOFSTREAM iniFile(fName);

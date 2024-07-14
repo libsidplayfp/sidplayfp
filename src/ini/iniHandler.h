@@ -78,6 +78,7 @@ public:
 
     void addSection(const TCHAR *section);
     void addValue(const TCHAR *key, const TCHAR *value);
+    void removeValue(const TCHAR *key);
 };
 
 #endif // INIHANDLER_H

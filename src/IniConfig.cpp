@@ -433,7 +433,18 @@ void IniConfig::readEmulation(iniHandler &ini)
     readDouble(ini, TEXT("FilterBias"), emulation_s.bias);
     readDouble(ini, TEXT("FilterCurve6581"), emulation_s.filterCurve6581);
 #ifdef FEAT_FILTER_RANGE
-    readDouble(ini, TEXT("filterRange6581"), emulation_s.filterRange6581);
+    {
+        // For backward compatibility, remove for 3.0
+        const TCHAR *key = TEXT("filterRange6581");
+        const TCHAR* value = ini.getValue(key);
+        if (value && value[0])
+        {
+            ini.addValue(TEXT("FilterRange6581"), value);
+            ini.removeValue(key);
+        }
+    }
+    readDouble(ini, TEXT("FilterRange6581"), emulation_s.filterRange6581);
+
 #endif
     readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
 
