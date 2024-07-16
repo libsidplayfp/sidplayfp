@@ -640,7 +640,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -nf          no SID filter emulation" << endl
 
-        << " -o<l|s>      looping and/or single track" << endl
+        << " -o<l|s>[num] looping and/or single track" << endl
         << " -o<num>      start track (default: preset)" << endl
 
         << " -p<num>      set format for file output (16 = signed 16 bit, 32 = 32 bit float)"

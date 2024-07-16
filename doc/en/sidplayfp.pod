@@ -96,7 +96,7 @@ Set bit precision for file saving. The default is 16
 to create 16 bit signed samples, but can be set to 32
 (32 bit float). Other values will cause invalid output.
 
-=item B<-o>I<< <l|s> >>
+=item B<-o>I<< <l|s> [num] >>
 
 Option 'l' will select continuous track looping while 's' will
 select the current track instead of all.  This option can be
