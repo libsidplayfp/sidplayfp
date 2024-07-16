@@ -127,7 +127,7 @@ bool Audio_Pulse::write(uint_least32_t size)
     if (pa_simple_write(_audioHandle, _sampleBuffer, size * 2, &err) < 0)
     {
         setError(pa_strerror(err));
-        // FIXME should we return false here?
+        return false;
     }
     return true;
 }
