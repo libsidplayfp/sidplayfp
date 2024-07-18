@@ -1009,7 +1009,11 @@ uint_least32_t ConsolePlayer::getBufSize()
     else if ((m_timer.stop != 0) && (m_timer.current >= m_timer.stop))
     {
         m_state = playerExit;
-        for (;;)
+        if (m_track.loop)
+        {
+            m_state = playerRestart;
+        }
+        else
         {
             if (m_track.single)
                 return 0;
@@ -1020,10 +1024,7 @@ uint_least32_t ConsolePlayer::getBufSize()
             if (m_track.selected == m_track.first)
                 return 0;
             m_state = playerRestart;
-            break;
         }
-        if (m_track.loop)
-            m_state = playerRestart;
     }
     else
     {
