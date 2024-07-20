@@ -50,14 +50,35 @@
 #  endif
 #endif
 
-typedef enum { black, red, green, yellow, blue, magenta, cyan, white }
-    player_colour_t;
-typedef enum { tableStart, tableMiddle, tableSeparator, tableEnd }
-    player_table_t;
+enum class color_t
+{
+    black,
+    red,
+    green,
+    yellow,
+    blue,
+    magenta,
+    cyan,
+    white
+};
+
+enum class table_t
+{
+    start,
+    middle,
+    separator,
+    end
+};
+
 typedef enum
 {
-    playerError = 0, playerRunning, playerPaused, playerStopped,
-    playerRestart, playerExit, playerFast = 128,
+    playerError = 0,
+    playerRunning,
+    playerPaused,
+    playerStopped,
+    playerRestart,
+    playerExit,
+    playerFast = 128,
     playerFastRestart = playerRestart | playerFast,
     playerFastExit = playerExit | playerFast
 } player_state_t;
@@ -68,39 +89,48 @@ typedef enum
     Still allows wav generation */
     EMU_NONE = 0,
     /* The following require a soundcard */
-    EMU_DEFAULT, EMU_RESIDFP, EMU_RESID,
+    EMU_DEFAULT,
+    EMU_RESIDFP,
+    EMU_RESID,
     /* The following should disable the soundcard */
-    EMU_HARDSID, EMU_EXSID, EMU_SIDSTATION, EMU_COMMODORE,
-    EMU_SIDSYN, EMU_END} SIDEMUS;
+    EMU_HARDSID,
+    EMU_EXSID,
+    EMU_SIDSTATION,
+    EMU_COMMODORE,
+    EMU_SIDSYN,
+    EMU_END
+} SIDEMUS;
 
-typedef enum
+enum class output_t
 {
     /* Define possible output sources */
-    OUT_NULL = 0,
+    NONE,
     /* Hardware */
-    OUT_SOUNDCARD,
+    SOUNDCARD,
     /* File creation support */
-    OUT_WAV, OUT_AU, OUT_END
-} OUTPUTS;
+    WAV,
+    AU,
+    END
+};
 
 // Error and status message numbers.
-enum
+enum class errnum_t
 {
-    ERR_SYNTAX = 0,
-    ERR_NOT_ENOUGH_MEMORY,
-    ERR_SIGHANDLER,
-    ERR_FILE_OPEN
+    SYNTAX,
+    NOT_ENOUGH_MEMORY,
+    SIGHANDLER,
+    FILE_OPEN
 };
 
 // Songlength DB.
-typedef enum
+enum class sldb_t
 {
-    SLDB_NONE = 0,
-    SLDB_TXT,
-    SLDB_MD5
-} sldb_t;
+    NONE,
+    TXT,
+    MD5
+};
 
-void displayError (const char *arg0, unsigned int num);
+void displayError (const char *arg0, errnum_t num);
 
 
 // Grouped global variables
@@ -174,7 +204,7 @@ private:
 
     struct m_driver_t
     {
-        OUTPUTS        output;   // Selected output type
+        output_t       output;   // Selected output type
         SIDEMUS        sid;      // Sid emulation
         bool           file;     // File based driver
         bool           info;     // File metadata
@@ -211,17 +241,17 @@ private:
 
 private:
     // Console
-    void consoleColour  (player_colour_t colour, bool bold);
-    void consoleTable   (player_table_t table);
+    void consoleColour  (color_t colour, bool bold);
+    void consoleTable   (table_t table);
     void consoleRestore (void);
 
     // Command line args
     void displayArgs    (const char *arg = nullptr);
 
-    bool createOutput   (OUTPUTS driver, const SidTuneInfo *tuneInfo);
+    bool createOutput   (output_t driver, const SidTuneInfo *tuneInfo);
     bool createSidEmu   (SIDEMUS emu, const SidTuneInfo *tuneInfo);
     void displayError   (const char *error);
-    void displayError   (unsigned int num) { ::displayError (m_name, num); }
+    void displayError   (errnum_t num) { ::displayError (m_name, num); }
     void decodeKeys     (void);
     void updateDisplay();
     void emuflush       (void);

@@ -331,7 +331,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_filename(""),
     m_fcurve(-1.0),
     m_quietLevel(0),
-    songlengthDB(SLDB_NONE),
+    songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
     m_autofilter(false)
 {
@@ -402,14 +402,14 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
             else if (emulation.engine.compare(TEXT("HARDSID")) == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
-                m_driver.output = OUT_NULL;
+                m_driver.output = output_t::NONE;
             }
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
             else if (emulation.engine.compare(TEXT("EXSID")) == 0)
             {
                 m_driver.sid    = EMU_EXSID;
-                m_driver.output = OUT_NULL;
+                m_driver.output = output_t::NONE;
             }
 #endif
             else if (emulation.engine.compare(TEXT("NONE")) == 0)
@@ -421,7 +421,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
     m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
 
-    createOutput (OUT_NULL, nullptr);
+    createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
 
     uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
@@ -465,7 +465,7 @@ std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo, const char* 
 }
 
 // Create the output object to process sound buffer
-bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
+bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
 {
     // Remove old audio driver
     m_driver.null.close ();
@@ -480,11 +480,11 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     // Create audio driver
     switch (driver)
     {
-    case OUT_NULL:
+    case output_t::NONE:
         m_driver.device = &m_driver.null;
     break;
 
-    case OUT_SOUNDCARD:
+    case output_t::SOUNDCARD:
         try
         {
             m_driver.device = new audioDrv();
@@ -495,7 +495,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         }
     break;
 
-    case OUT_WAV:
+    case output_t::WAV:
         try
         {
             std::string title = getFileName(tuneInfo, WavFile::extension());
@@ -510,7 +510,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
         }
     break;
 
-    case OUT_AU:
+    case output_t::AU:
         try
         {
             std::string title = getFileName(tuneInfo, auFile::extension());
@@ -530,7 +530,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
     if (!m_driver.device)
     {
         m_driver.device = &m_driver.null;
-        displayError (ERR_NOT_ENOUGH_MEMORY);
+        displayError (errnum_t::NOT_ENOUGH_MEMORY);
         return false;
     }
 
@@ -548,7 +548,7 @@ bool ConsolePlayer::createOutput (OUTPUTS driver, const SidTuneInfo *tuneInfo)
             err = true;
 
         // Can't open the same driver twice
-        if (driver != OUT_NULL)
+        if (driver != output_t::NONE)
         {
             if (!m_driver.null.open(m_driver.cfg))
                 err = true;
@@ -743,7 +743,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
     {
         if (emu > EMU_DEFAULT)
         {   // No sid emulation?
-            displayError (ERR_NOT_ENOUGH_MEMORY);
+            displayError (errnum_t::NOT_ENOUGH_MEMORY);
             return false;
         }
     }
@@ -830,7 +830,7 @@ bool ConsolePlayer::open (void)
     if (!m_timer.valid)
     {
 #ifdef FEAT_NEW_SONLEGTH_DB
-        const int_least32_t length = songlengthDB == SLDB_MD5 ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
+        const int_least32_t length = songlengthDB == sldb_t::MD5 ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
 #else
         const int_least32_t length = m_database.length(m_tune) * 1000;
 #endif
@@ -878,7 +878,7 @@ void ConsolePlayer::close ()
         m_driver.selected->reset ();
 
     // Shutdown drivers, etc
-    createOutput    (OUT_NULL, nullptr);
+    createOutput    (output_t::NONE, nullptr);
     createSidEmu    (EMU_NONE, nullptr);
     m_engine.load   (nullptr);
     m_engine.config (m_engCfg);

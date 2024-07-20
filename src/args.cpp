@@ -164,7 +164,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
     }
 
     // default arg options
-    m_driver.output = OUT_SOUNDCARD;
+    m_driver.output = output_t::SOUNDCARD;
     m_driver.file   = false;
     m_driver.info   = false;
 
@@ -393,21 +393,21 @@ int ConsolePlayer::args(int argc, const char *argv[])
             // File format conversions
             else if (argv[i][1] == 'w')
             {
-                m_driver.output = OUT_WAV;
+                m_driver.output = output_t::WAV;
                 m_driver.file   = true;
                 if (argv[i][2] != '\0')
                     m_outfile = &argv[i][2];
             }
             else if (strncmp (&argv[i][1], "-wav", 4) == 0)
             {
-                m_driver.output = OUT_WAV;
+                m_driver.output = output_t::WAV;
                 m_driver.file   = true;
                 if (argv[i][5] != '\0')
                     m_outfile = &argv[i][5];
             }
             else if (strncmp (&argv[i][1], "-au", 3) == 0)
             {
-                m_driver.output = OUT_AU;
+                m_driver.output = output_t::AU;
                 m_driver.file   = true;
                 if (argv[i][4] != '\0')
                     m_outfile = &argv[i][4];
@@ -435,7 +435,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (strcmp (&argv[i][1], "-hardsid") == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
-                m_driver.output = OUT_NULL;
+                m_driver.output = output_t::NONE;
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
@@ -443,7 +443,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (strcmp (&argv[i][1], "-exsid") == 0)
             {
                 m_driver.sid    = EMU_EXSID;
-                m_driver.output = OUT_NULL;
+                m_driver.output = output_t::NONE;
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
 
@@ -451,7 +451,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (strcmp (&argv[i][1], "-none") == 0)
             {
                 m_driver.sid    = EMU_NONE;
-                m_driver.output = OUT_NULL;
+                m_driver.output = output_t::NONE;
             }
             else if (strcmp (&argv[i][1], "-nosid") == 0)
             {
@@ -459,7 +459,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
             else if (strcmp (&argv[i][1], "-noaudio") == 0)
             {
-                m_driver.output = OUT_NULL;
+                m_driver.output = output_t::NONE;
             }
             else if (strcmp (&argv[i][1], "-cpu-debug") == 0)
             {
@@ -511,7 +511,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
         m_track.single = true;
 
     // Can only loop if not creating audio files
-    if (m_driver.output > OUT_SOUNDCARD)
+    if (m_driver.output > output_t::SOUNDCARD)
         m_track.loop = false;
 
     // Check to see if we are trying to generate an audio file
@@ -547,19 +547,19 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 ? (m_iniCfg.sidplay2()).recordLength
                 : (m_iniCfg.sidplay2()).playLength;
 
-            songlengthDB = SLDB_NONE;
+            songlengthDB = sldb_t::NONE;
             bool dbOpened = false;
             if (hvscBase)
             {
                 if (tryOpenDatabase(hvscBase, "md5"))
                 {
                     dbOpened = true;
-                    songlengthDB = SLDB_MD5;
+                    songlengthDB = sldb_t::MD5;
                 }
                 else if (tryOpenDatabase(hvscBase, "txt"))
                 {
                     dbOpened = true;
-                    songlengthDB = SLDB_TXT;
+                    songlengthDB = sldb_t::TXT;
                 }
             }
 
@@ -588,9 +588,9 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     }
 
                     if ((m_iniCfg.sidplay2()).database.find(TEXT(".md5")) != SID_STRING::npos)
-                        songlengthDB = SLDB_MD5;
+                        songlengthDB = sldb_t::MD5;
                     else
-                        songlengthDB = SLDB_TXT;
+                        songlengthDB = sldb_t::TXT;
                 }
             }
         }
