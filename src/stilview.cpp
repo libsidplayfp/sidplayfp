@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012-2023 Leandro Nini
+ * Copyright 2012-2024 Leandro Nini
  * Copyright 1998, 2002 LaLa <LaLa@C64.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <string>
 
 #include <cstdio>
 #include <cstdlib>
@@ -54,7 +55,7 @@ char STIL_DEMO_ENTRY[]="/Galway_Martin/Green_Beret.sid";
 // HVSC base directories. Ideally, it should point to a valid HVSC dir.
 char OTHER_HVSC_BASE_DIR[]="E:\\MUSIC\\SID\\C64music\\";
 
-#define STIL_MAX_PATH_SIZE 1024
+constexpr int STIL_MAX_PATH_SIZE = 1024;
 
 using namespace std;
 
@@ -304,7 +305,6 @@ void checkArguments(void)
 
 int main(int argc, char **argv)
 {
-    char temp[STIL_MAX_PATH_SIZE];
     const char *tmpptr, *sectionPtr, *entryPtr, *bugPtr;
     const char *versionPtr;
     float tempval;
@@ -524,19 +524,18 @@ int main(int argc, char **argv)
 
             cout << endl << "==== STIL ABSOLUTE PATH TO " << entryStr << ", Tune #" << tuneNo << " ====" << endl << endl;
 
-            strcpy(temp, hvscLoc);
+            std::string t(hvscLoc);
 
             // Chop the trailing slash
-            char *tmp = temp+strlen(temp)-1;
-            if (*tmp == SLASH)
+            if (t.back() == SLASH)
             {
-                *tmp = '\0';
+                t.pop_back();
             }
-            strcat(temp, entryStr);
+            t.append(entryStr);
 
             cout << "---- GLOBAL  COMMENT ----" << endl;
 
-            tmpptr = myStil.getAbsGlobalComment(temp);
+            tmpptr = myStil.getAbsGlobalComment(t.c_str());
 
             if (tmpptr == nullptr)
             {
@@ -549,7 +548,7 @@ int main(int argc, char **argv)
 
             cout << "-- TUNE GLOBAL COMMENT --" << endl;
 
-            tmpptr = myStil.getAbsEntry(temp, 0, STIL::comment);
+            tmpptr = myStil.getAbsEntry(t.c_str(), 0, STIL::comment);
 
             if (tmpptr == nullptr)
             {
@@ -563,7 +562,7 @@ int main(int argc, char **argv)
             cout << "------ STIL  ENTRY ------" << endl;
             cout << "(For tune #1)" << endl;
 
-            tmpptr = myStil.getAbsEntry(temp, 1, STIL::all);
+            tmpptr = myStil.getAbsEntry(t.c_str(), 1, STIL::all);
 
             if (tmpptr == nullptr)
             {
@@ -576,7 +575,7 @@ int main(int argc, char **argv)
 
             cout << "---------- BUG ----------" << endl;
 
-            tmpptr = myStil.getAbsBug(temp, tuneNo);
+            tmpptr = myStil.getAbsBug(t.c_str(), tuneNo);
 
             if (tmpptr == nullptr)
             {
@@ -598,7 +597,7 @@ int main(int argc, char **argv)
                 cout << "You should see the same entry below:" << endl;
                 cout << endl << "------ STIL  ENTRY ------" << endl;
 
-                tmpptr = myStil.getAbsEntry(temp, tuneNo, STIL::all);
+                tmpptr = myStil.getAbsEntry(t.c_str(), tuneNo, STIL::all);
 
                 if (tmpptr == nullptr)
                 {
@@ -621,6 +620,7 @@ int main(int argc, char **argv)
 
             cout << endl << "==== ENTERING INTERACTIVE MODE ====" << endl << endl;
 
+            char temp[STIL_MAX_PATH_SIZE];
             do
             {
                 cout << "Enter desired entry (relative path) or 'q' to exit." << endl;
