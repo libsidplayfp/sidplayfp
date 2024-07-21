@@ -144,7 +144,7 @@ static const filter_map_t filterRangeMap =
     { "Geir Tjelta",                         0.5 },
     { "Geoff Follin",                        0.85 },
     { "Georg Feil",                          0.2 },
-    { "Glenn Rune Gallefoss",                0.4 },
+    { "Glenn Rune Gallefoss",                1.3 },
     { "Graham Jarvis & Rob Hartshorne",      0.25 }, // Clever Music
     { "Jason Page",                          0.35 },
     { "Jeroen Tel",                          0.35 },
