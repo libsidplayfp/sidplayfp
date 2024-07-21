@@ -87,7 +87,7 @@ void printUsageStr(void)
 void printUsage(void)
 {
     printUsageStr();
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 void printHelp(void)
@@ -117,7 +117,7 @@ void printHelp(void)
     cout << endl;
     cout << "See user manual for further details and for examples." << endl;
     cout << endl;
-    exit(0);
+    exit(EXIT_SUCCESS);
 }
 
 char *getArgValue(char *argStr)
@@ -339,14 +339,14 @@ int main(int argc, char **argv)
                 cout << versionPtr;
             }
 
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
     }
 
     if (myStil.setBaseDir(hvscLoc) != true)
     {
         cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if ((!interactive) && (!demo))
@@ -717,5 +717,5 @@ int main(int argc, char **argv)
         }
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
