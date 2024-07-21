@@ -42,10 +42,6 @@ Set audio output frequency in Hz (default: 48000).
 No filter emulation.  This will reduce CPU overhead at the cost
 of reduced emulation quality.
 
-=item B<-o>I<< <num> >>
-
-Select track number (default: preset).
-
 =item B<-s>
 
 Stereo playback.  If the tune is identified as stereo then sid 1
@@ -96,11 +92,19 @@ Set bit precision for file saving. The default is 16
 to create 16 bit signed samples, but can be set to 32
 (32 bit float). Other values will cause invalid output.
 
+=item B<-o>I<< <num> >>
+
+Select start track number (default: preset).
+
 =item B<-o>I<< <l|s> [num] >>
 
 Option 'l' will select continuous track looping while 's' will
-select the current track instead of all.  This option can be
-combined with the track selection to form -ols<num>.
+play only the current track ignoring the others.  The options
+can be combined and may include the track selection.
+The following variations are possible:
+-ol<num>: will loop selected track allowing moving to another one;
+-os<num>: will play selected track and then stop;
+-ols<num>: will loop selected track;
 
 =item B<-t>I<< <num> >>
 
