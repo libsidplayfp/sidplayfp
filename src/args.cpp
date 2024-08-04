@@ -183,12 +183,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
         if ((argv[i][0] == '-') && (argv[i][1] != '\0'))
         {
             // help options
-            if ((argv[i][1] == 'h') || !strcmp(&argv[i][1], "-help"))
+            if ((argv[i][1] == 'h') || !std::strcmp(&argv[i][1], "-help"))
             {
                 displayArgs ();
                 return 0;
             }
-            else if (!strcmp(&argv[i][1], "-help-debug"))
+            else if (!std::strcmp(&argv[i][1], "-help-debug"))
             {
                 displayDebugArgs ();
                 return 0;
@@ -291,41 +291,41 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
 
             // Resampling Options ----------
-            else if (strcmp (&argv[i][1], "rif") == 0)
+            else if (std::strcmp (&argv[i][1], "rif") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::INTERPOLATE;
                 m_engCfg.fastSampling = true;
             }
-            else if (strcmp (&argv[i][1], "rrf") == 0)
+            else if (std::strcmp (&argv[i][1], "rrf") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
                 m_engCfg.fastSampling = true;
             }
-            else if (strcmp (&argv[i][1], "ri") == 0)
+            else if (std::strcmp (&argv[i][1], "ri") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::INTERPOLATE;
             }
-            else if (strcmp (&argv[i][1], "rr") == 0)
+            else if (std::strcmp (&argv[i][1], "rr") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
             }
 
             // SID model options
-            else if (strcmp (&argv[i][1], "mof") == 0)
+            else if (std::strcmp (&argv[i][1], "mof") == 0)
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS6581;
                 m_engCfg.forceSidModel = true;
             }
-            else if (strcmp (&argv[i][1], "mnf") == 0)
+            else if (std::strcmp (&argv[i][1], "mnf") == 0)
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS8580;
                 m_engCfg.forceSidModel = true;
             }
-            else if (strcmp (&argv[i][1], "mo") == 0)
+            else if (std::strcmp (&argv[i][1], "mo") == 0)
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS6581;
             }
-            else if (strcmp (&argv[i][1], "mn") == 0)
+            else if (std::strcmp (&argv[i][1], "mn") == 0)
             {
                 m_engCfg.defaultSidModel = SidConfig::MOS8580;
             }
@@ -340,31 +340,31 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
 
 #ifdef FEAT_DIGIBOOST
-            else if (strcmp (&argv[i][1], "-digiboost") == 0)
+            else if (std::strcmp (&argv[i][1], "-digiboost") == 0)
             {
                 m_engCfg.digiBoost = true;
             }
 #endif
             // Video/Verbose Options
-            else if (strcmp (&argv[i][1], "vnf") == 0)
+            else if (std::strcmp (&argv[i][1], "vnf") == 0)
             {
                 m_engCfg.forceC64Model = true;
                 m_engCfg.defaultC64Model  = SidConfig::NTSC;
             }
-            else if (strcmp (&argv[i][1], "vpf") == 0)
+            else if (std::strcmp (&argv[i][1], "vpf") == 0)
             {
                 m_engCfg.forceC64Model = true;
                 m_engCfg.defaultC64Model  = SidConfig::PAL;
             }
-            else if (strcmp (&argv[i][1], "vf") == 0)
+            else if (std::strcmp (&argv[i][1], "vf") == 0)
             {
                 m_engCfg.forceC64Model = true;
             }
-            else if (strcmp (&argv[i][1], "vn") == 0)
+            else if (std::strcmp (&argv[i][1], "vn") == 0)
             {
                 m_engCfg.defaultC64Model  = SidConfig::NTSC;
             }
-            else if (strcmp (&argv[i][1], "vp") == 0)
+            else if (std::strcmp (&argv[i][1], "vp") == 0)
             {
                 m_engCfg.defaultC64Model  = SidConfig::PAL;
             }
@@ -417,14 +417,14 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_driver.info   = true;
             }
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
-            else if (strcmp (&argv[i][1], "-residfp") == 0)
+            else if (std::strcmp (&argv[i][1], "-residfp") == 0)
             {
                 m_driver.sid    = EMU_RESIDFP;
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
-            else if (strcmp (&argv[i][1], "-resid") == 0)
+            else if (std::strcmp (&argv[i][1], "-resid") == 0)
             {
                 m_driver.sid    = EMU_RESID;
             }
@@ -432,7 +432,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
 
             // Hardware selection
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
-            else if (strcmp (&argv[i][1], "-hardsid") == 0)
+            else if (std::strcmp (&argv[i][1], "-hardsid") == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
                 m_driver.output = output_t::NONE;
@@ -440,7 +440,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
 #endif // HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
-            else if (strcmp (&argv[i][1], "-exsid") == 0)
+            else if (std::strcmp (&argv[i][1], "-exsid") == 0)
             {
                 m_driver.sid    = EMU_EXSID;
                 m_driver.output = output_t::NONE;
@@ -448,20 +448,20 @@ int ConsolePlayer::args(int argc, const char *argv[])
 #endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
 
             // These are for debug
-            else if (strcmp (&argv[i][1], "-none") == 0)
+            else if (std::strcmp (&argv[i][1], "-none") == 0)
             {
                 m_driver.sid    = EMU_NONE;
                 m_driver.output = output_t::NONE;
             }
-            else if (strcmp (&argv[i][1], "-nosid") == 0)
+            else if (std::strcmp (&argv[i][1], "-nosid") == 0)
             {
                 m_driver.sid = EMU_NONE;
             }
-            else if (strcmp (&argv[i][1], "-noaudio") == 0)
+            else if (std::strcmp (&argv[i][1], "-noaudio") == 0)
             {
                 m_driver.output = output_t::NONE;
             }
-            else if (strcmp (&argv[i][1], "-cpu-debug") == 0)
+            else if (std::strcmp (&argv[i][1], "-cpu-debug") == 0)
             {
                 m_cpudebug = true;
             }

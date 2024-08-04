@@ -123,7 +123,7 @@ void printHelp(void)
 
 char *getArgValue(char *argStr)
 {
-    char *temp = (char *)strchr(argStr, '=');
+    char *temp = (char *)std::strchr(argStr, '=');
 
     if (temp == nullptr)
     {

@@ -246,7 +246,7 @@ void WavFile::close()
 void WavFile::setInfo(const char* title, const char* author, const char* released)
 {
     hasListInfo = true;
-    memcpy(listHdr.name, title, 32);
-    memcpy(listHdr.artist, author, 32);
-    memcpy(listHdr.released, released, 32);
+    std::memcpy(listHdr.name, title, 32);
+    std::memcpy(listHdr.artist, author, 32);
+    std::memcpy(listHdr.released, released, 32);
 }
