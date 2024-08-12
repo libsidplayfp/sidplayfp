@@ -116,10 +116,8 @@ enum class output_t
 // Error and status message numbers.
 enum class errnum_t
 {
-    SYNTAX,
     NOT_ENOUGH_MEMORY,
-    SIGHANDLER,
-    FILE_OPEN
+    SIGHANDLER
 };
 
 // Songlength DB.
