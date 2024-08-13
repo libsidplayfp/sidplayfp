@@ -31,6 +31,8 @@ using std::endl;
 
 #include "keyboard.h"
 
+const char* ERR_SIGHANDLER = "ERROR: Could not install signal handler.";
+
 
 // Function prototypes
 static void sighandler (int signum);
@@ -58,7 +60,7 @@ main_restart:
      || (signal (SIGABRT, &sighandler) == SIG_ERR)
      || (signal (SIGTERM, &sighandler) == SIG_ERR))
     {
-        displayError(argv[0], errnum_t::SIGHANDLER);
+        player.displayError(ERR_SIGHANDLER);
         goto main_error;
     }
 
@@ -83,7 +85,7 @@ main_restart:
      || (signal (SIGABRT, SIG_DFL) == SIG_ERR)
      || (signal (SIGTERM, SIG_DFL) == SIG_ERR))
     {
-        displayError(argv[0], errnum_t::SIGHANDLER);
+        player.displayError(ERR_SIGHANDLER);
         goto main_error;
     }
 
@@ -109,25 +111,6 @@ void sighandler (int signum)
         // Exit now!
         g_player->stop ();
         break;
-    default: break;
-    }
-}
-
-
-void displayError (const char *arg0, errnum_t num)
-{
-    cerr << arg0 << ": ";
-
-    switch (num)
-    {
-    case errnum_t::NOT_ENOUGH_MEMORY:
-        cerr << "ERROR: Not enough memory." << endl;
-        break;
-
-    case errnum_t::SIGHANDLER:
-        cerr << "ERROR: Could not install signal handler." << endl;
-        break;
-
     default: break;
     }
 }

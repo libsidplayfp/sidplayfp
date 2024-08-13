@@ -65,6 +65,10 @@ using std::endl;
 // Previous song select timeout (4 secs)
 #define SID2_PREV_SONG_TIMEOUT 4000
 
+
+const char* ERR_NOT_ENOUGH_MEMORY = "ERROR: Not enough memory.";
+
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 #  include <sidplayfp/builders/residfp.h>
 const char ConsolePlayer::RESIDFP_ID[] = "ReSIDfp";
@@ -530,7 +534,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
     if (!m_driver.device)
     {
         m_driver.device = &m_driver.null;
-        displayError (errnum_t::NOT_ENOUGH_MEMORY);
+        displayError (ERR_NOT_ENOUGH_MEMORY);
         return false;
     }
 
@@ -743,7 +747,7 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
     {
         if (emu > EMU_DEFAULT)
         {   // No sid emulation?
-            displayError (errnum_t::NOT_ENOUGH_MEMORY);
+            displayError (ERR_NOT_ENOUGH_MEMORY);
             return false;
         }
     }

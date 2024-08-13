@@ -113,13 +113,6 @@ enum class output_t
     END
 };
 
-// Error and status message numbers.
-enum class errnum_t
-{
-    NOT_ENOUGH_MEMORY,
-    SIGHANDLER
-};
-
 // Songlength DB.
 enum class sldb_t
 {
@@ -127,9 +120,6 @@ enum class sldb_t
     TXT,
     MD5
 };
-
-void displayError (const char *arg0, errnum_t num);
-
 
 // Grouped global variables
 class ConsolePlayer
@@ -248,8 +238,6 @@ private:
 
     bool createOutput   (output_t driver, const SidTuneInfo *tuneInfo);
     bool createSidEmu   (SIDEMUS emu, const SidTuneInfo *tuneInfo);
-    void displayError   (const char *error);
-    void displayError   (errnum_t num) { ::displayError (m_name, num); }
     void decodeKeys     (void);
     void updateDisplay();
     void emuflush       (void);
@@ -268,6 +256,8 @@ private:
 public:
     ConsolePlayer (const char * const name);
     virtual ~ConsolePlayer() = default;
+
+    void displayError(const char *error);
 
     int  args  (int argc, const char *argv[]);
     bool open  (void);
