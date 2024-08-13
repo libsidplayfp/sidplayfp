@@ -52,18 +52,15 @@ using std::endl;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
-#ifdef HAVE_CXX11
-#  include <unordered_map>
-    typedef std::unordered_map<std::string, double> filter_map_t;
-    typedef std::unordered_map<std::string, double>::const_iterator filter_map_iter_t;
-#else
-#  include <map>
-    typedef std::map<std::string, double> filter_map_t;
-    typedef std::map<std::string, double>::const_iterator filter_map_iter_t;
-#endif
+
+#include <unordered_map>
+
+using filter_map_t = std::unordered_map<std::string, double>;
+using filter_map_iter_t = std::unordered_map<std::string, double>::const_iterator;
+
 
 // Previous song select timeout (4 secs)
-#define SID2_PREV_SONG_TIMEOUT 4000
+constexpr uint_least32_t SID2_PREV_SONG_TIMEOUT = 4000;
 
 
 const char* ERR_NOT_ENOUGH_MEMORY = "ERROR: Not enough memory.";
