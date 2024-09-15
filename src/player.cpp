@@ -825,6 +825,11 @@ bool ConsolePlayer::open (void)
     m_engine.mute(2, 0, m_mute_channel[6]);
     m_engine.mute(2, 1, m_mute_channel[7]);
     m_engine.mute(2, 2, m_mute_channel[8]);
+#ifdef FEAT_SAMPLE_MUTE
+    m_engine.mute(0, 3, m_mute_samples[0]);
+    m_engine.mute(1, 3, m_mute_samples[1]);
+    m_engine.mute(2, 3, m_mute_samples[2]);
+#endif
 
     // As yet we don't have a required songlength
     // so try the songlength database or keep the default
@@ -1192,7 +1197,20 @@ void ConsolePlayer::decodeKeys ()
             m_mute_channel.flip(8);
             m_engine.mute(2, 2, m_mute_channel[8]);
         break;
-
+#ifdef FEAT_SAMPLE_MUTE
+        case A_TOGGLE_SAMPLE1:
+            m_mute_samples.flip(0);
+            m_engine.mute(0, 3, m_mute_samples[0]);
+        break;
+        case A_TOGGLE_SAMPLE2:
+            m_mute_samples.flip(1);
+            m_engine.mute(1, 3, m_mute_samples[1]);
+        break;
+        case A_TOGGLE_SAMPLE3:
+            m_mute_samples.flip(2);
+            m_engine.mute(2, 3, m_mute_samples[2]);
+        break;
+#endif
         case A_TOGGLE_FILTER:
             m_filter.enabled = !m_filter.enabled;
             m_engCfg.sidEmulation->filter(m_filter.enabled);

@@ -19,6 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "sidlib_features.h"
+
 #ifdef _WIN32
 #  include <conio.h>
 #else
@@ -55,6 +57,11 @@ enum
     A_TOGGLE_VOICE7,
     A_TOGGLE_VOICE8,
     A_TOGGLE_VOICE9,
+#ifdef FEAT_SAMPLE_MUTE
+    A_TOGGLE_SAMPLE1,
+    A_TOGGLE_SAMPLE2,
+    A_TOGGLE_SAMPLE3,
+#endif
     A_TOGGLE_FILTER
 };
 

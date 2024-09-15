@@ -89,6 +89,11 @@ static char keytable[] =
     '7',0,                  A_TOGGLE_VOICE7,
     '8',0,                  A_TOGGLE_VOICE8,
     '9',0,                  A_TOGGLE_VOICE9,
+#ifdef FEAT_SAMPLE_MUTE
+    'q',0,                  A_TOGGLE_SAMPLE1,
+    'w',0,                  A_TOGGLE_SAMPLE2,
+    'e',0,                  A_TOGGLE_SAMPLE3,
+#endif
     'f',0,                  A_TOGGLE_FILTER,
 
     // General Keys
