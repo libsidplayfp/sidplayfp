@@ -259,6 +259,20 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 }
             }
 
+#ifdef FEAT_SAMPLE_MUTE
+            // Sample muting
+            else if (argv[i][1] == 'g')
+            {
+                if (argv[i][2] == '\0')
+                    err = true;
+                else
+                {
+                    const int chip = atoi(&argv[i][2]);
+                    if (chip > 0 && chip <= m_mute_samples.size())
+                        m_mute_samples[chip-1] = true;
+                }
+            }
+#endif
             else if (argv[i][1] == 'p')
             {   // User forgot precision
                 if (argv[i][2] == '\0')
@@ -634,7 +648,9 @@ void ConsolePlayer::displayArgs (const char *arg)
 #endif
 
         << " -u<num>      mute voice <num> (e.g. -u1 -u2)" << endl
-
+#ifdef FEAT_SAMPLE_MUTE
+        << " -g<num>      mute samples <num> (e.g. -g1 -g2)" << endl
+#endif
         << " -nf          no SID filter emulation" << endl
 
         << " -o<l|s>[num] looping and/or single track" << endl

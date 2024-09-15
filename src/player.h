@@ -173,6 +173,9 @@ private:
     bool               m_autofilter;
 
     std::bitset<9>     m_mute_channel;
+#ifdef FEAT_SAMPLE_MUTE
+    std::bitset<3>     m_mute_samples;
+#endif
 
     int  m_channels;
     int  m_precision;
