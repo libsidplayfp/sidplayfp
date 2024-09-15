@@ -26,8 +26,6 @@
 #  include "config.h"
 #endif
 
-#include <string>
-
 #include <sidplayfp/SidTune.h>
 #include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/SidConfig.h>
@@ -40,6 +38,9 @@
 #include "IniConfig.h"
 
 #include "sidlib_features.h"
+
+#include <string>
+#include <bitset>
 
 #ifdef HAVE_TSID
 #  if HAVE_TSID > 1
@@ -171,7 +172,7 @@ private:
 
     bool               m_autofilter;
 
-    bool vMute[9];
+    std::bitset<9>     m_mute_channel;
 
     int  m_channels;
     int  m_precision;

@@ -168,10 +168,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
     m_driver.file   = false;
     m_driver.info   = false;
 
-    for (int i=0; i<9; i++)
-    {
-        vMute[i] = false;
-    }
+    m_mute_channel.reset();
 
     int  infile = 0;
     int  i      = 0;
@@ -257,8 +254,8 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 else
                 {
                     const int voice = atoi(&argv[i][2]);
-                    if (voice > 0 && voice <= 9)
-                        vMute[voice-1] = true;
+                    if (voice > 0 && voice <= m_mute_channel.size())
+                        m_mute_channel[voice-1] = true;
                 }
             }
 
