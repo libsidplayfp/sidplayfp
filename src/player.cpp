@@ -331,7 +331,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_outfile(nullptr),
     m_filename(""),
     m_fcurve(-1.0),
+#ifdef FEAT_FILTER_RANGE
     m_frange(-1.0),
+#endif
     m_quietLevel(0),
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
