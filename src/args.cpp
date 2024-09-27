@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2023 Leandro Nini
+ * Copyright 2011-2024 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -401,6 +401,19 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     m_fcurve = atof(&argv[i][9]);
                 }
             }
+#ifdef FEAT_FILTER_RANGE
+            else if (strncmp (&argv[i][1], "-frange=", 8) == 0)
+            {
+                if (strncmp (&argv[i][9], "auto", 4) == 0)
+                {
+                    m_autofilter = true;
+                }
+                else
+                {
+                    m_frange = atof(&argv[i][9]);
+                }
+            }
+#endif
             // File format conversions
             else if (argv[i][1] == 'w')
             {
@@ -676,7 +689,9 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
         << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
-
+#ifdef FEAT_FILTER_RANGE
+        << " --frange=<num>|auto Controls the filter range in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
+#endif
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl
         << " --au[name]   create au file (default: <datafile>[n].au)" << endl
         << " --info       add metadata to wav file" << endl;

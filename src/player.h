@@ -154,6 +154,9 @@ private:
     SidDatabase        m_database;
 
     double             m_fcurve;
+#ifdef FEAT_FILTER_RANGE
+    double             m_frange;
+#endif
 
 #ifdef FEAT_CW_STRENGTH
     SidConfig::sid_cw_t m_combinedWaveformsStrength;

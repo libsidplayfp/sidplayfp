@@ -331,6 +331,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_outfile(nullptr),
     m_filename(""),
     m_fcurve(-1.0),
+    m_frange(-1.0),
     m_quietLevel(0),
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
@@ -620,6 +621,11 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 frange = getRecommendedFilterRange(tuneInfo->infoString(1));
                 if (m_verboseLevel > 1)
                     cerr << "Recommended filter range: " << frange << endl;
+            }
+
+            if (m_frange >= 0.0)
+            {
+                frange = m_frange;
             }
 
             if ((frange < 0.0) || (frange > 1.0))
