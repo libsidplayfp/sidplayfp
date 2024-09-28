@@ -751,7 +751,13 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
     if (m_engCfg.sidEmulation) {
         /* set up SID filter. HardSID just ignores call with def. */
-        m_engCfg.sidEmulation->filter(m_filter.enabled);
+#ifdef FEAT_FILTER_DISABLE
+            m_engine.filter(0, m_filter.enabled);
+            m_engine.filter(1, m_filter.enabled);
+            m_engine.filter(2, m_filter.enabled);
+#else
+            m_engCfg.sidEmulation->filter(m_filter.enabled);
+#endif
     }
 
     return true;
@@ -1213,7 +1219,13 @@ void ConsolePlayer::decodeKeys ()
 #endif
         case A_TOGGLE_FILTER:
             m_filter.enabled = !m_filter.enabled;
+#ifdef FEAT_FILTER_DISABLE
+            m_engine.filter(0, m_filter.enabled);
+            m_engine.filter(1, m_filter.enabled);
+            m_engine.filter(2, m_filter.enabled);
+#else
             m_engCfg.sidEmulation->filter(m_filter.enabled);
+#endif
         break;
 
         case A_QUIT:
