@@ -757,16 +757,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
         }
     }
 
+#ifndef FEAT_FILTER_DISABLE
     if (m_engCfg.sidEmulation) {
         /* set up SID filter. HardSID just ignores call with def. */
-#ifdef FEAT_FILTER_DISABLE
-            m_engine.filter(0, m_filter.enabled);
-            m_engine.filter(1, m_filter.enabled);
-            m_engine.filter(2, m_filter.enabled);
-#else
-            m_engCfg.sidEmulation->filter(m_filter.enabled);
-#endif
+        m_engCfg.sidEmulation->filter(m_filter.enabled);
     }
+#endif
 
     return true;
 
@@ -812,6 +808,12 @@ bool ConsolePlayer::open (void)
         displayError(m_engine.error ());
         return false;
     }
+
+#ifdef FEAT_FILTER_DISABLE
+    m_engine.filter(0, m_filter.enabled);
+    m_engine.filter(1, m_filter.enabled);
+    m_engine.filter(2, m_filter.enabled);
+#endif
 #ifdef FEAT_REGS_DUMP_SID
     if (
             (
