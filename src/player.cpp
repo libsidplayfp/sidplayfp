@@ -953,6 +953,7 @@ bool ConsolePlayer::play()
         retSize = m_engine.play(buffer, length);
         if ((retSize < length) || !m_engine.isPlaying())
         {
+            cerr << m_engine.error();
             m_state = playerError;
             return false;
         }
