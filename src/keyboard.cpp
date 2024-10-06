@@ -115,11 +115,7 @@ static char keytable[] =
  */
 static int keyboard_search (char *cmd)
 {
-    char *p;
-    char *q;
-    int   a;
-
-    for (p = keytable, q = cmd;;  p++, q++)
+    for (char *p = keytable, *q = cmd;;  p++, q++)
     {
         if (*p == *q)
         {
@@ -132,7 +128,7 @@ static int keyboard_search (char *cmd)
              */
             if (*p == '\0')
             {
-                a = *++p & 0377;
+                int a = *++p & 0377;
                 while (a == A_SKIP)
                     a = *++p & 0377;
                 if (a == A_END_LIST)
@@ -256,9 +252,6 @@ int _getch (void)
 static termios term;
 void keyboard_enable_raw ()
 {
-    // set to non canonical mode, echo off, ignore signals
-    struct termios current;
-
     // Already open
     if (infd >= 0)
         return;
@@ -276,6 +269,7 @@ void keyboard_enable_raw ()
     }
 
     // save current terminal settings
+    struct termios current;
     tcgetattr (infd, &current);
 
     // set to non canonical mode, echo off, ignore signals
