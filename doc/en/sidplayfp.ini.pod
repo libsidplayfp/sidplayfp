@@ -158,7 +158,7 @@ Default is 1 for standard tunes and 2 for multi SID tunes.
 
 =item B<BitsPerSample>=I<< <16|32> >>
 
-Number of bits ber sample, used only for wav output. Using
+Number of bits ber sample, used only for wav/au output. Using
 values other than the ones specified will produce invalid
 output.
 
