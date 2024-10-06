@@ -951,12 +951,9 @@ bool ConsolePlayer::play()
         short *buffer = m_driver.selected->buffer();
         const uint_least32_t length = getBufSize();
         retSize = m_engine.play(buffer, length);
-        if (retSize < length)
+        if ((retSize < length) || !m_engine.isPlaying())
         {
-            if (m_engine.isPlaying())
-            {
-                m_state = playerError;
-            }
+            m_state = playerError;
             return false;
         }
     }
