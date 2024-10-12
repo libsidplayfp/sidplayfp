@@ -82,6 +82,7 @@ bool Audio_Pulse::open(AudioConfig &cfg)
             throw error("Unable to allocate memory for sample buffers.");
         }
 
+        m_frameSize = 2 * cfg.channels;
         _settings = cfg;
 
         return true;
@@ -115,7 +116,7 @@ void Audio_Pulse::close()
     }
 }
 
-bool Audio_Pulse::write(uint_least32_t size)
+bool Audio_Pulse::write(uint_least32_t frames)
 {
     if (_audioHandle == nullptr)
     {
@@ -124,7 +125,7 @@ bool Audio_Pulse::write(uint_least32_t size)
     }
 
     int err;
-    if (pa_simple_write(_audioHandle, _sampleBuffer, size * 2, &err) < 0)
+    if (pa_simple_write(_audioHandle, _sampleBuffer, frames * m_frameSize, &err) < 0)
     {
         setError(pa_strerror(err));
         return false;

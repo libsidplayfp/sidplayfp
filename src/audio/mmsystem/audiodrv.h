@@ -53,6 +53,8 @@ private:  // ------------------------------------------------------- private
     HGLOBAL  blockHeaderHandles[MAXBUFBLOCKS];
     int      blockNum;
     int      bufSize;
+    int      m_frameSize;
+
     bool     isOpen;
 
 private:
@@ -66,7 +68,7 @@ public:  // --------------------------------------------------------- public
     bool open  (AudioConfig &cfg) override;
     void close () override;
     void reset () override;
-    bool write (uint_least32_t size) override;
+    bool write (uint_least32_t frames) override;
     void pause () override {}
 };
 

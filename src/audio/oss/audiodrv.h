@@ -59,6 +59,9 @@ private:  // ------------------------------------------------------- private
     static   const char AUDIODEVICE[];
     volatile int   _audiofd;
 
+    int m_frameSize;
+
+private:
     void outOfOrder ();
 
 public:  // --------------------------------------------------------- public
@@ -68,7 +71,7 @@ public:  // --------------------------------------------------------- public
     bool open  (AudioConfig &cfg) override;
     void close () override;
     void reset () override;
-    bool write (uint_least32_t size) override;
+    bool write (uint_least32_t frames) override;
     void pause () override {}
 };
 

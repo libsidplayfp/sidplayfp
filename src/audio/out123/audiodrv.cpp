@@ -78,10 +78,11 @@ bool Audio_OUT123::open(AudioConfig &cfg)
         }
 
         cfg.bufSize = 8192; // FIXME make configurable?
+        m_frameSize = 2 * cfg.channels;
 
         try
         {
-            _sampleBuffer = new short[cfg.bufSize];
+            _sampleBuffer = new short[cfg.bufSize * m_frameSize];
         }
         catch (std::bad_alloc const &ba)
         {
@@ -126,7 +127,7 @@ void Audio_OUT123::reset()
     }
 }
 
-bool Audio_OUT123::write(uint_least32_t size)
+bool Audio_OUT123::write(uint_least32_t frames)
 {
     if (_audiofd == nullptr)
     {
@@ -134,7 +135,16 @@ bool Audio_OUT123::write(uint_least32_t size)
         return false;
     }
 
-    out123_play(_audiofd, _sampleBuffer, 2 * size);
-    // FIXME check return value?
+    size_t bytes = frames * m_frameSize;
+    size_t res = out123_play(_audiofd, _sampleBuffer, bytes);
+    if (res < bytes)
+    {
+        int err = out123_errcode(_audiofd);
+        if (err != OUT123_OK)
+        {
+            setError(out123_plain_strerror(err));
+            return false;
+        }
+    }
     return true;
 }

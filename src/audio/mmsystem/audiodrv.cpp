@@ -113,11 +113,11 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
     wfm.cbSize          = 0;
 
     // Rev 1.3 (saw) - Calculate buffer to hold 250ms of data
-    bufSize = wfm.nSamplesPerSec / 4 * wfm.nBlockAlign;
+    cfg.bufSize = wfm.nSamplesPerSec / 4;
+    bufSize = cfg.bufSize * wfm.nBlockAlign;
 
     try
     {
-        cfg.bufSize = bufSize / 2;
         checkResult(waveOutOpen(&waveHandle, WAVE_MAPPER, &wfm, 0, 0, 0));
 
         _settings = cfg;
@@ -160,6 +160,7 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
             header->dwFlags        = WHDR_DONE; /* mark the block is done */
         }
 
+        m_frameSize = 2 * cfg.channels;
         blockNum = 0;
         _sampleBuffer = blocks[blockNum];
         return true;
@@ -173,7 +174,7 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
     }
 }
 
-bool Audio_MMSystem::write(uint_least32_t size)
+bool Audio_MMSystem::write(uint_least32_t frames)
 {
     if (!isOpen)
     {
@@ -181,9 +182,12 @@ bool Audio_MMSystem::write(uint_least32_t size)
         return false;
     }
 
+    // get the number of bytes
+    DWORD size = frames * m_frameSize;
+
     /* Reset wave header fields: */
     blockHeaders[blockNum]->dwFlags = 0;
-    blockHeaders[blockNum]->dwBufferLength = size * 2;
+    blockHeaders[blockNum]->dwBufferLength = size;
 
     /* Prepare block header: */
     checkResult(waveOutPrepareHeader(waveHandle, blockHeaders[blockNum], sizeof(WAVEHDR)));

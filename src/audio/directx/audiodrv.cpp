@@ -182,7 +182,8 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
         }
 
         // Update the users settings
-        cfg.bufSize   = bufSize / 2;
+        m_frameSize   = 2 * cfg.channels;
+        cfg.bufSize   = bufSize / (2 * m_frameSize);
         _settings     = cfg;
         isPlaying     = false;
         _sampleBuffer = (short*)lpvData;
@@ -198,15 +199,16 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
     }
 }
 
-bool Audio_DirectX::write (uint_least32_t size)
+bool Audio_DirectX::write (uint_least32_t frames)
 {
     if (!isOpen)
     {
         setError("Device not open.");
         return false;
     }
-    
-    size *= 2;
+
+    // get the number of bytes
+    DWORD size = frames * m_frameSize;
 
     // Unlock the current buffer for playing
     lpDsb->Unlock (lpvData, size, NULL, 0);

@@ -37,7 +37,7 @@ public:
 
     bool open(AudioConfig &cfg) override;
     void reset() override { audio->reset(); }
-    bool write(uint_least32_t size) override { return audio->write(size); }
+    bool write(uint_least32_t frames) override { return audio->write(frames); }
     void close() override { audio->close(); }
     void pause() override { audio->pause(); }
     short *buffer() const override { return audio->buffer(); }

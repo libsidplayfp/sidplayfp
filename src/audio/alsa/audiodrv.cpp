@@ -136,7 +136,7 @@ void Audio_ALSA::close()
     }
 }
 
-bool Audio_ALSA::write(uint_least32_t size)
+bool Audio_ALSA::write(uint_least32_t frames)
 {
     if (_audioHandle == nullptr)
     {
@@ -144,7 +144,7 @@ bool Audio_ALSA::write(uint_least32_t size)
         return false;
     }
 
-    int err = snd_pcm_writei(_audioHandle, _sampleBuffer, size);
+    int err = snd_pcm_writei(_audioHandle, _sampleBuffer, frames);
     if (err < 0)
     {
         err = snd_pcm_recover(_audioHandle, err, 0);

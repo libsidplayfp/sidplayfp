@@ -37,6 +37,9 @@ class Audio_OUT123: public AudioBase
 private:  // ------------------------------------------------------- private
     out123_handle *_audiofd;
 
+    int      m_frameSize;
+
+private:
     void outOfOrder ();
 
 public:  // --------------------------------------------------------- public
@@ -46,7 +49,7 @@ public:  // --------------------------------------------------------- public
     bool open  (AudioConfig &cfg) override;
     void close () override;
     void reset () override;
-    bool write (uint_least32_t size) override;
+    bool write (uint_least32_t frames) override;
     void pause () override {}
 };
 

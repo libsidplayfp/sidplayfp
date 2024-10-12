@@ -126,20 +126,21 @@ WavFile::WavFile(const std::string &name) :
     file(nullptr),
     headerWritten(false),
     hasListInfo(false),
-    precision(32)
+    m_precision(32)
 {}
 
 bool WavFile::open(AudioConfig &cfg)
 {
-    precision = cfg.precision;
+    m_precision = cfg.precision;
+    m_channels = cfg.channels;
 
-    unsigned short bits       = precision;
-    unsigned short format     = (precision == 16) ? 1 : 3;
-    unsigned short channels   = cfg.channels;
+    unsigned short bits       = m_precision;
+    unsigned short format     = (m_precision == 16) ? 1 : 3;
+    unsigned short channels   = m_channels;
     unsigned long  freq       = cfg.frequency;
     unsigned short blockAlign = (bits>>3)*channels;
     unsigned long  bufSize    = freq * blockAlign;
-    cfg.bufSize = bufSize;
+    cfg.bufSize = freq;
 
     if (name.empty())
         return false;
@@ -183,10 +184,11 @@ bool WavFile::open(AudioConfig &cfg)
     return true;
 }
 
-bool WavFile::write(uint_least32_t size)
+bool WavFile::write(uint_least32_t frames)
 {
     if (file && !file->fail())
     {
+        uint_least32_t size = frames * m_channels;
         unsigned long int bytes = size;
         if (!headerWritten)
         {
@@ -198,7 +200,7 @@ bool WavFile::write(uint_least32_t size)
         }
 
         /* XXX endianness... */
-        if (precision == 16)
+        if (m_precision == 16)
         {
             bytes *= 2;
             file->write((char*)_sampleBuffer, bytes);

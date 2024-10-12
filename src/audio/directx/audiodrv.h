@@ -59,6 +59,8 @@ private:  // ------------------------------------------------------- private
     HANDLE rghEvent[AUDIO_DIRECTX_BUFFERS];
     DWORD  bufSize;
 
+    int m_frameSize;
+
     bool isOpen;
     bool isPlaying;
 
@@ -75,7 +77,7 @@ public:  // --------------------------------------------------------- public
     bool open  (AudioConfig &cfg, HWND hwnd);
     void close () override;
     void reset () override;
-    bool write (uint_least32_t size) override;
+    bool write (uint_least32_t frames) override;
     void pause () override;
 };
 
