@@ -164,7 +164,8 @@ bool Audio_OSS::write (uint_least32_t frames)
         return false;
     }
 
-    ::write (_audiofd, _sampleBuffer, frames * m_frameSize);
+    size_t const bytes = static_cast<size_t>(frames) * m_frameSize;
+    ::write (_audiofd, _sampleBuffer, bytes);
     return true;
 }
 

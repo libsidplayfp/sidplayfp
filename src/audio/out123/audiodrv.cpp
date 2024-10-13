@@ -134,7 +134,7 @@ bool Audio_OUT123::write(uint_least32_t frames)
         return false;
     }
 
-    size_t bytes = frames * m_frameSize;
+    size_t const bytes = static_cast<size_t>(frames) * m_frameSize;
     size_t res = out123_play(_audiofd, _sampleBuffer, bytes);
     if (res < bytes)
     {

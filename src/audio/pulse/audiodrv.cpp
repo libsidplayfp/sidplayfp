@@ -123,7 +123,8 @@ bool Audio_Pulse::write(uint_least32_t frames)
     }
 
     int err;
-    if (pa_simple_write(_audioHandle, _sampleBuffer, frames * m_frameSize, &err) < 0)
+    size_t const bytes = static_cast<size_t>(frames) * m_frameSize;
+    if (pa_simple_write(_audioHandle, _sampleBuffer, bytes, &err) < 0)
     {
         setError(pa_strerror(err));
         return false;
