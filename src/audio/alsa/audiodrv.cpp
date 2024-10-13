@@ -84,7 +84,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
             tmpCfg.frequency = rate;
         }
 
-        snd_pcm_uframes_t buffer_size = tmpCfg.frequency / 5;
+        snd_pcm_uframes_t buffer_size = tmpCfg.bufSize;
         checkResult(snd_pcm_hw_params_set_buffer_size_near(_audioHandle, hw_params, &buffer_size));
         tmpCfg.bufSize = buffer_size;
 

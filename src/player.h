@@ -182,6 +182,7 @@ private:
 
     int  m_channels;
     int  m_precision;
+    int  m_buffer_size;
 
     struct m_filter_t
     {

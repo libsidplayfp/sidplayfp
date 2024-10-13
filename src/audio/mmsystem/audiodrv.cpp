@@ -113,7 +113,6 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
     wfm.cbSize          = 0;
 
     // Rev 1.3 (saw) - Calculate buffer to hold 250ms of data
-    cfg.bufSize = wfm.nSamplesPerSec / 4;
     bufSize = cfg.bufSize * wfm.nBlockAlign;
 
     try
@@ -160,7 +159,7 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
             header->dwFlags        = WHDR_DONE; /* mark the block is done */
         }
 
-        m_frameSize = 2 * cfg.channels;
+        m_frameSize = wfm.nBlockAlign;
         blockNum = 0;
         _sampleBuffer = blocks[blockNum];
         return true;

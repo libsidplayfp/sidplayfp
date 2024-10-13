@@ -63,9 +63,11 @@ public:
 
     struct audio_section
     {   // INI Section - [Audio]
-        int frequency;
-        int channels;
-        int precision;
+        int frequency; // sample rate
+        int channels;  // number of channels
+        int precision; // sample precision in bits
+        int bufLength; // buffer length in milliseconds
+        int getBufSize() const { return (bufLength * frequency) / 1000; }
     };
 
     struct emulation_section

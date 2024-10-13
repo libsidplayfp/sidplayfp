@@ -378,6 +378,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.fastSampling = emulation.fastSampling;
         m_channels            = audio.channels;
         m_precision           = audio.precision;
+        m_buffer_size         = audio.getBufSize();
         m_filter.enabled      = emulation.filter;
         m_filter.bias         = emulation.bias;
         m_filter.filterCurve6581 = emulation.filterCurve6581;
@@ -542,9 +543,9 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
 
     // Configure with user settings
     m_driver.cfg.frequency = m_engCfg.frequency;
-    m_driver.cfg.channels = m_channels ? m_channels : tuneChannels;
+    m_driver.cfg.channels  = m_channels ? m_channels : tuneChannels;
     m_driver.cfg.precision = m_precision;
-    m_driver.cfg.bufSize   = 0; // Recalculate
+    m_driver.cfg.bufSize   = m_buffer_size;
 
     {   // Open the hardware
         bool err = false;

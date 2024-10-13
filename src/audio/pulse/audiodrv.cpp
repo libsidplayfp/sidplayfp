@@ -71,8 +71,6 @@ bool Audio_Pulse::open(AudioConfig &cfg)
             throw error(pa_strerror(err));
         }
 
-        cfg.bufSize = 4096;
-
         try
         {
             _sampleBuffer = new short[cfg.bufSize];

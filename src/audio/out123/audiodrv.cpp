@@ -77,7 +77,6 @@ bool Audio_OUT123::open(AudioConfig &cfg)
             throw error(out123_strerror(_audiofd));
         }
 
-        cfg.bufSize = 8192; // FIXME make configurable?
         m_frameSize = 2 * cfg.channels;
 
         try
