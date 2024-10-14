@@ -47,6 +47,8 @@
 #  define HAVE_NULL
 #endif
 
+#include <iostream>
+
 bool audioDrv::open(AudioConfig &cfg)
 {
     bool res = false;
@@ -69,6 +71,7 @@ bool audioDrv::open(AudioConfig &cfg)
     {
         audio.reset(new Audio_ALSA());
         res = audio->open(cfg);
+        if (res) std::cerr << "ALSA" << std::endl;
     }
 #endif
 #ifdef HAVE_OSS

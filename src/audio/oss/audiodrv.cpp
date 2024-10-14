@@ -117,6 +117,7 @@ bool Audio_OSS::open (AudioConfig &cfg)
         }
 
         // Setup internal Config
+        m_frameSize = 2 * cfg.channels;
         _settings = cfg;
         return true;
     }
@@ -155,7 +156,7 @@ void Audio_OSS::reset ()
     }
 }
 
-bool Audio_OSS::write (uint_least32_t size)
+bool Audio_OSS::write (uint_least32_t frames)
 {
     if (_audiofd == -1)
     {
@@ -163,7 +164,8 @@ bool Audio_OSS::write (uint_least32_t size)
         return false;
     }
 
-    ::write (_audiofd, _sampleBuffer, 2 * size);
+    size_t const bytes = static_cast<size_t>(frames) * m_frameSize;
+    ::write (_audiofd, _sampleBuffer, bytes);
     return true;
 }
 

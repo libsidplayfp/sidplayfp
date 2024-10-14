@@ -186,20 +186,21 @@ auFile::auFile(const std::string &name) :
     auHdr(defaultAuHdr),
     file(nullptr),
     headerWritten(false),
-    precision(32)
+    m_precision(32)
 {}
 
 bool auFile::open(AudioConfig &cfg)
 {
-    precision = cfg.precision;
+    m_precision = cfg.precision;
+    m_channels = cfg.channels;
 
-    unsigned short bits       = precision;
-    unsigned long  format     = (precision == 16) ? 3 : 6;
-    unsigned long  channels   = cfg.channels;
+    unsigned short bits       = m_precision;
+    unsigned long  format     = (m_precision == 16) ? 3 : 6;
+    unsigned long  channels   = m_channels;
     unsigned long  freq       = cfg.frequency;
     unsigned short blockAlign = (bits>>3)*channels;
     unsigned long  bufSize    = freq * blockAlign;
-    cfg.bufSize = bufSize;
+    cfg.bufSize = freq;
 
     if (name.empty())
         return false;
@@ -238,10 +239,11 @@ bool auFile::open(AudioConfig &cfg)
     return true;
 }
 
-bool auFile::write(uint_least32_t size)
+bool auFile::write(uint_least32_t frames)
 {
     if (file && !file->fail())
     {
+        uint_least32_t size = frames * m_channels;
         unsigned long int bytes = size;
         if (!headerWritten)
         {
@@ -249,7 +251,7 @@ bool auFile::write(uint_least32_t size)
             headerWritten = true;
         }
 
-        if (precision == 16)
+        if (m_precision == 16)
         {
             std::vector<uint_least16_t> buffer(size);
             bytes *= 2;

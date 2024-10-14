@@ -57,7 +57,8 @@ private:
 
     std::ostream *file;
     bool headerWritten;
-    int precision;
+    int m_precision;
+    int m_channels;
 
 public:
     auFile(const std::string &name);

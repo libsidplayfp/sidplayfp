@@ -96,7 +96,8 @@ private:
     std::ostream *file;
     bool headerWritten;
     bool hasListInfo;
-    int precision;
+    int m_precision;
+    int m_channels;
 
 public:
     WavFile(const std::string &name);
@@ -114,7 +115,7 @@ public:
 
     // After write call old buffer is invalid and you should
     // use the new buffer provided instead.
-    bool write(uint_least32_t size) override;
+    bool write(uint_least32_t frames) override;
     void close() override;
     void pause() override {}
     void reset() override {}

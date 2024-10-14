@@ -378,6 +378,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.fastSampling = emulation.fastSampling;
         m_channels            = audio.channels;
         m_precision           = audio.precision;
+        m_buffer_size         = audio.getBufSize();
         m_filter.enabled      = emulation.filter;
         m_filter.bias         = emulation.bias;
         m_filter.filterCurve6581 = emulation.filterCurve6581;
@@ -542,9 +543,9 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
 
     // Configure with user settings
     m_driver.cfg.frequency = m_engCfg.frequency;
-    m_driver.cfg.channels = m_channels ? m_channels : tuneChannels;
+    m_driver.cfg.channels  = m_channels ? m_channels : tuneChannels;
     m_driver.cfg.precision = m_precision;
-    m_driver.cfg.bufSize   = 0; // Recalculate
+    m_driver.cfg.bufSize   = m_buffer_size;
 
     {   // Open the hardware
         bool err = false;
@@ -942,27 +943,32 @@ void ConsolePlayer::emuflush ()
 // Out play loop to be externally called
 bool ConsolePlayer::play()
 {
-    uint_least32_t retSize = 0;
+    uint_least32_t frames = 0;
     if (m_state == playerRunning)
     {
         updateDisplay();
 
         // Fill buffer
         short *buffer = m_driver.selected->buffer();
-        const uint_least32_t length = getBufSize();
-        retSize = m_engine.play(buffer, length);
-        if ((retSize < length) || !m_engine.isPlaying())
+        // getBufSize returns the number of frames
+        // multiply by number of channels to get the count of 16bit samples
+        const uint_least32_t length = getBufSize() * m_driver.cfg.channels;
+        uint_least32_t samples = m_engine.play(buffer, length);
+        if ((samples < length) || !m_engine.isPlaying())
         {
             cerr << m_engine.error();
             m_state = playerError;
             return false;
         }
+        // m_engine.play returns the number of 16bit samples
+        // divide by number of channels to get the count of frames
+        frames = samples / m_driver.cfg.channels;
     }
 
     switch (m_state)
     {
     case playerRunning:
-        if (!m_driver.selected->write(retSize))
+        if (!m_driver.selected->write(frames))
         {
             cerr << m_driver.selected->getErrorString();
             m_state = playerError;
@@ -1020,7 +1026,7 @@ uint_least32_t ConsolePlayer::getBufSize()
     {   // Switch audio drivers.
         m_timer.starting = false;
         m_driver.selected = m_driver.device;
-        memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize);
+        memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize); // FIXME
         m_speed.current = 1;
         m_engine.fastForward(100);
         if (m_cpudebug)
@@ -1048,8 +1054,8 @@ uint_least32_t ConsolePlayer::getBufSize()
     }
     else
     {
-        uint_least32_t remaining = m_timer.stop - m_timer.current;
-        uint_least32_t bufSize = remaining * m_driver.cfg.bytesPerMillis();
+        uint_least32_t remainingMs = m_timer.stop - m_timer.current;
+        uint_least32_t bufSize = (remainingMs * m_driver.cfg.frequency) / 1000;
         if (bufSize < m_driver.cfg.bufSize)
             return bufSize;
     }

@@ -29,15 +29,13 @@ public:
     uint_least32_t frequency;
     int            precision;
     int            channels;
-    uint_least32_t bufSize;       // sample buffer size
+    uint_least32_t bufSize;       // sample buffer size measured in frames
 
     AudioConfig() :
         frequency(48000),
         precision(16),
         channels(1),
         bufSize(0) {}
-
-    uint_least32_t bytesPerMillis() const { return (precision/8 * channels * frequency) / 1000; }
 };
 
 #endif  // AUDIOCONFIG_H

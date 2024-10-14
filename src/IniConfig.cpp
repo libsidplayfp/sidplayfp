@@ -106,6 +106,7 @@ void IniConfig::clear()
     audio_s.frequency = SidConfig::DEFAULT_SAMPLING_FREQ;
     audio_s.channels  = 0;
     audio_s.precision = 16;
+    audio_s.bufLength = 250;
 
     emulation_s.modelDefault  = SidConfig::PAL;
     emulation_s.modelForced   = false;
@@ -376,6 +377,8 @@ void IniConfig::readAudio(iniHandler &ini)
     readInt(ini, TEXT("Channels"),  audio_s.channels);
 
     readInt(ini, TEXT("BitsPerSample"), audio_s.precision);
+
+    readInt(ini, TEXT("BufferLength"), audio_s.bufLength);
 }
 
 
