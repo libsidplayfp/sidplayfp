@@ -162,6 +162,12 @@ Number of bits ber sample, used only for wav/au output. Using
 values other than the ones specified will produce invalid
 output.
 
+=item B<BufferLength>=I<< <number> >>
+
+Length of the buffer in milliseconds, default is 250.
+Increase if you experience audio problems or reduce to
+improve latency.
+
 =back
 
 
