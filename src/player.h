@@ -41,6 +41,7 @@
 
 #include <string>
 #include <bitset>
+#include <thread>
 
 #ifdef HAVE_TSID
 #  if HAVE_TSID > 1
@@ -184,6 +185,8 @@ private:
     int  m_precision;
     int  m_buffer_size;
 
+    std::thread *m_thread;
+
     struct m_filter_t
     {
         // Filter parameter for reSID
@@ -260,6 +263,8 @@ private:
 
     inline bool tryOpenTune(const char *hvscBase);
     inline bool tryOpenDatabase(const char *hvscBase, const char *suffix);
+
+    void displayThread();
 
 public:
     ConsolePlayer (const char * const name);

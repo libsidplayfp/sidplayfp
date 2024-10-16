@@ -52,7 +52,7 @@ using std::endl;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
-
+#include <chrono>
 #include <unordered_map>
 
 using filter_map_t = std::unordered_map<std::string, double>;
@@ -774,6 +774,18 @@ createSidEmu_error:
     return false;
 }
 
+void ConsolePlayer::displayThread()
+{
+    using namespace std::chrono_literals;
+
+    while (m_state == playerRunning)
+    {
+        updateDisplay();
+        // TODO 16ms for NTSC?
+        std::this_thread::sleep_for(20ms);
+    }
+}
+
 
 bool ConsolePlayer::open (void)
 {
@@ -884,7 +896,8 @@ bool ConsolePlayer::open (void)
 
     // Update display
     menu();
-    updateDisplay();
+    m_thread = new std::thread(&ConsolePlayer::displayThread, this);
+
     return true;
 }
 
@@ -917,6 +930,8 @@ void ConsolePlayer::close ()
         cerr << endl;
 #endif
     }
+    m_thread->join();
+    delete m_thread;
 }
 
 // Flush any hardware sid fifos so all music is played
@@ -946,8 +961,6 @@ bool ConsolePlayer::play()
     uint_least32_t frames = 0;
     if (m_state == playerRunning)
     {
-        updateDisplay();
-
         // Fill buffer
         short *buffer = m_driver.selected->buffer();
         // getBufSize returns the number of frames
@@ -1064,7 +1077,6 @@ uint_least32_t ConsolePlayer::getBufSize()
 }
 
 
-// External Timer Event
 void ConsolePlayer::updateDisplay()
 {
 #ifdef FEAT_NEW_SONLEGTH_DB
