@@ -42,6 +42,7 @@
 #include <string>
 #include <bitset>
 #include <thread>
+#include <atomic>
 
 #ifdef HAVE_TSID
 #  if HAVE_TSID > 1
@@ -216,7 +217,7 @@ private:
     struct m_timer_t
     {   // secs
         uint_least32_t start;
-        uint_least32_t current;
+        std::atomic<uint_least32_t> current;
         uint_least32_t stop;
         uint_least32_t length;
         bool           valid;
