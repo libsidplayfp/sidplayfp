@@ -41,6 +41,8 @@
 
 #include <string>
 #include <bitset>
+#include <thread>
+#include <atomic>
 
 #ifdef HAVE_TSID
 #  if HAVE_TSID > 1
@@ -184,6 +186,8 @@ private:
     int  m_precision;
     int  m_buffer_size;
 
+    std::thread *m_thread = nullptr;
+
     struct m_filter_t
     {
         // Filter parameter for reSID
@@ -213,7 +217,7 @@ private:
     struct m_timer_t
     {   // secs
         uint_least32_t start;
-        uint_least32_t current;
+        std::atomic<uint_least32_t> current;
         uint_least32_t stop;
         uint_least32_t length;
         bool           valid;
