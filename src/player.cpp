@@ -774,19 +774,6 @@ createSidEmu_error:
     return false;
 }
 
-void ConsolePlayer::displayThread()
-{
-    using namespace std::chrono_literals;
-
-    while (m_state == playerRunning)
-    {
-        updateDisplay();
-        // TODO 16ms for NTSC?
-        std::this_thread::sleep_for(20ms);
-    }
-}
-
-
 bool ConsolePlayer::open (void)
 {
     if ((m_state & ~playerFast) == playerRestart)
@@ -896,7 +883,17 @@ bool ConsolePlayer::open (void)
 
     // Update display
     menu();
-    m_thread = new std::thread(&ConsolePlayer::displayThread, this);
+    m_thread = new std::thread([this]()
+    {
+        using namespace std::chrono_literals;
+
+        while (m_state == playerRunning)
+        {
+            updateDisplay();
+            // TODO 16ms for NTSC?
+            std::this_thread::sleep_for(20ms);
+        }
+    });
 
     return true;
 }

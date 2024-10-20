@@ -264,8 +264,6 @@ private:
     inline bool tryOpenTune(const char *hvscBase);
     inline bool tryOpenDatabase(const char *hvscBase, const char *suffix);
 
-    void displayThread();
-
 public:
     ConsolePlayer (const char * const name);
     virtual ~ConsolePlayer() = default;
