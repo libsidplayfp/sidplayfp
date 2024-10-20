@@ -930,8 +930,12 @@ void ConsolePlayer::close ()
         cerr << endl;
 #endif
     }
-    m_thread->join();
-    delete m_thread;
+
+    if (m_thread)
+    {
+        m_thread->join();
+        delete m_thread;
+    }
 }
 
 // Flush any hardware sid fifos so all music is played
