@@ -809,22 +809,19 @@ bool ConsolePlayer::open (void)
         return false;
     }
 
+    const bool isNTSC = (
+                (m_engCfg.defaultC64Model == SidConfig::NTSC) &&
+                (m_engCfg.forceC64Model || (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL))
+            ) ||
+            (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC);
+
 #ifdef FEAT_FILTER_DISABLE
     m_engine.filter(0, m_filter.enabled);
     m_engine.filter(1, m_filter.enabled);
     m_engine.filter(2, m_filter.enabled);
 #endif
 #ifdef FEAT_REGS_DUMP_SID
-    if (
-            (
-                (m_engCfg.defaultC64Model == SidConfig::NTSC) &&
-                (m_engCfg.forceC64Model || (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL))
-            ) ||
-            (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC)
-    )
-        m_freqTable = freqTableNtsc;
-    else
-        m_freqTable = freqTablePal;
+    m_freqTable = isNTSC ? freqTableNtsc : freqTablePal;
 #endif
     // Start the player.  Do this by fast
     // forwarding to the start position
@@ -883,17 +880,17 @@ bool ConsolePlayer::open (void)
 
     // Update display
     menu();
-    m_thread = new std::thread([this]()
-    {
-        using namespace std::chrono_literals;
 
+    // Update display at 50/60Hz
+    int delay = isNTSC ? 16 : 20;
+    m_thread = new std::thread([this](int delay)
+    {
         while (m_state == playerRunning)
         {
             updateDisplay();
-            // TODO 16ms for NTSC?
-            std::this_thread::sleep_for(20ms);
+            std::this_thread::sleep_for(std::chrono::milliseconds(delay));
         }
-    });
+    }, delay);
 
     return true;
 }
