@@ -185,7 +185,7 @@ private:
     int  m_precision;
     int  m_buffer_size;
 
-    std::thread *m_thread;
+    std::thread *m_thread = nullptr;
 
     struct m_filter_t
     {
