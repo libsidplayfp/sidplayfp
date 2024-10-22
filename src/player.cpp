@@ -885,9 +885,10 @@ bool ConsolePlayer::open (void)
     int delay = isNTSC ? 16 : 20;
     m_thread = new std::thread([this](int delay)
     {
-        while (m_state == playerRunning)
+        while (m_state != playerStopped)
         {
-            updateDisplay();
+            if (m_state == playerRunning)
+                updateDisplay();
             std::this_thread::sleep_for(std::chrono::milliseconds(delay));
         }
     }, delay);
@@ -897,7 +898,7 @@ bool ConsolePlayer::open (void)
 
 void ConsolePlayer::close ()
 {
-    m_engine.stop();
+    stop();
     if (m_state == playerExit)
     {   // Natural finish
         emuflush ();

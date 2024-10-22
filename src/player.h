@@ -148,7 +148,9 @@ private:
     sidplayfp          m_engine;
     SidConfig          m_engCfg;
     SidTune            m_tune;
-    player_state_t     m_state;
+
+    std::atomic<player_state_t>    m_state;
+
     const char*        m_outfile;
     std::string        m_filename;
 
