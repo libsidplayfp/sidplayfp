@@ -414,6 +414,20 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 }
             }
 #endif
+#ifdef FEAT_CW_STRENGTH
+            else if (std::strcmp (&argv[i][1], "cww") == 0)
+            {
+                m_combinedWaveformsStrength  = SidConfig::WEAK;
+            }
+            else if (std::strcmp (&argv[i][1], "cwa") == 0)
+            {
+                m_combinedWaveformsStrength  = SidConfig::AVERAGE;
+            }
+            else if (std::strcmp (&argv[i][1], "cws") == 0)
+            {
+                m_combinedWaveformsStrength  = SidConfig::STRONG;
+            }	
+#endif
             // File format conversions
             else if (argv[i][1] == 'w')
             {

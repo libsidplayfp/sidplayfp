@@ -199,6 +199,12 @@ Ranges from 0.0 (light) to 1.0 (dark), the default
 value is 0.5.  If set to auto it will choose a
 predefined value for 6581 depending on the tune author.
 
+=item B<-cw>I<< <w|a|s> >>
+
+Set the strength (width) of combined waveforms.
+'w' for weak (thin) waves, 'a' for average waves,
+and 's' for strong (wide) waves.
+
 =item B<--noaudio>
 
 Run without an audio output device.
