@@ -1026,7 +1026,7 @@ uint_least32_t ConsolePlayer::getBufSize()
     {   // Switch audio drivers.
         m_timer.starting = false;
         m_driver.selected = m_driver.device;
-        memset(m_driver.selected->buffer (), 0, m_driver.cfg.bufSize); // FIXME
+        m_driver.selected->clearBuffer();
         m_speed.current = 1;
         m_engine.fastForward(100);
         if (m_cpudebug)

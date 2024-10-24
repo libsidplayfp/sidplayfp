@@ -41,6 +41,7 @@ public:
     void close() override { audio->close(); }
     void pause() override { audio->pause(); }
     short *buffer() const override { return audio->buffer(); }
+    void clearBuffer() override { audio->clearBuffer(); }
     void getConfig(AudioConfig &cfg) const override { audio->getConfig(cfg); }
     const char *getErrorString() const override { return audio->getErrorString(); }
 };

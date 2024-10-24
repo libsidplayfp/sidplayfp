@@ -23,6 +23,7 @@
 #define AUDIOBASE_H
 
 #include <string>
+#include <cstring>
 
 #include "IAudio.h"
 #include "AudioConfig.h"
@@ -68,6 +69,8 @@ public:
     ~AudioBase() override = default;
 
     short *buffer() const override { return _sampleBuffer; }
+
+    void clearBuffer() override { std::memset(_sampleBuffer, 0, _settings.getBufBytes()); }
 
     void getConfig(AudioConfig &cfg) const override
     {

@@ -36,6 +36,8 @@ public:
         precision(16),
         channels(1),
         bufSize(0) {}
+
+    uint_least32_t getBufBytes() const { return bufSize * channels * (precision/8); }
 };
 
 #endif  // AUDIOCONFIG_H
