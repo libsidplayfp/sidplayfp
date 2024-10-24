@@ -58,7 +58,7 @@ and default search paths.
 
 This package uses autotools so the usual ./configure && make is enough to build
 the libraries. If cloning the bare sources the package need to be bootstrapped
-in advance with the autoreconf -i command.
+in advance with the autoreconf -vfi command.
 
 In addition to the standard build options the following are available:
 
