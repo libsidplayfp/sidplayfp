@@ -706,6 +706,9 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifdef FEAT_FILTER_RANGE
         << " --frange=<num>|auto Controls the filter range in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
 #endif
+#ifdef FEAT_CW_STRENGTH
+        << " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)" << endl
+#endif
         << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl
         << " --au[name]   create au file (default: <datafile>[n].au)" << endl
         << " --info       add metadata to wav file" << endl;
