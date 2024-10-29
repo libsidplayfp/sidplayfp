@@ -25,6 +25,7 @@
 
 #include <cctype>
 #include <cstring>
+#include <cmath>
 
 #include <iostream>
 #include <iomanip>
@@ -124,7 +125,7 @@ const char *ConsolePlayer::getNote(uint16_t freq)
         int distance = 0xffff;
         for (int i=0; i<(12 * 8); i++)
         {
-            int d = abs(freq - m_freqTable[i]);
+            int d = std::abs(freq - m_freqTable[i]);
             if (d < distance)
                 distance = d;
             else
@@ -443,7 +444,7 @@ void ConsolePlayer::menu ()
     consoleTable  (table_t::middle);
     consoleColour (color_t::magenta, true);
     cerr << " Kernal ROM   : ";
-    if (strlen(romDesc) == 0)
+    if (std::strlen(romDesc) == 0)
     {
         consoleColour (color_t::red, false);
         cerr << "None - Some tunes may not play!";
@@ -460,7 +461,7 @@ void ConsolePlayer::menu ()
     consoleTable  (table_t::middle);
     consoleColour (color_t::magenta, true);
     cerr << " BASIC ROM    : ";
-    if (strlen(romDesc) == 0)
+    if (std::strlen(romDesc) == 0)
     {
         consoleColour (color_t::red, false);
         cerr << "None - Basic tunes will not play!";
@@ -477,7 +478,7 @@ void ConsolePlayer::menu ()
     consoleTable  (table_t::middle);
     consoleColour (color_t::magenta, true);
     cerr << " Chargen ROM  : ";
-    if (strlen(romDesc) == 0)
+    if (std::strlen(romDesc) == 0)
     {
         consoleColour (color_t::red, false);
         cerr << "None";

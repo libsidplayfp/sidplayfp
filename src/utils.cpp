@@ -73,10 +73,10 @@ SID_STRING utils::getPath(const char* id, const char* def)
 {
     SID_STRING returnPath;
 
-    char *path = getenv(id);
+    char *path = std::getenv(id);
     if (!path)
     {
-        path = getenv("HOME");
+        path = std::getenv("HOME");
         if (!path)
             throw error();
         returnPath.append(path).append(def);
