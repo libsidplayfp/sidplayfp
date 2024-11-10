@@ -52,6 +52,7 @@ public:  // --------------------------------------------------------- public
     void reset () override {}
     bool write (uint_least32_t frames) override;
     void pause () override {}
+    void clearBuffer() override {}
 };
 
 #endif // AUDIO_NULL_H
