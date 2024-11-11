@@ -213,7 +213,7 @@ bool auFile::open(AudioConfig &cfg)
     // We need to make a buffer for the user
     try
     {
-        _sampleBuffer = new short[bufSize];
+        _sampleBuffer = new short[bufSize/2];
     }
     catch (std::bad_alloc const &ba)
     {
