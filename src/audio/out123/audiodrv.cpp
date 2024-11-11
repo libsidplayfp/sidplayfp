@@ -81,7 +81,7 @@ bool Audio_OUT123::open(AudioConfig &cfg)
 
         try
         {
-            _sampleBuffer = new short[cfg.bufSize * m_frameSize];
+            _sampleBuffer = new short[cfg.bufSize * cfg.channels];
         }
         catch (std::bad_alloc const &ba)
         {
