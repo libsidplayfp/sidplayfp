@@ -65,9 +65,6 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 
         checkResult(snd_pcm_open(&_audioHandle, "default", SND_PCM_STREAM_PLAYBACK, 0));
 
-        // May later be replaced with driver defaults.
-        AudioConfig tmpCfg = cfg;
-
         checkResult(snd_pcm_hw_params_malloc(&hw_params));
 
         checkResult(snd_pcm_hw_params_any(_audioHandle, hw_params));
@@ -76,17 +73,13 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 
         checkResult(snd_pcm_hw_params_set_format(_audioHandle, hw_params, SND_PCM_FORMAT_S16_LE));
 
-        checkResult(snd_pcm_hw_params_set_channels(_audioHandle, hw_params, tmpCfg.channels));
+        checkResult(snd_pcm_hw_params_set_channels(_audioHandle, hw_params, cfg.channels));
 
-        {   // Gentoo bug #98769, comment 4
-            unsigned int rate = tmpCfg.frequency;
-            checkResult(snd_pcm_hw_params_set_rate_near(_audioHandle, hw_params, &rate, nullptr));
-            tmpCfg.frequency = rate;
-        }
+        checkResult(snd_pcm_hw_params_set_rate_near(_audioHandle, hw_params, &cfg.frequency, nullptr));
 
-        snd_pcm_uframes_t buffer_size = tmpCfg.bufSize;
+        snd_pcm_uframes_t buffer_size = cfg.bufSize;
         checkResult(snd_pcm_hw_params_set_buffer_size_near(_audioHandle, hw_params, &buffer_size));
-        tmpCfg.bufSize = buffer_size;
+        cfg.bufSize = buffer_size;
 
         snd_pcm_uframes_t period_size = buffer_size / 3;
         checkResult(snd_pcm_hw_params_set_period_size_near(_audioHandle, hw_params, &period_size, nullptr));
@@ -98,7 +91,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
 
         try
         {
-            _sampleBuffer = new short[snd_pcm_frames_to_bytes(_audioHandle, tmpCfg.bufSize)];
+            _sampleBuffer = new short[snd_pcm_frames_to_bytes(_audioHandle, buffer_size)/2];
         }
         catch (std::bad_alloc const &ba)
         {
@@ -106,9 +99,7 @@ bool Audio_ALSA::open(AudioConfig &cfg)
         }
 
         // Setup internal Config
-        _settings = tmpCfg;
-        // Update the users settings
-        getConfig (cfg);
+        _settings = cfg;
         return true;
     }
     catch(error const &e)
@@ -144,7 +135,7 @@ bool Audio_ALSA::write(uint_least32_t frames)
         return false;
     }
 
-    int err = snd_pcm_writei(_audioHandle, _sampleBuffer, frames);
+    snd_pcm_sframes_t err = snd_pcm_writei(_audioHandle, _sampleBuffer, frames);
     if (err < 0)
     {
         err = snd_pcm_recover(_audioHandle, err, 0);
