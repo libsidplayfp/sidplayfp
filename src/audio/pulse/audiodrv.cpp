@@ -73,7 +73,7 @@ bool Audio_Pulse::open(AudioConfig &cfg)
 
         try
         {
-            _sampleBuffer = new short[cfg.bufSize/2];
+            _sampleBuffer = new short[cfg.bufSize * cfg.channels];
         }
         catch (std::bad_alloc const &ba)
         {
