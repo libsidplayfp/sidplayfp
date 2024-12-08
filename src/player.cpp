@@ -949,10 +949,10 @@ bool ConsolePlayer::play()
         updateDisplay();
 
         // Fill buffer
-        short *buffer = m_driver.selected->buffer();
         // getBufSize returns the number of frames
         // multiply by number of channels to get the count of 16bit samples
         const uint_least32_t length = getBufSize() * m_driver.cfg.channels;
+        short *buffer = m_driver.selected->buffer();
         uint_least32_t samples = m_engine.play(buffer, length);
         if ((samples < length) || !m_engine.isPlaying())
         {
