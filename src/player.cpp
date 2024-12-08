@@ -935,6 +935,7 @@ void ConsolePlayer::emuflush ()
     }
 }
 
+//#include <iostream>
 
 // Out play loop to be externally called
 bool ConsolePlayer::play()
@@ -949,6 +950,49 @@ bool ConsolePlayer::play()
         // multiply by number of channels to get the count of 16bit samples
         const uint_least32_t length = getBufSize() * m_driver.cfg.channels;
         short *buffer = m_driver.selected->buffer();
+#ifdef FEAT_NEW_PLAY_API
+        short* buffers[3];
+        uint_least32_t pos = 0;
+        do
+        {
+            if (m_buffer.size())
+            {
+                for (int i=0; i<m_buffer.size(); i++)
+                {
+                    buffer[i] = m_buffer[i];
+                }
+                pos = m_buffer.size();
+            }
+            uint_least32_t samples = m_engine.play(20000, buffers);
+            //std::cout << samples << std::endl;
+            if (!samples)
+            {
+                cerr << m_engine.error();
+                m_state = playerError;
+                return false;
+            }
+            uint_least32_t const cnt = std::min(samples, length-pos);
+            for (int i=0; i<cnt; i++)
+            {
+                buffer[pos+i] = buffers[0][i];
+            }
+            pos += cnt;
+            // save remaining samples
+            {
+                int const rem = samples - cnt;
+                m_buffer.resize(rem);
+                for (int i=0; i<rem; i++)
+                {
+                    m_buffer[i] = buffers[0][cnt+i];
+                }
+            }
+        }
+        while (pos < length);
+
+        // m_engine.play returns the number of 16bit samples
+        // divide by number of channels to get the count of frames
+        frames = pos / m_driver.cfg.channels;
+#else
         uint_least32_t samples = m_engine.play(buffer, length);
         if ((samples < length) || !m_engine.isPlaying())
         {
@@ -959,6 +1003,7 @@ bool ConsolePlayer::play()
         // m_engine.play returns the number of 16bit samples
         // divide by number of channels to get the count of frames
         frames = samples / m_driver.cfg.channels;
+#endif
     }
 #ifdef HAVE_UNISTD_H
     else
@@ -1027,6 +1072,9 @@ uint_least32_t ConsolePlayer::getBufSize()
         m_timer.starting = false;
         m_driver.selected = m_driver.device;
         m_driver.selected->clearBuffer();
+#ifdef FEAT_NEW_PLAY_API
+        m_buffer.resize(0);
+#endif
         m_speed.current = 1;
         m_engine.fastForward(100);
         if (m_cpudebug)
