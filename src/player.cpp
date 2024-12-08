@@ -951,18 +951,15 @@ bool ConsolePlayer::play()
         const uint_least32_t length = getBufSize() * m_driver.cfg.channels;
         short *buffer = m_driver.selected->buffer();
 #ifdef FEAT_NEW_PLAY_API
-        short* buffers[3];
-        uint_least32_t pos = 0;
+        uint_least32_t pos = m_buffer.size();
+        for (int i=0; i<pos; i++)
+        {
+            buffer[i] = m_buffer[i];
+        }
+
         do
         {
-            if (m_buffer.size())
-            {
-                for (int i=0; i<m_buffer.size(); i++)
-                {
-                    buffer[i] = m_buffer[i];
-                }
-                pos = m_buffer.size();
-            }
+            short* buffers[3];
             uint_least32_t samples = m_engine.play(20000, buffers);
             //std::cout << samples << std::endl;
             if (!samples)
@@ -977,14 +974,13 @@ bool ConsolePlayer::play()
                 buffer[pos+i] = buffers[0][i];
             }
             pos += cnt;
-            // save remaining samples
+
+            // save remaining samples, if any
+            int const rem = samples - cnt;
+            m_buffer.resize(rem);
+            for (int i=0; i<rem; i++)
             {
-                int const rem = samples - cnt;
-                m_buffer.resize(rem);
-                for (int i=0; i<rem; i++)
-                {
-                    m_buffer[i] = buffers[0][cnt+i];
-                }
+                m_buffer[i] = buffers[0][cnt+i];
             }
         }
         while (pos < length);
