@@ -951,11 +951,7 @@ bool ConsolePlayer::play()
         const uint_least32_t length = getBufSize() * m_driver.cfg.channels;
         short *buffer = m_driver.selected->buffer();
 #ifdef FEAT_NEW_PLAY_API
-        uint_least32_t pos = m_buffer.size();
-        for (int i=0; i<pos; i++)
-        {
-            buffer[i] = m_buffer[i];
-        }
+        m_mixer.begin(buffer, length);
 
         do
         {
@@ -968,26 +964,13 @@ bool ConsolePlayer::play()
                 m_state = playerError;
                 return false;
             }
-            uint_least32_t const cnt = std::min(samples, length-pos);
-            for (int i=0; i<cnt; i++)
-            {
-                buffer[pos+i] = buffers[0][i];
-            }
-            pos += cnt;
-
-            // save remaining samples, if any
-            int const rem = samples - cnt;
-            m_buffer.resize(rem);
-            for (int i=0; i<rem; i++)
-            {
-                m_buffer[i] = buffers[0][cnt+i];
-            }
+            m_mixer.doMix(buffers, samples);
         }
-        while (pos < length);
+        while (!m_mixer.isFull());
 
         // m_engine.play returns the number of 16bit samples
         // divide by number of channels to get the count of frames
-        frames = pos / m_driver.cfg.channels;
+        frames = length / m_driver.cfg.channels;
 #else
         uint_least32_t samples = m_engine.play(buffer, length);
         if ((samples < length) || !m_engine.isPlaying())
@@ -1069,7 +1052,7 @@ uint_least32_t ConsolePlayer::getBufSize()
         m_driver.selected = m_driver.device;
         m_driver.selected->clearBuffer();
 #ifdef FEAT_NEW_PLAY_API
-        m_buffer.resize(0);
+        m_mixer.clear();
 #endif
         m_speed.current = 1;
         m_engine.fastForward(100);

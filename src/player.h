@@ -38,13 +38,15 @@
 #include "IniConfig.h"
 
 #include "setting.h"
+
+#ifdef FEAT_NEW_PLAY_API
+#  include <mixer.h>
+#endif
+
 #include "sidlib_features.h"
 
 #include <string>
 #include <bitset>
-#ifdef FEAT_NEW_PLAY_API
-#  include <vector>
-#endif
 
 #ifdef HAVE_TSID
 #  if HAVE_TSID > 1
@@ -190,7 +192,7 @@ private:
     int  m_precision;
     int  m_buffer_size;
 #ifdef FEAT_NEW_PLAY_API
-    std::vector<short> m_buffer;
+    Mixer m_mixer;
 #endif
     struct m_filter_t
     {
