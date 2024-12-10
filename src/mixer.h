@@ -34,19 +34,16 @@
 class Mixer
 {
 private:
-    uint_least32_t m_pos;
-    uint_least32_t m_dest_size;
+    uint_least32_t m_pos = 0;
+    uint_least32_t m_dest_size = 0;
 
-    short* m_dest;
+    short* m_dest = nullptr;
+
+    int m_channels = 1;
 
     std::vector<short> m_buffer;
 
 public:
-    Mixer() :
-        m_pos(0),
-        m_dest_size(0)
-    {}
-
     void begin(short *buffer, uint_least32_t length);
 
     void doMix(short* (&buffers)[], uint_least32_t samples);
