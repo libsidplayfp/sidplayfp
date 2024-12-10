@@ -22,32 +22,37 @@
 
 #include "mixer.h"
 
+#include <cstring>
+
 void Mixer::begin(short *buffer, uint_least32_t length)
 {
     m_dest = buffer;
     m_dest_size = length;
 
     m_pos = m_buffer.size();
-    for (uint_least32_t i=0; i<m_pos; i++) // FIXME use memcpy
-    {
-        m_dest[i] = m_buffer[i];
-    }
+    std::memcpy(m_dest, m_buffer.data(), m_pos*sizeof(short));
 }
 
 void Mixer::doMix(short* (&buffers)[], uint_least32_t samples)
 {
-    uint_least32_t const cnt = std::min(samples, m_dest_size-m_pos);
+    uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
     for (uint_least32_t i=0; i<cnt; i++)
     {
-        m_dest[m_pos+i] = buffers[0][i];
+        for (int c=0; c<m_channels; c++)
+        {
+            m_dest[m_pos++] = buffers[0][i]; // TODO mix
+        }
     }
-    m_pos += cnt;
 
     // save remaining samples, if any
     uint_least32_t const rem = samples - cnt;
-    m_buffer.resize(rem);
-    for (uint_least32_t i=0; i<rem; i++) // FIXME use memcpy
+    m_buffer.resize(rem*m_channels);
+    int j = 0;
+    for (uint_least32_t i=0; i<rem; i++)
     {
-        m_buffer[i] = buffers[0][cnt+i];
+        for (int c=0; c<m_channels; c++)
+        {
+            m_buffer[j++] = buffers[0][cnt+i]; // TODO mix
+        }
     }
 }
