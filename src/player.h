@@ -96,6 +96,7 @@ typedef enum
     /* The following should disable the soundcard */
     EMU_HARDSID,
     EMU_EXSID,
+    EMU_USBSID,
     EMU_SIDSTATION,
     EMU_COMMODORE,
     EMU_SIDSYN,
@@ -138,6 +139,9 @@ private:
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
     static const char  EXSID_ID[];
 #endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    static const char  USBSID_ID[];
+#endif
 #ifdef HAVE_TSID
     TSID               m_tsid;
 #endif
@@ -172,6 +176,8 @@ private:
     sldb_t             songlengthDB;
 
     bool               m_cpudebug;
+
+    bool               m_noMenu;
 
     bool               m_autofilter;
 
@@ -208,6 +214,9 @@ private:
         IAudio*        selected; // Selected Output Driver
         IAudio*        device;   // HW/File Driver
         Audio_Null     null;     // Used for everything
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+        bool           is_threaded;
+#endif
     } m_driver;
 
     struct m_timer_t

@@ -22,9 +22,11 @@ AM_CPPFLAGS = \
 -I $(top_srcdir)/src \
 -DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
+$(USBSID_CFLAGS) \
 $(STILVIEW_CFLAGS) \
 $(ALSA_CFLAGS) \
 $(PULSE_CFLAGS) \
+$(LIBUSB_CFLAGS) \
 $(OUT123_CFLAGS) \
 ${W32_CPPFLAGS} \
 @debug_flags@
@@ -85,10 +87,12 @@ src/ini/types.h
 src_sidplayfp_LDADD = \
 $(LIBICONV) \
 $(AUDIO_LDFLAGS) \
+$(USBSID_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
 $(PULSE_LIBS) \
+$(LIBUSB_LIBS) \
 $(OUT123_LIBS) \
 $(W32_LIBS)
 

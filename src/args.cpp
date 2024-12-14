@@ -45,6 +45,10 @@ using std::endl;
 #  include <sidplayfp/builders/exsid.h>
 #endif
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+#  include <sidplayfp/builders/usbsid.h>
+#endif
+
 // Wide-chars are not yet supported here
 #undef SEPARATOR
 #define SEPARATOR "/"
@@ -151,6 +155,7 @@ void displayDebugArgs()
         << " --delay=<num> simulate c64 power on delay (default: random)" << endl
         << " --noaudio     no audio output device" << endl
         << " --nosid       no sid emulation" << endl
+        << " --nomenu      no menu and info display" << endl
         << " --none        no audio output device and no sid emulation" << endl;
 }
 
@@ -426,7 +431,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (std::strcmp (&argv[i][1], "cws") == 0)
             {
                 m_combinedWaveformsStrength  = SidConfig::STRONG;
-            }	
+            }
 #endif
             // File format conversions
             else if (argv[i][1] == 'w')
@@ -485,6 +490,18 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+            else if (std::strcmp (&argv[i][1], "-usbsid") == 0)
+            {
+                m_driver.sid    = EMU_USBSID;
+                m_driver.output = output_t::NONE;
+            }
+            else if (std::strcmp (&argv[i][1], "-threaded") == 0)
+            {
+                m_driver.is_threaded = true;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+
             // These are for debug
             else if (std::strcmp (&argv[i][1], "-none") == 0)
             {
@@ -498,6 +515,10 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (std::strcmp (&argv[i][1], "-noaudio") == 0)
             {
                 m_driver.output = output_t::NONE;
+            }
+            else if (std::strcmp (&argv[i][1], "-nomenu") == 0)
+            {
+                m_noMenu = true;
             }
             else if (std::strcmp (&argv[i][1], "-cpu-debug") == 0)
             {
@@ -733,6 +754,14 @@ void ConsolePlayer::displayArgs (const char *arg)
         exSIDBuilder hs("");
         if (hs.availDevices ())
             out << " --exsid      enable exSID support" << endl;
+    }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    {
+        USBSIDBuilder us("");
+        if (us.availDevices ())
+            out << " --usbsid     enable USBSID support" << endl;
+            out << " --threaded   enable USBSID threaded writes (disables reading)" << endl;
     }
 #endif
     out << endl

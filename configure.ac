@@ -83,6 +83,12 @@ AC_SUBST(AUDIO_LDFLAGS)
 PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
+USE_LIBUSB=no
+PKG_CHECK_MODULES([LIBUSB], [libusb-1.0],
+    [USE_LIBUSB=yes,
+    AC_DEFINE([HAVE_LIBUSB], [1], [Use libusb])],
+    [USE_LIBUSB=no])
+
 USE_LIBOUT123=no
 AC_ARG_WITH([out123], AS_HELP_STRING([--with-out123], [Build with out123 library (default: enabled)]))
 
@@ -99,12 +105,13 @@ AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
 
 # hack?
 saveCPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"
+CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS $USBSIDFLAGS"
 
 AC_CHECK_HEADERS([sidplayfp/builders/residfp.h \
 sidplayfp/builders/resid.h \
 sidplayfp/builders/hardsid.h \
-sidplayfp/builders/exsid.h])
+sidplayfp/builders/exsid.h
+sidplayfp/builders/usbsid.h])
 
 CPPFLAGS=$saveCPPFLAGS
 
