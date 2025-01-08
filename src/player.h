@@ -216,6 +216,7 @@ private:
         Audio_Null     null;     // Used for everything
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
         bool           is_threaded;
+        bool           is_cycled;
 #endif
     } m_driver;
 
