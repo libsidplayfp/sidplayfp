@@ -498,15 +498,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_driver.is_threaded = false;
                 m_driver.is_cycled = false;
             }
-            else if (std::strcmp (&argv[i][1], "-threaded") == 0)
-            {
-                m_driver.is_threaded = true;
-            }
             else if (std::strcmp (&argv[i][1], "-cycled") == 0)
-            {
-                m_driver.is_cycled = true;
-            }
-            else if (std::strcmp (&argv[i][1], "-tc") == 0)
             {
                 m_driver.is_threaded = true;
                 m_driver.is_cycled = true;
@@ -770,11 +762,10 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
     {
         USBSIDBuilder us("");
-        if (us.availDevices ())
+        if (us.availDevices ()) {
             out << " --usbsid     enable USBSID support" << endl;
-            out << " --tc         enable USBSID threaded & cycled writes (disables reading)" << endl;
-            out << " --cycled     enable USBSID cycled writes only (disables reading)" << endl;
-            out << " --threaded   enable USBSID threaded writes only (disables reading)" << endl;
+            out << " --cycled     enable USBSID cycled writes (disables reading)" << endl;
+        }
     }
 #endif
     out << endl
