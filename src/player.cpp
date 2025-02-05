@@ -764,7 +764,6 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             m_engCfg.sidEmulation = us;
             if (!us->getStatus()) goto createSidEmu_error;
-            us->m_isthreaded = m_driver.is_threaded;
             us->m_iscycled = m_driver.is_cycled;
             us->create ((m_engine.info ()).maxsids());
             if (!us->getStatus()) goto createSidEmu_error;

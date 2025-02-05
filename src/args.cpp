@@ -495,12 +495,10 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 m_driver.sid    = EMU_USBSID;
                 m_driver.output = output_t::NONE;
-                m_driver.is_threaded = false;
                 m_driver.is_cycled = false;
             }
             else if (std::strcmp (&argv[i][1], "-cycled") == 0)
             {
-                m_driver.is_threaded = true;
                 m_driver.is_cycled = true;
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
@@ -762,7 +760,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
     {
         USBSIDBuilder us("");
-        if (us.availDevices ()) {
+        if (us.availDevices () == 0) {
             out << " --usbsid     enable USBSID support" << endl;
             out << " --cycled     enable USBSID cycled writes (disables reading)" << endl;
         }
