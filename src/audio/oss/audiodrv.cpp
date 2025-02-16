@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include <new>
 
@@ -131,7 +132,6 @@ bool Audio_OSS::open (AudioConfig &cfg)
             _audiofd = -1;
         }
 
-        perror (AUDIODEVICE);
         return false;
     }
 }
@@ -165,7 +165,12 @@ bool Audio_OSS::write (uint_least32_t frames)
     }
 
     size_t const bytes = static_cast<size_t>(frames) * m_frameSize;
-    ::write (_audiofd, _sampleBuffer, bytes);
+    ssize_t res = ::write (_audiofd, _sampleBuffer, bytes);
+    if (res < 0)
+    {
+        setError(strerror(errno));
+        return false;
+    }
     return true;
 }
 

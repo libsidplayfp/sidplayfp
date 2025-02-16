@@ -244,7 +244,11 @@ int _getch (void)
 {
     char ch = -1;
     if (infd >= 0)
-        read (infd, &ch, 1);
+    {
+        ssize_t res = read (infd, &ch, 1);
+        if (res < 0)
+            return -1;
+    }
     return ch;
 }
 
