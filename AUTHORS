@@ -3,7 +3,7 @@ to provide the best SID listening experience.
 
 Copyright (c) 2000 Simon White
 Copyright (c) 2007-2010 Antti Lankila
-Copyright (c) 2010-2024 Leandro Nini
+Copyright (c) 2010-2025 Leandro Nini
 
 This version of the freely available sidplayfp player source code
 contains the following contributed or derived work. In the order they first
@@ -18,6 +18,7 @@ supplied contributions or code was derived from their work:
     Leandro Nini      - build system changes, port to libsidplayfp
                         minor improvements
     LaLa              - stilview
+    Stian Skjelstad   - SID status display
     Michael Hartmann  - filter curves
 
 
