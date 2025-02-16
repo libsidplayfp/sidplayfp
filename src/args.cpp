@@ -253,7 +253,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     err = true;
                 else
                 {
-                    const int voice = atoi(&argv[i][2]);
+                    const unsigned int voice = atoi(&argv[i][2]);
                     if (voice > 0 && voice <= m_mute_channel.size())
                         m_mute_channel[voice-1] = true;
                 }
@@ -267,7 +267,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     err = true;
                 else
                 {
-                    const int chip = atoi(&argv[i][2]);
+                    const unsigned int chip = atoi(&argv[i][2]);
                     if (chip > 0 && chip <= m_mute_samples.size())
                         m_mute_samples[chip-1] = true;
                 }
