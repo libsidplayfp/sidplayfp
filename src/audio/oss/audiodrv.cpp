@@ -117,8 +117,10 @@ bool Audio_OSS::open (AudioConfig &cfg)
             throw error("Unable to allocate memory for sample buffers.");
         }
 
-        // Setup internal Config
         m_frameSize = 2 * cfg.channels;
+        // Force precision
+        cfg.precision = 16;
+        // Setup internal Config
         _settings = cfg;
         return true;
     }

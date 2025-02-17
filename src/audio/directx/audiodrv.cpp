@@ -180,6 +180,8 @@ bool Audio_DirectX::open (AudioConfig &cfg, HWND hwnd)
             throw error("Unable to set play position to start of buffer.");
         }
 
+        // Force precision
+        cfg.precision = 16;
         // Update the users settings
         m_frameSize   = wfm.nBlockAlign;
         _settings     = cfg;

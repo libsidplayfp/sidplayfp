@@ -162,6 +162,8 @@ bool Audio_MMSystem::open(AudioConfig &cfg)
         m_frameSize = wfm.nBlockAlign;
         blockNum = 0;
         _sampleBuffer = blocks[blockNum];
+        // Force precision
+        cfg.precision = 16;
         return true;
     }
     catch(error const &e)
