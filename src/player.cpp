@@ -340,7 +340,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_autofilter(false)
 {
 #ifdef FEAT_REGS_DUMP_SID
-    memset(m_registers, 0, 32*3);
+    std::memset(m_registers, 0, 32*3);
 #endif
     // Other defaults
     m_filter.enabled = true;
