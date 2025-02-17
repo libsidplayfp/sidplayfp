@@ -162,8 +162,10 @@ private:
     SidConfig::sid_cw_t m_combinedWaveformsStrength;
 #endif
 
+#ifdef FEAT_REGS_DUMP_SID
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
+#endif
 
     // Display parameters
     uint_least8_t      m_quietLevel;
