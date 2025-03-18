@@ -952,11 +952,12 @@ bool ConsolePlayer::play()
         short *buffer = m_driver.selected->buffer();
 #ifdef FEAT_NEW_PLAY_API
         m_mixer.begin(buffer, length);
+        short* buffers[3];
+        m_engine.buffers(buffers);
 
         do
         {
-            short* buffers[3];
-            uint_least32_t samples = m_engine.play(20000, buffers);
+            uint_least32_t samples = m_engine.play(2000);
             //std::cout << samples << std::endl;
             if (!samples)
             {

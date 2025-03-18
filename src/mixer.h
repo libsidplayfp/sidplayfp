@@ -46,7 +46,7 @@ private:
 public:
     void begin(short *buffer, uint_least32_t length);
 
-    void doMix(short* (&buffers)[], uint_least32_t samples);
+    void doMix(short* (&buffers)[3], uint_least32_t samples);
 
     bool isFull() const { return m_pos >= m_dest_size; }
 
