@@ -33,7 +33,7 @@ void Mixer::begin(short *buffer, uint_least32_t length)
     std::memcpy(m_dest, m_buffer.data(), m_pos*sizeof(short));
 }
 
-void Mixer::doMix(short* (&buffers)[], uint_least32_t samples)
+void Mixer::doMix(short* (&buffers)[3], uint_least32_t samples)
 {
     uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
     for (uint_least32_t i=0; i<cnt; i++)
