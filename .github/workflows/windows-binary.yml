@@ -1,4 +1,4 @@
-name: Build W64 Release
+name: Build Windows Release
 
 on:
   release:
@@ -14,17 +14,24 @@ jobs:
       run:
         shell: msys2 {0}
 
+    strategy:
+      matrix:
+        include:
+          - { sys: MINGW64, env: x86_64,      arch: x86-64-v2 }
+          - { sys: MINGW32, env: i686,        arch: i686 }
+          - { sys: UCRT64,  env: ucrt-x86_64, arch: x86-64-v3 }
     steps:
     - uses: msys2/setup-msys2@v2
       with:
+        msystem: ${{matrix.sys}}
         update: true
         install: >-
           git
           zip
           upx
           base-devel
-          mingw-w64-x86_64-toolchain
-          mingw-w64-x86_64-autotools
+          mingw-w64-${{matrix.env}}-toolchain
+          mingw-w64-${{matrix.env}}-autotools
     - uses: dsaltares/fetch-gh-release-asset@master
       with:
         repo: 'libsidplayfp/libsidplayfp'
@@ -35,7 +42,7 @@ jobs:
       run: |
         cd subdir
         export LDFLAGS="-s -Wl,-no-undefined -Wl,-O1 -static"
-        export CXXFLAGS="-O2 -march=x86-64-v2 -fomit-frame-pointer -ftree-vectorize -pipe -DUNICODE"
+        export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -ftree-vectorize -pipe -DUNICODE"
         export PKG_CONFIG="pkg-config --static"
         tar -xf libsidplayfp*.tar.gz
         cd libsidplayfp*/.
@@ -50,7 +57,7 @@ jobs:
     - name: build
       run: |
         export LDFLAGS="-s -Wl,-no-undefined -Wl,-O1 -static"
-        export CXXFLAGS="-O2 -march=x86-64-v2 -fomit-frame-pointer -ftree-vectorize -pipe -DUNICODE"
+        export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -ftree-vectorize -pipe -DUNICODE"
         export PKG_CONFIG="pkg-config --static"
         autoreconf -vfi
         ./configure --disable-dependency-tracking
@@ -61,11 +68,11 @@ jobs:
         pod2text doc/en/sidplayfp.ini.pod > sidplayfp.ini.txt
         pod2text doc/en/sidplayfp.pod > sidplayfp.txt
         pod2text doc/en/stilview.pod > stilview.txt
-        zip sidplayfp-w64-${{ steps.get_tag_name.outputs.tagname }}.zip *.exe README AUTHORS *.txt
+        zip sidplayfp-${{matrix.arch}}-${{ steps.get_tag_name.outputs.tagname }}.zip *.exe README AUTHORS *.txt
     - uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: sidplayfp-w64-${{ steps.get_tag_name.outputs.tagname }}.zip
+        file: sidplayfp-${{matrix.arch}}-${{ steps.get_tag_name.outputs.tagname }}.zip
         tag: ${{ github.ref }}
         file_glob: true
         overwrite: true
