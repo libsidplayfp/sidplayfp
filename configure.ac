@@ -60,8 +60,7 @@ PKG_CHECK_MODULES(PULSE,
 
 
 dnl Checks what version of Unix we have and soundcard support
-AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h \
-sys/soundcard.h soundcard.h])
+AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h sys/soundcard.h soundcard.h])
 
 AC_CHECK_HEADERS([dsound.h mmsystem.h], [], [], [#include <windows.h>])
 
