@@ -964,6 +964,10 @@ bool ConsolePlayer::play()
         // divide by number of channels to get the count of frames
         frames = samples / m_driver.cfg.channels;
     }
+#ifdef HAVE_UNISTD_H
+    else
+        usleep(100000);
+#endif
 
     switch (m_state)
     {
