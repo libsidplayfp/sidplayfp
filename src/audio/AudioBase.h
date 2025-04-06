@@ -44,7 +44,7 @@ protected:
     };
 
 private:
-    const char *_backendName;
+    const char *m_backendName;
     std::string _errorString;
 
 protected:
@@ -54,7 +54,7 @@ protected:
 protected:
     void setError(const char* msg)
     {
-        _errorString.assign(_backendName).append(" ERROR: ").append(msg);
+        _errorString.assign(m_backendName).append(" ERROR: ").append(msg);
     }
 
     void clearError()
@@ -64,7 +64,7 @@ protected:
 
 public:
     AudioBase(const char* name) :
-        _backendName(name),
+        m_backendName(name),
         _sampleBuffer(nullptr) {}
     ~AudioBase() override = default;
 
@@ -80,6 +80,11 @@ public:
     const char *getErrorString() const override
     {
         return _errorString.c_str();
+    }
+
+    const char *getDriverString() const override
+    {
+        return m_backendName;
     }
 };
 

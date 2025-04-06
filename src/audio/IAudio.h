@@ -40,6 +40,7 @@ public:
     virtual void clearBuffer() = 0;
     virtual void getConfig(AudioConfig &cfg) const = 0;
     virtual const char *getErrorString() const = 0;
+    virtual const char *getDriverString() const = 0;
 };
 
 #endif // IAUDIO_H

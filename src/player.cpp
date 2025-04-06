@@ -564,6 +564,9 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
             displayError(m_driver.device->getErrorString());
             return false;
         }
+
+        if (m_verboseLevel && (driver != output_t::NONE))
+            cerr << "Using audio driver: " << m_driver.device->getDriverString() << endl;
     }
 
     // See what we got
