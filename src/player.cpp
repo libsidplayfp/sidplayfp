@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2024 Leandro Nini
+ * Copyright 2011-2025 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -330,10 +330,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_state(playerStopped),
     m_outfile(nullptr),
     m_filename(""),
-    m_fcurve(-1.0),
-#ifdef FEAT_FILTER_RANGE
-    m_frange(-1.0),
-#endif
     m_quietLevel(0),
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
@@ -629,9 +625,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                     cerr << "Recommended filter range: " << frange << endl;
             }
 
-            if (m_frange >= 0.0)
+            if (m_frange.has_value())
             {
-                frange = m_frange;
+                frange = m_frange.value();
             }
 
             if ((frange < 0.0) || (frange > 1.0))
@@ -655,9 +651,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                     cerr << "Recommended filter curve: " << fcurve << endl;
             }
 #endif
-            if (m_fcurve >= 0.0)
+            if (m_fcurve.has_value())
             {
-                fcurve = m_fcurve;
+                fcurve = m_fcurve.value();
             }
 
             if ((fcurve < 0.0) || (fcurve > 1.0))
@@ -672,9 +668,9 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             // 8580
             fcurve = m_filter.filterCurve8580;
-            if (m_fcurve >= 0.0)
+            if (m_fcurve.has_value())
             {
-                fcurve = m_fcurve;
+                fcurve = m_fcurve.value();
             }
 
             if ((fcurve < 0.0) || (fcurve > 1.0))
