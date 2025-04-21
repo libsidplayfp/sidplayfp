@@ -52,7 +52,7 @@ using std::endl;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
-
+#include <chrono>
 #include <unordered_map>
 
 using filter_map_t = std::unordered_map<std::string, double>;
@@ -773,7 +773,6 @@ createSidEmu_error:
     return false;
 }
 
-
 bool ConsolePlayer::open (void)
 {
     if ((m_state & ~playerFast) == playerRestart)
@@ -809,22 +808,19 @@ bool ConsolePlayer::open (void)
         return false;
     }
 
+    const bool isNTSC = (
+                (m_engCfg.defaultC64Model == SidConfig::NTSC) &&
+                (m_engCfg.forceC64Model || (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL))
+            ) ||
+            (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC);
+
 #ifdef FEAT_FILTER_DISABLE
     m_engine.filter(0, m_filter.enabled);
     m_engine.filter(1, m_filter.enabled);
     m_engine.filter(2, m_filter.enabled);
 #endif
 #ifdef FEAT_REGS_DUMP_SID
-    if (
-            (
-                (m_engCfg.defaultC64Model == SidConfig::NTSC) &&
-                (m_engCfg.forceC64Model || (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL))
-            ) ||
-            (tuneInfo->clockSpeed() == SidTuneInfo::CLOCK_NTSC)
-    )
-        m_freqTable = freqTableNtsc;
-    else
-        m_freqTable = freqTablePal;
+    m_freqTable = isNTSC ? freqTableNtsc : freqTablePal;
 #endif
     // Start the player.  Do this by fast
     // forwarding to the start position
@@ -883,13 +879,25 @@ bool ConsolePlayer::open (void)
 
     // Update display
     menu();
-    updateDisplay();
+
+    // Update display at 50/60Hz
+    int delay = isNTSC ? 16 : 20;
+    m_thread = new std::thread([this](int delay)
+    {
+        while (m_state != playerStopped)
+        {
+            if (m_state == playerRunning)
+                updateDisplay();
+            std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+        }
+    }, delay);
+
     return true;
 }
 
 void ConsolePlayer::close ()
 {
-    m_engine.stop();
+    stop();
     if (m_state == playerExit)
     {   // Natural finish
         emuflush ();
@@ -915,6 +923,12 @@ void ConsolePlayer::close ()
 #ifndef _WIN32
         cerr << endl;
 #endif
+    }
+
+    if (m_thread)
+    {
+        m_thread->join();
+        delete m_thread;
     }
 }
 
@@ -945,8 +959,6 @@ bool ConsolePlayer::play()
     uint_least32_t frames = 0;
     if (m_state == playerRunning)
     {
-        updateDisplay();
-
         // Fill buffer
         // getBufSize returns the number of frames
         // multiply by number of channels to get the count of 16bit samples
@@ -1067,7 +1079,6 @@ uint_least32_t ConsolePlayer::getBufSize()
 }
 
 
-// External Timer Event
 void ConsolePlayer::updateDisplay()
 {
 #ifdef FEAT_NEW_SONLEGTH_DB
