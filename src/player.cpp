@@ -827,6 +827,9 @@ bool ConsolePlayer::open (void)
     else
         m_freqTable = freqTablePal;
 #endif
+
+    m_mixer.initialize(m_engine.installedSIDs(), m_engCfg.playback == SidConfig::STEREO); // FIXME
+
     // Start the player.  Do this by fast
     // forwarding to the start position
     m_driver.selected = &m_driver.null;

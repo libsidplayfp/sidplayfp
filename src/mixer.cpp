@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a SID player engine.
  *
- * Copyright 2011-2024 Leandro Nini <drfiemost@users.sourceforge.net>
+ * Copyright 2011-2025 Leandro Nini <drfiemost@users.sourceforge.net>
  * Copyright 2007-2010 Antti Lankila
  * Copyright (C) 2000 Simon White
  *
@@ -22,7 +22,31 @@
 
 #include "mixer.h"
 
+#include <cassert>
 #include <cstring>
+
+void Mixer::initialize(int chips, bool stereo)
+{
+    m_channels = stereo ? 2 : 1;
+    m_chips = chips;
+    m_iSamples.resize(chips);
+    m_mix.resize(stereo ? 2 : 1);
+    switch (chips)
+    {
+    case 1:
+        m_mix[0] = stereo ? &Mixer::stereo_OneChip : &Mixer::template mono<1>;
+        if (stereo) m_mix[1] = &Mixer::stereo_OneChip;
+        break;
+    case 2:
+        m_mix[0] = stereo ? &Mixer::stereo_ch1_TwoChips : &Mixer::template mono<2>;
+        if (stereo) m_mix[1] = &Mixer::stereo_ch2_TwoChips;
+        break;
+    case 3:
+        m_mix[0] = stereo ? &Mixer::stereo_ch1_ThreeChips : &Mixer::template mono<3>;
+        if (stereo) m_mix[1] = &Mixer::stereo_ch2_ThreeChips;
+        break;
+     }
+}
 
 void Mixer::begin(short *buffer, uint_least32_t length)
 {
@@ -38,9 +62,13 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
     uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
     for (uint_least32_t i=0; i<cnt; i++)
     {
+        for (int c=0; c<m_chips; c++)
+            m_iSamples[c] = buffers[c][i];
         for (int c=0; c<m_channels; c++)
         {
-            m_dest[m_pos++] = buffers[0][i]; // TODO mix
+            const int_least32_t tmp = (this->*(m_mix[c]))();
+            assert(tmp >= -32768 && tmp <= 32767);
+            m_dest[m_pos++] = static_cast<short>(tmp);
         }
     }
 
@@ -50,9 +78,13 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
     int j = 0;
     for (uint_least32_t i=0; i<rem; i++)
     {
+        for (int c=0; c<m_chips; c++)
+            m_iSamples[c] = buffers[c][cnt+i];
         for (int c=0; c<m_channels; c++)
         {
-            m_buffer[j++] = buffers[0][cnt+i]; // TODO mix
+            const int_least32_t tmp = (this->*(m_mix[c]))();
+            assert(tmp >= -32768 && tmp <= 32767);
+            m_buffer[j++] = static_cast<short>(tmp);
         }
     }
 }
