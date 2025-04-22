@@ -28,9 +28,9 @@
 void Mixer::initialize(int chips, bool stereo)
 {
     m_channels = stereo ? 2 : 1;
+    m_mix.resize(m_channels);
     m_chips = chips;
     m_iSamples.resize(chips);
-    m_mix.resize(stereo ? 2 : 1);
     switch (chips)
     {
     case 1:
@@ -57,34 +57,29 @@ void Mixer::begin(short *buffer, uint_least32_t length)
     std::memcpy(m_dest, m_buffer.data(), m_pos*sizeof(short));
 }
 
-void Mixer::doMix(short** buffers, uint_least32_t samples)
+void Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest)
 {
-    uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
-    for (uint_least32_t i=0; i<cnt; i++)
+    for (uint_least32_t i=0; i<length; i++)
     {
         for (int c=0; c<m_chips; c++)
-            m_iSamples[c] = buffers[c][i];
+            m_iSamples[c] = buffers[c][start+i];
         for (int c=0; c<m_channels; c++)
         {
             const int_least32_t tmp = (this->*(m_mix[c]))();
             assert(tmp >= -32768 && tmp <= 32767);
-            m_dest[m_pos++] = static_cast<short>(tmp);
+            *dest++ = static_cast<short>(tmp);
         }
     }
+}
+
+void Mixer::doMix(short** buffers, uint_least32_t samples)
+{
+    uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
+    mix(buffers, 0, cnt, m_dest+m_pos);
+    m_pos += cnt;
 
     // save remaining samples, if any
     uint_least32_t const rem = samples - cnt;
     m_buffer.resize(rem*m_channels);
-    int j = 0;
-    for (uint_least32_t i=0; i<rem; i++)
-    {
-        for (int c=0; c<m_chips; c++)
-            m_iSamples[c] = buffers[c][cnt+i];
-        for (int c=0; c<m_channels; c++)
-        {
-            const int_least32_t tmp = (this->*(m_mix[c]))();
-            assert(tmp >= -32768 && tmp <= 32767);
-            m_buffer[j++] = static_cast<short>(tmp);
-        }
-    }
+    mix(buffers, cnt, rem, m_buffer.data());
 }

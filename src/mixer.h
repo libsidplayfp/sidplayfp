@@ -109,6 +109,8 @@ private:
         return (0.5*m_iSamples[0] + m_iSamples[1] + m_iSamples[2]) * SCALE[2] / SCALE_FACTOR;
     }
 
+    inline void mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest);
+
 public:
     void initialize(int chips, bool stereo);
 
