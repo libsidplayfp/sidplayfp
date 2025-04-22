@@ -76,7 +76,7 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
 {
     uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
     mix(buffers, 0, cnt, m_dest+m_pos);
-    m_pos += cnt;
+    m_pos += cnt * m_channels;
 
     // save remaining samples, if any
     uint_least32_t const rem = samples - cnt;

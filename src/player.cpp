@@ -827,8 +827,9 @@ bool ConsolePlayer::open (void)
     else
         m_freqTable = freqTablePal;
 #endif
-
-    m_mixer.initialize(m_engine.installedSIDs(), m_engCfg.playback == SidConfig::STEREO); // FIXME
+#ifdef FEAT_NEW_PLAY_API
+    m_mixer.initialize(m_engine.installedSIDs(), m_engCfg.playback == SidConfig::STEREO);
+#endif
 
     // Start the player.  Do this by fast
     // forwarding to the start position
@@ -961,7 +962,6 @@ bool ConsolePlayer::play()
         do
         {
             uint_least32_t samples = m_engine.play(2000);
-            //std::cout << samples << std::endl;
             if (!samples)
             {
                 cerr << m_engine.error();
