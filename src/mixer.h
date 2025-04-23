@@ -56,6 +56,7 @@ private:
 
     int m_channels = 1;
     int m_chips;
+    int m_fastForwardFactor = 1;
 
     std::vector<int_least32_t> m_iSamples;
     std::vector<short> m_buffer;
@@ -109,7 +110,7 @@ private:
         return (0.5*m_iSamples[0] + m_iSamples[1] + m_iSamples[2]) * SCALE[2] / SCALE_FACTOR;
     }
 
-    inline void mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest);
+    inline uint_least32_t mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest);
 
 public:
     void initialize(int chips, bool stereo);
@@ -121,6 +122,14 @@ public:
     bool isFull() const { return m_pos >= m_dest_size; }
 
     void clear() { m_buffer.resize(0); }
+
+    /**
+     * Set the fast forward ratio.
+     *
+     * @param ff the fast forward ratio, from 1 to 32
+     * @return true if parameter is valid, false otherwise
+     */
+    bool setFastForward(int ff);
 };
 
 #endif // MIXER_H

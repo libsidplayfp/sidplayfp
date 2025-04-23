@@ -57,29 +57,53 @@ void Mixer::begin(short *buffer, uint_least32_t length)
     std::memcpy(m_dest, m_buffer.data(), m_pos*sizeof(short));
 }
 
-void Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest)
+uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest)
 {
-    for (uint_least32_t i=0; i<length; i++)
+    uint_least32_t j = 0;
+    for (uint_least32_t i=0; i<length;)
     {
         for (int c=0; c<m_chips; c++)
-            m_iSamples[c] = buffers[c][start+i];
+        {
+            int_least32_t sample = 0;
+            const short *buffer = &buffers[c][start+i];
+            for (int j = 0; j < m_fastForwardFactor; j++)
+            {
+                sample += buffer[j];
+            }
+
+            m_iSamples[c] = sample / m_fastForwardFactor;
+        }
+
+        // increment i to mark we ate some samples, finish the boxcar thing.
+        i += m_fastForwardFactor;
+
         for (int c=0; c<m_channels; c++)
         {
             const int_least32_t tmp = (this->*(m_mix[c]))();
             assert(tmp >= -32768 && tmp <= 32767);
-            *dest++ = static_cast<short>(tmp);
+            dest[j++] = static_cast<short>(tmp);
         }
     }
+    return j;
 }
 
 void Mixer::doMix(short** buffers, uint_least32_t samples)
 {
     uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
-    mix(buffers, 0, cnt, m_dest+m_pos);
-    m_pos += cnt * m_channels;
+    uint_least32_t res = mix(buffers, 0, cnt, m_dest+m_pos);
+    m_pos += res * m_channels;
 
     // save remaining samples, if any
     uint_least32_t const rem = samples - cnt;
     m_buffer.resize(rem*m_channels);
     mix(buffers, cnt, rem, m_buffer.data());
+}
+
+bool Mixer::setFastForward(int ff)
+{
+    if (ff < 1 || ff > 32)
+        return false;
+
+    m_fastForwardFactor = ff;
+    return true;
 }

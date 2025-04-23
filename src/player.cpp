@@ -835,7 +835,11 @@ bool ConsolePlayer::open (void)
     // forwarding to the start position
     m_driver.selected = &m_driver.null;
     m_speed.current   = m_speed.max;
-    m_engine.fastForward (100 * m_speed.current);
+#ifdef FEAT_NEW_PLAY_API
+    m_mixer.setFastForward(m_speed.current);
+#else
+    m_engine.fastForward(100 * m_speed.current);
+#endif
 
     for (int chip=0; chip<3; chip++)
     {
@@ -938,8 +942,6 @@ void ConsolePlayer::emuflush ()
         break;
     }
 }
-
-//#include <iostream>
 
 // Out play loop to be externally called
 bool ConsolePlayer::play()
@@ -1057,9 +1059,11 @@ uint_least32_t ConsolePlayer::getBufSize()
         m_driver.selected->clearBuffer();
 #ifdef FEAT_NEW_PLAY_API
         m_mixer.clear();
+        m_mixer.setFastForward(1);
+#else
+        m_engine.fastForward(100);
 #endif
         m_speed.current = 1;
-        m_engine.fastForward(100);
         if (m_cpudebug)
             m_engine.debug (true, nullptr);
     }
@@ -1168,13 +1172,21 @@ void ConsolePlayer::decodeKeys ()
             m_speed.current *= 2;
             if (m_speed.current > m_speed.max)
                 m_speed.current = m_speed.max;
-  
-            m_engine.fastForward (100 * m_speed.current);
+
+#ifdef FEAT_NEW_PLAY_API
+            m_mixer.setFastForward(m_speed.current);
+#else
+            m_engine.fastForward(100 * m_speed.current);
+#endif
         break;
 
         case A_DOWN_ARROW:
             m_speed.current = 1;
-            m_engine.fastForward (100);
+#ifdef FEAT_NEW_PLAY_API
+            m_mixer.setFastForward(1);
+#else
+            m_engine.fastForward(100);
+#endif
         break;
 
         case A_HOME:
