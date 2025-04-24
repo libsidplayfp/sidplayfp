@@ -810,9 +810,10 @@ bool ConsolePlayer::open (void)
     }
 
 #ifdef FEAT_FILTER_DISABLE
-    m_engine.filter(0, m_filter.enabled);
-    m_engine.filter(1, m_filter.enabled);
-    m_engine.filter(2, m_filter.enabled);
+    for (int chip=0; chip<3; chip++)
+    {
+        m_engine.filter(chip, m_filter.enabled);
+    }
 #endif
 #ifdef FEAT_REGS_DUMP_SID
     if (
@@ -832,20 +833,16 @@ bool ConsolePlayer::open (void)
     m_speed.current   = m_speed.max;
     m_engine.fastForward (100 * m_speed.current);
 
-    m_engine.mute(0, 0, m_mute_channel[0]);
-    m_engine.mute(0, 1, m_mute_channel[1]);
-    m_engine.mute(0, 2, m_mute_channel[2]);
-    m_engine.mute(1, 0, m_mute_channel[3]);
-    m_engine.mute(1, 1, m_mute_channel[4]);
-    m_engine.mute(1, 2, m_mute_channel[5]);
-    m_engine.mute(2, 0, m_mute_channel[6]);
-    m_engine.mute(2, 1, m_mute_channel[7]);
-    m_engine.mute(2, 2, m_mute_channel[8]);
+    for (int chip=0; chip<3; chip++)
+    {
+        for (int channel=0; channel<3; channel++)
+        {
+            m_engine.mute(chip, channel, m_mute_channel[chip*3 + channel]);
+        }
 #ifdef FEAT_SAMPLE_MUTE
-    m_engine.mute(0, 3, m_mute_samples[0]);
-    m_engine.mute(1, 3, m_mute_samples[1]);
-    m_engine.mute(2, 3, m_mute_samples[2]);
+        m_engine.mute(chip, 3, m_mute_samples[chip]);
 #endif
+    }
 
     // As yet we don't have a required songlength
     // so try the songlength database or keep the default
@@ -1136,7 +1133,7 @@ void ConsolePlayer::decodeKeys ()
             }
         break;
 
-        case A_UP_ARROW:     
+        case A_UP_ARROW:
             m_speed.current *= 2;
             if (m_speed.current > m_speed.max)
                 m_speed.current = m_speed.max;
@@ -1237,9 +1234,10 @@ void ConsolePlayer::decodeKeys ()
         case A_TOGGLE_FILTER:
             m_filter.enabled = !m_filter.enabled;
 #ifdef FEAT_FILTER_DISABLE
-            m_engine.filter(0, m_filter.enabled);
-            m_engine.filter(1, m_filter.enabled);
-            m_engine.filter(2, m_filter.enabled);
+        for (int chip=0; chip<3; chip++)
+        {
+            m_engine.filter(chip, m_filter.enabled);
+        }
 #else
             m_engCfg.sidEmulation->filter(m_filter.enabled);
 #endif
