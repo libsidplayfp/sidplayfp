@@ -25,8 +25,9 @@
 #include <cassert>
 #include <cstring>
 
-void Mixer::initialize(int chips, bool stereo)
+void Mixer::initialize(unsigned int chips, bool stereo)
 {
+    assert((chips >= 1) && (chips <= 3));
     m_channels = stereo ? 2 : 1;
     m_mix.resize(m_channels);
     m_chips = chips;
@@ -66,9 +67,9 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
         {
             int_least32_t sample = 0;
             const short *buffer = &buffers[c][start+i];
-            for (unsigned int j = 0; j < m_fastForwardFactor; j++)
+            for (unsigned int k = 0; k < m_fastForwardFactor; k++)
             {
-                sample += buffer[j];
+                sample += buffer[k];
             }
 
             m_iSamples[c] = sample / m_fastForwardFactor;
@@ -91,11 +92,11 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
 {
     uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
     uint_least32_t res = mix(buffers, 0, cnt, m_dest+m_pos);
-    m_pos += res * m_channels;
+    m_pos += res;
 
     // save remaining samples, if any
-    std::size_t const rem = static_cast<std::size_t>(samples - cnt);
-    m_buffer.resize(rem*m_channels);
+    uint_least32_t const rem = samples - cnt;
+    m_buffer.resize(static_cast<std::size_t>(rem)*m_channels);
     mix(buffers, cnt, rem, m_buffer.data());
 }
 

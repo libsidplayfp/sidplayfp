@@ -80,11 +80,11 @@ private:
      */
 
     // Mono mixing
-    template <int Chips>
+    template <unsigned int Chips>
     int_least32_t mono() const
     {
         int_least32_t res = 0;
-        for (int i = 0; i < Chips; i++)
+        for (unsigned int i = 0; i < Chips; i++)
             res += m_iSamples[i];
         return res * SCALE[Chips-1] / SCALE_FACTOR;
     }
@@ -113,7 +113,7 @@ private:
     inline uint_least32_t mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest);
 
 public:
-    void initialize(int chips, bool stereo);
+    void initialize(unsigned int chips, bool stereo);
 
     void begin(short *buffer, uint_least32_t length);
 
