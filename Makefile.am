@@ -45,6 +45,8 @@ src/keyboard.cpp \
 src/keyboard.h \
 src/main.cpp \
 src/menu.cpp \
+src/mixer.cpp \
+src/mixer.h \
 src/player.cpp \
 src/player.h \
 src/setting.h \

@@ -827,11 +827,19 @@ bool ConsolePlayer::open (void)
     else
         m_freqTable = freqTablePal;
 #endif
+#ifdef FEAT_NEW_PLAY_API
+    m_mixer.initialize(m_engine.installedSIDs(), m_engCfg.playback == SidConfig::STEREO);
+#endif
+
     // Start the player.  Do this by fast
     // forwarding to the start position
     m_driver.selected = &m_driver.null;
     m_speed.current   = m_speed.max;
-    m_engine.fastForward (100 * m_speed.current);
+#ifdef FEAT_NEW_PLAY_API
+    m_mixer.setFastForward(m_speed.current);
+#else
+    m_engine.fastForward(100 * m_speed.current);
+#endif
 
     for (int chip=0; chip<3; chip++)
     {
@@ -935,7 +943,6 @@ void ConsolePlayer::emuflush ()
     }
 }
 
-
 // Out play loop to be externally called
 bool ConsolePlayer::play()
 {
@@ -949,6 +956,28 @@ bool ConsolePlayer::play()
         // multiply by number of channels to get the count of 16bit samples
         const uint_least32_t length = getBufSize() * m_driver.cfg.channels;
         short *buffer = m_driver.selected->buffer();
+#ifdef FEAT_NEW_PLAY_API
+        m_mixer.begin(buffer, length);
+        short* buffers[3];
+        m_engine.buffers(buffers);
+
+        do
+        {
+            uint_least32_t samples = m_engine.play(2000);
+            if (!samples)
+            {
+                cerr << m_engine.error();
+                m_state = playerError;
+                return false;
+            }
+            m_mixer.doMix(buffers, samples);
+        }
+        while (!m_mixer.isFull());
+
+        // m_engine.play returns the number of 16bit samples
+        // divide by number of channels to get the count of frames
+        frames = length / m_driver.cfg.channels;
+#else
         uint_least32_t samples = m_engine.play(buffer, length);
         if ((samples < length) || !m_engine.isPlaying())
         {
@@ -959,6 +988,7 @@ bool ConsolePlayer::play()
         // m_engine.play returns the number of 16bit samples
         // divide by number of channels to get the count of frames
         frames = samples / m_driver.cfg.channels;
+#endif
     }
 #ifdef HAVE_UNISTD_H
     else
@@ -1027,8 +1057,13 @@ uint_least32_t ConsolePlayer::getBufSize()
         m_timer.starting = false;
         m_driver.selected = m_driver.device;
         m_driver.selected->clearBuffer();
-        m_speed.current = 1;
+#ifdef FEAT_NEW_PLAY_API
+        m_mixer.clear();
+        m_mixer.setFastForward(1);
+#else
         m_engine.fastForward(100);
+#endif
+        m_speed.current = 1;
         if (m_cpudebug)
             m_engine.debug (true, nullptr);
     }
@@ -1137,13 +1172,21 @@ void ConsolePlayer::decodeKeys ()
             m_speed.current *= 2;
             if (m_speed.current > m_speed.max)
                 m_speed.current = m_speed.max;
-  
-            m_engine.fastForward (100 * m_speed.current);
+
+#ifdef FEAT_NEW_PLAY_API
+            m_mixer.setFastForward(m_speed.current);
+#else
+            m_engine.fastForward(100 * m_speed.current);
+#endif
         break;
 
         case A_DOWN_ARROW:
             m_speed.current = 1;
-            m_engine.fastForward (100);
+#ifdef FEAT_NEW_PLAY_API
+            m_mixer.setFastForward(1);
+#else
+            m_engine.fastForward(100);
+#endif
         break;
 
         case A_HOME:

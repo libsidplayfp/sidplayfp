@@ -496,7 +496,11 @@ void ConsolePlayer::menu ()
         consoleTable  (table_t::separator);
         consoleTable (table_t::middle); cerr << "         NOTE PW         CONTROL          WAVEFORMS" << endl;
 
+#ifdef FEAT_NEW_PLAY_API
+        for (unsigned int i=0; i < m_engine.installedSIDs() * 3; i++)
+#else
         for (int i=0; i < tuneInfo->sidChips() * 3; i++)
+#endif
         {
             consoleTable (table_t::middle); cerr << endl; // reserve space for the Voice 3 status
         }
@@ -522,11 +526,15 @@ void ConsolePlayer::refreshRegDump()
 #ifdef FEAT_REGS_DUMP_SID
     if (m_verboseLevel > 1)
     {
-        const SidTuneInfo *tuneInfo = m_tune.getInfo();
+        unsigned int chips =
+#ifdef FEAT_NEW_PLAY_API
+            m_engine.installedSIDs();
+#else
+            m_tune.getInfo()->sidChips();
+#endif
+        cerr << "\x1b[" << chips * 3 + 1 << "A\r"; // Moves cursor X lines up
 
-        cerr << "\x1b[" << tuneInfo->sidChips() * 3 + 1 << "A\r"; // Moves cursor X lines up
-
-        for (int j=0; j < tuneInfo->sidChips(); j++)
+        for (unsigned int j=0; j < chips; j++)
         {
             uint8_t* registers = m_registers[j];
             uint8_t oldCtl[3];
