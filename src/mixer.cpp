@@ -62,11 +62,11 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
     uint_least32_t j = 0;
     for (uint_least32_t i=0; i<length;)
     {
-        for (int c=0; c<m_chips; c++)
+        for (unsigned int c=0; c<m_chips; c++)
         {
             int_least32_t sample = 0;
             const short *buffer = &buffers[c][start+i];
-            for (int j = 0; j < m_fastForwardFactor; j++)
+            for (unsigned int j = 0; j < m_fastForwardFactor; j++)
             {
                 sample += buffer[j];
             }
@@ -77,7 +77,7 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
         // increment i to mark we ate some samples, finish the boxcar thing.
         i += m_fastForwardFactor;
 
-        for (int c=0; c<m_channels; c++)
+        for (unsigned int c=0; c<m_channels; c++)
         {
             const int_least32_t tmp = (this->*(m_mix[c]))();
             assert(tmp >= -32768 && tmp <= 32767);
@@ -99,7 +99,7 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
     mix(buffers, cnt, rem, m_buffer.data());
 }
 
-bool Mixer::setFastForward(int ff)
+bool Mixer::setFastForward(unsigned int ff)
 {
     if (ff < 1 || ff > 32)
         return false;

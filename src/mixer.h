@@ -54,9 +54,9 @@ private:
 
     short* m_dest = nullptr;
 
-    int m_channels = 1;
-    int m_chips;
-    int m_fastForwardFactor = 1;
+    unsigned int m_channels = 1;
+    unsigned int m_chips;
+    unsigned int m_fastForwardFactor = 1;
 
     std::vector<int_least32_t> m_iSamples;
     std::vector<short> m_buffer;
@@ -129,7 +129,7 @@ public:
      * @param ff the fast forward ratio, from 1 to 32
      * @return true if parameter is valid, false otherwise
      */
-    bool setFastForward(int ff);
+    bool setFastForward(unsigned int ff);
 };
 
 #endif // MIXER_H
