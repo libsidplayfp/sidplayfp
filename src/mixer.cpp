@@ -94,7 +94,7 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
     m_pos += res * m_channels;
 
     // save remaining samples, if any
-    uint_least32_t const rem = samples - cnt;
+    std::size_t const rem = static_cast<std::size_t>(samples - cnt);
     m_buffer.resize(rem*m_channels);
     mix(buffers, cnt, rem, m_buffer.data());
 }
