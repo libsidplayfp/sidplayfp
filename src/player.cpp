@@ -963,8 +963,8 @@ bool ConsolePlayer::play()
 
         do
         {
-            uint_least32_t samples = m_engine.play(2000);
-            if (!samples)
+            int samples = m_engine.play(2000);
+            if (samples < 0)
             {
                 cerr << m_engine.error();
                 m_state = playerError;
