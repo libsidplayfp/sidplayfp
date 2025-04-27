@@ -1,7 +1,7 @@
 /*
  * This file is part of libsidplayfp, a SID player engine.
  *
- *  Copyright 2014-2015 Leandro Nini
+ *  Copyright 2014-2025 Leandro Nini
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,15 @@
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
+#endif
+
+#ifdef HAVE_CXX20
+#  define HAVE_CXX17
+#  define LIKELY [[ likely ]]
+#  define UNLIKELY [[ unlikely ]]
+#else
+#  define LIKELY
+#  define UNLIKELY
 #endif
 
 #ifdef HAVE_CXX17

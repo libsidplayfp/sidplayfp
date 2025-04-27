@@ -947,7 +947,7 @@ void ConsolePlayer::emuflush ()
 bool ConsolePlayer::play()
 {
     uint_least32_t frames = 0;
-    if (m_state == playerRunning)
+    if (m_state == playerRunning) LIKELY
     {
         updateDisplay();
 
@@ -964,7 +964,7 @@ bool ConsolePlayer::play()
         do
         {
             int samples = m_engine.play(2000);
-            if (samples < 0) // Unlikely
+            if (samples < 0) UNLIKELY
             {
                 cerr << m_engine.error();
                 m_state = playerError;
@@ -981,7 +981,7 @@ bool ConsolePlayer::play()
         frames = length / m_driver.cfg.channels;
 #else
         uint_least32_t samples = m_engine.play(buffer, length);
-        if ((samples < length) || !m_engine.isPlaying())
+        if ((samples < length) || !m_engine.isPlaying()) UNLIKELY
         {
             cerr << m_engine.error();
             m_state = playerError;
@@ -999,8 +999,8 @@ bool ConsolePlayer::play()
 
     switch (m_state)
     {
-    case playerRunning:
-        if (!m_driver.selected->write(frames))
+    LIKELY case playerRunning:
+        if (!m_driver.selected->write(frames)) UNLIKELY
         {
             cerr << m_driver.selected->getErrorString();
             m_state = playerError;
@@ -1054,7 +1054,7 @@ void ConsolePlayer::stop ()
 
 uint_least32_t ConsolePlayer::getBufSize()
 {
-    if (m_timer.starting && (m_timer.current >= m_timer.start))
+    if (m_timer.starting && (m_timer.current >= m_timer.start)) UNLIKELY
     {   // Switch audio drivers.
         m_timer.starting = false;
         m_driver.selected = m_driver.device;
@@ -1069,7 +1069,7 @@ uint_least32_t ConsolePlayer::getBufSize()
         if (m_cpudebug)
             m_engine.debug (true, nullptr);
     }
-    else if ((m_timer.stop != 0) && (m_timer.current >= m_timer.stop))
+    else if ((m_timer.stop != 0) && (m_timer.current >= m_timer.stop)) UNLIKELY
     {
         m_state = playerExit;
         if (m_track.loop)
