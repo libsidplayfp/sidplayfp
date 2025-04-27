@@ -201,13 +201,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (!parseAddress (&argv[i][3], m_engCfg.secondSidAddress))
                     err = true;
             }
-#ifdef FEAT_THIRD_SID
             else if (strncmp (&argv[i][1], "ts", 2) == 0)
             {   // Override sidTune and enable the third sid
                 if (!parseAddress (&argv[i][3], m_engCfg.thirdSidAddress))
                     err = true;
             }
-#endif
             else if (argv[i][1] == 'f')
             {
                 if (argv[i][2] == '\0')
@@ -350,12 +348,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_channels = 1;
             }
 
-#ifdef FEAT_DIGIBOOST
             else if (std::strcmp (&argv[i][1], "-digiboost") == 0)
             {
                 m_engCfg.digiBoost = true;
             }
-#endif
+
             // Video/Verbose Options
             else if (std::strcmp (&argv[i][1], "vnf") == 0)
             {
@@ -670,9 +667,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -ds<addr>    set second sid address (e.g. -ds0xd420)" << endl
-#ifdef FEAT_THIRD_SID
         << " -ts<addr>    set third sid address (e.g. -ts0xd440)" << endl
-#endif
 
         << " -u<num>      mute voice <num> (e.g. -u1 -u2)" << endl
 #ifdef FEAT_SAMPLE_MUTE
@@ -697,9 +692,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
         << "              Use 'f' to force the model" << endl
-#ifdef FEAT_DIGIBOOST
         << " --digiboost  Enable digiboost for 8580 model" << endl
-#endif
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
         << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl

@@ -366,9 +366,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.defaultC64Model = emulation.modelDefault;
         m_engCfg.defaultSidModel = emulation.sidModel;
         m_engCfg.forceSidModel   = emulation.forceModel;
-#ifdef FEAT_CONFIG_CIAMODEL
         m_engCfg.ciaModel        = emulation.ciaModel;
-#endif
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.samplingMethod = emulation.samplingMethod;
         m_engCfg.fastSampling = emulation.fastSampling;
@@ -856,11 +854,9 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-#ifdef FEAT_NEW_SONLEGTH_DB
-        const int_least32_t length = songlengthDB == sldb_t::MD5 ? m_database.lengthMs(m_tune) : (m_database.length(m_tune) * 1000);
-#else
-        const int_least32_t length = m_database.length(m_tune) * 1000;
-#endif
+        const int_least32_t length = songlengthDB == sldb_t::MD5
+            ? m_database.lengthMs(m_tune)
+            : (m_database.length(m_tune) * 1000);
         if (length > 0)
             m_timer.length = length;
     }
@@ -1104,13 +1100,8 @@ uint_least32_t ConsolePlayer::getBufSize()
 // External Timer Event
 void ConsolePlayer::updateDisplay()
 {
-#ifdef FEAT_NEW_SONLEGTH_DB
     const uint_least32_t milliseconds = m_engine.timeMs();
     const uint_least32_t seconds = milliseconds / 1000;
-#else
-    const uint_least32_t seconds = m_engine.time();
-    const uint_least32_t milliseconds = seconds * 1000;
-#endif
 
     refreshRegDump();
 
@@ -1156,11 +1147,7 @@ void ConsolePlayer::decodeKeys ()
             if (!m_track.single)
             {   // Only select previous song if less than timeout
                 // else restart current song
-#ifdef FEAT_NEW_SONLEGTH_DB
-    const uint_least32_t milliseconds = m_engine.timeMs();
-#else
-    const uint_least32_t milliseconds = m_engine.time() * 1000;
-#endif
+                const uint_least32_t milliseconds = m_engine.timeMs();
                 if (milliseconds < SID2_PREV_SONG_TIMEOUT)
                 {
                     m_track.selected--;

@@ -294,9 +294,7 @@ void ConsolePlayer::menu ()
         const uint_least32_t seconds = m_timer.stop / 1000;
         cerr << setw(2) << setfill('0') << ((seconds / 60) % 100)
              << ':' << setw(2) << setfill('0') << (seconds % 60);
-#ifdef FEAT_NEW_SONLEGTH_DB
         cerr << '.' << setw(3) << m_timer.stop % 1000;
-#endif
     }
     else if (m_timer.valid)
         cerr << "FOREVER";
@@ -353,31 +351,17 @@ void ConsolePlayer::menu ()
         cerr << " SID Details  : ";
         consoleColour (color_t::white, false);
         cerr << "Model = ";
-#ifdef FEAT_NEW_TUNEINFO_API
         cerr << getModel(tuneInfo->sidModel(0));
-#else
-        cerr << getModel(tuneInfo->sidModel1());
-#endif
         cerr << endl;
-#ifdef FEAT_NEW_TUNEINFO_API
         if (tuneInfo->sidChips() > 1)
-#else
-        if (tuneInfo->isStereo())
-#endif
         {
             consoleTable  (table_t::middle);
             consoleColour (color_t::yellow, true);
             cerr << "              : ";
             consoleColour (color_t::white, false);
-#ifdef FEAT_NEW_TUNEINFO_API
             cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase(1) << dec;
             cerr << ", Model = " << getModel(tuneInfo->sidModel(1));
-#else
-            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2() << dec;
-            cerr << ", Model = " << getModel(tuneInfo->sidModel2());
-#endif
             cerr << endl;
-#ifdef FEAT_NEW_TUNEINFO_API
             if (tuneInfo->sidChips() > 2)
             {
                 consoleTable  (table_t::middle);
@@ -388,7 +372,6 @@ void ConsolePlayer::menu ()
                 cerr << ", Model = " << getModel(tuneInfo->sidModel(2));
                 cerr << endl;
             }
-#endif
         }
 
         consoleTable  (table_t::separator);
@@ -410,13 +393,13 @@ void ConsolePlayer::menu ()
         cerr << " SID Filter   : ";
         consoleColour (color_t::white, false);
         cerr << (m_filter.enabled ? "Yes" : "No") << endl;
-#ifdef FEAT_DIGIBOOST
+
         consoleTable  (table_t::middle);
         consoleColour (color_t::yellow, true);
         cerr << " DigiBoost    : ";
         consoleColour (color_t::white, false);
         cerr << (m_engCfg.digiBoost ? "Yes" : "No") << endl;
-#endif
+
         consoleTable  (table_t::middle);
         consoleColour (color_t::yellow, true);
         cerr << " SID Model    : ";
