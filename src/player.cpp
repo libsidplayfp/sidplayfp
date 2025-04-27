@@ -964,13 +964,15 @@ bool ConsolePlayer::play()
         do
         {
             int samples = m_engine.play(2000);
-            if (samples < 0)
+            if (samples < 0) // Unlikely
             {
                 cerr << m_engine.error();
                 m_state = playerError;
                 return false;
             }
-            m_mixer.doMix(buffers, samples);
+            if (samples > 0)
+                m_mixer.doMix(buffers, samples);
+            else break;
         }
         while (!m_mixer.isFull());
 
