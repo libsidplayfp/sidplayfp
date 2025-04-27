@@ -57,7 +57,7 @@ class Audio_OSS: public AudioBase
 {
 private:  // ------------------------------------------------------- private
     static   const char AUDIODEVICE[];
-    volatile int   _audiofd;
+    int m_audiofd;
 
     int m_frameSize;
 
