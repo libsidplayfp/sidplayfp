@@ -82,7 +82,7 @@ AS_IF([test "x$ac_cv_header_soundcard_h" = "xyes"],
 
 AC_SUBST(AUDIO_LDFLAGS)
 
-PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
+PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 USE_LIBOUT123=no

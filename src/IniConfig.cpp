@@ -112,9 +112,7 @@ void IniConfig::clear()
     emulation_s.modelForced   = false;
     emulation_s.sidModel      = SidConfig::MOS6581;
     emulation_s.forceModel    = false;
-#ifdef FEAT_CONFIG_CIAMODEL
     emulation_s.ciaModel      = SidConfig::MOS6526;
-#endif
     emulation_s.filter        = true;
     emulation_s.engine.clear();
 
@@ -406,7 +404,6 @@ void IniConfig::readEmulation(iniHandler &ini)
 
     readBool(ini, TEXT("ForceC64Model"), emulation_s.modelForced);
     readBool(ini, TEXT("DigiBoost"), emulation_s.digiboost);
-#ifdef FEAT_CONFIG_CIAMODEL
     {
         SID_STRING str = readString(ini, TEXT("CiaModel"));
         if (!str.empty())
@@ -417,7 +414,6 @@ void IniConfig::readEmulation(iniHandler &ini)
                 emulation_s.ciaModel = SidConfig::MOS8521;
         }
     }
-#endif
     {
         SID_STRING str = readString(ini, TEXT("SidModel"));
         if (!str.empty())
