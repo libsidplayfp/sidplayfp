@@ -25,6 +25,8 @@
 #include <cassert>
 #include <cstring>
 
+#include "sidcxx11.h"
+
 void Mixer::initialize(unsigned int chips, bool stereo)
 {
     assert((chips >= 1) && (chips <= 3));
@@ -55,7 +57,8 @@ void Mixer::begin(short *buffer, uint_least32_t length)
     m_dest_size = length;
 
     m_pos = m_buffer.size();
-    std::memcpy(m_dest, m_buffer.data(), m_pos*sizeof(short));
+    if (m_pos) LIKELY
+        std::memcpy(m_dest, m_buffer.data(), m_pos*sizeof(short));
 }
 
 uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest)
