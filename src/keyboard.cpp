@@ -37,8 +37,8 @@
 int _getch (void);
 #endif
 
-#define MAX_CMDLEN 10
-#define ESC '\033'
+constexpr int MAX_CMDLEN = 10;
+constexpr char ESC = '\033';
 
 // Special Extended Key Definitions
 enum
