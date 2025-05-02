@@ -94,13 +94,16 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
 void Mixer::doMix(short** buffers, uint_least32_t samples)
 {
     uint_least32_t const cnt = std::min(samples, (m_dest_size-m_pos)/m_channels);
-    uint_least32_t res = mix(buffers, 0, cnt, m_dest+m_pos);
+    uint_least32_t const res = mix(buffers, 0, cnt, m_dest+m_pos);
     m_pos += res;
 
     // save remaining samples, if any
     uint_least32_t const rem = samples - cnt;
-    m_buffer.resize(static_cast<std::size_t>(rem)*m_channels);
-    mix(buffers, cnt, rem, m_buffer.data());
+    if (rem)
+    {
+        m_buffer.resize(static_cast<std::size_t>(rem)*m_channels);
+        mix(buffers, cnt, rem, m_buffer.data());
+    }
 }
 
 bool Mixer::setFastForward(unsigned int ff)
