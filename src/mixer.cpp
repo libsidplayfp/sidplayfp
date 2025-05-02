@@ -66,20 +66,33 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
     uint_least32_t j = 0;
     for (uint_least32_t i=0; i<length;)
     {
-        for (unsigned int c=0; c<m_chips; c++)
+        if (m_fastForwardFactor == 1) LIKELY
         {
-            int_least32_t sample = 0;
-            const short *buffer = &buffers[c][start+i];
-            for (unsigned int k = 0; k < m_fastForwardFactor; k++)
+            for (unsigned int c=0; c<m_chips; c++)
             {
-                sample += buffer[k];
+                m_iSamples[c] = buffers[c][start+i];
             }
 
-            m_iSamples[c] = sample / m_fastForwardFactor;
+            i++;
         }
+        else
+        {
+            for (unsigned int c=0; c<m_chips; c++)
+            {
+                // Apply boxcar filter
+                int_least32_t sample = 0;
+                const short *buffer = &buffers[c][start+i];
+                for (unsigned int k = 0; k < m_fastForwardFactor; k++)
+                {
+                    sample += buffer[k];
+                }
 
-        // increment i to mark we ate some samples, finish the boxcar thing.
-        i += m_fastForwardFactor;
+                m_iSamples[c] = sample / m_fastForwardFactor;
+            }
+
+            // increment i to mark we ate some samples.
+            i += m_fastForwardFactor;
+        }
 
         for (unsigned int c=0; c<m_channels; c++)
         {
