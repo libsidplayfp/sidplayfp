@@ -676,7 +676,7 @@ void ConsolePlayer::consoleTable (table_t table)
 void ConsolePlayer::consoleRestore ()
 {
     if ((m_iniCfg.console ()).ansi) {
-    cerr << '\x1b' << "[?25h";
+        cerr << '\x1b' << "[?25h";
         cerr << '\x1b' << "[0m";
     }
 }
