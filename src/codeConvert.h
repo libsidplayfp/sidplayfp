@@ -27,6 +27,11 @@
 
 #ifdef HAVE_ICONV
 #  include <clocale>
+#  ifdef __FreeBSD__
+     // workaround a FreeBSD issue
+     // https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=275969
+#    define LIBICONV_PLUG
+#  endif
 #  include <iconv.h>
 #ifndef _WIN32
 #  include <langinfo.h>
