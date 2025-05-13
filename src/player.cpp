@@ -890,7 +890,9 @@ bool ConsolePlayer::open (void)
 
 void ConsolePlayer::close ()
 {
+#ifndef FEAT_NEW_PLAY_API
     m_engine.stop();
+#endif
     if (m_state == playerExit)
     {   // Natural finish
         emuflush ();
@@ -1013,7 +1015,9 @@ bool ConsolePlayer::play()
     default:
         if (m_quietLevel < 2)
             cerr << endl;
+#ifndef FEAT_NEW_PLAY_API
         m_engine.stop ();
+#endif
 #if HAVE_TSID == 1
         if (m_tsid)
         {
@@ -1044,7 +1048,9 @@ bool ConsolePlayer::play()
 void ConsolePlayer::stop ()
 {
     m_state = playerStopped;
+#ifndef FEAT_NEW_PLAY_API
     m_engine.stop ();
+#endif
 }
 
 
