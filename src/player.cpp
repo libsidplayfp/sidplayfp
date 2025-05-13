@@ -968,6 +968,8 @@ bool ConsolePlayer::play()
                 m_state = playerError;
                 return false;
             }
+            if (!buffer) UNLIKELY
+                break;
             if (samples > 0)
                 m_mixer.doMix(buffers, samples);
             else break;
