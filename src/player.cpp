@@ -834,6 +834,7 @@ bool ConsolePlayer::open (void)
     m_driver.selected = &m_driver.null;
     m_speed.current   = m_speed.max;
 #ifdef FEAT_NEW_PLAY_API
+    m_mixer.clear();
     m_mixer.setFastForward(m_speed.current);
 #else
     m_engine.fastForward(100 * m_speed.current);
