@@ -41,6 +41,7 @@ src_sidplayfp_SOURCES = \
 src/IniConfig.cpp \
 src/IniConfig.h \
 src/args.cpp \
+src/dataParser.h \
 src/keyboard.cpp \
 src/keyboard.h \
 src/main.cpp \
@@ -81,7 +82,6 @@ src/audio/wav/WavFile.cpp \
 src/audio/wav/WavFile.h \
 src/ini/iniHandler.h \
 src/ini/iniHandler.cpp \
-src/ini/dataParser.h \
 src/ini/sidfstream.h \
 src/ini/types.h
 

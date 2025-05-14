@@ -45,7 +45,7 @@
 #endif
 
 #include "utils.h"
-#include "ini/dataParser.h"
+#include "dataParser.h"
 
 #include "sidcxx11.h"
 
