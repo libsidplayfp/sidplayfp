@@ -22,6 +22,7 @@
 #include "player.h"
 
 #include <cstdlib>
+#include <cmath>
 #include <cstring>
 #include <iostream>
 #include <iomanip>
@@ -578,6 +579,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
              << " audio channels not supported" << endl;
         return false;
     }
+
     return true;
 }
 
@@ -839,6 +841,7 @@ bool ConsolePlayer::open (void)
 #else
     m_engine.fastForward(100 * m_speed.current);
 #endif
+    m_mixer.setVolume(Mixer::VOLUME_MAX);
 
     for (int chip=0; chip<3; chip++)
     {
@@ -949,6 +952,20 @@ bool ConsolePlayer::play()
     if (m_state == playerRunning) LIKELY
     {
         updateDisplay();
+
+        // fadeout
+        constexpr uint_least32_t m_fadeoutTime = 10; // TODO make configurable
+        const uint_least32_t fadeoutTime = m_fadeoutTime*1000;
+        if (fadeoutTime && m_timer.stop > fadeoutTime)
+        {
+            const uint_least32_t timeleft = m_timer.stop - m_timer.current;
+            if (timeleft <= fadeoutTime) UNLIKELY
+            {
+                double a = (double)timeleft / fadeoutTime;
+                double v = a / (1. + (1.-a)*0.25);
+                m_mixer.setVolume(Mixer::VOLUME_MAX * v);
+            }
+        }
 
         // Fill buffer
         // getBufSize returns the number of frames
