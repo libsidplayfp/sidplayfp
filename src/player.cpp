@@ -838,10 +838,10 @@ bool ConsolePlayer::open (void)
 #ifdef FEAT_NEW_PLAY_API
     m_mixer.clear();
     m_mixer.setFastForward(m_speed.current);
+    m_mixer.setVolume(Mixer::VOLUME_MAX);
 #else
     m_engine.fastForward(100 * m_speed.current);
 #endif
-    m_mixer.setVolume(Mixer::VOLUME_MAX);
 
     for (int chip=0; chip<3; chip++)
     {
@@ -952,7 +952,7 @@ bool ConsolePlayer::play()
     if (m_state == playerRunning) LIKELY
     {
         updateDisplay();
-
+#ifdef FEAT_NEW_PLAY_API
         // fadeout
         const uint_least32_t fadeoutTime = m_fadeoutTime*1000;
         if (fadeoutTime && (m_timer.stop > fadeoutTime)) UNLIKELY
@@ -965,7 +965,7 @@ bool ConsolePlayer::play()
                 m_mixer.setVolume(Mixer::VOLUME_MAX * v);
             }
         }
-
+#endif
         // Fill buffer
         // getBufSize returns the number of frames
         // multiply by number of channels to get the count of 16bit samples

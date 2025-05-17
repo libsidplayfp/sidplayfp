@@ -42,7 +42,9 @@ public:
         SID_STRING     database;
         uint_least32_t playLength;
         uint_least32_t recordLength;
+#ifdef FEAT_NEW_PLAY_API
         uint_least32_t fadeoutLength;
+#endif
         SID_STRING     kernalRom;
         SID_STRING     basicRom;
         SID_STRING     chargenRom;
