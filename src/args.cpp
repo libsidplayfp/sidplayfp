@@ -168,6 +168,8 @@ int ConsolePlayer::args(int argc, const char *argv[])
     m_driver.file   = false;
     m_driver.info   = false;
 
+    m_fadeoutTime = m_iniCfg.sidplay2().fadeoutLength;
+
     m_mute_channel.reset();
 
     int  infile = 0;

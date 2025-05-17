@@ -42,6 +42,7 @@ public:
         SID_STRING     database;
         uint_least32_t playLength;
         uint_least32_t recordLength;
+        uint_least32_t fadeoutLength;
         SID_STRING     kernalRom;
         SID_STRING     basicRom;
         SID_STRING     chargenRom;

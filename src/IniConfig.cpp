@@ -88,6 +88,7 @@ void IniConfig::clear()
     sidplay2_s.database.clear();
     sidplay2_s.playLength   = 0;           // INFINITE
     sidplay2_s.recordLength = (3 * 60 + 30) * 1000; // 3.5 minutes
+    sidplay2_s.fadeoutLength = 0;           // NONE
     sidplay2_s.kernalRom.clear();
     sidplay2_s.basicRom.clear();
     sidplay2_s.chargenRom.clear();
@@ -339,6 +340,8 @@ void IniConfig::readSidplay2(iniHandler &ini)
         sidplay2_s.playLength = time;
     if (readTime(ini, TEXT("Default Record Length"), time))
         sidplay2_s.recordLength = time;
+    if (readTime(ini, TEXT("Fade Out Length"), time))
+        sidplay2_s.fadeoutLength = time;
 
     sidplay2_s.kernalRom = readString(ini, TEXT("Kernal Rom"));
     sidplay2_s.basicRom = readString(ini, TEXT("Basic Rom"));

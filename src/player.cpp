@@ -421,8 +421,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
     m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
 
-    m_fadeoutTime = 0;
-
     createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
 
@@ -957,7 +955,7 @@ bool ConsolePlayer::play()
 
         // fadeout
         const uint_least32_t fadeoutTime = m_fadeoutTime*1000;
-        if (fadeoutTime && m_timer.stop > fadeoutTime)
+        if (fadeoutTime && (m_timer.stop > fadeoutTime)) UNLIKELY
         {
             const uint_least32_t timeleft = m_timer.stop - m_timer.current;
             if (timeleft <= fadeoutTime) UNLIKELY
