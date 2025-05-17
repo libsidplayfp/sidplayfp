@@ -421,6 +421,8 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
     m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
 
+    m_fadeoutTime = 0;
+
     createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
 
@@ -954,7 +956,6 @@ bool ConsolePlayer::play()
         updateDisplay();
 
         // fadeout
-        constexpr uint_least32_t m_fadeoutTime = 10; // TODO make configurable
         const uint_least32_t fadeoutTime = m_fadeoutTime*1000;
         if (fadeoutTime && m_timer.stop > fadeoutTime)
         {

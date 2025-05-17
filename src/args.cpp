@@ -206,6 +206,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (!parseAddress (&argv[i][3], m_engCfg.thirdSidAddress))
                     err = true;
             }
+            else if (strncmp (&argv[i][1], "fo", 2) == 0)
+            {
+                if (argv[i][3] == '\0')
+                    err = true;
+                m_fadeoutTime = (uint_least32_t) atoi (&argv[i][3]);
+            }
             else if (argv[i][1] == 'f')
             {
                 if (argv[i][2] == '\0')
@@ -663,6 +669,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " --help|-h    display this screen" << endl
         << " --help-debug debug help menu" << endl
         << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
+        << " -fo<num>     set fade-out time in seconds (default: 0)" << endl
 
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl

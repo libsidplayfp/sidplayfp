@@ -168,6 +168,8 @@ private:
     SidConfig::sid_cw_t m_combinedWaveformsStrength;
 #endif
 
+    uint_least32_t     m_fadeoutTime;
+
 #ifdef FEAT_REGS_DUMP_SID
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
