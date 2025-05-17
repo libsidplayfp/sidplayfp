@@ -40,6 +40,28 @@
 class Mixer
 {
 private:
+    // random number generator for dithering
+    template <int MAX_VAL>
+    class randomLCG
+    {
+    static_assert((MAX_VAL != 0) && ((MAX_VAL & (MAX_VAL - 1)) == 0), "MAX_VAL must be a power of two");
+
+    private:
+        uint32_t rand_seed;
+
+    public:
+        randomLCG(uint32_t seed) :
+            rand_seed(seed)
+        {}
+
+        int get()
+        {
+            rand_seed = (214013 * rand_seed + 2531011);
+            return static_cast<int>((rand_seed >> 16) & (MAX_VAL-1));
+        }
+    };
+
+private:
     static constexpr int_least32_t SCALE_FACTOR = 1 << 16;
 
 #if defined(HAVE_CXX20) && defined(__cpp_lib_math_constants)
@@ -59,6 +81,12 @@ private:
 private:
     using mixer_func_t = int_least32_t (Mixer::*)() const;
 
+    using scale_func_t = int (Mixer::*)(unsigned int);
+
+public:
+    /// Maximum allowed volume, must be a power of 2.
+    static constexpr unsigned int VOLUME_MAX = 1024;
+
 private:
     uint_least32_t m_pos = 0;
     uint_least32_t m_dest_size = 0;
@@ -67,13 +95,37 @@ private:
 
     unsigned int m_channels = 1;
     unsigned int m_chips;
+    int m_oldRandomValue = 0;
     unsigned int m_fastForwardFactor = 1;
+
+    int_least32_t m_volume;
+    scale_func_t m_scale;
 
     std::vector<int_least32_t> m_iSamples;
     std::vector<short> m_buffer;
     std::vector<mixer_func_t> m_mix;
 
+    randomLCG<VOLUME_MAX> m_rand;
+
 private:
+    int_least32_t triangularDithering()
+    {
+        const int prevValue = m_oldRandomValue;
+        m_oldRandomValue = m_rand.get();
+        return static_cast<int_least32_t>(m_oldRandomValue - prevValue);
+    }
+
+    int scale(unsigned int ch)
+    {
+        const int_least32_t sample = (this->*(m_mix[ch]))();
+        return (sample * m_volume + triangularDithering()) / VOLUME_MAX;
+    }
+
+    int noScale(unsigned int ch)
+    {
+        return (this->*(m_mix[ch]))();
+    }
+
     /*
      * Channel matrix
      *
@@ -125,6 +177,8 @@ private:
     inline uint_least32_t mix(short** buffers, uint_least32_t start, uint_least32_t length, short* dest);
 
 public:
+    Mixer();
+
     void initialize(unsigned int chips, bool stereo);
 
     void begin(short *buffer, uint_least32_t length);
@@ -134,6 +188,13 @@ public:
     bool isFull() const { return m_pos >= m_dest_size; }
 
     void clear() { m_buffer.resize(0); }
+
+    /**
+     * Set mixing volumes.
+     *
+     * @param vol volume, from 0 to #VOLUME_MAX
+     */
+    void setVolume(unsigned int vol);
 
     /**
      * Set the fast forward ratio.

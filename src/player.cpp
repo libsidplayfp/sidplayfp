@@ -22,6 +22,7 @@
 #include "player.h"
 
 #include <cstdlib>
+#include <cmath>
 #include <cstring>
 #include <iostream>
 #include <iomanip>
@@ -578,6 +579,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
              << " audio channels not supported" << endl;
         return false;
     }
+
     return true;
 }
 
@@ -836,6 +838,7 @@ bool ConsolePlayer::open (void)
 #ifdef FEAT_NEW_PLAY_API
     m_mixer.clear();
     m_mixer.setFastForward(m_speed.current);
+    m_mixer.setVolume(Mixer::VOLUME_MAX);
 #else
     m_engine.fastForward(100 * m_speed.current);
 #endif
@@ -949,7 +952,20 @@ bool ConsolePlayer::play()
     if (m_state == playerRunning) LIKELY
     {
         updateDisplay();
-
+#ifdef FEAT_NEW_PLAY_API
+        // fadeout
+        const uint_least32_t fadeoutTime = m_fadeoutTime*1000;
+        if (fadeoutTime && (m_timer.stop > fadeoutTime)) UNLIKELY
+        {
+            const uint_least32_t timeleft = m_timer.stop - m_timer.current;
+            if (timeleft <= fadeoutTime) UNLIKELY
+            {
+                double a = (double)timeleft / fadeoutTime;
+                double v = a / (1. + (1.-a)*0.25);
+                m_mixer.setVolume(Mixer::VOLUME_MAX * v);
+            }
+        }
+#endif
         // Fill buffer
         // getBufSize returns the number of frames
         // multiply by number of channels to get the count of 16bit samples

@@ -25,6 +25,12 @@
 #include <cassert>
 #include <cstring>
 
+Mixer::Mixer() :
+    m_rand(257254)
+{
+    setVolume(VOLUME_MAX);
+}
+
 void Mixer::initialize(unsigned int chips, bool stereo)
 {
     assert((chips >= 1) && (chips <= 3));
@@ -94,7 +100,7 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
 
         for (unsigned int c=0; c<m_channels; c++)
         {
-            const int_least32_t tmp = (this->*(m_mix[c]))();
+            const int_least32_t tmp = (this->*(m_scale))(c);
             assert(tmp >= -32768 && tmp <= 32767);
             dest[j++] = static_cast<short>(tmp);
         }
@@ -115,6 +121,14 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
         m_buffer.resize(static_cast<std::size_t>(rem)*m_channels);
         mix(buffers, cnt, rem, m_buffer.data());
     }
+}
+
+void Mixer::setVolume(unsigned int vol)
+{
+    assert(vol <= VOLUME_MAX);
+    m_volume = vol;
+
+    m_scale = (vol == VOLUME_MAX) ? &Mixer::noScale : &Mixer::scale;
 }
 
 bool Mixer::setFastForward(unsigned int ff)
