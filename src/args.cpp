@@ -167,9 +167,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
     m_driver.output = output_t::SOUNDCARD;
     m_driver.file   = false;
     m_driver.info   = false;
-#ifdef FEAT_NEW_PLAY_API
-    m_fadeoutTime = m_iniCfg.sidplay2().fadeoutLength;
-#endif
+
     m_mute_channel.reset();
 
     int  infile = 0;
@@ -533,10 +531,10 @@ int ConsolePlayer::args(int argc, const char *argv[])
 
         i++;  // next index
     }
-
+#ifdef FEAT_NEW_PLAY_API
     // convert to milliseconds
     m_fadeoutTime *= 1000;
-
+#endif
     const char* hvscBase = getenv("HVSC_BASE");
 
     // Load the tune
