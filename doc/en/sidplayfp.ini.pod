@@ -55,7 +55,7 @@ Default recording time when writing wave files if Songlength Database is not fou
 
 =item B<Kernal Rom>=I<< <path> >>
 
-Full path for the Kernal Rom file. This is the most important rom and should always be provided, although many tunes will still work without.
+Full path for the Kernal Rom file. This is the most important ROM and should always be provided, although many tunes will still work without.
 By default the program will look for a file named F<kernal> under the following locations:
 
 =over
