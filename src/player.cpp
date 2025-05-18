@@ -22,6 +22,7 @@
 #include "player.h"
 
 #include <cstdlib>
+#include <cmath>
 #include <cstring>
 #include <iostream>
 #include <iomanip>
@@ -419,7 +420,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     }
 
     m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
-
+#ifdef FEAT_NEW_PLAY_API
+    m_fadeoutTime = 0;
+#endif
     createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
 
@@ -575,6 +578,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
              << " audio channels not supported" << endl;
         return false;
     }
+
     return true;
 }
 
@@ -833,6 +837,7 @@ bool ConsolePlayer::open (void)
 #ifdef FEAT_NEW_PLAY_API
     m_mixer.clear();
     m_mixer.setFastForward(m_speed.current);
+    m_mixer.setVolume(Mixer::VOLUME_MAX);
 #else
     m_engine.fastForward(100 * m_speed.current);
 #endif
@@ -861,6 +866,9 @@ bool ConsolePlayer::open (void)
 
     // Set up the play timer
     m_timer.stop = m_timer.length;
+#ifdef FEAT_NEW_PLAY_API
+    m_timer.stop += m_fadeoutTime;
+#endif
 
     if (m_timer.valid)
     {   // Length relative to start
@@ -946,7 +954,20 @@ bool ConsolePlayer::play()
     if (m_state == playerRunning) LIKELY
     {
         updateDisplay();
-
+#ifdef FEAT_NEW_PLAY_API
+        // fadeout
+        const uint_least32_t fadeoutTime = m_fadeoutTime;
+        if (fadeoutTime && (m_timer.stop > fadeoutTime)) UNLIKELY
+        {
+            const uint_least32_t timeleft = m_timer.stop - m_timer.current;
+            if (timeleft <= fadeoutTime) UNLIKELY
+            {
+                double a = (double)timeleft / fadeoutTime;
+                double v = a / (1. + (1.-a)*0.25);
+                m_mixer.setVolume(Mixer::VOLUME_MAX * v);
+            }
+        }
+#endif
         // Fill buffer
         // getBufSize returns the number of frames
         // multiply by number of channels to get the count of 16bit samples

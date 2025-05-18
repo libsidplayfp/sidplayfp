@@ -167,7 +167,9 @@ private:
 #ifdef FEAT_CW_STRENGTH
     SidConfig::sid_cw_t m_combinedWaveformsStrength;
 #endif
-
+#ifdef FEAT_NEW_PLAY_API
+    uint_least32_t     m_fadeoutTime;
+#endif
 #ifdef FEAT_REGS_DUMP_SID
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
