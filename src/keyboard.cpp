@@ -68,10 +68,10 @@ static char keytable[] =
     ESC,'[','D',0,          A_LEFT_ARROW,
     ESC,'[','A',0,          A_UP_ARROW,
     ESC,'[','B',0,          A_DOWN_ARROW,
-    // Hmm, in consile there:
+    // Hmm, in console there is:
     ESC,'[','1','~',0,      A_HOME,
     ESC,'[','4','~',0,      A_END,
-    // But in X there:
+    // But in X it's:
     ESC,'[','H',0,          A_HOME,
     ESC,'[','F',0,          A_END,
 

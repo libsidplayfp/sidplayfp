@@ -115,9 +115,9 @@ uint16_t freqTableNtsc[]
 };
 #endif
 
-// This tables contains chip-profiles which allow us to adjust
+// This tables contains chip profiles which allow us to adjust
 // certain settings that varied wildly between 6581 chips, even
-// made in the same factory on the same day.
+// those made in the same factory on the same day.
 //
 // This works under the assumption that the authors used the
 // same SID chip their entire career.

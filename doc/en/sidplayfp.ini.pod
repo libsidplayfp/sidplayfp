@@ -181,14 +181,14 @@ Set the SID emulation engine. Default is RESIDFP.
 
 =item B<C64Model>=I<< <PAL|NTSC|OLD_NTSC|DREAN> >>
 
-Default c64 model to use if not specified by tune, PAL for
+Default C64 model to use if not specified by tune, PAL for
 european PAL-B model, NTSC for american/japanese NTSC-M models,
 OLD_NTSC for NTSC-M models with old video chip and DREAN
 for argentinian PAL-N model. Default is PAL.
 
 =item B<ForceC64Model>=I<true|false>
 
-Force the configured c64 model even if the tune specifies one.
+Force the configured C64 model even if the tune specifies one.
 
 =item B<CiaModel>=I<< <MOS6526|MOS8521> >>
 
@@ -241,12 +241,12 @@ emulation.  The default value is AVERAGE.
 
 =item B<PowerOnDelay>=I<< <number> >>
 
-The c64 power on delay as number of cpu cycles.
+The C64 power on delay in number of CPU cycles.
 If greater than 8191 the delay will be random.
 
 =item B<Sampling>=I<< <INTERPOLATE|RESAMPLE> >>
 
-Set resampling mode.  'Interpolation (less expensive) or
+Set resampling mode:  Interpolation (less expensive) or
 resampling (accurate).
 
 =item B<FastSampling>=I<< <true|false> >>

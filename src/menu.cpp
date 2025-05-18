@@ -485,7 +485,7 @@ void ConsolePlayer::menu ()
         for (int i=0; i < tuneInfo->sidChips() * 3; i++)
 #endif
         {
-            consoleTable (table_t::middle); cerr << endl; // reserve space for the Voice 3 status
+            consoleTable (table_t::middle); cerr << endl; // reserve space for each voice's status
         }
     }
 #endif
