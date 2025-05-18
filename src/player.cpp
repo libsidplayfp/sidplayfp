@@ -27,6 +27,7 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <memory>
 #include <new>
 
 using std::cout;
@@ -255,7 +256,7 @@ double getRecommendedFilterCurve(const std::string& author)
 }
 #endif
 
-uint8_t* loadRom(const SID_STRING &romPath, const int size)
+std::unique_ptr<uint8_t[]> loadRom(const SID_STRING &romPath, const int size)
 {
     SID_IFSTREAM is(romPath.c_str(), std::ios::binary);
 
@@ -263,15 +264,14 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size)
     {
         try
         {
-            uint8_t *buffer = new uint8_t[size];
+            std::unique_ptr<uint8_t[]> buffer(new uint8_t[size]);
 
-            is.read((char*)buffer, size);
+            is.read((char*)buffer.get(), size);
             if (!is.fail())
             {
                 is.close();
                 return buffer;
             }
-            delete [] buffer;
         }
         catch (std::bad_alloc const &ba) {}
     }
@@ -280,12 +280,12 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size)
 }
 
 
-uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultRom[])
+std::unique_ptr<uint8_t[]> loadRom(const SID_STRING &romPath, const int size, const TCHAR* defaultRom)
 {
     // Try to load given rom
     if (!romPath.empty())
     {
-        uint8_t* buffer = loadRom(romPath, size);
+        std::unique_ptr<uint8_t[]> buffer = loadRom(romPath, size);
         if (buffer)
             return buffer;
     }
@@ -298,7 +298,7 @@ uint8_t* loadRom(const SID_STRING &romPath, const int size, const TCHAR defaultR
             // Try exec dir first
             SID_STRING execPath(utils::getExecPath());
             execPath.append(SEPARATOR).append(defaultRom);
-            uint8_t* buffer = loadRom(execPath, size);
+            std::unique_ptr<uint8_t[]> buffer = loadRom(execPath, size);
             if (buffer)
                 return buffer;
         }
@@ -423,13 +423,10 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
 
-    uint8_t *kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
-    uint8_t *basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, TEXT("basic"));
-    uint8_t *chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, TEXT("chargen"));
-    m_engine.setRoms(kernalRom, basicRom, chargenRom);
-    delete [] kernalRom;
-    delete [] basicRom;
-    delete [] chargenRom;
+    std::unique_ptr<uint8_t[]> kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
+    std::unique_ptr<uint8_t[]> basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, TEXT("basic"));
+    std::unique_ptr<uint8_t[]> chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, TEXT("chargen"));
+    m_engine.setRoms(kernalRom.get(), basicRom.get(), chargenRom.get());
 }
 
 std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo, const char* ext)
