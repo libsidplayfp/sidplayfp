@@ -17,8 +17,8 @@ B<Sidplayfp> is a music player that emulates various components from a
 Commodore 64 (C64) computer.  The result is a program which can load
 and execute C64 machine code programs which produce music and sound.
 Sidplayfp has been designed for accuracy which results in a quite high
-cpu usage.  Additional playback modes have however been provided to
-allow playback on low specification machines at the cost of accuracy.
+CPU usage.  Additional playback modes have, however, been provided to
+allow playback on low-spec machines at the cost of said accuracy.
 
 
 =head1 OPTIONS
@@ -175,12 +175,12 @@ Use exSID device.
 
 =item B<--cpu-debug>
 
-Display cpu register and assembly dumps, available only
+Display CPU register and assembly dumps, available only
 for debug builds.
 
 =item B<--delay=>I<< [num] >>
 
-Simulate c64 power on delay as number of cpu cycles.
+Simulate C64 power on delay as number of CPU cycles.
 If greater than 8191 the delay will be random.
 This is the default.
 
@@ -280,15 +280,15 @@ The configuration file. See L<sidplayfp.ini(5)> for further details.
 
 =item F<kernal>
 
-The c64 kernal rom dump file.
+The C64 kernal rom dump file.
 
 =item F<basic>
 
-The c64 basic rom dump file.
+The C64 basic rom dump file.
 
 =item F<chargen>
 
-The c64 character generator rom dump file.
+The C64 character generator rom dump file.
 
 =back
 
