@@ -866,7 +866,7 @@ bool ConsolePlayer::open (void)
     }
 
     // Set up the play timer
-    m_timer.stop = m_timer.length;
+    m_timer.stop = m_timer.length + m_fadeoutTime;
 
     if (m_timer.valid)
     {   // Length relative to start
@@ -954,7 +954,7 @@ bool ConsolePlayer::play()
         updateDisplay();
 #ifdef FEAT_NEW_PLAY_API
         // fadeout
-        const uint_least32_t fadeoutTime = m_fadeoutTime*1000;
+        const uint_least32_t fadeoutTime = m_fadeoutTime;
         if (fadeoutTime && (m_timer.stop > fadeoutTime)) UNLIKELY
         {
             const uint_least32_t timeleft = m_timer.stop - m_timer.current;

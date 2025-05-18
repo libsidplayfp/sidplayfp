@@ -534,6 +534,9 @@ int ConsolePlayer::args(int argc, const char *argv[])
         i++;  // next index
     }
 
+    // convert to milliseconds
+    m_fadeoutTime *= 1000;
+
     const char* hvscBase = getenv("HVSC_BASE");
 
     // Load the tune
