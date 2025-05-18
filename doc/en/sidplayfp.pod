@@ -280,15 +280,15 @@ The configuration file. See L<sidplayfp.ini(5)> for further details.
 
 =item F<kernal>
 
-The C64 kernal rom dump file.
+The C64 Kernal ROM dump file.
 
 =item F<basic>
 
-The C64 basic rom dump file.
+The C64 BASIC ROM dump file.
 
 =item F<chargen>
 
-The C64 character generator rom dump file.
+The C64 Character Generator ROM dump file.
 
 =back
 
