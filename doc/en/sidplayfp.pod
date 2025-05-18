@@ -33,6 +33,12 @@ Display help.
 
 Display additional options helpful for debugging.
 
+=item B<-fo>I<< <num> >>
+
+Set fade-out time in seconds (default: 0).
+The fade-out starts at the song end so this adds
+the specified number of seconds to the tune length.
+
 =item B<-f>I<< <num> >>
 
 Set audio output frequency in Hz (default: 48000).
