@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [2.14.0], [], [], [https://github.com/libsidplayfp/sidplayfp/])
+AC_INIT([sidplayfp], [3.0.0a], [], [], [https://github.com/libsidplayfp/sidplayfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -104,6 +104,7 @@ saveCPPFLAGS=$CPPFLAGS
 CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"
 
 AC_CHECK_HEADERS([sidplayfp/builders/residfp.h \
+sidplayfp/builders/residfpII.h \
 sidplayfp/builders/resid.h \
 sidplayfp/builders/hardsid.h \
 sidplayfp/builders/exsid.h])
