@@ -416,6 +416,9 @@ void IniConfig::readConsole(iniHandler &ini)
     readColor(ini, TEXT("Color Text Core"),    console_s.text_core);
     readColor(ini, TEXT("Color Label Extra"),  console_s.label_extra);
     readColor(ini, TEXT("Color Text Extra"),   console_s.text_extra);
+    readColor(ini, TEXT("Color Notes"),        console_s.notes);
+    readColor(ini, TEXT("Color Control On"),   console_s.control_on);
+    readColor(ini, TEXT("Color Control Off"),  console_s.control_off);
 }
 
 
