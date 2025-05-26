@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2024 Leandro Nini
+ * Copyright 2011-2025 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -48,6 +48,26 @@
 #include "dataParser.h"
 
 #include "sidcxx11.h"
+
+const TCHAR* colorStrings[16] =
+{
+    TEXT("black"),
+    TEXT("red"),
+    TEXT("green"),
+    TEXT("yellow"),
+    TEXT("blue"),
+    TEXT("magenta"),
+    TEXT("cyan"),
+    TEXT("white"),
+    TEXT("bright black"),
+    TEXT("bright red"),
+    TEXT("bright green"),
+    TEXT("bright yellow"),
+    TEXT("bright blue"),
+    TEXT("bright magenta"),
+    TEXT("bright cyan"),
+    TEXT("bright white")
+};
 
 inline void debug(MAYBE_UNUSED const TCHAR *msg, MAYBE_UNUSED const TCHAR *val)
 {
@@ -102,6 +122,15 @@ void IniConfig::clear()
     console_s.horizontal    = '-';
     console_s.junctionLeft  = '+';
     console_s.junctionRight = '+';
+    console_s.decorations   = color_t::bright_white;
+    console_s.title         = color_t::white;
+    console_s.label_core    = color_t::bright_green;
+    console_s.text_core     = color_t::bright_white;
+    console_s.label_extra   = color_t::bright_yellow;
+    console_s.text_extra    = color_t::white;
+    console_s.notes         = color_t::bright_yellow;
+    console_s.control_on    = color_t::bright_green;
+    console_s.control_off   = color_t::bright_red;
 
     audio_s.frequency = SidConfig::DEFAULT_SAMPLING_FREQ;
     audio_s.channels  = 0;
@@ -224,7 +253,7 @@ void readChar(iniHandler &ini, const TCHAR *key, char &ch)
 
     TCHAR c = 0;
 
-    // Check if we have an actual chanracter
+    // Check if we have an actual character
     if (str[0] == '\'')
     {
         if (str[2] != '\'')
@@ -311,6 +340,24 @@ IniCofig_readTime_error:
     return false;
 }
 
+bool readColor(iniHandler &ini, const TCHAR *key, color_t &ch)
+{
+    SID_STRING str = readString(ini, key);
+    if (str.empty())
+        return false;
+
+    for (int i=0; i<16; i++)
+    {
+        if (str.compare(colorStrings[i]) == 0)
+        {
+            ch = static_cast<color_t>(i);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 void IniConfig::readSidplay2(iniHandler &ini)
 {
@@ -362,6 +409,13 @@ void IniConfig::readConsole(iniHandler &ini)
     readChar(ini, TEXT("Char Horizontal"),     console_s.horizontal);
     readChar(ini, TEXT("Char Junction Left"),  console_s.junctionLeft);
     readChar(ini, TEXT("Char Junction Right"), console_s.junctionRight);
+
+    readColor(ini, TEXT("Color Decorations"),  console_s.decorations);
+    readColor(ini, TEXT("Color Title"),        console_s.title);
+    readColor(ini, TEXT("Color Label Core"),   console_s.label_core);
+    readColor(ini, TEXT("Color Text Core"),    console_s.text_core);
+    readColor(ini, TEXT("Color Label Extra"),  console_s.label_extra);
+    readColor(ini, TEXT("Color Text Extra"),   console_s.text_extra);
 }
 
 
