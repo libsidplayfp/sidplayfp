@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2024 Leandro Nini
+ * Copyright 2011-2025 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -43,6 +43,7 @@
 #  include <mixer.h>
 #endif
 
+#include "siddefines.h"
 #include "sidlib_features.h"
 
 #include <string>
@@ -56,26 +57,6 @@
 #    include <tsid/tsid.h>
 #  endif
 #endif
-
-enum class color_t
-{
-    black,
-    red,
-    green,
-    yellow,
-    blue,
-    magenta,
-    cyan,
-    white
-};
-
-enum class table_t
-{
-    start,
-    middle,
-    separator,
-    end
-};
 
 typedef enum
 {
@@ -249,7 +230,7 @@ private:
 
 private:
     // Console
-    void consoleColour  (color_t colour, bool bold);
+    void consoleColour  (color_t colour);
     void consoleTable   (table_t table);
     void consoleRestore (void);
 

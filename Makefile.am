@@ -54,6 +54,7 @@ src/player.cpp \
 src/player.h \
 src/setting.h \
 src/sidcxx11.h \
+src/siddefines.h \
 src/sidlib_features.h \
 src/utils.cpp \
 src/utils.h \
