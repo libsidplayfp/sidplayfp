@@ -99,16 +99,18 @@ AS_IF([test "x$with_out123" != "xno"],
 
 AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
 
-# hack?
-saveCPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS"
+# check for builders
+PKG_CHECK_VAR([SIDPLAYPF_PREFIX], [libsidplayfp], [prefix])
 
-AC_CHECK_HEADERS([sidplayfp/builders/residfp.h \
-sidplayfp/builders/resid.h \
-sidplayfp/builders/hardsid.h \
-sidplayfp/builders/exsid.h])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfp.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H], [1], [residfp builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/resid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESID_H], [1], [resid builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/hardsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_HARDSID_H], [1], [hardsid builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/exsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_EXSID_H], [1], [exsid builder])])
 
-CPPFLAGS=$saveCPPFLAGS
 
 AC_MSG_CHECKING([for debugging])
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@no/yes, default=no@:>@])],
