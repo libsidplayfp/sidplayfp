@@ -606,10 +606,11 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             ReSIDfpBuilder *rs = new ReSIDfpBuilder( RESIDFP_ID );
 
             m_engCfg.sidEmulation = rs;
+#ifndef FEAT_NO_CREATE
             if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
-
+#endif
 #ifdef FEAT_CW_STRENGTH
             rs->combinedWaveformsStrength(m_combinedWaveformsStrength);
 #endif
@@ -698,7 +699,6 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             if (!rs->getStatus()) goto createSidEmu_error;
             rs->create ((m_engine.info ()).maxsids());
             if (!rs->getStatus()) goto createSidEmu_error;
-
             rs->bias(m_filter.bias);
         }
         catch (std::bad_alloc const &ba) {}
@@ -728,12 +728,14 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
     {
         try
         {
-            exSIDBuilder *hs = new exSIDBuilder( EXSID_ID );
+            exSIDBuilder *es = new exSIDBuilder( EXSID_ID );
 
-            m_engCfg.sidEmulation = hs;
-            if (!hs->getStatus()) goto createSidEmu_error;
-            hs->create ((m_engine.info ()).maxsids());
-            if (!hs->getStatus()) goto createSidEmu_error;
+            m_engCfg.sidEmulation = es;
+#ifndef FEAT_NO_CREATE
+            if (!es->getStatus()) goto createSidEmu_error;
+            es->create ((m_engine.info ()).maxsids());
+            if (!es->getStatus()) goto createSidEmu_error;
+#endif
         }
         catch (std::bad_alloc const &ba) {}
         break;

@@ -736,8 +736,10 @@ void ConsolePlayer::displayArgs (const char *arg)
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
     {
-        exSIDBuilder hs("");
-        if (hs.availDevices ())
+        exSIDBuilder es("");
+#ifndef FEAT_NO_CREATE
+        if (es.availDevices ())
+#endif
             out << " --exsid      enable exSID support" << endl;
     }
 #endif
