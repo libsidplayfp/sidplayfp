@@ -125,10 +125,10 @@ void IniConfig::clear()
     console_s.decorations   = color_t::bright_white;
     console_s.title         = color_t::white;
     console_s.label_core    = color_t::bright_green;
-    console_s.text_core     = color_t::bright_white;
-    console_s.label_extra   = color_t::bright_yellow;
-    console_s.text_extra    = color_t::white;
-    console_s.notes         = color_t::bright_yellow;
+    console_s.text_core     = color_t::bright_yellow;
+    console_s.label_extra   = color_t::bright_magenta;
+    console_s.text_extra    = color_t::bright_cyan;
+    console_s.notes         = color_t::bright_blue;
     console_s.control_on    = color_t::bright_green;
     console_s.control_off   = color_t::bright_red;
 
