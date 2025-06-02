@@ -466,6 +466,13 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+            else if (std::strcmp (&argv[i][1], "-residfp2") == 0)
+            {
+                m_driver.sid    = EMU_RESIDFPII;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
             else if (std::strcmp (&argv[i][1], "-resid") == 0)
             {
@@ -721,6 +728,10 @@ void ConsolePlayer::displayArgs (const char *arg)
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     out << " --residfp    use reSIDfp emulation (default)" << endl;
+#endif
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+    out << " --residfp2   use reSIDfpII emulation" << endl;
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
