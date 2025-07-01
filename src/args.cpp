@@ -497,10 +497,6 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_driver.output = output_t::NONE;
                 m_driver.is_cycled = false;
             }
-            else if (std::strcmp (&argv[i][1], "-cycled") == 0)
-            {
-                m_driver.is_cycled = true;
-            }
 #endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
 
             // These are for debug
@@ -762,7 +758,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         USBSIDBuilder us("");
         if (us.availDevices () == 0) {
             out << " --usbsid     enable USBSID support" << endl;
-            out << " --cycled     enable USBSID cycled writes (disables reading)" << endl;
+            out << " --usbsidc    enable USBSID support with cycled writes (disables reading)" << endl;
         }
     }
 #endif
