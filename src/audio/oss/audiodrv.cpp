@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include <new>
 
@@ -51,12 +52,12 @@ void Audio_OSS::outOfOrder ()
 {
     // Reset everything.
     clearError();
-    _audiofd = -1;
+    m_audiofd = -1;
 }
 
 bool Audio_OSS::open (AudioConfig &cfg)
 {
-    if (_audiofd != -1)
+    if (m_audiofd != -1)
     {
         setError("Device already in use");
         return false;
@@ -69,19 +70,19 @@ bool Audio_OSS::open (AudioConfig &cfg)
             throw error("Could not locate an audio device.");
         }
 
-        if ((_audiofd = ::open (AUDIODEVICE, O_WRONLY, 0)) == (-1))
+        if ((m_audiofd = ::open (AUDIODEVICE, O_WRONLY, 0)) == (-1))
         {
             throw error("Could not open audio device.");
         }
 
         int format = AFMT_S16_LE;
-        if (ioctl (_audiofd, SNDCTL_DSP_SETFMT, &format) == (-1))
+        if (ioctl (m_audiofd, SNDCTL_DSP_SETFMT, &format) == (-1))
         {
             throw error("Could not set sample format.");
         }
 
         // Set mono/stereo.
-        if (ioctl (_audiofd, SNDCTL_DSP_CHANNELS, &cfg.channels) == (-1))
+        if (ioctl (m_audiofd, SNDCTL_DSP_CHANNELS, &cfg.channels) == (-1))
         {
             throw error("Could not set mono/stereo.");
         }
@@ -98,13 +99,13 @@ bool Audio_OSS::open (AudioConfig &cfg)
         }
 
         // Set frequency.
-        if (ioctl (_audiofd, SNDCTL_DSP_SPEED, &cfg.frequency) == (-1))
+        if (ioctl (m_audiofd, SNDCTL_DSP_SPEED, &cfg.frequency) == (-1))
         {
             throw error("Could not set frequency.");
         }
 
         int temp = 0;
-        ioctl (_audiofd, SNDCTL_DSP_GETBLKSIZE, &temp);
+        ioctl (m_audiofd, SNDCTL_DSP_GETBLKSIZE, &temp);
         cfg.bufSize = (uint_least32_t) temp;
 
         try
@@ -116,8 +117,10 @@ bool Audio_OSS::open (AudioConfig &cfg)
             throw error("Unable to allocate memory for sample buffers.");
         }
 
-        // Setup internal Config
         m_frameSize = 2 * cfg.channels;
+        // Force precision
+        cfg.precision = 16;
+        // Setup internal Config
         _settings = cfg;
         return true;
     }
@@ -125,13 +128,12 @@ bool Audio_OSS::open (AudioConfig &cfg)
     {
         setError(e.message());
 
-        if (_audiofd != -1)
+        if (m_audiofd != -1)
         {
             close ();
-            _audiofd = -1;
+            m_audiofd = -1;
         }
 
-        perror (AUDIODEVICE);
         return false;
     }
 }
@@ -140,9 +142,9 @@ bool Audio_OSS::open (AudioConfig &cfg)
 // reset any variables that reflect the current state.
 void Audio_OSS::close ()
 {
-    if (_audiofd != -1)
+    if (m_audiofd != -1)
     {
-        ::close (_audiofd);
+        ::close (m_audiofd);
         delete [] _sampleBuffer;
         outOfOrder ();
     }
@@ -150,22 +152,27 @@ void Audio_OSS::close ()
 
 void Audio_OSS::reset ()
 {
-    if (_audiofd != -1)
+    if (m_audiofd != -1)
     {
-        ioctl (_audiofd, SNDCTL_DSP_RESET, 0);
+        ioctl (m_audiofd, SNDCTL_DSP_RESET, 0);
     }
 }
 
 bool Audio_OSS::write (uint_least32_t frames)
 {
-    if (_audiofd == -1)
+    if (m_audiofd == -1)
     {
         setError("Device not open.");
         return false;
     }
 
     size_t const bytes = static_cast<size_t>(frames) * m_frameSize;
-    ::write (_audiofd, _sampleBuffer, bytes);
+    ssize_t res = ::write (m_audiofd, _sampleBuffer, bytes);
+    if (res < 0)
+    {
+        setError(strerror(errno));
+        return false;
+    }
     return true;
 }
 

@@ -164,16 +164,19 @@ void ConsolePlayer::menu ()
 
     consoleTable (table_t::start);
     consoleTable (table_t::middle);
-    consoleColour (color_t::white, true);
+    consoleColour ((m_iniCfg.console()).title);
     cerr << "  SIDPLAYFP - Music Player and C64 SID Chip Emulator" << endl;
     consoleTable  (table_t::middle);
-    consoleColour (color_t::white, false);
+    consoleColour ((m_iniCfg.console()).title);
     {
         string version;
         version.reserve(54);
         version.append("Sidplayfp V" VERSION ", ").append(1, toupper(*info.name())).append(info.name() + 1).append(" V").append(info.version());
         cerr << setw(54/2 + version.length()/2) << version << endl;
     }
+
+    color_t label_color = (m_iniCfg.console()).label_core;
+    color_t text_color = (m_iniCfg.console()).text_core;
 
     const unsigned int n = tuneInfo->numberOfInfoStrings();
     if (n)
@@ -183,21 +186,21 @@ void ConsolePlayer::menu ()
         consoleTable (table_t::separator);
 
         consoleTable  (table_t::middle);
-        consoleColour (color_t::cyan, true);
+        consoleColour (label_color);
         cerr << " Title        : ";
-        consoleColour (color_t::magenta, true);
+        consoleColour (text_color);
         cerr << codeset.convert(tuneInfo->infoString(0)) << endl;
         if (n>1)
         {
             consoleTable  (table_t::middle);
-            consoleColour (color_t::cyan, true);
+            consoleColour (label_color);
             cerr << " Author       : ";
-            consoleColour (color_t::magenta, true);
+            consoleColour (text_color);
             cerr << codeset.convert(tuneInfo->infoString(1)) << endl;
             consoleTable  (table_t::middle);
-            consoleColour (color_t::cyan, true);
+            consoleColour (label_color);
             cerr << " Released     : ";
-            consoleColour (color_t::magenta, true);
+            consoleColour (text_color);
             cerr << codeset.convert(tuneInfo->infoString(2)) << endl;
         }
     }
@@ -205,57 +208,60 @@ void ConsolePlayer::menu ()
     for (unsigned int i = 0; i < tuneInfo->numberOfCommentStrings(); i++)
     {
         consoleTable  (table_t::middle);
-        consoleColour (color_t::cyan, true);
+        consoleColour (label_color);
         cerr << " Comment      : ";
-        consoleColour (color_t::magenta, true);
+        consoleColour (text_color);
         cerr << tuneInfo->commentString(i) << endl;
     }
 
     consoleTable (table_t::separator);
 
+    label_color = (m_iniCfg.console()).label_extra;
+    text_color = (m_iniCfg.console()).text_extra;
+
     if (m_verboseLevel)
     {
         consoleTable  (table_t::middle);
-        consoleColour (color_t::green, true);
+        consoleColour (label_color);
         cerr << " File format  : ";
-        consoleColour (color_t::white, true);
+        consoleColour (text_color);
         cerr << tuneInfo->formatString() << endl;
         consoleTable  (table_t::middle);
-        consoleColour (color_t::green, true);
+        consoleColour (label_color);
         cerr << " Filename(s)  : ";
-        consoleColour (color_t::white, true);
+        consoleColour (text_color);
         cerr << trimString(tuneInfo->dataFileName(), 37) << endl;
         // Second file is only sometimes present
         if (tuneInfo->infoFileName())
         {
             consoleTable  (table_t::middle);
-            consoleColour (color_t::green, true);
+            consoleColour (label_color);
             cerr << "              : ";
-            consoleColour (color_t::white, true);
+            consoleColour (text_color);
             cerr << tuneInfo->infoFileName() << endl;
         }
         consoleTable  (table_t::middle);
-        consoleColour (color_t::green, true);
+        consoleColour (label_color);
         cerr << " Condition    : ";
-        consoleColour (color_t::white, true);
+        consoleColour (text_color);
         cerr << m_tune.statusString() << endl;
 
 #if HAVE_TSID == 1
         if (!m_tsid)
         {
             consoleTable  (table_t::middle);
-            consoleColour (color_t::green, true);
+            consoleColour (label_color);
             cerr << " TSID Error   : ";
-            consoleColour (color_t::white, true);
+            consoleColour (text_color);
             cerr << m_tsid.getError () << endl;
         }
 #endif // HAVE_TSID
     }
 
     consoleTable  (table_t::middle);
-    consoleColour (color_t::green, true);
+    consoleColour (label_color);
     cerr << " Playlist     : ";
-    consoleColour (color_t::white, true);
+    consoleColour (text_color);
 
     {   // This will be the format used for playlists
         int i = 1;
@@ -279,24 +285,22 @@ void ConsolePlayer::menu ()
     if (m_verboseLevel)
     {
         consoleTable  (table_t::middle);
-        consoleColour (color_t::green, true);
+        consoleColour (label_color);
         cerr << " Song Speed   : ";
-        consoleColour (color_t::white, true);
+        consoleColour (text_color);
         cerr << getClock(tuneInfo->clockSpeed()) << endl;
     }
 
     consoleTable  (table_t::middle);
-    consoleColour (color_t::green, true);
+    consoleColour (label_color);
     cerr << " Song Length  : ";
-    consoleColour (color_t::white, true);
+    consoleColour (text_color);
     if (m_timer.stop)
     {
         const uint_least32_t seconds = m_timer.stop / 1000;
         cerr << setw(2) << setfill('0') << ((seconds / 60) % 100)
              << ':' << setw(2) << setfill('0') << (seconds % 60);
-#ifdef FEAT_NEW_SONLEGTH_DB
         cerr << '.' << setw(3) << m_timer.stop % 1000;
-#endif
     }
     else if (m_timer.valid)
         cerr << "FOREVER";
@@ -316,11 +320,14 @@ void ConsolePlayer::menu ()
     {
         consoleTable  (table_t::separator);
 
+        label_color = (m_iniCfg.console()).label_core;
+        text_color = (m_iniCfg.console()).text_core;
+
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " Addresses    : " << hex;
         cerr.setf(std::ios::uppercase);
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         // Display PSID Driver location
         cerr << "DRIVER = ";
         if (info.driverAddr() == 0)
@@ -337,9 +344,9 @@ void ConsolePlayer::menu ()
             cerr << ", INIT = $" << setw(4) << setfill('0') << tuneInfo->initAddr();
         cerr << endl;
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << "              : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << "LOAD   = $" << setw(4) << setfill('0') << tuneInfo->loadAddr();
         cerr << "-$"         << setw(4) << setfill('0') << tuneInfo->loadAddr() +
             (tuneInfo->c64dataLen() - 1);
@@ -349,78 +356,66 @@ void ConsolePlayer::menu ()
         cerr.unsetf(std::ios::uppercase);
 
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " SID Details  : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << "Model = ";
-#ifdef FEAT_NEW_TUNEINFO_API
         cerr << getModel(tuneInfo->sidModel(0));
-#else
-        cerr << getModel(tuneInfo->sidModel1());
-#endif
         cerr << endl;
-#ifdef FEAT_NEW_TUNEINFO_API
         if (tuneInfo->sidChips() > 1)
-#else
-        if (tuneInfo->isStereo())
-#endif
         {
             consoleTable  (table_t::middle);
-            consoleColour (color_t::yellow, true);
+            consoleColour (label_color);
             cerr << "              : ";
-            consoleColour (color_t::white, false);
-#ifdef FEAT_NEW_TUNEINFO_API
+            consoleColour (text_color);
             cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase(1) << dec;
             cerr << ", Model = " << getModel(tuneInfo->sidModel(1));
-#else
-            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase2() << dec;
-            cerr << ", Model = " << getModel(tuneInfo->sidModel2());
-#endif
             cerr << endl;
-#ifdef FEAT_NEW_TUNEINFO_API
             if (tuneInfo->sidChips() > 2)
             {
                 consoleTable  (table_t::middle);
-                consoleColour (color_t::yellow, true);
+                consoleColour (label_color);
                 cerr << "              : ";
-                consoleColour (color_t::white, false);
+                consoleColour (text_color);
                 cerr << "3rd SID = $" << hex << tuneInfo->sidChipBase(2) << dec;
                 cerr << ", Model = " << getModel(tuneInfo->sidModel(2));
                 cerr << endl;
             }
-#endif
         }
 
         consoleTable  (table_t::separator);
 
+        label_color = (m_iniCfg.console()).label_extra;
+        text_color = (m_iniCfg.console()).text_extra;
+
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " Play speed   : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << info.speedString() << endl;
 
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " Play mode    : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << (info.channels() == 1 ? "Mono" : "Stereo") << endl;
 
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " SID Filter   : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << (m_filter.enabled ? "Yes" : "No") << endl;
-#ifdef FEAT_DIGIBOOST
+
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " DigiBoost    : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << (m_engCfg.digiBoost ? "Yes" : "No") << endl;
-#endif
+
         consoleTable  (table_t::middle);
-        consoleColour (color_t::yellow, true);
+        consoleColour (label_color);
         cerr << " SID Model    : ";
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         if (m_engCfg.forceSidModel)
             cerr << "Forced ";
         else
@@ -430,9 +425,9 @@ void ConsolePlayer::menu ()
         if (m_verboseLevel > 1)
         {
             consoleTable  (table_t::middle);
-            consoleColour (color_t::yellow, true);
+            consoleColour (label_color);
             cerr << " Delay        : ";
-            consoleColour (color_t::white, false);
+            consoleColour (text_color);
             cerr << info.powerOnDelay() << " (cycles at poweron)" << endl;
         }
     }
@@ -441,17 +436,20 @@ void ConsolePlayer::menu ()
 
     consoleTable  (table_t::separator);
 
+    label_color = (m_iniCfg.console()).label_core;
+    text_color = (m_iniCfg.console()).text_core;
+
     consoleTable  (table_t::middle);
-    consoleColour (color_t::magenta, true);
+    consoleColour (label_color);
     cerr << " Kernal ROM   : ";
     if (std::strlen(romDesc) == 0)
     {
-        consoleColour (color_t::red, false);
+        consoleColour (color_t::red);
         cerr << "None - Some tunes may not play!";
     }
     else
     {
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << romDesc;
     }
     cerr << endl;
@@ -459,16 +457,16 @@ void ConsolePlayer::menu ()
     romDesc = info.basicDesc();
 
     consoleTable  (table_t::middle);
-    consoleColour (color_t::magenta, true);
+    consoleColour (label_color);
     cerr << " BASIC ROM    : ";
     if (std::strlen(romDesc) == 0)
     {
-        consoleColour (color_t::red, false);
+        consoleColour (color_t::red);
         cerr << "None - Basic tunes will not play!";
     }
     else
     {
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << romDesc;
     }
     cerr << endl;
@@ -476,16 +474,16 @@ void ConsolePlayer::menu ()
     romDesc = info.chargenDesc();
 
     consoleTable  (table_t::middle);
-    consoleColour (color_t::magenta, true);
+    consoleColour (label_color);
     cerr << " Chargen ROM  : ";
     if (std::strlen(romDesc) == 0)
     {
-        consoleColour (color_t::red, false);
+        consoleColour (color_t::red);
         cerr << "None";
     }
     else
     {
-        consoleColour (color_t::white, false);
+        consoleColour (text_color);
         cerr << romDesc;
     }
     cerr << endl;
@@ -493,12 +491,16 @@ void ConsolePlayer::menu ()
 #ifdef FEAT_REGS_DUMP_SID
     if (m_verboseLevel > 1)
     {
-        consoleTable  (table_t::separator);
+        consoleTable (table_t::separator);
         consoleTable (table_t::middle); cerr << "         NOTE PW         CONTROL          WAVEFORMS" << endl;
 
+#ifdef FEAT_NEW_PLAY_API
+        for (unsigned int i=0; i < m_engine.installedSIDs() * 3; i++)
+#else
         for (int i=0; i < tuneInfo->sidChips() * 3; i++)
+#endif
         {
-            consoleTable (table_t::middle); cerr << endl; // reserve space for the Voice 3 status
+            consoleTable (table_t::middle); cerr << endl; // reserve space for each voice's status
         }
     }
 #endif
@@ -522,11 +524,17 @@ void ConsolePlayer::refreshRegDump()
 #ifdef FEAT_REGS_DUMP_SID
     if (m_verboseLevel > 1)
     {
-        const SidTuneInfo *tuneInfo = m_tune.getInfo();
+        unsigned int chips =
+#ifdef FEAT_NEW_PLAY_API
+            m_engine.installedSIDs();
+#else
+            m_tune.getInfo()->sidChips();
+#endif
+        cerr << "\x1b[" << chips * 3 + 1 << "A\r"; // Moves cursor X lines up
 
-        cerr << "\x1b[" << tuneInfo->sidChips() * 3 + 1 << "A\r"; // Moves cursor X lines up
-
-        for (int j=0; j < tuneInfo->sidChips(); j++)
+        const color_t ctrlon  = (m_iniCfg.console()).control_on;
+        const color_t ctrloff = (m_iniCfg.console()).control_off;
+        for (unsigned int j=0; j < chips; j++)
         {
             uint8_t* registers = m_registers[j];
             uint8_t oldCtl[3];
@@ -542,53 +550,53 @@ void ConsolePlayer::refreshRegDump()
 
                 for (int i=0; i < 3; i++)
                 {
-                    consoleTable (table_t::middle);
-                    consoleColour (color_t::red, true);
+                    consoleTable(table_t::middle);
+                    consoleColour(ctrloff);
 
                     cerr << " Voice " << (j * 3 + i+1) << hex;
 
-                    consoleColour (color_t::yellow, true);
+                    consoleColour((m_iniCfg.console()).notes);
                     ;
                     cerr << " " << getNote(registers[0x00 + i * 0x07] | (registers[0x01 + i * 0x07] << 8))
                          << " $" << setw(3) << setfill('0') << (registers[0x02 + i * 0x07] | ((registers[0x03 + i * 0x07] & 0x0f) << 8));
 
                     // gate changed ?
-                    consoleColour((oldCtl[i] & 0x01) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x01) ? ctrlon : ctrloff);
                     // gate on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x01) ? " GATE" : " gate");
 
                     // sync changed ?
-                    consoleColour((oldCtl[i] & 0x02) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x02) ? ctrlon : ctrloff);
                     // sync on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x02) ? " SYNC" : " sync");
 
                     // ring changed ?
-                    consoleColour((oldCtl[i] & 0x04) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x04) ? ctrlon : ctrloff);
                     // ring on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x04) ? " RING" : " ring");
 
                     // test changed ?
-                    consoleColour((oldCtl[i] & 0x08) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x08) ? ctrlon : ctrloff);
                     // test on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x08) ? " TEST" : " test");
 
                     // triangle changed ?
-                    consoleColour((oldCtl[i] & 0x10) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x10) ? ctrlon : ctrloff);
                     // triangle on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x10) ? " TRI" : " ___");
 
                     // sawtooth changed ?
-                    consoleColour((oldCtl[i] & 0x20) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x20) ? ctrlon : ctrloff);
                     // sawtooth on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x20) ? " SAW" : " ___");
 
                     // pulse changed ?
-                    consoleColour((oldCtl[i] & 0x40) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x40) ? ctrlon : ctrloff);
                     // pulse on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x40) ? " PUL" : " ___");
 
                     // noise changed ?
-                    consoleColour((oldCtl[i] & 0x80) ? color_t::green : color_t::red, true);
+                    consoleColour((oldCtl[i] & 0x80) ? ctrlon : ctrloff);
                     // noise on ?
                     cerr << ((registers[0x04 + i * 0x07] & 0x80) ? " NOI" : " ___");
 
@@ -618,28 +626,36 @@ void ConsolePlayer::refreshRegDump()
 }
 
 // Set colour of text on console
-void ConsolePlayer::consoleColour (color_t colour, bool bold)
+void ConsolePlayer::consoleColour(color_t colour)
 {
     if ((m_iniCfg.console ()).ansi)
     {
-        const char *mode = "";
+        const char *fg = "";
 
         switch (colour)
         {
-        case color_t::black:   mode = "30"; break;
-        case color_t::red:     mode = "31"; break;
-        case color_t::green:   mode = "32"; break;
-        case color_t::yellow:  mode = "33"; break;
-        case color_t::blue:    mode = "34"; break;
-        case color_t::magenta: mode = "35"; break;
-        case color_t::cyan:    mode = "36"; break;
-        case color_t::white:   mode = "37"; break;
+        case color_t::black:          fg = "[0;30"; break;
+        case color_t::red:            fg = "[0;31"; break;
+        case color_t::green:          fg = "[0;32"; break;
+        case color_t::yellow:         fg = "[0;33"; break;
+        case color_t::blue:           fg = "[0;34"; break;
+        case color_t::magenta:        fg = "[0;35"; break;
+        case color_t::cyan:           fg = "[0;36"; break;
+        case color_t::white:          fg = "[0;37"; break;
+        case color_t::bright_black:   fg = "[1;30"; break;
+        case color_t::bright_red:     fg = "[1;31"; break;
+        case color_t::bright_green:   fg = "[1;32"; break;
+        case color_t::bright_yellow:  fg = "[1;33"; break;
+        case color_t::bright_blue:    fg = "[1;34"; break;
+        case color_t::bright_magenta: fg = "[1;35"; break;
+        case color_t::bright_cyan:    fg = "[1;36"; break;
+        case color_t::bright_white:   fg = "[1;37"; break;
         }
 
-        if (bold)
-            cerr << '\x1b' << "[1;40;" << mode << 'm';
-        else
-            cerr << '\x1b' << "[0;40;" << mode << 'm';
+        // Add black background
+        const char *bg = ";40";
+
+        cerr << '\x1b' << fg << bg << 'm';
     }
 }
 
@@ -648,7 +664,7 @@ void ConsolePlayer::consoleTable (table_t table)
 {
     const unsigned int tableWidth = 54;
 
-    consoleColour (color_t::white, true);
+    consoleColour((m_iniCfg.console()).decorations);
     switch (table)
     {
         case table_t::start:
@@ -685,7 +701,7 @@ void ConsolePlayer::consoleTable (table_t table)
 void ConsolePlayer::consoleRestore ()
 {
     if ((m_iniCfg.console ()).ansi) {
-    cerr << '\x1b' << "[?25h";
+        cerr << '\x1b' << "[?25h";
         cerr << '\x1b' << "[0m";
     }
 }

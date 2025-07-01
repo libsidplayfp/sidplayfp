@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([sidplayfp], [2.12.0], [], [], [https://github.com/libsidplayfp/sidplayfp/])
+AC_INIT([sidplayfp], [3.0.0a], [], [], [https://github.com/libsidplayfp/sidplayfp/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -28,12 +28,15 @@ AC_PROG_CXX
 dnl Use C++ for tests.
 AC_LANG([C++])
 
-AX_CXX_COMPILE_STDCXX([17], [noext], [optional])
-AS_IF([test $ax_cv_cxx_compile_cxx17__std_cpp17 != "yes"], [
-    AX_CXX_COMPILE_STDCXX([14], [noext], [optional])
-    AS_IF([test $ax_cv_cxx_compile_cxx14__std_cpp14 != "yes"],
-        [AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])]
-    )
+AX_CXX_COMPILE_STDCXX([20], [noext], [optional])
+AS_IF([test $ax_cv_cxx_compile_cxx20__std_cpp20 != "yes"], [
+    AX_CXX_COMPILE_STDCXX([17], [noext], [optional])
+    AS_IF([test $ax_cv_cxx_compile_cxx17__std_cpp17 != "yes"], [
+        AX_CXX_COMPILE_STDCXX([14], [noext], [optional])
+        AS_IF([test $ax_cv_cxx_compile_cxx14__std_cpp14 != "yes"],
+            [AX_CXX_COMPILE_STDCXX([11], [noext], [mandatory])]
+        )
+    ])
 ])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
@@ -60,8 +63,7 @@ PKG_CHECK_MODULES(PULSE,
 
 
 dnl Checks what version of Unix we have and soundcard support
-AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h \
-sys/soundcard.h soundcard.h])
+AC_CHECK_HEADERS([sys/ioctl.h linux/soundcard.h machine/soundcard.h sys/soundcard.h soundcard.h])
 
 AC_CHECK_HEADERS([dsound.h mmsystem.h], [], [], [#include <windows.h>])
 
@@ -80,7 +82,7 @@ AS_IF([test "x$ac_cv_header_soundcard_h" = "xyes"],
 
 AC_SUBST(AUDIO_LDFLAGS)
 
-PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 1.0])
+PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
 USE_LIBUSB=no
@@ -103,17 +105,22 @@ AS_IF([test "x$with_out123" != "xno"],
 
 AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
 
-# hack?
-saveCPPFLAGS=$CPPFLAGS
-CPPFLAGS="$CPPFLAGS $SIDPLAYFP_CFLAGS $USBSIDFLAGS"
+# check for builders
+PKG_CHECK_VAR([SIDPLAYPF_PREFIX], [libsidplayfp], [prefix])
 
-AC_CHECK_HEADERS([sidplayfp/builders/residfp.h \
-sidplayfp/builders/resid.h \
-sidplayfp/builders/hardsid.h \
-sidplayfp/builders/exsid.h
-sidplayfp/builders/usbsid.h])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfp.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H], [1], [residfp builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfpII.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H], [1], [residfpII builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/resid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESID_H], [1], [resid builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/hardsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_HARDSID_H], [1], [hardsid builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/exsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_EXSID_H], [1], [exsid builder])])
+AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/usbsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_USBSID_H], [1], [usbsid builder])])
 
-CPPFLAGS=$saveCPPFLAGS
 
 AC_MSG_CHECKING([for debugging])
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@no/yes, default=no@:>@])],

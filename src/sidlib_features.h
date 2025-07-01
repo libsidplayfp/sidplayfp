@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2021-2024 Leandro Nini
+ * Copyright 2021-2025 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,17 +23,6 @@
 
 #include <sidplayfp/sidplayfp.h>
 
-#if LIBSIDPLAYFP_VERSION_MAJ > 1
-#  define FEAT_CONFIG_CIAMODEL
-#  define FEAT_NEW_SONLEGTH_DB
-#  define FEAT_DIGIBOOST
-#endif
-
-#if LIBSIDPLAYFP_VERSION_MAJ > 1 || (LIBSIDPLAYFP_VERSION_MAJ == 1 && LIBSIDPLAYFP_VERSION_MIN >= 8)
-#  define FEAT_THIRD_SID
-#  define FEAT_NEW_TUNEINFO_API
-#endif
-
 #if LIBSIDPLAYFP_VERSION_MAJ > 2 || (LIBSIDPLAYFP_VERSION_MAJ == 2 && LIBSIDPLAYFP_VERSION_MIN >= 2)
 #  define FEAT_REGS_DUMP_SID
 #  define FEAT_DB_WCHAR_OPEN
@@ -47,6 +36,14 @@
 #if LIBSIDPLAYFP_VERSION_MAJ > 2 || (LIBSIDPLAYFP_VERSION_MAJ == 2 && LIBSIDPLAYFP_VERSION_MIN >= 10)
 #  define FEAT_SAMPLE_MUTE
 #  define FEAT_FILTER_DISABLE
+#endif
+
+#if LIBSIDPLAYFP_VERSION_MAJ > 2 || (LIBSIDPLAYFP_VERSION_MAJ == 2 && LIBSIDPLAYFP_VERSION_MIN >= 14)
+#  define FEAT_NEW_PLAY_API
+#endif
+
+#if LIBSIDPLAYFP_VERSION_MAJ >= 3
+#  define FEAT_NO_CREATE
 #endif
 
 #endif

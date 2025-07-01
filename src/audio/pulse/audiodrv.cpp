@@ -81,8 +81,10 @@ bool Audio_Pulse::open(AudioConfig &cfg)
         }
 
         m_frameSize = 2 * cfg.channels;
-        _settings = cfg;
 
+        // Force precision
+        cfg.precision = 16;
+        _settings = cfg;
         return true;
     }
     catch(error const  &e)

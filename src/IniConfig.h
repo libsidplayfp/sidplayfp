@@ -25,6 +25,7 @@
 #include "ini/types.h"
 #include "ini/iniHandler.h"
 
+#include "siddefines.h"
 #include "sidlib_features.h"
 
 #include <sidplayfp/sidplayfp.h>
@@ -59,6 +60,15 @@ public:
         char horizontal;
         char junctionLeft;
         char junctionRight;
+        color_t decorations;
+        color_t title;
+        color_t label_core;
+        color_t text_core;
+        color_t label_extra;
+        color_t text_extra;
+        color_t notes;
+        color_t control_on;
+        color_t control_off;
     };
 
     struct audio_section
@@ -77,9 +87,7 @@ public:
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
         bool          forceModel;
-#ifdef FEAT_CONFIG_CIAMODEL
         SidConfig::cia_model_t  ciaModel;
-#endif
         bool          digiboost;
         bool          filter;
         double        bias;

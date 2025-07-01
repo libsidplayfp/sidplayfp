@@ -98,6 +98,8 @@ bool Audio_ALSA::open(AudioConfig &cfg)
             throw error("Unable to allocate memory for sample buffers.");
         }
 
+        // Force precision
+        cfg.precision = 16;
         // Setup internal Config
         _settings = cfg;
         return true;

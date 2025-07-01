@@ -44,6 +44,7 @@ public:
     void clearBuffer() override { audio->clearBuffer(); }
     void getConfig(AudioConfig &cfg) const override { audio->getConfig(cfg); }
     const char *getErrorString() const override { return audio->getErrorString(); }
+    const char *getDriverString() const override { return audio->getDriverString(); }
 };
 
 #endif // AUDIODRV_H

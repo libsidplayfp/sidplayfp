@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2024 Leandro Nini
+ * Copyright 2011-2025 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -206,11 +206,17 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (!parseAddress (&argv[i][3], m_engCfg.secondSidAddress))
                     err = true;
             }
-#ifdef FEAT_THIRD_SID
             else if (strncmp (&argv[i][1], "ts", 2) == 0)
             {   // Override sidTune and enable the third sid
                 if (!parseAddress (&argv[i][3], m_engCfg.thirdSidAddress))
                     err = true;
+            }
+#ifdef FEAT_NEW_PLAY_API
+            else if (strncmp (&argv[i][1], "fo", 2) == 0)
+            {
+                if (argv[i][3] == '\0')
+                    err = true;
+                m_fadeoutTime = (uint_least32_t) atoi (&argv[i][3]);
             }
 #endif
             else if (argv[i][1] == 'f')
@@ -258,7 +264,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     err = true;
                 else
                 {
-                    const int voice = atoi(&argv[i][2]);
+                    const unsigned int voice = atoi(&argv[i][2]);
                     if (voice > 0 && voice <= m_mute_channel.size())
                         m_mute_channel[voice-1] = true;
                 }
@@ -272,7 +278,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     err = true;
                 else
                 {
-                    const int chip = atoi(&argv[i][2]);
+                    const unsigned int chip = atoi(&argv[i][2]);
                     if (chip > 0 && chip <= m_mute_samples.size())
                         m_mute_samples[chip-1] = true;
                 }
@@ -355,12 +361,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_channels = 1;
             }
 
-#ifdef FEAT_DIGIBOOST
             else if (std::strcmp (&argv[i][1], "-digiboost") == 0)
             {
                 m_engCfg.digiBoost = true;
             }
-#endif
+
             // Video/Verbose Options
             else if (std::strcmp (&argv[i][1], "vnf") == 0)
             {
@@ -466,6 +471,13 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+            else if (std::strcmp (&argv[i][1], "-residfp2") == 0)
+            {
+                m_driver.sid    = EMU_RESIDFPII;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
             else if (std::strcmp (&argv[i][1], "-resid") == 0)
             {
@@ -544,7 +556,10 @@ int ConsolePlayer::args(int argc, const char *argv[])
 
         i++;  // next index
     }
-
+#ifdef FEAT_NEW_PLAY_API
+    // convert to milliseconds
+    m_fadeoutTime *= 1000;
+#endif
     const char* hvscBase = getenv("HVSC_BASE");
 
     // Load the tune
@@ -684,13 +699,13 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " --help|-h    display this screen" << endl
         << " --help-debug debug help menu" << endl
         << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
-
+#ifdef FEAT_NEW_PLAY_API
+        << " -fo<num>     set fade-out time in seconds (default: 0)" << endl
+#endif
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
         << " -ds<addr>    set second sid address (e.g. -ds0xd420)" << endl
-#ifdef FEAT_THIRD_SID
         << " -ts<addr>    set third sid address (e.g. -ts0xd440)" << endl
-#endif
 
         << " -u<num>      mute voice <num> (e.g. -u1 -u2)" << endl
 #ifdef FEAT_SAMPLE_MUTE
@@ -715,9 +730,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 
         << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
         << "              Use 'f' to force the model" << endl
-#ifdef FEAT_DIGIBOOST
         << " --digiboost  Enable digiboost for 8580 model" << endl
-#endif
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
         << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
@@ -735,6 +748,10 @@ void ConsolePlayer::displayArgs (const char *arg)
     out << " --residfp    use reSIDfp emulation (default)" << endl;
 #endif
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+    out << " --residfp2   use reSIDfpII emulation" << endl;
+#endif
+
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     out << " --resid      use reSID emulation" << endl;
 #endif
@@ -748,8 +765,10 @@ void ConsolePlayer::displayArgs (const char *arg)
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
     {
-        exSIDBuilder hs("");
-        if (hs.availDevices ())
+        exSIDBuilder es("");
+#ifndef FEAT_NO_CREATE
+        if (es.availDevices ())
+#endif
             out << " --exsid      enable exSID support" << endl;
     }
 #endif

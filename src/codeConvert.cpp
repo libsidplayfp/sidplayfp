@@ -32,7 +32,7 @@ const char* codeConvert::convert(const char* src)
     if (cd == (iconv_t) -1)
         return src;
 
-    char *srcPtr = const_cast<char*>(src);
+    ICONV_CONST char *srcPtr = const_cast<ICONV_CONST char*>(src);
     size_t srcLeft = strlen(src);
     char *outPtr = buffer;
     size_t outLeft = sizeof (buffer)-1;

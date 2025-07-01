@@ -1,8 +1,8 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013 Leandro Nini
- * Copyright 2000 Simon White
+ * Copyright 2011-2025 Leandro Nini
+ * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,28 +19,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef IAUDIO_H
-#define IAUDIO_H
+#ifndef SIDDEFINES_H
+#define SIDDEFINES_H
 
-#include <stdint.h>
-
-class AudioConfig;
-
-class IAudio
+enum class color_t
 {
-public:
-    virtual ~IAudio() = default;
-
-    virtual bool open(AudioConfig &cfg) = 0;
-    virtual void reset() = 0;
-    virtual bool write(uint_least32_t frames) = 0;
-    virtual void close() = 0;
-    virtual void pause() = 0;
-    virtual short *buffer() const = 0;
-    virtual void clearBuffer() = 0;
-    virtual void getConfig(AudioConfig &cfg) const = 0;
-    virtual const char *getErrorString() const = 0;
-    virtual const char *getDriverString() const = 0;
+    black,
+    red,
+    green,
+    yellow,
+    blue,
+    magenta,
+    cyan,
+    white,
+    bright_black,
+    bright_red,
+    bright_green,
+    bright_yellow,
+    bright_blue,
+    bright_magenta,
+    bright_cyan,
+    bright_white
 };
 
-#endif // IAUDIO_H
+enum class table_t
+{
+    start,
+    middle,
+    separator,
+    end
+};
+
+#endif // SIDDEFINES_H

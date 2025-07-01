@@ -1,4 +1,6 @@
 
+ACLOCAL_AMFLAGS = -I m4
+
 AUTOMAKE_OPTIONS = foreign subdir-objects
 
 if MINGW32
@@ -43,13 +45,18 @@ src_sidplayfp_SOURCES = \
 src/IniConfig.cpp \
 src/IniConfig.h \
 src/args.cpp \
+src/dataParser.h \
 src/keyboard.cpp \
 src/keyboard.h \
 src/main.cpp \
 src/menu.cpp \
+src/mixer.cpp \
+src/mixer.h \
 src/player.cpp \
 src/player.h \
+src/setting.h \
 src/sidcxx11.h \
+src/siddefines.h \
 src/sidlib_features.h \
 src/utils.cpp \
 src/utils.h \
@@ -80,7 +87,6 @@ src/audio/wav/WavFile.cpp \
 src/audio/wav/WavFile.h \
 src/ini/iniHandler.h \
 src/ini/iniHandler.cpp \
-src/ini/dataParser.h \
 src/ini/sidfstream.h \
 src/ini/types.h
 

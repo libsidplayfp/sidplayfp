@@ -1,8 +1,7 @@
 /*
- * This file is part of sidplayfp, a console SID player.
+ * This file is part of sidplayfp, a SID player engine.
  *
- * Copyright 2013 Leandro Nini
- * Copyright 2000 Simon White
+ * Copyright 2025 Leandro Nini <drfiemost@users.sourceforge.net>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,28 +18,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef IAUDIO_H
-#define IAUDIO_H
+#ifndef SETTING_H
+#define SETTING_H
 
-#include <stdint.h>
+#include "sidcxx11.h"
 
-class AudioConfig;
+#ifdef HAVE_CXX17
 
-class IAudio
+#include <optional>
+
+template <typename T>
+using Setting = std::optional<T>;
+
+#else
+
+#include <type_traits>
+
+template <typename T>
+class Setting
 {
-public:
-    virtual ~IAudio() = default;
+    static_assert(std::is_scalar<T>(), "T must be a scalar type");
 
-    virtual bool open(AudioConfig &cfg) = 0;
-    virtual void reset() = 0;
-    virtual bool write(uint_least32_t frames) = 0;
-    virtual void close() = 0;
-    virtual void pause() = 0;
-    virtual short *buffer() const = 0;
-    virtual void clearBuffer() = 0;
-    virtual void getConfig(AudioConfig &cfg) const = 0;
-    virtual const char *getErrorString() const = 0;
-    virtual const char *getDriverString() const = 0;
+private:
+    T m_val;
+    bool m_isSet;
+
+public:
+    Setting() :
+        m_isSet(false) {}
+
+    inline bool has_value() const { return m_isSet; }
+    inline T value() const { return m_val; }
+    inline Setting<T>& operator =(const T& val) { m_val = val; m_isSet = true;  return *this; }
 };
 
-#endif // IAUDIO_H
+#endif // HAVE_CXX17
+
+#endif // SETTING_H

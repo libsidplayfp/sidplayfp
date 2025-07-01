@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012-2024 Leandro Nini
+ * Copyright 2012-2025 Leandro Nini
  * Copyright 1998, 2002 LaLa <LaLa@C64.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -263,7 +263,7 @@ void checkArguments(void)
             hvscLoc = new char[STIL_MAX_PATH_SIZE];
             cout << "Enter HVSC base directory: ";
             cin.width(STIL_MAX_PATH_SIZE);
-            cin >> hvscLoc;
+            cin >> *hvscLoc;
         }
         else
         {

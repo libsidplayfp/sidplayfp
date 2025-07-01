@@ -22,7 +22,7 @@
 #include <sstream>
 #include <cstring>
 
-#include "types.h"
+#include "ini/types.h"
 
 class dataParser
 {

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2024 Leandro Nini
+ * Copyright 2011-2025 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -37,6 +37,13 @@
 #include "audio/null/null.h"
 #include "IniConfig.h"
 
+#include "setting.h"
+
+#ifdef FEAT_NEW_PLAY_API
+#  include <mixer.h>
+#endif
+
+#include "siddefines.h"
 #include "sidlib_features.h"
 
 #include <string>
@@ -50,26 +57,6 @@
 #    include <tsid/tsid.h>
 #  endif
 #endif
-
-enum class color_t
-{
-    black,
-    red,
-    green,
-    yellow,
-    blue,
-    magenta,
-    cyan,
-    white
-};
-
-enum class table_t
-{
-    start,
-    middle,
-    separator,
-    end
-};
 
 typedef enum
 {
@@ -92,6 +79,7 @@ typedef enum
     /* The following require a soundcard */
     EMU_DEFAULT,
     EMU_RESIDFP,
+    EMU_RESIDFPII,
     EMU_RESID,
     /* The following should disable the soundcard */
     EMU_HARDSID,
@@ -130,6 +118,9 @@ private:
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     static const char  RESIDFP_ID[];
 #endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+    static const char  RESIDFPII_ID[];
+#endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     static const char  RESID_ID[];
 #endif
@@ -157,17 +148,21 @@ private:
     IniConfig          m_iniCfg;
     SidDatabase        m_database;
 
-    double             m_fcurve;
+    Setting<double>    m_fcurve;
 #ifdef FEAT_FILTER_RANGE
-    double             m_frange;
+    Setting<double>    m_frange;
 #endif
 
 #ifdef FEAT_CW_STRENGTH
     SidConfig::sid_cw_t m_combinedWaveformsStrength;
 #endif
-
+#ifdef FEAT_NEW_PLAY_API
+    uint_least32_t     m_fadeoutTime;
+#endif
+#ifdef FEAT_REGS_DUMP_SID
     uint8_t            m_registers[3][32];
     uint16_t*          m_freqTable;
+#endif
 
     // Display parameters
     uint_least8_t      m_quietLevel;
@@ -189,7 +184,9 @@ private:
     int  m_channels;
     int  m_precision;
     int  m_buffer_size;
-
+#ifdef FEAT_NEW_PLAY_API
+    Mixer m_mixer;
+#endif
     struct m_filter_t
     {
         // Filter parameter for reSID
@@ -246,7 +243,7 @@ private:
 
 private:
     // Console
-    void consoleColour  (color_t colour, bool bold);
+    void consoleColour  (color_t colour);
     void consoleTable   (table_t table);
     void consoleRestore (void);
 
