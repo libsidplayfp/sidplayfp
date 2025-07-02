@@ -102,15 +102,30 @@ AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
 # check for builders
 PKG_CHECK_VAR([SIDPLAYPF_PREFIX], [libsidplayfp], [prefix])
 
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfp.h],
-    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H], [1], [residfp builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/resid.h],
-    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESID_H], [1], [resid builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/hardsid.h],
-    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_HARDSID_H], [1], [hardsid builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/exsid.h],
-    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_EXSID_H], [1], [exsid builder])])
-
+AC_MSG_CHECKING([for $SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfp.h])
+AS_IF([test -f $SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfp.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H], [1], [residfp builder])
+    AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])]
+)
+AC_MSG_CHECKING([for $SIDPLAYPF_PREFIX/include/sidplayfp/builders/resid.h])
+AS_IF([test -f $SIDPLAYPF_PREFIX/include/sidplayfp/builders/resid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESID_H], [1], [resid builder])
+    AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])]
+)
+AC_MSG_CHECKING([for $SIDPLAYPF_PREFIX/include/sidplayfp/builders/hardsid.h])
+AS_IF([test -f $SIDPLAYPF_PREFIX/include/sidplayfp/builders/hardsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_HARDSID_H], [1], [hardsid builder])
+    AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])]
+)
+AC_MSG_CHECKING([for $SIDPLAYPF_PREFIX/include/sidplayfp/builders/exsid.h])
+AS_IF([test -f $SIDPLAYPF_PREFIX/include/sidplayfp/builders/exsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_EXSID_H], [1], [exsid builder])
+    AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])]
+)
 
 AC_MSG_CHECKING([for debugging])
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@no/yes, default=no@:>@])],
