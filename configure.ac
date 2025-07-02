@@ -133,12 +133,13 @@ AS_IF([test -f $SIDPLAYPF_INCLUDE/include/sidplayfp/builders/exsid.h],
     [AC_MSG_RESULT([no])]
 )
 
-AC_MSG_CHECKING([for debugging])
+AC_MSG_CHECKING([whether to build for debugging])
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@no/yes, default=no@:>@])],
  [], [enable_debug=no])
 
 AS_IF([test "x$enable_debug" = "xno"],
-  [AC_MSG_RESULT([Build without debugging messages]); debug_flags=-DNDEBUG]
+  [AC_MSG_RESULT([no]); debug_flags=-DNDEBUG],
+  [AC_MSG_RESULT([yes])],
 )
 
 AC_SUBST([debug_flags])
