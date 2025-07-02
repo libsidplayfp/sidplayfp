@@ -507,7 +507,6 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 m_driver.sid    = EMU_USBSID;
                 m_driver.output = output_t::NONE;
-                m_driver.is_cycled = false;
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
 
@@ -775,10 +774,10 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
     {
         USBSIDBuilder us("");
-        if (us.availDevices () == 0) {
+#ifndef FEAT_NO_CREATE
+        if (us.availDevices ())
+#endif
             out << " --usbsid     enable USBSID support" << endl;
-            out << " --usbsidc    enable USBSID support with cycled writes (disables reading)" << endl;
-        }
     }
 #endif
     out << endl

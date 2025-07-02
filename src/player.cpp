@@ -845,10 +845,11 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
             USBSIDBuilder *us = new USBSIDBuilder( USBSID_ID );
 
             m_engCfg.sidEmulation = us;
+#ifndef FEAT_NO_CREATE
+            if (!us->sid.getStatus()) goto createSidEmu_error;
+            us->create ((m_engine.info ()).maxsids);
             if (!us->getStatus()) goto createSidEmu_error;
-            us->m_iscycled = m_driver.is_cycled;
-            us->create ((m_engine.info ()).maxsids());
-            if (!us->getStatus()) goto createSidEmu_error;
+#endif
         }
         catch (std::bad_alloc const &ba) {}
         break;
