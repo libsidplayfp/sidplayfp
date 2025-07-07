@@ -60,7 +60,7 @@ and default search paths.
 ## Build
 
 This package uses autotools, so the usual `./configure && make` is enough to build
-the program. If cloning the bare sources, the package needs to be bootstrapped
+the programs. If cloning the bare sources, the package needs to be bootstrapped
 in advance with `autoreconf -vfi`.
 
 In addition to the standard build options the following are available:
