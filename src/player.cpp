@@ -375,7 +375,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.ciaModel        = emulation.ciaModel;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.samplingMethod = emulation.samplingMethod;
+#ifdef FEAT_FASTSAMPLING
         m_engCfg.fastSampling = emulation.fastSampling;
+#endif
         m_channels            = audio.channels;
         m_precision           = audio.precision;
         m_buffer_size         = audio.getBufSize();

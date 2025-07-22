@@ -308,16 +308,19 @@ int ConsolePlayer::args(int argc, const char *argv[])
             }
 
             // Resampling Options ----------
+#ifdef FEAT_FASTSAMPLING
             else if (std::strcmp (&argv[i][1], "rif") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::INTERPOLATE;
                 m_engCfg.fastSampling = true;
+
             }
             else if (std::strcmp (&argv[i][1], "rrf") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
                 m_engCfg.fastSampling = true;
             }
+#endif
             else if (std::strcmp (&argv[i][1], "ri") == 0)
             {
                 m_engCfg.samplingMethod = SidConfig::INTERPOLATE;
@@ -713,7 +716,11 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
         << "              Use 'f' to force the model" << endl
         << " --digiboost  Enable digiboost for 8580 model" << endl
+#ifdef FEAT_FASTSAMPLING
         << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
+#else
+        << " -r[i|r]      set resampling method (default: resample interpolate)" << endl
+#endif
         << "              Use 'f' to enable fast resampling (only for reSID)" << endl
         << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
 #ifdef FEAT_FILTER_RANGE
