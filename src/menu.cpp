@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2023 Leandro Nini
+ * Copyright 2011-2025 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -362,7 +362,7 @@ void ConsolePlayer::menu ()
         consoleColour (color_t::yellow, true);
         cerr << " SID Details  : ";
         consoleColour (color_t::white, false);
-        cerr << "Model = ";
+        cerr << "1st SID = $d400, Model = ";
         cerr << getModel(tuneInfo->sidModel(0));
         cerr << endl;
         if (tuneInfo->sidChips() > 1)
@@ -414,13 +414,19 @@ void ConsolePlayer::menu ()
 
         consoleTable  (table_t::middle);
         consoleColour (color_t::yellow, true);
-        cerr << " SID Model    : ";
+        cerr << " SID Model(s) : ";
         consoleColour (color_t::white, false);
+#ifdef FEAT_SID_MODEL
+        for (unsigned int i=0; i<info.numberOfSIDs(); i++)
+            cerr << getModel(info.sidModel(i)) << " ";
+        cerr << endl;
+#else
         if (m_engCfg.forceSidModel)
             cerr << "Forced ";
         else
             cerr << "from tune, default = ";
         cerr << getModel(m_engCfg.defaultSidModel) << endl;
+#endif
 
         if (m_verboseLevel > 1)
         {
