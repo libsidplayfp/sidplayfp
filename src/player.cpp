@@ -375,7 +375,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.ciaModel        = emulation.ciaModel;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.samplingMethod = emulation.samplingMethod;
-#ifdef FEAT_FASTSAMPLING
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
         m_engCfg.fastSampling = emulation.fastSampling;
 #endif
         m_channels            = audio.channels;
