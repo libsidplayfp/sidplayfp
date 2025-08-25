@@ -53,7 +53,7 @@ jobs:
         ref: ${{ github.ref }}
     - name: Get the tag name
       id: get_tag_name
-      run: echo "tagname=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      run: echo "tagname=${GITHUB_REF#refs/tags/}" | sed 's/v//' >> $GITHUB_OUTPUT
     - name: build
       run: |
         export LDFLAGS="-s -Wl,-no-undefined -Wl,-O1 -static"
