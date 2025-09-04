@@ -948,7 +948,18 @@ bool ConsolePlayer::open (void)
             ? m_database.lengthMs(m_tune)
             : (m_database.length(m_tune) * 1000);
         if (length > 0)
+        {
             m_timer.length = length;
+            if (m_engCfg.forceC64Model)
+            {
+                // The model is forced. Adjust the songlength
+                // if it doesn't match what the tune is made for.
+                m_timer.length *= tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL
+                    ? SidTuneInfo::SPEED_CIA_1A : 50;
+                m_timer.length /= m_engCfg.defaultC64Model == SidConfig::NTSC
+                    ? SidTuneInfo::SPEED_CIA_1A : 50;
+            }
+        }
     }
 
     // Set up the play timer
