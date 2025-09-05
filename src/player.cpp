@@ -63,6 +63,8 @@ using filter_map_iter_t = std::unordered_map<std::string, double>::const_iterato
 
 // Previous song select timeout (4 secs)
 constexpr uint_least32_t SID2_PREV_SONG_TIMEOUT = 4000;
+constexpr uint_least32_t FREQ_PAL = 50;
+constexpr uint_least32_t FREQ_NTSC = 60;
 
 
 const char* ERR_NOT_ENOUGH_MEMORY = "ERROR: Not enough memory.";
@@ -954,13 +956,15 @@ bool ConsolePlayer::open (void)
             {
                 // The model is forced. Adjust the songlength
                 // if it doesn't match what the tune is made for.
-                m_timer.length *= 
+                m_timer.length *=
                     (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL)
-                    ? SidTuneInfo::SPEED_CIA_1A : 50;
-                m_timer.length /= 
+                    ? FREQ_NTSC
+                    : FREQ_PAL;
+                m_timer.length /=
                     (m_engCfg.defaultC64Model == SidConfig::NTSC) ||
                     (m_engCfg.defaultC64Model == SidConfig::OLD_NTSC)
-                    ? SidTuneInfo::SPEED_CIA_1A : 50;
+                    ? FREQ_NTSC
+                    : FREQ_PAL;
             }
         }
     }
