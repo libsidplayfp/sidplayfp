@@ -946,26 +946,26 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-        const int_least32_t length = songlengthDB == sldb_t::MD5
+        int_least32_t length = songlengthDB == sldb_t::MD5
             ? m_database.lengthMs(m_tune)
             : (m_database.length(m_tune) * 1000);
         if (length > 0)
         {
-            m_timer.length = length;
             if (m_engCfg.forceC64Model)
             {
-                // The model is forced. Adjust the songlength
-                // if it doesn't match what the tune is made for.
-                m_timer.length *=
+                // The model is forced. Adjust the song length
+                // if it doesn't match what the tune is made for
+                length *=
                     (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL)
                     ? FREQ_NTSC
                     : FREQ_PAL;
-                m_timer.length /=
+                length /= 
                     (m_engCfg.defaultC64Model == SidConfig::NTSC) ||
                     (m_engCfg.defaultC64Model == SidConfig::OLD_NTSC)
                     ? FREQ_NTSC
                     : FREQ_PAL;
             }
+            m_timer.length = length;
         }
     }
 
