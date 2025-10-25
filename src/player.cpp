@@ -991,7 +991,7 @@ bool ConsolePlayer::open (void)
                     (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL)
                     ? FREQ_NTSC
                     : FREQ_PAL;
-                length /= 
+                length /=
                     (m_engCfg.defaultC64Model == SidConfig::NTSC) ||
                     (m_engCfg.defaultC64Model == SidConfig::OLD_NTSC)
                     ? FREQ_NTSC
