@@ -7,8 +7,10 @@ sidplayfp is a console C64 music player which uses the libsidplayfp engine
 to provide the best SID listening experience.
 
 Copyright (c) 2000 Simon White
+
 Copyright (c) 2007-2010 Antti Lankila
-Copyright (c) 2010-2025 Leandro Nini <drfiemost@users.sourceforge.net>
+
+Copyright (c) 2010-2025 Leandro Nini (drfiemost@users.sourceforge.net)
 
 
 stilview
@@ -17,24 +19,25 @@ stilview
 STILView is a command-line driven program to help you retrieve
 the entries stored in STIL fast and accurately.
 
-Copyright (c) 1998, 2002 by LaLa
-Copyright (c) 2013-2017 Leandro Nini <drfiemost@users.sourceforge.net>
+Copyright (c) 1998, 2002 LaLa
+
+Copyright (c) 2013-2017 Leandro Nini (drfiemost@users.sourceforge.net)
 
 -----------------------------------------------------------------------------
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
+_This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version._
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+_This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details._
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+_You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA_
 
 -----------------------------------------------------------------------------
 
@@ -46,26 +49,26 @@ https://github.com/libsidplayfp/sidplayfp/wiki
 
 NOTE:
 -----
-ROM dumps are not embedded but must be supplied by the user.
-The ROMs are optional and most tunes should work fine without
+ROM dumps are not embedded and must be supplied by the user.
+These ROMs are optional and most tunes should work fine without them,
 but compatibility is not guaranteed.
-Check the sidplayfp.ini documentation for configuration details
+Check `sidplayfp.ini`'s documentation for configuration details
 and default search paths.
 
 -----------------------------------------------------------------------------
 
-* Build
+## Build
 
-This package uses autotools so the usual ./configure && make is enough to build
-the libraries. If cloning the bare sources the package need to be bootstrapped
-in advance with the autoreconf -vfi command.
+This package uses autotools, so the usual `./configure && make` is enough to build
+the programs. If cloning the bare sources, the package needs to be bootstrapped
+in advance with `autoreconf -vfi`.
 
 In addition to the standard build options the following are available:
 
---enable-debug
-compile with debugging messages
+`--enable-debug`:
+compile with debugging messages,
 disabled by default
 
---with-out123
-Build with out123 library providing support for additional audio interfaces
+`--with-out123`:
+build with the out123 library providing support for additional audio interfaces;
 enabled by default

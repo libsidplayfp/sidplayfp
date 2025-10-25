@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - { sys: MINGW64, env: x86_64,      arch: x86-64-v2 }
-          - { sys: MINGW32, env: i686,        arch: i686 }
-          - { sys: UCRT64,  env: ucrt-x86_64, arch: x86-64-v3 }
+          - { sys: MINGW32, env: i686,        arch: i686,   flag: --with-simd=mmx,       name: 32bit-mmx }
+          - { sys: MINGW64, env: x86_64,      arch: x86-64, flag: --with-simd=sse4,      name: 64bit-sse4 }
+          - { sys: UCRT64,  env: ucrt-x86_64, arch: x86-64, flag: --with-simd=avx2,      name: 64bit-avx2 }
     steps:
     - uses: msys2/setup-msys2@v2
       with:
@@ -42,22 +42,22 @@ jobs:
       run: |
         cd subdir
         export LDFLAGS="-s -Wl,-no-undefined -Wl,-O1 -static"
-        export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -ftree-vectorize -pipe -DUNICODE"
+        export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -pipe -DUNICODE"
         export PKG_CONFIG="pkg-config --static"
         tar -xf libsidplayfp*.tar.gz
         cd libsidplayfp*/.
-        ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid
+        ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid ${{matrix.flag}}
         make && make install
     - uses: actions/checkout@v4
       with:
         ref: ${{ github.ref }}
     - name: Get the tag name
       id: get_tag_name
-      run: echo "tagname=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      run: echo "tagname=${GITHUB_REF#refs/tags/}" | sed 's/v//' >> $GITHUB_OUTPUT
     - name: build
       run: |
         export LDFLAGS="-s -Wl,-no-undefined -Wl,-O1 -static"
-        export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -ftree-vectorize -pipe -DUNICODE"
+        export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -pipe -DUNICODE"
         export PKG_CONFIG="pkg-config --static"
         autoreconf -vfi
         ./configure --disable-dependency-tracking
@@ -68,11 +68,11 @@ jobs:
         pod2text doc/en/sidplayfp.ini.pod > sidplayfp.ini.txt
         pod2text doc/en/sidplayfp.pod > sidplayfp.txt
         pod2text doc/en/stilview.pod > stilview.txt
-        zip sidplayfp-${{matrix.arch}}-${{ steps.get_tag_name.outputs.tagname }}.zip *.exe README AUTHORS *.txt
+        zip sidplayfp-${{ steps.get_tag_name.outputs.tagname }}-${{matrix.name}}.zip *.exe README AUTHORS *.txt
     - uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: sidplayfp-${{matrix.arch}}-${{ steps.get_tag_name.outputs.tagname }}.zip
+        file: sidplayfp-${{ steps.get_tag_name.outputs.tagname }}-${{matrix.name}}.zip
         tag: ${{ github.ref }}
         file_glob: true
         overwrite: true

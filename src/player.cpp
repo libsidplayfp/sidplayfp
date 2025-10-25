@@ -63,6 +63,8 @@ using filter_map_iter_t = std::unordered_map<std::string, double>::const_iterato
 
 // Previous song select timeout (4 secs)
 constexpr uint_least32_t SID2_PREV_SONG_TIMEOUT = 4000;
+constexpr uint_least32_t FREQ_PAL = 50;
+constexpr uint_least32_t FREQ_NTSC = 60;
 
 
 const char* ERR_NOT_ENOUGH_MEMORY = "ERROR: Not enough memory.";
@@ -381,7 +383,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_engCfg.ciaModel        = emulation.ciaModel;
         m_engCfg.frequency    = audio.frequency;
         m_engCfg.samplingMethod = emulation.samplingMethod;
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
         m_engCfg.fastSampling = emulation.fastSampling;
+#endif
         m_channels            = audio.channels;
         m_precision           = audio.precision;
         m_buffer_size         = audio.getBufSize();
@@ -974,11 +978,27 @@ bool ConsolePlayer::open (void)
     // so try the songlength database or keep the default
     if (!m_timer.valid)
     {
-        const int_least32_t length = songlengthDB == sldb_t::MD5
+        int_least32_t length = songlengthDB == sldb_t::MD5
             ? m_database.lengthMs(m_tune)
             : (m_database.length(m_tune) * 1000);
         if (length > 0)
+        {
+            if (m_engCfg.forceC64Model)
+            {
+                // The model is forced. Adjust the song length
+                // if it doesn't match what the tune is made for
+                length *=
+                    (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL)
+                    ? FREQ_NTSC
+                    : FREQ_PAL;
+                length /= 
+                    (m_engCfg.defaultC64Model == SidConfig::NTSC) ||
+                    (m_engCfg.defaultC64Model == SidConfig::OLD_NTSC)
+                    ? FREQ_NTSC
+                    : FREQ_PAL;
+            }
             m_timer.length = length;
+        }
     }
 
     // Set up the play timer
