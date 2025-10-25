@@ -613,12 +613,13 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
 bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 {
     // Remove old driver and emulation
-    if (m_engCfg.sidEmulation)
+    if (m_engCfg.sidEmulation != nullptr)
     {
-        sidbuilder *builder   = m_engCfg.sidEmulation;
+        // sidbuilder *builder   = m_engCfg.sidEmulation;
+        delete m_engCfg.sidEmulation;
         m_engCfg.sidEmulation = nullptr;
         m_engine.config(m_engCfg);
-        delete builder;
+        // delete builder;
     }
 
     // Now setup the sid emulation
