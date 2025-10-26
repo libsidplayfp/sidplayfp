@@ -155,7 +155,6 @@ void displayDebugArgs()
         << " --delay=<num> simulate c64 power on delay (default: random)" << endl
         << " --noaudio     no audio output device" << endl
         << " --nosid       no sid emulation" << endl
-        << " --nomenu      no menu and info display" << endl
         << " --none        no audio output device and no sid emulation" << endl;
 }
 
@@ -526,10 +525,6 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (std::strcmp (&argv[i][1], "-noaudio") == 0)
             {
                 m_driver.output = output_t::NONE;
-            }
-            else if (std::strcmp (&argv[i][1], "-nomenu") == 0)
-            {
-                m_noMenu = true;
             }
             else if (std::strcmp (&argv[i][1], "-cpu-debug") == 0)
             {

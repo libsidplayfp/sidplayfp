@@ -345,7 +345,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_filename(""),
     m_quietLevel(0),
     songlengthDB(sldb_t::NONE),
-    m_noMenu(false),
     m_cpudebug(false),
     m_autofilter(false)
 {
@@ -1027,10 +1026,8 @@ bool ConsolePlayer::open (void)
     m_state = playerRunning;
 
     // Update display
-    if (!m_noMenu) {
-        menu();
-        updateDisplay();
-    }
+    menu();
+    updateDisplay();
     return true;
 }
 

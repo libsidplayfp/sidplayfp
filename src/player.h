@@ -172,8 +172,6 @@ private:
 
     bool               m_cpudebug;
 
-    bool               m_noMenu;
-
     bool               m_autofilter;
 
     std::bitset<9>     m_mute_channel;
