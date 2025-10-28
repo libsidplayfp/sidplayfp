@@ -100,17 +100,17 @@ AS_IF([test "x$with_out123" != "xno"],
 AM_CONDITIONAL([USE_LIBOUT123], [test "x$USE_LIBOUT123" = "xyes"])
 
 # check for builders
-PKG_CHECK_VAR([SIDPLAYPF_PREFIX], [libsidplayfp], [prefix])
+PKG_CHECK_VAR([SIDPLAYPF_INCLUDE], [libsidplayfp], [includedir])
 
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfp.h],
+AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/residfp.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H], [1], [residfp builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/residfpII.h],
+AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/residfpII.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H], [1], [residfpII builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/resid.h],
+AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/resid.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESID_H], [1], [resid builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/hardsid.h],
+AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/hardsid.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_HARDSID_H], [1], [hardsid builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/exsid.h],
+AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/exsid.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_EXSID_H], [1], [exsid builder])])
 
 
