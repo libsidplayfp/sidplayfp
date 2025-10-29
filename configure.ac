@@ -118,7 +118,7 @@ AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/hardsid.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_HARDSID_H], [1], [hardsid builder])])
 AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/exsid.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_EXSID_H], [1], [exsid builder])])
-AC_CHECK_FILE([$SIDPLAYPF_PREFIX/include/sidplayfp/builders/usbsid.h],
+AC_CHECK_FILE([$SIDPLAYPF_INCLUDE/sidplayfp/builders/usbsid.h],
     [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_USBSID_H], [1], [usbsid builder])])
 
 
