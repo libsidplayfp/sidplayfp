@@ -92,7 +92,6 @@ src/ini/types.h
 src_sidplayfp_LDADD = \
 $(LIBICONV) \
 $(AUDIO_LDFLAGS) \
-$(USBSID_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
 $(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
