@@ -24,7 +24,6 @@ AM_CPPFLAGS = \
 -I $(top_srcdir)/src \
 -DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
-$(USBSID_CFLAGS) \
 $(STILVIEW_CFLAGS) \
 $(ALSA_CFLAGS) \
 $(PULSE_CFLAGS) \
