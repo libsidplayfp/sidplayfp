@@ -26,7 +26,7 @@
 #  include "config.h"
 #endif
 
-#if defined(HAVE_SIDPLAYFP_BUILDERS_HARDSID_H) || defined(HAVE_SIDPLAYFP_BUILDERS_EXSID_H)
+#if defined(HAVE_SIDPLAYFP_BUILDERS_HARDSID_H) || defined(HAVE_SIDPLAYFP_BUILDERS_EXSID_H) || defined(HAVE_SIDPLAYFP_BUILDERS_USBSID_H)
 #  ifndef AudioDriver
 #    define AudioDriver Audio_Null
 #  endif
@@ -35,7 +35,7 @@
 #include "../AudioBase.h"
 
 /*
- * Null audio driver used for hardsid, exSID
+ * Null audio driver used for hardsid, exSID and USBSID-Pico
  * and songlength detection
  */
 class Audio_Null: public AudioBase

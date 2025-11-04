@@ -90,6 +90,11 @@ const char ConsolePlayer::HARDSID_ID[] = "HardSID";
 const char ConsolePlayer::EXSID_ID[] = "exSID";
 #endif
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+#   include <sidplayfp/builders/usbsid.h>
+const char ConsolePlayer::USBSID_ID[] = "USBSID";
+#endif
+
 #ifdef FEAT_REGS_DUMP_SID
 uint16_t freqTablePal[]
 {
@@ -414,6 +419,13 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
             else if (emulation.engine.compare(TEXT("EXSID")) == 0)
             {
                 m_driver.sid    = EMU_EXSID;
+                m_driver.output = output_t::NONE;
+            }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+            else if (emulation.engine.compare(TEXT("USBSID")) == 0)
+            {
+                m_driver.sid    = EMU_USBSID;
                 m_driver.output = output_t::NONE;
             }
 #endif
@@ -764,6 +776,25 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    case EMU_USBSID:
+    {
+        try
+        {
+            USBSIDBuilder *us = new USBSIDBuilder( USBSID_ID );
+
+            m_engCfg.sidEmulation = us;
+#ifndef FEAT_NO_CREATE
+            if (!us->sid.getStatus()) goto createSidEmu_error;
+            us->create ((m_engine.info ()).maxsids);
+            if (!us->getStatus()) goto createSidEmu_error;
+#endif
+        }
+        catch (std::bad_alloc const &ba) {}
+        break;
+    }
+#endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+
     default:
         // Emulation Not yet handled
         // This default case results in the default
@@ -894,7 +925,7 @@ bool ConsolePlayer::open (void)
                     (tuneInfo->clockSpeed() != SidTuneInfo::CLOCK_PAL)
                     ? FREQ_NTSC
                     : FREQ_PAL;
-                length /= 
+                length /=
                     (m_engCfg.defaultC64Model == SidConfig::NTSC) ||
                     (m_engCfg.defaultC64Model == SidConfig::OLD_NTSC)
                     ? FREQ_NTSC
@@ -971,6 +1002,11 @@ void ConsolePlayer::emuflush ()
         ((exSIDBuilder *)m_engCfg.sidEmulation)->flush ();
         break;
 #endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    case EMU_USBSID:
+        ((USBSIDBuilder *)m_engCfg.sidEmulation)->flush ();
+        break;
+#endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
     default:
         break;
     }

@@ -126,6 +126,12 @@ AS_IF([test -f $SIDPLAYPF_INCLUDE/sidplayfp/builders/exsid.h],
     AC_MSG_RESULT([yes])],
     [AC_MSG_RESULT([no])]
 )
+AC_MSG_CHECKING([for $SIDPLAYPF_INCLUDE/sidplayfp/builders/usbsid.h])
+AS_IF([test -f $SIDPLAYPF_INCLUDE/sidplayfp/builders/usbsid.h],
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_USBSID_H], [1], [usbsid builder])
+    AC_MSG_RESULT([yes])],
+    [AC_MSG_RESULT([no])]
+)
 
 AC_MSG_CHECKING([whether to build for debugging])
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug], [compile for debugging @<:@no/yes, default=no@:>@])],
