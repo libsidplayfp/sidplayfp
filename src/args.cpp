@@ -45,6 +45,10 @@ using std::endl;
 #  include <sidplayfp/builders/exsid.h>
 #endif
 
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+#  include <sidplayfp/builders/usbsid.h>
+#endif
+
 // Wide-chars are not yet supported here
 #undef SEPARATOR
 #define SEPARATOR "/"
@@ -434,7 +438,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (std::strcmp (&argv[i][1], "cws") == 0)
             {
                 m_combinedWaveformsStrength  = SidConfig::STRONG;
-            }	
+            }
 #endif
             // File format conversions
             else if (argv[i][1] == 'w')
@@ -499,6 +503,14 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_driver.output = output_t::NONE;
             }
 #endif // HAVE_SIDPLAYFP_BUILDERS_EXSID_H
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+            else if (std::strcmp (&argv[i][1], "-usbsid") == 0)
+            {
+                m_driver.sid    = EMU_USBSID;
+                m_driver.output = output_t::NONE;
+            }
+#endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
 
             // These are for debug
             else if (std::strcmp (&argv[i][1], "-none") == 0)
@@ -759,6 +771,15 @@ void ConsolePlayer::displayArgs (const char *arg)
         if (es.availDevices ())
 #endif
             out << " --exsid      enable exSID support" << endl;
+    }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    {
+        USBSIDBuilder us("");
+#ifndef FEAT_NO_CREATE
+        if (us.availDevices ())
+#endif
+            out << " --usbsid     enable USBSID support" << endl;
     }
 #endif
     out << endl

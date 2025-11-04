@@ -84,6 +84,7 @@ typedef enum
     /* The following should disable the soundcard */
     EMU_HARDSID,
     EMU_EXSID,
+    EMU_USBSID,
     EMU_SIDSTATION,
     EMU_COMMODORE,
     EMU_SIDSYN,
@@ -128,6 +129,9 @@ private:
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
     static const char  EXSID_ID[];
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    static const char  USBSID_ID[];
 #endif
 #ifdef HAVE_TSID
     TSID               m_tsid;
