@@ -179,6 +179,10 @@ Use HardSID device.
 
 Use exSID device.
 
+=item B<--usbsid>
+
+Use USBSID-Pico device.
+
 =item B<--cpu-debug>
 
 Display CPU register and assembly dumps, available only
