@@ -175,7 +175,7 @@ improve latency.
 
 =over
 
-=item B<Engine>=I<< <RESIDFP|RESID|HARDSID|EXSID|NONE> >>
+=item B<Engine>=I<< <RESIDFP|RESID|HARDSID|EXSID|USBSID|NONE> >>
 
 Set the SID emulation engine. Default is RESIDFP.
 
