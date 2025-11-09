@@ -168,7 +168,6 @@ int ConsolePlayer::args(int argc, const char *argv[])
     }
 
     // default arg options
-    m_driver.output = output_t::SOUNDCARD;
     m_driver.file   = false;
     m_driver.info   = false;
 
