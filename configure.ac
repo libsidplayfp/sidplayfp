@@ -110,7 +110,7 @@ AS_IF([test -f $SIDPLAYPF_INCLUDE/sidplayfp/builders/residfp.h],
 )
 AC_MSG_CHECKING([for $SIDPLAYPF_INCLUDE/sidplayfp/builders/residfpII.h])
 AS_IF([test -f $SIDPLAYPF_INCLUDE/sidplayfp/builders/residfpII.h],
-    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H], [1], [residfpII builder])
+    [AC_DEFINE([HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H], [1], [residfpII builder])
     AC_MSG_RESULT([yes])],
     [AC_MSG_RESULT([no])]
 )
