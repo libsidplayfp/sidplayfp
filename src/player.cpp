@@ -259,7 +259,7 @@ double getRecommendedFilterRange(const std::string& author)
         double adjustment = it->second;
         return (adjustment * 20. - 1.) / 39.;
     }
-    return -1;
+    return -1.;
 }
 #else
 double getRecommendedFilterCurve(const std::string& author)
@@ -645,9 +645,18 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
-                frange = getRecommendedFilterRange(tuneInfo->infoString(1));
-                if (m_verboseLevel > 1)
-                    cerr << "Recommended filter range: " << frange << endl;
+                double rfr = getRecommendedFilterRange(tuneInfo->infoString(1));
+                if (rfr < 0.)
+                {
+                    if (m_verboseLevel > 1)
+                        cerr << "No recommended filter range available" << endl;
+                }
+                else
+                {
+                    if (m_verboseLevel > 1)
+                        cerr << "Recommended filter range: " << rfr << endl;
+                    frange = rfr;
+                }
             }
 
             if (m_frange.has_value())
@@ -671,9 +680,18 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 #ifndef FEAT_FILTER_RANGE
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
-                fcurve = getRecommendedFilterCurve(tuneInfo->infoString(1));
-                if (m_verboseLevel > 1)
-                    cerr << "Recommended filter curve: " << fcurve << endl;
+                double rfc = getRecommendedFilterCurve(tuneInfo->infoString(1));
+                if (rfc < 0.)
+                {
+                    if (m_verboseLevel > 1)
+                        cerr << "No recommended filter curve available" << endl;
+                }
+                else
+                {
+                    if (m_verboseLevel > 1)
+                        cerr << "Recommended filter curve: " << rfc << endl;
+                    fcurve = rfc;
+                }
             }
 #endif
             if (m_fcurve.has_value())
@@ -727,9 +745,18 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
             {
-                frange = getRecommendedFilterRange(tuneInfo->infoString(1));
-                if (m_verboseLevel > 1)
-                    cerr << "Recommended filter range: " << frange << endl;
+                double rfr = getRecommendedFilterRange(tuneInfo->infoString(1));
+                if (rfr < 0.)
+                {
+                    if (m_verboseLevel > 1)
+                        cerr << "No recommended filter range available" << endl;
+                }
+                else
+                {
+                    if (m_verboseLevel > 1)
+                        cerr << "Recommended filter range: " << rfr << endl;
+                    frange = rfr;
+                }
             }
 
             if (m_frange.has_value())
