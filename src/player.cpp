@@ -402,6 +402,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;
 
+        // Set default output
+        m_driver.output = output_t::SOUNDCARD;
+
         if (!emulation.engine.empty())
         {
             if (emulation.engine.compare(TEXT("RESIDFP")) == 0)
