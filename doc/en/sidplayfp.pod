@@ -33,13 +33,13 @@ Display help.
 
 Display additional options helpful for debugging.
 
-=item B<-fo>I<< <num> >>
+=item B<-fo>I<< <a|b> <num> >>
 
 Set fade-out time in seconds (default: 0).
-If positive the fade-out will start at the song end
-so the specified number of seconds wil be added
-to the tune length. If negative it will start
-before the song end.
+Starts a(fter) or b(efore) the actual song end time,
+the specified number of seconds wil be added to the tune length
+if after. If not specified starts after.
+Mostly useful for looping tunes.
 
 =item B<-f>I<< <num> >>
 

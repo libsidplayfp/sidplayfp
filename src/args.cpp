@@ -213,19 +213,25 @@ int ConsolePlayer::args(int argc, const char *argv[])
 #ifdef FEAT_NEW_PLAY_API
             else if (strncmp (&argv[i][1], "fo", 2) == 0)
             {
-                if (argv[i][3] == '\0')
-                    err = true;
-                int fadeoutTime = (uint_least32_t) atoi (&argv[i][3]);
-                if (fadeoutTime < 0)
+                m_fadeAfter = true;
+                int j = 3;
+                if (argv[i][j] == 'a')
                 {
-                    m_fadeoutTime = -fadeoutTime;
+                    j++;
+                }
+                else if (argv[i][j] == 'b')
+                {
+                    j++;
                     m_fadeAfter = false;
                 }
-                else
+                if (argv[i][j] == '\0')
+                    err = true;
+                int fadeoutTime = (uint_least32_t) atoi (&argv[i][j]);
+                if (fadeoutTime < 0)
                 {
-                    m_fadeoutTime = fadeoutTime;
-                    m_fadeAfter = true;
+                    err = true;
                 }
+                m_fadeoutTime = static_cast<uint_least32_t>(fadeoutTime);
             }
 #endif
             else if (argv[i][1] == 'f')
@@ -707,7 +713,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " --help-debug debug help menu" << endl
         << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
 #ifdef FEAT_NEW_PLAY_API
-        << " -fo<num>     set fade-out time in seconds, if positive will be added to song duration (default: 0)" << endl
+        << " -fo[a|b]<num> set fade-out time in seconds, starts a(fter) or b(efore) actual song end time (default: 0)" << endl
 #endif
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
