@@ -447,6 +447,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_verboseLevel = (m_iniCfg.sidplay2()).verboseLevel;
 #ifdef FEAT_NEW_PLAY_API
     m_fadeoutTime = 0;
+    m_fadeAfter = false;
 #endif
     createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
@@ -1003,7 +1004,8 @@ bool ConsolePlayer::open (void)
     // Set up the play timer
     m_timer.stop = m_timer.length;
 #ifdef FEAT_NEW_PLAY_API
-    m_timer.stop += m_fadeoutTime;
+    if (m_fadeAfter)
+        m_timer.stop += m_fadeoutTime;
 #endif
 
     if (m_timer.valid)

@@ -215,7 +215,17 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 if (argv[i][3] == '\0')
                     err = true;
-                m_fadeoutTime = (uint_least32_t) atoi (&argv[i][3]);
+                int fadeoutTime = (uint_least32_t) atoi (&argv[i][3]);
+                if (fadeoutTime < 0)
+                {
+                    m_fadeoutTime = -fadeoutTime;
+                    m_fadeAfter = false;
+                }
+                else
+                {
+                    m_fadeoutTime = fadeoutTime;
+                    m_fadeAfter = true;
+                }
             }
 #endif
             else if (argv[i][1] == 'f')
@@ -697,7 +707,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " --help-debug debug help menu" << endl
         << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
 #ifdef FEAT_NEW_PLAY_API
-        << " -fo<num>     set fade-out time in seconds (default: 0)" << endl
+        << " -fo<num>     set fade-out time in seconds, if positive will be added to song duration (default: 0)" << endl
 #endif
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
