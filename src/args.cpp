@@ -713,7 +713,7 @@ void ConsolePlayer::displayArgs (const char *arg)
         << " --help-debug debug help menu" << endl
         << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
 #ifdef FEAT_NEW_PLAY_API
-        << " -fo[a|b]<num> set fade-out time in seconds, starts a(fter) or b(efore) actual song end time (default: 0)" << endl
+        << " -fo[a|b]<num> set fade-out time in seconds, ends a(fter) or starts b(efore) actual song end time (default: 0=no fade out)" << endl
 #endif
         << " -f<num>      set frequency in Hz (default: "
         << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
