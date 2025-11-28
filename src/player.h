@@ -169,6 +169,11 @@ private:
 #endif
 #ifdef FEAT_NEW_PLAY_API
     uint_least32_t     m_fadeoutTime;
+    /*
+     * fade out after song end
+     * if true fade out time will be added to song duration
+     */
+    bool               m_fadeAfter;
 #endif
 #ifdef FEAT_REGS_DUMP_SID
     uint8_t            m_registers[3][32];
