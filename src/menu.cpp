@@ -501,6 +501,9 @@ void ConsolePlayer::menu ()
     // is not disturbed.
     if ( !m_quietLevel )
         cerr << "00:00";
+
+    consoleRestore();
+
     cerr << flush;
 }
 
