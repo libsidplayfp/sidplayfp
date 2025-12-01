@@ -1081,18 +1081,6 @@ void ConsolePlayer::close ()
     createSidEmu    (EMU_NONE, nullptr);
     m_engine.load   (nullptr);
     m_engine.config (m_engCfg);
-
-    if (m_quietLevel < 2)
-    {   // Correctly leave ansi mode and get prompt to
-        // end up in a suitable location
-        if ((m_iniCfg.console ()).ansi) {
-            cerr << '\x1b' << "[?25h";
-            cerr << '\x1b' << "[0m";
-        }
-#ifndef _WIN32
-        cerr << endl;
-#endif
-    }
 }
 
 // Flush any hardware sid fifos so all music is played
