@@ -1006,7 +1006,7 @@ bool ConsolePlayer::play()
             int samples = m_engine.play(2000);
             if (samples < 0) UNLIKELY
             {
-                cerr << m_engine.error();
+                displayError (m_engine.error());
                 m_state = playerError;
                 return false;
             }
@@ -1025,7 +1025,7 @@ bool ConsolePlayer::play()
         uint_least32_t samples = m_engine.play(buffer, length);
         if ((samples < length) || !m_engine.isPlaying()) UNLIKELY
         {
-            cerr << m_engine.error();
+            displayError (m_engine.error());
             m_state = playerError;
             return false;
         }
