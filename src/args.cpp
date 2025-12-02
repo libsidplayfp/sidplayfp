@@ -23,9 +23,9 @@
 
 #include <iostream>
 
-#include <cstring>
 #include <climits>
 #include <cstdlib>
+#include <cstring>
 
 #include "ini/types.h"
 
@@ -95,13 +95,13 @@ bool parseTime(const char *str, uint_least32_t &time)
     char *sep = (char *) strstr (str, ":");
     if (!sep)
     {   // User gave seconds
-        _time = atoi (str);
+        _time = std::atoi (str);
     }
     else
     {   // Read in MM:SS[.mmm] format
         int val;
         *sep = '\0';
-        val  = atoi (str);
+        val  = std::atoi (str);
         if (val < 0 || val > 99)
             return false;
         _time = (uint_least32_t) val * 60;
@@ -125,7 +125,7 @@ bool parseTime(const char *str, uint_least32_t &time)
 
             *milli = '\0';
         }
-        val   = atoi (sep + 1);
+        val   = std::atoi (sep + 1);
         if (val < 0 || val > 59)
             return false;
         _time += (uint_least32_t) val;
@@ -199,18 +199,18 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (!parseTime (&argv[i][2], m_timer.start))
                     err = true;
             }
-            else if (strncmp (&argv[i][1], "ds", 2) == 0)
+            else if (std::strncmp (&argv[i][1], "ds", 2) == 0)
             {   // Override sidTune and enable the second sid
                 if (!parseAddress (&argv[i][3], m_engCfg.secondSidAddress))
                     err = true;
             }
-            else if (strncmp (&argv[i][1], "ts", 2) == 0)
+            else if (std::strncmp (&argv[i][1], "ts", 2) == 0)
             {   // Override sidTune and enable the third sid
                 if (!parseAddress (&argv[i][3], m_engCfg.thirdSidAddress))
                     err = true;
             }
 #ifdef FEAT_NEW_PLAY_API
-            else if (strncmp (&argv[i][1], "fo", 2) == 0)
+            else if (std::strncmp (&argv[i][1], "fo", 2) == 0)
             {
                 m_fadeAfter = true;
                 int j = 3;
@@ -225,7 +225,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 }
                 if (argv[i][j] == '\0')
                     err = true;
-                int fadeoutTime = (uint_least32_t) atoi (&argv[i][j]);
+                int fadeoutTime = (uint_least32_t) std::atoi (&argv[i][j]);
                 if (fadeoutTime < 0)
                 {
                     err = true;
@@ -237,38 +237,38 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 if (argv[i][2] == '\0')
                     err = true;
-                m_engCfg.frequency = (uint_least32_t) atoi (argv[i]+2);
+                m_engCfg.frequency = (uint_least32_t) std::atoi (argv[i]+2);
             }
 
             // No filter options
-            else if (strncmp (&argv[i][1], "nf", 2) == 0)
+            else if (std::strncmp (&argv[i][1], "nf", 2) == 0)
             {
                 if (argv[i][3] == '\0')
                     m_filter.enabled = false;
             }
 
             // Track options
-            else if (strncmp (&argv[i][1], "ols", 3) == 0)
+            else if (std::strncmp (&argv[i][1], "ols", 3) == 0)
             {
                 m_track.loop   = true;
                 m_track.single = true;
-                m_track.first  = atoi(&argv[i][4]);
+                m_track.first  = std::atoi(&argv[i][4]);
             }
-            else if (strncmp (&argv[i][1], "ol", 2) == 0)
+            else if (std::strncmp (&argv[i][1], "ol", 2) == 0)
             {
                 m_track.loop  = true;
-                m_track.first = atoi(&argv[i][3]);
+                m_track.first = std::atoi(&argv[i][3]);
             }
-            else if (strncmp (&argv[i][1], "os", 2) == 0)
+            else if (std::strncmp (&argv[i][1], "os", 2) == 0)
             {
                 m_track.single = true;
-                m_track.first  = atoi(&argv[i][3]);
+                m_track.first  = std::atoi(&argv[i][3]);
             }
             else if (argv[i][1] == 'o')
             {   // User forgot track number ?
                 if (argv[i][2] == '\0')
                     err = true;
-                m_track.first = atoi(&argv[i][2]);
+                m_track.first = std::atoi(&argv[i][2]);
             }
 
             // Channel muting
@@ -278,7 +278,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     err = true;
                 else
                 {
-                    const unsigned int voice = atoi(&argv[i][2]);
+                    const unsigned int voice = std::atoi(&argv[i][2]);
                     if (voice > 0 && voice <= m_mute_channel.size())
                         m_mute_channel[voice-1] = true;
                 }
@@ -292,7 +292,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     err = true;
                 else
                 {
-                    const unsigned int chip = atoi(&argv[i][2]);
+                    const unsigned int chip = std::atoi(&argv[i][2]);
                     if (chip > 0 && chip <= m_mute_samples.size())
                         m_mute_samples[chip-1] = true;
                 }
@@ -303,7 +303,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][2] == '\0')
                     err = true;
                 {
-                    uint_least8_t precision = atoi(&argv[i][2]);
+                    uint_least8_t precision = std::atoi(&argv[i][2]);
                     if (precision <= 16)
                         m_precision = 16;
                     else
@@ -316,7 +316,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][2] == '\0')
                     m_quietLevel = 1;
                 else
-                    m_quietLevel = atoi(&argv[i][2]);
+                    m_quietLevel = std::atoi(&argv[i][2]);
             }
 
             else if (argv[i][1] == 't')
@@ -411,15 +411,15 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][2] == '\0')
                     m_verboseLevel = 1;
                 else
-                    m_verboseLevel = atoi(&argv[i][2]);
+                    m_verboseLevel = std::atoi(&argv[i][2]);
             }
-            else if (strncmp (&argv[i][1], "-delay=", 7) == 0)
+            else if (std::strncmp (&argv[i][1], "-delay=", 7) == 0)
             {
-                m_engCfg.powerOnDelay = (uint_least16_t) atoi(&argv[i][8]);
+                m_engCfg.powerOnDelay = (uint_least16_t) std::atoi(&argv[i][8]);
             }
-            else if (strncmp (&argv[i][1], "-fcurve=", 8) == 0)
+            else if (std::strncmp (&argv[i][1], "-fcurve=", 8) == 0)
             {
-                if (strncmp (&argv[i][9], "auto", 4) == 0)
+                if (std::strncmp (&argv[i][9], "auto", 4) == 0)
                 {
                     m_autofilter = true;
                 }
@@ -429,9 +429,9 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 }
             }
 #ifdef FEAT_FILTER_RANGE
-            else if (strncmp (&argv[i][1], "-frange=", 8) == 0)
+            else if (std::strncmp (&argv[i][1], "-frange=", 8) == 0)
             {
-                if (strncmp (&argv[i][9], "auto", 4) == 0)
+                if (std::strncmp (&argv[i][9], "auto", 4) == 0)
                 {
                     m_autofilter = true;
                 }
@@ -463,21 +463,21 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 if (argv[i][2] != '\0')
                     m_outfile = &argv[i][2];
             }
-            else if (strncmp (&argv[i][1], "-wav", 4) == 0)
+            else if (std::strncmp (&argv[i][1], "-wav", 4) == 0)
             {
                 m_driver.output = output_t::WAV;
                 m_driver.file   = true;
                 if (argv[i][5] != '\0')
                     m_outfile = &argv[i][5];
             }
-            else if (strncmp (&argv[i][1], "-au", 3) == 0)
+            else if (std::strncmp (&argv[i][1], "-au", 3) == 0)
             {
                 m_driver.output = output_t::AU;
                 m_driver.file   = true;
                 if (argv[i][4] != '\0')
                     m_outfile = &argv[i][4];
             }
-            else if (strncmp (&argv[i][1], "-info", 5) == 0)
+            else if (std::strncmp (&argv[i][1], "-info", 5) == 0)
             {
                 m_driver.info   = true;
             }
