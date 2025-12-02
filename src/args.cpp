@@ -193,6 +193,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 displayDebugArgs ();
                 return 0;
             }
+            else if (!std::strcmp(&argv[i][1], "-version"))
+            {
+                displayVersion();
+                return 0;
+            }
 
             else if (argv[i][1] == 'b')
             {
