@@ -137,6 +137,18 @@ const char *ConsolePlayer::getNote(uint16_t freq)
     return "---";
 }
 #endif
+
+void ConsolePlayer::displayVersion()
+{
+    const SidInfo &info = m_engine.info();
+
+    cout << PACKAGE_NAME " " VERSION << endl;
+    string version;
+    version.append("Using ").append(info.name()).append(" ").append(info.version());
+    cout << version << endl;
+    cout << "Home Page: " PACKAGE_URL;
+}
+
 // Display console menu
 void ConsolePlayer::menu ()
 {

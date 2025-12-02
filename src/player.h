@@ -249,6 +249,7 @@ private:
 
     // Command line args
     void displayArgs    (const char *arg = nullptr);
+    void displayVersion ();
 
     bool createOutput   (output_t driver, const SidTuneInfo *tuneInfo);
     bool createSidEmu   (SIDEMUS emu, const SidTuneInfo *tuneInfo);
