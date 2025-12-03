@@ -72,3 +72,8 @@ disabled by default
 `--with-out123`:
 build with the out123 library providing support for additional audio interfaces;
 enabled by default
+
+`--with-libiconv-prefix[=DIR]`:
+search for libiconv in DIR/include and DIR/lib
+
+the character conversion requires presence of the POSIX/XSI iconv function family in either the C library or a separate libiconv library (see https://www.gnu.org/software/gettext/manual/html_node/AM_005fICONV.html)
