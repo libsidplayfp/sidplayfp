@@ -45,9 +45,9 @@ class codeConvert
 private:
 #ifdef HAVE_ICONV
     iconv_t cd;
+#endif
 
     char buffer[1024];
-#endif
 
 public:
     codeConvert();
