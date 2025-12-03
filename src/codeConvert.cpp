@@ -29,31 +29,43 @@
 const char* codeConvert::convert(const char* src)
 {
 #ifdef HAVE_ICONV
-    if (cd == (iconv_t) -1)
-        return src;
-
-    ICONV_CONST char *srcPtr = const_cast<ICONV_CONST char*>(src);
-    size_t srcLeft = strlen(src);
-    char *outPtr = buffer;
-    size_t outLeft = sizeof (buffer)-1;
-
-    while (srcLeft > 0)
+    if (cd != (iconv_t) -1)
     {
-        size_t ret = iconv(cd, &srcPtr, &srcLeft, &outPtr, &outLeft);
-        if (ret == (size_t) -1)
-            return src;
+        ICONV_CONST char *srcPtr = const_cast<ICONV_CONST char*>(src);
+        size_t srcLeft = std::strlen(src);
+        char *outPtr = buffer;
+        size_t outLeft = sizeof (buffer)-1;
+
+        while (srcLeft > 0)
+        {
+            size_t ret = iconv(cd, &srcPtr, &srcLeft, &outPtr, &outLeft);
+            if (ret == (size_t) -1)
+                return src;
+        }
+
+        // flush
+        iconv(cd, nullptr, &srcLeft, &outPtr, &outLeft);
+
+        // terminate buffer string
+        *outPtr = 0;
+
+        return buffer;
+    }
+#endif
+    // convert non-ASCII characters to ASCII
+    const char ascii[64 + 1] = "AAAAAAECEEEEIIIIDNOOOOOxOUUUUYTSaaaaaaeceeeeiiiidnooooo/ouuuuyty";
+    int i=0;
+    while (src[i])
+    {
+        unsigned char ch = static_cast<unsigned char>(src[i]);
+        buffer[i] = (ch < 0xc0) ? ch : ascii[ch - 0xc0];
+        i++;
     }
 
-    // flush
-    iconv(cd, nullptr, &srcLeft, &outPtr, &outLeft);
-
     // terminate buffer string
-    *outPtr = 0;
+    buffer[i] = 0;
 
     return buffer;
-#else
-    return src;
-#endif
 }
 
 codeConvert::codeConvert()
