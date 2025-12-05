@@ -880,8 +880,8 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             m_engCfg.sidEmulation = us;
 #ifndef FEAT_NO_CREATE
-            if (!us->sid.getStatus()) goto createSidEmu_error;
-            us->create ((m_engine.info ()).maxsids);
+            if (!us->getStatus()) goto createSidEmu_error;
+            us->create ((m_engine.info ()).maxsids());
             if (!us->getStatus()) goto createSidEmu_error;
 #endif
         }
