@@ -776,9 +776,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
     {
         USBSIDBuilder us("");
-#ifndef FEAT_NO_CREATE
         if (us.availDevices ())
-#endif
             out << " --usbsid     enable USBSID support" << endl;
     }
 #endif
