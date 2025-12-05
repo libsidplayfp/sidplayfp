@@ -146,7 +146,7 @@ void ConsolePlayer::displayVersion()
     string version;
     version.append("Using ").append(info.name()).append(" ").append(info.version());
     cout << version << endl;
-    cout << "Home Page: " PACKAGE_URL;
+    cout << "Home Page: " PACKAGE_URL << endl;
 }
 
 // Display console menu
