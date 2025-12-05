@@ -42,9 +42,12 @@
 #  define FEAT_NEW_PLAY_API
 #endif
 
+#if LIBSIDPLAYFP_VERSION_MAJ > 2 || (LIBSIDPLAYFP_VERSION_MAJ == 2 && LIBSIDPLAYFP_VERSION_MIN >= 16)
+#  define FEAT_SID_MODEL
+#endif
+
 #if LIBSIDPLAYFP_VERSION_MAJ >= 3
 #  define FEAT_NO_CREATE
-#  define FEAT_SID_MODEL
 #endif
 
 #endif
