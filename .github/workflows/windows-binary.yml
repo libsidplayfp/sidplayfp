@@ -17,9 +17,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - { sys: MINGW32, env: i686,        arch: i686,   flag: --with-simd=mmx,       name: 32bit-mmx }
-          - { sys: MINGW64, env: x86_64,      arch: x86-64, flag: --with-simd=sse4,      name: 64bit-sse4 }
-          - { sys: UCRT64,  env: ucrt-x86_64, arch: x86-64, flag: --with-simd=avx2,      name: 64bit-avx2 }
+          - { sys: MINGW32, env: i686,        arch: i686,   name: mingw32 }
+          - { sys: MINGW64, env: x86_64,      arch: x86-64, name: mingw64 }
+          - { sys: UCRT64,  env: ucrt-x86_64, arch: x86-64, name: ucrt64 }
     steps:
     - uses: msys2/setup-msys2@v2
       with:
@@ -46,7 +46,7 @@ jobs:
         export PKG_CONFIG="pkg-config --static"
         tar -xf libsidplayfp*.tar.gz
         cd libsidplayfp*/.
-        ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid ${{matrix.flag}}
+        ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid --with-simd=runtime
         make && make install
     - uses: actions/checkout@v4
       with:
@@ -68,7 +68,7 @@ jobs:
         pod2text doc/en/sidplayfp.ini.pod > sidplayfp.ini.txt
         pod2text doc/en/sidplayfp.pod > sidplayfp.txt
         pod2text doc/en/stilview.pod > stilview.txt
-        zip sidplayfp-${{ steps.get_tag_name.outputs.tagname }}-${{matrix.name}}.zip *.exe README AUTHORS *.txt
+        zip sidplayfp-${{ steps.get_tag_name.outputs.tagname }}-${{matrix.name}}.zip *.exe README* AUTHORS *.txt
     - uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
