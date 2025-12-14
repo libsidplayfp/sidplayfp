@@ -1,0 +1,11 @@
+2.16.0 2025-12-xx
+* Add USBSID support (#84)
+* Display the actual used SID model(s) (#79)
+* Fix invalid filter range error (#94)
+* Add --version option (#99)
+* Replace non-ASCII characters with ASCII when iconv is not enabled (#97)
+* Correctly restore ANSI console (#100)
+* Correctly display play errors (#101)
+* Handle negative fade out values in an useful way (#93)
+* Init driver output before parsing config (#89)
+* Build windows binaries with dynamic SIMD dispatch
