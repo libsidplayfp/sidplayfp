@@ -16,10 +16,23 @@ jobs:
 
     strategy:
       matrix:
+        sys: [MINGW32, MINGW64, UCRT64]
         include:
-          - { sys: MINGW32, env: i686,        arch: i686,   name: mingw32 }
-          - { sys: MINGW64, env: x86_64,      arch: x86-64, name: mingw64 }
-          - { sys: UCRT64,  env: ucrt-x86_64, arch: x86-64, name: ucrt64 }
+          - sys: MINGW32
+            arch: i686
+            name: mingw32
+            usb_libs:
+            cfg_parms:
+          - sys: MINGW64
+            arch: x86-64
+            name: mingw64
+            usb_libs: libusb:p libftdi:p
+            cfg_parms: --with-usbsid --with-exsid
+          - sys: UCRT64
+            arch: x86-64
+            name: ucrt64
+            usb_libs: libusb:p libftdi:p
+            cfg_parms: --with-usbsid --with-exsid
     steps:
     - uses: msys2/setup-msys2@v2
       with:
@@ -30,8 +43,10 @@ jobs:
           zip
           upx
           base-devel
-          mingw-w64-${{matrix.env}}-toolchain
-          mingw-w64-${{matrix.env}}-autotools
+        pacboy: >-
+          toolchain:p
+          autotools:p
+          ${{matrix.usb_libs}}
     - uses: dsaltares/fetch-gh-release-asset@master
       with:
         repo: 'libsidplayfp/libsidplayfp'
@@ -46,7 +61,7 @@ jobs:
         export PKG_CONFIG="pkg-config --static"
         tar -xf libsidplayfp*.tar.gz
         cd libsidplayfp*/.
-        ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid --with-simd=runtime
+        ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid ${{matrix.cfg_parms}} --with-simd=runtime
         make && make install
     - uses: actions/checkout@v4
       with:
