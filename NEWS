@@ -1,4 +1,4 @@
-2.16.0 2025-12-xx
+2.16.0 2025-12-23
 * Add USBSID support (#84)
 * Display the actual used SID model(s) (#79)
 * Fix invalid filter range error (#94)
