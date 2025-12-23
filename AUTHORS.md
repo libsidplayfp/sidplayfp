@@ -20,6 +20,8 @@ supplied contributions or code was derived from their work:
     LaLa              - stilview
     Stian Skjelstad   - SID status display
     Michael Hartmann  - filter curves
+    Thibaut VARENE    - exSID support
+    LouD              - USBSID-Pico support
 
 
 Credit where credit is due, so if I missed anyone please let me know.
