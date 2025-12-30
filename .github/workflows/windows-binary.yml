@@ -63,7 +63,7 @@ jobs:
         cd libsidplayfp*/.
         ./configure --disable-dependency-tracking --disable-shared --enable-static --without-gcrypt --enable-hardsid ${{matrix.cfg_parms}} --with-simd=runtime
         make && make install
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         ref: ${{ github.ref }}
     - name: Get the tag name
