@@ -510,7 +510,8 @@ void ConsolePlayer::menu ()
     if (m_verboseLevel > 1)
     {
         consoleTable (table_t::separator);
-        consoleTable (table_t::middle); cerr << "         NOTE PW         CONTROL          WAVEFORMS" << endl;
+        consoleTable (table_t::middle);
+        cerr << "         NOTE PW         CONTROL          WAVEFORMS" << endl;
 
 #ifdef FEAT_NEW_PLAY_API
         for (unsigned int i=0; i < m_engine.installedSIDs() * 3; i++)
@@ -518,10 +519,25 @@ void ConsolePlayer::menu ()
         for (int i=0; i < tuneInfo->sidChips() * 3; i++)
 #endif
         {
-            consoleTable (table_t::middle); cerr << endl; // reserve space for each voice's status
+            consoleTable (table_t::middle);
+            cerr << endl; // reserve space for each voice's status
         }
     }
 #endif
+
+    if (m_verboseLevel)
+    {
+        consoleTable(table_t::separator);
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ←/→  Previous/Next  1-9  Toggle voices  p    Pause" << endl;
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ↓/↑  Standard/Fast  qwe  Toggle sample  Esc  Quit" << endl;
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ⇱/⇲  First/Last     f    Toggle filter" << endl;
+    }
 
     consoleTable (table_t::end);
 
