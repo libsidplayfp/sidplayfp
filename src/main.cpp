@@ -66,7 +66,8 @@ main_restart:
 
 #ifndef _WIN32
     // Configure terminal to allow direct access to key events
-    keyboard_enable_raw ();
+    if (player.isInteractive())
+        keyboard_enable_raw();
 #endif
 
     // Play loop
@@ -77,7 +78,8 @@ main_restart:
     }
 
 #ifndef _WIN32
-    keyboard_disable_raw ();
+    if (player.isInteractive())
+        keyboard_disable_raw();
 #endif
 
     // Restore default signal error handlers
