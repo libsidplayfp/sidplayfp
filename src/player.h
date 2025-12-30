@@ -281,6 +281,8 @@ public:
     void stop  (void);
 
     player_state_t state (void) const { return m_state; }
+
+    bool isInteractive() const { return !m_driver.file; }
 };
 
 #endif // PLAYER_H
