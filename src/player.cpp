@@ -344,6 +344,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_outfile(nullptr),
     m_filename(""),
     m_quietLevel(0),
+    m_showhelp(false),
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
     m_autofilter(false)
@@ -1391,6 +1392,11 @@ void ConsolePlayer::decodeKeys ()
                 m_state = playerPaused;
                 m_driver.selected->pause ();
             }
+        break;
+
+        case A_HELP:
+            m_showhelp = !m_showhelp;
+            menu();
         break;
 
         case A_TOGGLE_VOICE1:
