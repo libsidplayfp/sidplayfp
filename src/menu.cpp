@@ -506,7 +506,7 @@ void ConsolePlayer::menu ()
     }
     cerr << endl;
 
-    if (m_verboseLevel)
+    if (m_showhelp)
     {
         consoleTable(table_t::separator);
         consoleTable(table_t::middle);
@@ -514,10 +514,10 @@ void ConsolePlayer::menu ()
         cerr << " ←/→  Previous/Next  1-9  Toggle voices  p    Pause" << endl;
         consoleTable(table_t::middle);
         consoleColour((m_iniCfg.console()).title);
-        cerr << " ↓/↑  Standard/Fast  qwe  Toggle sample  Esc  Quit" << endl;
+        cerr << " ↓/↑  Standard/Fast  qwe  Toggle sample  h    Help" << endl;
         consoleTable(table_t::middle);
         consoleColour((m_iniCfg.console()).title);
-        cerr << " ⇱/⇲  First/Last     f    Toggle filter" << endl;
+        cerr << " ⇱/⇲  First/Last     f    Toggle filter  Esc  Quit" << endl;
     }
 
 #ifdef FEAT_REGS_DUMP_SID

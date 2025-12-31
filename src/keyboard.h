@@ -45,6 +45,7 @@ enum
     A_HOME,
     A_END,
     A_PAUSED,
+    A_HELP,
     A_QUIT,
 
     /* Debug */

@@ -251,6 +251,10 @@ Toggle filter.
 
 Pause/unpause playback.
 
+=item h
+
+Show/hide help.
+
 =item Esc
 
 Quit player.
