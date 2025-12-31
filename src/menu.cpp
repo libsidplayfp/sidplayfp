@@ -506,6 +506,20 @@ void ConsolePlayer::menu ()
     }
     cerr << endl;
 
+    if (m_verboseLevel)
+    {
+        consoleTable(table_t::separator);
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ←/→  Previous/Next  1-9  Toggle voices  p    Pause" << endl;
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ↓/↑  Standard/Fast  qwe  Toggle sample  Esc  Quit" << endl;
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ⇱/⇲  First/Last     f    Toggle filter" << endl;
+    }
+
 #ifdef FEAT_REGS_DUMP_SID
     if (m_verboseLevel > 1)
     {
@@ -524,20 +538,6 @@ void ConsolePlayer::menu ()
         }
     }
 #endif
-
-    if (m_verboseLevel)
-    {
-        consoleTable(table_t::separator);
-        consoleTable(table_t::middle);
-        consoleColour((m_iniCfg.console()).title);
-        cerr << " ←/→  Previous/Next  1-9  Toggle voices  p    Pause" << endl;
-        consoleTable(table_t::middle);
-        consoleColour((m_iniCfg.console()).title);
-        cerr << " ↓/↑  Standard/Fast  qwe  Toggle sample  Esc  Quit" << endl;
-        consoleTable(table_t::middle);
-        consoleColour((m_iniCfg.console()).title);
-        cerr << " ⇱/⇲  First/Last     f    Toggle filter" << endl;
-    }
 
     consoleTable (table_t::end);
 
