@@ -56,6 +56,7 @@ static char keytable[] =
 {
     // Windows Special Cursors
 #ifdef _WIN32
+    // https://learn.microsoft.com/en-us/previous-versions/visualstudio/visual-studio-6.0/aa299374(v=vs.60)
     PCK_EXTENDED, PCK_RIGHT,0,    A_RIGHT_ARROW,
     PCK_EXTENDED, PCK_LEFT,0,     A_LEFT_ARROW,
     PCK_EXTENDED, PCK_UP,0,       A_UP_ARROW,
@@ -63,7 +64,7 @@ static char keytable[] =
     PCK_EXTENDED, PCK_HOME,0,     A_HOME,
     PCK_EXTENDED, PCK_END,0,      A_END,
 #else
-    // Linux Special Keys
+    // Linux Special Keys https://en.wikipedia.org/wiki/ANSI_escape_code#Terminal_input_sequences
     ESC,'[','C',0,          A_RIGHT_ARROW,
     ESC,'[','D',0,          A_LEFT_ARROW,
     ESC,'[','A',0,          A_UP_ARROW,
