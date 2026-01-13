@@ -49,6 +49,8 @@ enum
     PCK_RIGHT         = '\115',
     PCK_END           = '\117',
     PCK_DOWN          = '\120',
+    PCK_ESC           = '\033',
+    PCK_F1            = '\073',
     PCK_EXTENDED      = '\340'
 };
 
@@ -63,21 +65,27 @@ static char keytable[] =
     PCK_EXTENDED, PCK_DOWN,0,     A_DOWN_ARROW,
     PCK_EXTENDED, PCK_HOME,0,     A_HOME,
     PCK_EXTENDED, PCK_END,0,      A_END,
+    PCK_EXTENDED, PCK_F1,0,       A_HELP,
+    PCK_EXTENDED, PCK_ESC,0,      A_QUIT,
 #else
     // Linux Special Keys https://en.wikipedia.org/wiki/ANSI_escape_code#Terminal_input_sequences
-    ESC,'[','C',0,          A_RIGHT_ARROW,
-    ESC,'[','D',0,          A_LEFT_ARROW,
-    ESC,'[','A',0,          A_UP_ARROW,
-    ESC,'[','B',0,          A_DOWN_ARROW,
-    // Hmm, in console there is:
-    ESC,'[','1','~',0,      A_HOME,
-    ESC,'[','4','~',0,      A_END,
-    // But in X it's:
-    ESC,'[','H',0,          A_HOME,
-    ESC,'[','F',0,          A_END,
+#  define CSI   ESC,'[' // Control Sequence Introducer
+#  define SS3   ESC,'O' // Single Shift Three
+    CSI,'C',0,          A_RIGHT_ARROW,
+    CSI,'D',0,          A_LEFT_ARROW,
+    CSI,'A',0,          A_UP_ARROW,
+    CSI,'B',0,          A_DOWN_ARROW,
+    // vt sequences
+    CSI,'1','~',0,      A_HOME,
+    CSI,'4','~',0,      A_END,
+    CSI,'1','1','~',0,  A_HELP, // F1
+    // xterm sequences
+    CSI,'H',0,          A_HOME,
+    CSI,'F',0,          A_END,
+    SS3,'P',0,          A_HELP, // F1
 
-    ESC,'[','1','0',0,      A_INVALID,
-    ESC,'[','2','0',0,      A_INVALID,
+    CSI,'1','0',0,      A_INVALID,
+    CSI,'2','0',0,      A_INVALID,
 #endif
 
     /* debug keys. Just use the cursor keys in linux to move in the song */
@@ -91,15 +99,17 @@ static char keytable[] =
     '8',0,                  A_TOGGLE_VOICE8,
     '9',0,                  A_TOGGLE_VOICE9,
 #ifdef FEAT_SAMPLE_MUTE
-    'q',0,                  A_TOGGLE_SAMPLE1,
-    'w',0,                  A_TOGGLE_SAMPLE2,
-    'e',0,                  A_TOGGLE_SAMPLE3,
+    'a',0,                  A_TOGGLE_SAMPLE1,
+    's',0,                  A_TOGGLE_SAMPLE2,
+    'd',0,                  A_TOGGLE_SAMPLE3,
 #endif
     'f',0,                  A_TOGGLE_FILTER,
 
     // General Keys
     'p',0,                  A_PAUSED,
+    ' ',0,                  A_PAUSED,
     'h',0,                  A_HELP,
+    'q',0,                  A_QUIT,
     ESC,ESC,0,              A_QUIT,
 
     // Old Keys

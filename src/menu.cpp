@@ -511,13 +511,23 @@ void ConsolePlayer::menu ()
         consoleTable(table_t::separator);
         consoleTable(table_t::middle);
         consoleColour((m_iniCfg.console()).title);
-        cerr << " ←/→  Previous/Next  1-9  Toggle voices  p    Pause" << endl;
+#ifndef _WIN32
+        cerr << " ←/→  Previous/Next  1-9  Toggle voices    p  Pause" << endl;
         consoleTable(table_t::middle);
         consoleColour((m_iniCfg.console()).title);
-        cerr << " ↓/↑  Standard/Fast  qwe  Toggle sample  h    Help" << endl;
+        cerr << " ↓/↑  Play speed     asd  Toggle samples   h  Help" << endl;
         consoleTable(table_t::middle);
         consoleColour((m_iniCfg.console()).title);
-        cerr << " ⇱/⇲  First/Last     f    Toggle filter  Esc  Quit" << endl;
+        cerr << " ⇱/⇲  First/Last     f    Toggle filter    q  Quit" << endl;
+#else
+        cerr << " <-/->   Prev/Next   1-9  Toggle voices    p  Pause" << endl;
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " ^/v     Play speed  asd  Toggle samples   h  Help" << endl;
+        consoleTable(table_t::middle);
+        consoleColour((m_iniCfg.console()).title);
+        cerr << " Hom/End First/Last  f    Toggle filter    q  Quit" << endl;
+#endif
     }
 
 #ifdef FEAT_REGS_DUMP_SID
