@@ -237,25 +237,25 @@ Run with no audio output device and no sid emulation.
 
 =item 1-9
 
-Mute/unmute voice.
+Mute/unmute voice. 1-3 are for the first chip and so on.
 
-=item q,w,e
+=item a,s,d
 
-Mute/unmute samples.
+Mute/unmute samples. a for the first chip and so on.
 
 =item f
 
 Toggle filter.
 
-=item p
+=item p/space
 
 Pause/unpause playback.
 
-=item h
+=item h/F1
 
 Show/hide help.
 
-=item Esc
+=item Esc/q
 
 Quit player.
 
