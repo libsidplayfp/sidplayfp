@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2025 Leandro Nini
+ * Copyright 2011-2026 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include "player.h"
 
 #include "codeConvert.h"
+#include "fmt/format.h"
 
 #include <cctype>
 #include <cstring>
@@ -31,7 +32,6 @@
 #include <iomanip>
 #include <string>
 
-using std::cout;
 using std::cerr;
 using std::endl;
 using std::dec;
@@ -142,11 +142,9 @@ void ConsolePlayer::displayVersion()
 {
     const SidInfo &info = m_engine.info();
 
-    cout << PACKAGE_NAME " " VERSION << endl;
-    string version;
-    version.append("Using ").append(info.name()).append(" ").append(info.version());
-    cout << version << endl;
-    cout << "Home Page: " PACKAGE_URL << endl;
+    fmt::print("{} {}\n", PACKAGE_NAME, VERSION);
+    fmt::print("Using {} {}\n", info.name(), info.version());
+    fmt::print("Home Page: {}\n", PACKAGE_URL);
 }
 
 // Display console menu

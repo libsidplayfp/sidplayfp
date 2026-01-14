@@ -17,6 +17,7 @@ AM_CPPFLAGS = \
 -I $(top_builddir)/src \
 -I $(top_srcdir)/src \
 -I $(top_srcdir)/libs/miniaudio \
+-I $(top_srcdir)/libs \
 -DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \
@@ -35,6 +36,7 @@ src_sidplayfp_SOURCES = \
 libs/miniaudio/osaudio_miniaudio.c \
 libs/miniaudio/osaudio.h \
 libs/miniaudio/miniaudio.h \
+libs/fmt/format.cc \
 src/IniConfig.cpp \
 src/IniConfig.h \
 src/args.cpp \
