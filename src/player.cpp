@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2025 Leandro Nini
+ * Copyright 2011-2026 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 
 #include "player.h"
 
+#include "fmt/format.h"
+
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
@@ -31,7 +33,6 @@
 #include <memory>
 #include <new>
 
-using std::cout;
 using std::cerr;
 using std::endl;
 
@@ -590,9 +591,8 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
         }
 
         if (m_verboseLevel && (driver != output_t::NONE))
-            cerr << "Using audio driver: " << m_driver.device->getDriverString() << endl;
+            fmt::print("Using audio driver: {}\n", m_driver.device->getDriverString());
     }
-
     // See what we got
     m_engCfg.frequency = m_driver.cfg.frequency;
     switch (m_driver.cfg.channels)
@@ -604,8 +604,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
         m_engCfg.playback  = SidConfig::STEREO;
         break;
     default:
-        cerr << m_name << ": " << "ERROR: " << m_channels
-             << " audio channels not supported" << endl;
+        fmt::print(stderr, "{}: ERROR: {} audio channels not supported\n", m_name, m_channels);
         return false;
     }
 
@@ -614,7 +613,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
 
 
 // Create the sid emulation
-bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
+bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
 {
     // Remove old driver and emulation
     if (m_engCfg.sidEmulation)
@@ -654,12 +653,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 if (rfr < 0.)
                 {
                     if (m_verboseLevel > 1)
-                        cerr << "No recommended filter range available" << endl;
+                        fmt::print("No recommended filter range available\n");
                 }
                 else
                 {
                     if (m_verboseLevel > 1)
-                        cerr << "Recommended filter range: " << rfr << endl;
+                        fmt::print("Recommended filter range: {}\n", rfr);
                     frange = rfr;
                 }
             }
@@ -671,12 +670,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if ((frange < 0.0) || (frange > 1.0))
             {
-                cerr << "Invalid 6581 filter range: " << frange << endl;
+                fmt::print(stderr, "ERROR: Invalid 6581 filter range: {}\n", frange);
                 exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
-                cerr << "6581 filter range: " << frange << endl;
+                fmt::print("6581 filter range: {}\n", frange);
             rs->filter6581Range(frange);
 #endif
 
@@ -689,12 +688,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 if (rfc < 0.)
                 {
                     if (m_verboseLevel > 1)
-                        cerr << "No recommended filter curve available" << endl;
+                        fmt::print("No recommended filter curve available\n");
                 }
                 else
                 {
                     if (m_verboseLevel > 1)
-                        cerr << "Recommended filter curve: " << rfc << endl;
+                        fmt::print("Recommended filter curve: {}\n", rfc);
                     fcurve = rfc;
                 }
             }
@@ -706,12 +705,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if ((fcurve < 0.0) || (fcurve > 1.0))
             {
-                cerr << "Invalid 6581 filter curve: " << fcurve << endl;
+                fmt::print(stderr, "ERROR: Invalid 6581 filter curve: {}\n", fcurve);
                 exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
-                cerr << "6581 filter curve: " << fcurve << endl;
+                fmt::print("6581 filter curve: {}\n", fcurve);
             rs->filter6581Curve(fcurve);
 
             // 8580
@@ -723,12 +722,12 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if ((fcurve < 0.0) || (fcurve > 1.0))
             {
-                cerr << "Invalid 8580 filter curve: " << fcurve << endl;
+                fmt::print(stderr, "ERROR: Invalid 8580 filter curve: {}\n", fcurve);
                 exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
-                cerr << "8580 filter curve: " << fcurve << endl;
+                fmt::print("8580 filter curve: {}\n", fcurve);
             rs->filter8580Curve(fcurve);
         }
         catch (std::bad_alloc const &ba) {}
@@ -925,7 +924,7 @@ createSidEmu_error:
 }
 
 
-bool ConsolePlayer::open (void)
+bool ConsolePlayer::open()
 {
     if ((m_state & ~playerFast) == playerRestart)
     {
@@ -1183,7 +1182,7 @@ bool ConsolePlayer::play()
     LIKELY case playerRunning:
         if (!m_driver.selected->write(frames)) UNLIKELY
         {
-            cerr << m_driver.selected->getErrorString();
+            displayError(m_driver.selected->getErrorString());
             m_state = playerError;
             return false;
         }
@@ -1305,9 +1304,9 @@ void ConsolePlayer::updateDisplay()
     m_timer.current = milliseconds;
 }
 
-void ConsolePlayer::displayError (const char *error)
+void ConsolePlayer::displayError(const char *error)
 {
-    cerr << m_name << ": " << error << endl;
+    fmt::print(stderr, "{}: {}\n", m_name, error);
 }
 
 // Keyboard handling
