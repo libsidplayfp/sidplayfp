@@ -26,15 +26,11 @@
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
-#include <iostream>
-#include <iomanip>
+#include <cstdio>
+
 #include <fstream>
-#include <sstream>
 #include <memory>
 #include <new>
-
-using std::cerr;
-using std::endl;
 
 #include <cstdlib>
 
@@ -484,9 +480,8 @@ std::string ConsolePlayer::getFileName(const SidTuneInfo *tuneInfo, const char* 
         // Change name based on subtune
         if (tuneInfo->songs() > 1)
         {
-            std::ostringstream sstream;
-            sstream << "[" << tuneInfo->currentSong() << "]";
-            title.append(sstream.str());
+            std::string str = fmt::format("[{}]", tuneInfo->currentSong());
+            title.append(str);
         }
         title.append(ext);
     }
@@ -753,12 +748,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 if (rfr < 0.)
                 {
                     if (m_verboseLevel > 1)
-                        cerr << "No recommended filter range available" << endl;
+                        fmt::print("No recommended filter range available\n");
                 }
                 else
                 {
                     if (m_verboseLevel > 1)
-                        cerr << "Recommended filter range: " << rfr << endl;
+                        fmt::print("Recommended filter range: {}\n", rfr);
                     frange = rfr;
                 }
             }
@@ -770,12 +765,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if ((frange < 0.0) || (frange > 1.0))
             {
-                cerr << "Invalid 6581 filter range: " << frange << endl;
+                fmt::print(stderr, "ERROR: Invalid 6581 filter range: {}\n", frange);
                 exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
-                cerr << "6581 filter range: " << frange << endl;
+                fmt::print("6581 filter range: {}\n", frange);
             rs->filter6581Range(frange);
 
             // 6581
@@ -787,12 +782,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if ((fcurve < 0.0) || (fcurve > 1.0))
             {
-                cerr << "Invalid 6581 filter curve: " << fcurve << endl;
+                fmt::print(stderr, "ERROR: Invalid 6581 filter curve: {}\n", fcurve);
                 exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
-                cerr << "6581 filter curve: " << fcurve << endl;
+                fmt::print("6581 filter curve: {}\n", fcurve);
             rs->filter6581Curve(fcurve);
 
             // 8580
@@ -804,12 +799,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
             if ((fcurve < 0.0) || (fcurve > 1.0))
             {
-                cerr << "Invalid 8580 filter curve: " << fcurve << endl;
+                fmt::print(stderr, "ERROR: Invalid 8580 filter curve: {}\n", fcurve);
                 exit(EXIT_FAILURE);
             }
 
             if (m_verboseLevel)
-                cerr << "8580 filter curve: " << fcurve << endl;
+                fmt::print("8580 filter curve: {}\n", fcurve);
             rs->filter8580Curve(fcurve);
         }
         catch (std::bad_alloc const &ba) {}
@@ -929,7 +924,7 @@ bool ConsolePlayer::open()
     if ((m_state & ~playerFast) == playerRestart)
     {
         if (m_quietLevel < 2)
-            cerr << endl;
+            fmt::print("\n");
         if (m_state & playerFast)
             m_driver.selected->reset ();
         m_state = playerStopped;
@@ -1071,7 +1066,7 @@ void ConsolePlayer::close ()
     {   // Natural finish
         emuflush ();
         if (m_driver.file)
-            cerr << (char) 7; // Bell
+           fmt::print("\a"); // Bell
     }
     else // Destroy buffers
         m_driver.selected->reset ();
@@ -1196,7 +1191,7 @@ bool ConsolePlayer::play()
         return true;
     default:
         if (m_quietLevel < 2)
-            cerr << endl;
+            fmt::print("\n");
 #ifndef FEAT_NEW_PLAY_API
         m_engine.stop ();
 #endif
@@ -1295,10 +1290,9 @@ void ConsolePlayer::updateDisplay()
 
     if (!m_quietLevel && (seconds != (m_timer.current / 1000)))
     {
-        //cerr << "\b\b\b\b\b";
-        cerr << std::setw(2) << std::setfill('0')
-             << ((seconds / 60) % 100) << ':' << std::setw(2)
-             << std::setfill('0') << (seconds % 60) << std::flush;
+        //fmt::print("\b\b\b\b\b");
+        fmt::print("{:02}:{:02}", ((seconds / 60) % 100), (seconds % 60));
+        std::fflush(stdout);
     }
 
     m_timer.current = milliseconds;
@@ -1379,17 +1373,18 @@ void ConsolePlayer::decodeKeys ()
         case A_PAUSED:
             if (m_state == playerPaused)
             {
-                cerr << "\b\b\b\b\b\b\b\b\b";
+                fmt::print("\b\b\b\b\b\b\b\b\b");
                 // Just to make sure PAUSED is removed from screen
-                cerr << "         ";
-                cerr << "\b\b\b\b\b\b\b\b\b";
+                fmt::print("         ");
+                fmt::print("\b\b\b\b\b\b\b\b\b");
                 m_state  = playerRunning;
             }
             else
             {
-                cerr << " [PAUSED]";
+                fmt::print(" [PAUSED]");
+                std::fflush(stdout);
                 m_state = playerPaused;
-                m_driver.selected->pause ();
+                m_driver.selected->pause();
             }
         break;
 
