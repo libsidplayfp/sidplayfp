@@ -44,6 +44,20 @@ using std::string;
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
+struct fill {
+  char value;
+  int width;
+};
+
+template <>
+struct fmt::formatter<fill> {
+  constexpr const char* parse(format_parse_context& ctx) const { return ctx.begin(); }
+
+  fmt::basic_appender<char> format(fill f, format_context& ctx) const {
+    return std::fill_n(ctx.out(), f.width, f.value);
+  }
+};
+
 #ifdef FEAT_REGS_DUMP_SID
 const char *noteName[] =
 {
@@ -156,26 +170,25 @@ void ConsolePlayer::menu ()
     const SidInfo &info         = m_engine.info ();
     const SidTuneInfo *tuneInfo = m_tune.getInfo();
 
-    // cerr << (char) 12 << '\f'; // New Page
-    if ((m_iniCfg.console ()).ansi)
-    {
-        cerr << '\x1b' << "[40m";  // Background black
-        cerr << '\x1b' << "[2J";   // Clear screen
-        cerr << '\x1b' << "[0;0H"; // Move cursor to 0,0
-        cerr << '\x1b' << "[?25l"; // and hide it
-    }
-
     if (m_verboseLevel > 1)
     {
-        cerr << '\x1b' << "[0m";
-        cerr << "Config loaded from" << endl;
+        fmt::print("Config loaded from\n");
         SID_CERR << m_iniCfg.getFilename() << endl;
+    }
+
+    // fmt::print("\n\f"); // New Page
+    if ((m_iniCfg.console ()).ansi)
+    {
+        fmt::print("\x1b[40m");  // Background black
+        fmt::print("\x1b[2J");   // Clear screen
+        fmt::print("\x1b[0;0H"); // Move cursor to 0,0
+        fmt::print("\x1b[?25l"); // and hide it
     }
 
     consoleTable (table_t::start);
     consoleTable (table_t::middle);
     consoleColour ((m_iniCfg.console()).title);
-    cerr << "  SIDPLAYFP - Music Player and C64 SID Chip Emulator" << endl;
+    fmt::print("  SIDPLAYFP - Music Player and C64 SID Chip Emulator\n");
     consoleTable  (table_t::middle);
     consoleColour ((m_iniCfg.console()).title);
     {
@@ -705,40 +718,43 @@ void ConsolePlayer::consoleColour(color_t colour)
 }
 
 // Display menu outline
-void ConsolePlayer::consoleTable (table_t table)
+void ConsolePlayer::consoleTable(table_t table)
 {
-    const unsigned int tableWidth = 54;
+    constexpr unsigned int tableWidth = 54;
 
     consoleColour((m_iniCfg.console()).decorations);
     switch (table)
     {
         case table_t::start:
-        cerr << (m_iniCfg.console ()).topLeft << setw(tableWidth)
-             << setfill ((m_iniCfg.console ()).horizontal) << ""
-             << (m_iniCfg.console ()).topRight;
+        fmt::print("{}{}{}",
+                   (m_iniCfg.console()).topLeft,
+                   fill{(m_iniCfg.console()).horizontal, tableWidth},
+                   (m_iniCfg.console()).topRight);
         break;
 
     case table_t::middle:
-        cerr << setw(tableWidth + 1) << setfill(' ') << ""
-             << (m_iniCfg.console ()).vertical << '\r'
-             << (m_iniCfg.console ()).vertical;
+        fmt::print("{0}{1}\r{1}",
+                   fill{' ', tableWidth+1},
+                   (m_iniCfg.console()).vertical);
         return;
 
     case table_t::separator:
-        cerr << (m_iniCfg.console ()).junctionRight << setw(tableWidth)
-             << setfill ((m_iniCfg.console ()).horizontal) << ""
-             << (m_iniCfg.console ()).junctionLeft;
+        fmt::print("{}{}{}",
+                   (m_iniCfg.console()).junctionRight,
+                   fill{(m_iniCfg.console()).horizontal, tableWidth},
+                   (m_iniCfg.console()).junctionLeft);
         break;
 
     case table_t::end:
-        cerr << (m_iniCfg.console ()).bottomLeft << setw(tableWidth)
-             << setfill ((m_iniCfg.console ()).horizontal) << ""
-             << (m_iniCfg.console ()).bottomRight;
+        fmt::print("{}{}{}",
+                   (m_iniCfg.console()).bottomLeft,
+                   fill{(m_iniCfg.console()).horizontal, tableWidth},
+                   (m_iniCfg.console()).bottomRight);
         break;
     }
 
     // Move back to begining of row and skip first char
-    cerr << "\n";
+    fmt::print("\n");
 }
 
 
@@ -746,7 +762,7 @@ void ConsolePlayer::consoleTable (table_t table)
 void ConsolePlayer::consoleRestore ()
 {
     if ((m_iniCfg.console ()).ansi) {
-        cerr << '\x1b' << "[?25h";
-        cerr << '\x1b' << "[0m";
+        fmt::print("\x1b[?25h");
+        fmt::print("\x1b[0m");
     }
 }
