@@ -27,12 +27,12 @@
 #include <cmath>
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
 
 #include <fstream>
 #include <memory>
 #include <new>
 
-#include <cstdlib>
 
 #ifdef HAVE_UNISTD_H
 #  include <unistd.h>
