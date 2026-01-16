@@ -72,6 +72,8 @@ const char *noteName[] =
 };
 #endif
 
+constexpr unsigned int tableWidth = 54;
+
 const char SID6581[] = "MOS6581";
 const char SID8580[] = "CSG8580";
 
@@ -193,9 +195,8 @@ void ConsolePlayer::menu ()
     consoleColour ((m_iniCfg.console()).title);
     {
         string version;
-        version.reserve(54);
-        version.append("Sidplayfp V" VERSION ", ").append(1, toupper(*info.name())).append(info.name() + 1).append(" V").append(info.version());
-        cerr << setw(54/2 + version.length()/2) << version << endl;
+        fmt::format_to(std::back_inserter(version), "Sidplayfp V{}, {}{}", VERSION, info.name(), info.version());
+        fmt::print("{:^{}}\n", version, tableWidth);
     }
 
     color_t label_color = (m_iniCfg.console()).label_core;
@@ -212,19 +213,19 @@ void ConsolePlayer::menu ()
         consoleColour (label_color);
         fmt::print(" Title        : ");
         consoleColour (text_color);
-        cerr << codeset.convert(tuneInfo->infoString(0)) << endl;
+        fmt::print("{}\n", codeset.convert(tuneInfo->infoString(0)));
         if (n>1)
         {
             consoleTable  (table_t::middle);
             consoleColour (label_color);
             fmt::print(" Author       : ");
             consoleColour (text_color);
-            cerr << codeset.convert(tuneInfo->infoString(1)) << endl;
+            fmt::print("{}\n", codeset.convert(tuneInfo->infoString(1)));
             consoleTable  (table_t::middle);
             consoleColour (label_color);
             fmt::print(" Released     : ");
             consoleColour (text_color);
-            cerr << codeset.convert(tuneInfo->infoString(2)) << endl;
+            fmt::print("{}\n", codeset.convert(tuneInfo->infoString(2)));
         }
     }
 
@@ -234,7 +235,7 @@ void ConsolePlayer::menu ()
         consoleColour (label_color);
         fmt::print(" Comment      : ");
         consoleColour (text_color);
-        cerr << tuneInfo->commentString(i) << endl;
+        fmt::print("{}\n", tuneInfo->commentString(i));
     }
 
     consoleTable (table_t::separator);
@@ -267,7 +268,7 @@ void ConsolePlayer::menu ()
         consoleColour (label_color);
         fmt::print(" Condition    : ");
         consoleColour (text_color);
-        cerr << m_tune.statusString() << endl;
+        fmt::print("{}\n", m_tune.statusString());
 
 #if HAVE_TSID == 1
         if (!m_tsid)
@@ -276,7 +277,7 @@ void ConsolePlayer::menu ()
             consoleColour (label_color);
             fmt::print(" TSID Error   : ");
             consoleColour (text_color);
-            cerr << m_tsid.getError () << endl;
+            fmt::print("{}\n", m_tsid.getError());
         }
 #endif // HAVE_TSID
     }
@@ -313,7 +314,7 @@ void ConsolePlayer::menu ()
         consoleColour (label_color);
         fmt::print(" Song Speed   : ");
         consoleColour (text_color);
-        cerr << getClock(tuneInfo->clockSpeed()) << endl;
+        fmt::print("{}\n", getClock(tuneInfo->clockSpeed()));
     }
 
     consoleTable  (table_t::middle);
@@ -323,9 +324,10 @@ void ConsolePlayer::menu ()
     if (m_timer.stop)
     {
         const uint_least32_t seconds = m_timer.stop / 1000;
-        cerr << setw(2) << setfill('0') << ((seconds / 60) % 100)
-             << ':' << setw(2) << setfill('0') << (seconds % 60);
-        cerr << '.' << setw(3) << m_timer.stop % 1000;
+        fmt::print("{:0>2}:{:0>2}.{:0>3}",
+            ((seconds / 60) % 100),
+            (seconds % 60),
+            m_timer.stop % 1000);
     }
     else if (m_timer.valid)
         fmt::print("FOREVER");
@@ -336,8 +338,9 @@ void ConsolePlayer::menu ()
     if (m_timer.start)
     {   // Show offset
         const uint_least32_t seconds = m_timer.start / 1000;
-        cerr << " (+" << setw(2) << setfill('0') << ((seconds / 60) % 100)
-             << ':' << setw(2) << setfill('0') << (seconds % 60) << ")";
+        fmt::print(" (+{:0>2}:{:0>2})",
+            ((seconds / 60) % 100),
+            (seconds % 60));
     }
     fmt::print("\n");
 
@@ -350,8 +353,7 @@ void ConsolePlayer::menu ()
 
         consoleTable  (table_t::middle);
         consoleColour (label_color);
-        cerr << " Addresses    : " << hex;
-        cerr.setf(std::ios::uppercase);
+        fmt::print(" Addresses    : ");
         consoleColour (text_color);
         // Display PSID Driver location
         fmt::print("DRIVER = ");
@@ -359,26 +361,23 @@ void ConsolePlayer::menu ()
             fmt::print("NOT PRESENT");
         else
         {
-            cerr << "$"  << setw(4) << setfill('0') << info.driverAddr();
-            cerr << "-$" << setw(4) << setfill('0') << info.driverAddr() +
-                (info.driverLength() - 1);
+            fmt::print("${:0>4X}-${:0>4X}",
+                info.driverAddr(),
+                info.driverAddr() + (info.driverLength() - 1));
         }
-        if (tuneInfo->playAddr() == 0xffff)
-            cerr << ", SYS = $" << setw(4) << setfill('0') << tuneInfo->initAddr();
-        else
-            cerr << ", INIT = $" << setw(4) << setfill('0') << tuneInfo->initAddr();
-        fmt::print("\n");
+        fmt::print(", {} = ${:0>4X}\n",
+            (tuneInfo->playAddr() == 0xffff) ? "SYS" : "INIT",
+            tuneInfo->initAddr());
         consoleTable  (table_t::middle);
         consoleColour (label_color);
         fmt::print("              : ");
         consoleColour (text_color);
-        cerr << "LOAD   = $" << setw(4) << setfill('0') << tuneInfo->loadAddr();
-        cerr << "-$"         << setw(4) << setfill('0') << tuneInfo->loadAddr() +
-            (tuneInfo->c64dataLen() - 1);
+        fmt::print("LOAD   = ${:0>4X}-${:0>4X}",
+            tuneInfo->loadAddr(),
+            tuneInfo->loadAddr() + (tuneInfo->c64dataLen() - 1));
         if (tuneInfo->playAddr() != 0xffff)
-            cerr << ", PLAY = $" << setw(4) << setfill('0') << tuneInfo->playAddr();
-        cerr << dec << endl;
-        cerr.unsetf(std::ios::uppercase);
+            fmt::print(", PLAY = ${:0>4X}",tuneInfo->playAddr());
+        fmt::print("\n");
 
         consoleTable  (table_t::middle);
         consoleColour (label_color);
@@ -413,25 +412,25 @@ void ConsolePlayer::menu ()
         consoleColour (label_color);
         fmt::print(" Play speed   : ");
         consoleColour (text_color);
-        cerr << info.speedString() << endl;
+        fmt::print("{}\n", info.speedString());
 
         consoleTable  (table_t::middle);
         consoleColour (label_color);
         fmt::print(" Play mode    : ");
         consoleColour (text_color);
-        cerr << (info.channels() == 1 ? "Mono" : "Stereo") << endl;
+        fmt::print("{}\n", (info.channels() == 1 ? "Mono" : "Stereo"));
 
         consoleTable  (table_t::middle);
         consoleColour (label_color);
         fmt::print(" SID Filter   : ");
         consoleColour (text_color);
-        cerr << (m_filter.enabled ? "Yes" : "No") << endl;
+        fmt::print("{}\n", (m_filter.enabled ? "Yes" : "No"));
 
         consoleTable  (table_t::middle);
         consoleColour (label_color);
         fmt::print(" DigiBoost    : ");
         consoleColour (text_color);
-        cerr << (m_engCfg.digiBoost ? "Yes" : "No") << endl;
+        fmt::print("{}\n", (m_engCfg.digiBoost ? "Yes" : "No"));
 
         consoleTable  (table_t::middle);
         consoleColour (label_color);
@@ -704,8 +703,6 @@ void ConsolePlayer::consoleColour(color_t colour)
 // Display menu outline
 void ConsolePlayer::consoleTable(table_t table)
 {
-    constexpr unsigned int tableWidth = 54;
-
     consoleColour((m_iniCfg.console()).decorations);
     switch (table)
     {
