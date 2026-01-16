@@ -104,6 +104,7 @@ $(W32_LIBS)
 # stilview
 
 src_stilview_SOURCES = \
+libs/fmt/format.cc \
 src/codeConvert.cpp \
 src/codeConvert.h \
 $(ICONV_SOURCES) \
