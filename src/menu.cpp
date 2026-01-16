@@ -23,6 +23,9 @@
 
 #include "codeConvert.h"
 #include "fmt/format.h"
+#if defined(_WIN32) && defined(UNICODE)
+#  include "fmt/xchar.h"
+#endif
 
 #include <cctype>
 #include <cstring>
@@ -33,12 +36,6 @@
 #include <iomanip>
 #include <string>
 
-using std::cerr;
-using std::endl;
-using std::dec;
-using std::hex;
-using std::setw;
-using std::setfill;
 using std::string;
 
 #include <sidplayfp/SidInfo.h>
@@ -175,7 +172,11 @@ void ConsolePlayer::menu ()
     if (m_verboseLevel > 1)
     {
         fmt::print("Config loaded from\n");
-        SID_CERR << m_iniCfg.getFilename() << endl;
+#if defined(_WIN32) && defined(UNICODE)
+        fmt::print(L"{}\n", m_iniCfg.getFilename());
+#else
+        fmt::print("{}\n", m_iniCfg.getFilename());
+#endif
     }
 
     // fmt::print("\n\f"); // New Page
@@ -195,7 +196,7 @@ void ConsolePlayer::menu ()
     consoleColour ((m_iniCfg.console()).title);
     {
         string version;
-        fmt::format_to(std::back_inserter(version), "Sidplayfp V{}, {}{}", VERSION, info.name(), info.version());
+        fmt::format_to(std::back_inserter(version), "sidplayfp {}, {} {}", VERSION, info.name(), info.version());
         fmt::print("{:^{}}\n", version, tableWidth);
     }
 
@@ -383,14 +384,14 @@ void ConsolePlayer::menu ()
         consoleColour (label_color);
         fmt::print(" SID Details  : ");
         consoleColour (text_color);
-        fmt::print("1st SID = $d400, Model = {}\n", getModel(tuneInfo->sidModel(0)));
+        fmt::print("1st SID = $D400, Model = {}\n", getModel(tuneInfo->sidModel(0)));
         if (tuneInfo->sidChips() > 1)
         {
             consoleTable  (table_t::middle);
             consoleColour (label_color);
             fmt::print("              : ");
             consoleColour (text_color);
-            cerr << "2nd SID = $" << hex << tuneInfo->sidChipBase(1) << dec;
+            fmt::print("2nd SID = ${:0>4X}", tuneInfo->sidChipBase(1));
             fmt::print(", Model = {}\n", getModel(tuneInfo->sidModel(1)));
             if (tuneInfo->sidChips() > 2)
             {
@@ -398,7 +399,7 @@ void ConsolePlayer::menu ()
                 consoleColour (label_color);
                 fmt::print("              : ");
                 consoleColour (text_color);
-                cerr << "3rd SID = $" << hex << tuneInfo->sidChipBase(2) << dec;
+                fmt::print("3rd SID = ${:0>4X}", tuneInfo->sidChipBase(2));
                 fmt::print(", Model = {}\n", getModel(tuneInfo->sidModel(2)));
             }
         }
@@ -594,65 +595,66 @@ void ConsolePlayer::refreshRegDump()
                     consoleTable(table_t::middle);
                     consoleColour(ctrloff);
 
-                    cerr << " Voice " << (j * 3 + i+1) << hex;
+                    fmt::print(" Voice {}", (j * 3 + i+1));
 
                     consoleColour((m_iniCfg.console()).notes);
 
-                    cerr << " " << getNote(registers[0x00 + i * 0x07] | (registers[0x01 + i * 0x07] << 8))
-                         << " $" << setw(3) << setfill('0') << (registers[0x02 + i * 0x07] | ((registers[0x03 + i * 0x07] & 0x0f) << 8));
+                    fmt::print(" {} ${:0>3X}",
+                        getNote(registers[0x00 + i * 0x07] | (registers[0x01 + i * 0x07] << 8)),
+                        registers[0x02 + i * 0x07] | ((registers[0x03 + i * 0x07] & 0x0f) << 8));
 
                     // gate changed ?
                     consoleColour((oldCtl[i] & 0x01) ? ctrlon : ctrloff);
                     // gate on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x01) ? " GATE" : " gate");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x01) ? " GATE" : " gate");
 
                     // sync changed ?
                     consoleColour((oldCtl[i] & 0x02) ? ctrlon : ctrloff);
                     // sync on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x02) ? " SYNC" : " sync");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x02) ? " SYNC" : " sync");
 
                     // ring changed ?
                     consoleColour((oldCtl[i] & 0x04) ? ctrlon : ctrloff);
                     // ring on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x04) ? " RING" : " ring");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x04) ? " RING" : " ring");
 
                     // test changed ?
                     consoleColour((oldCtl[i] & 0x08) ? ctrlon : ctrloff);
                     // test on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x08) ? " TEST" : " test");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x08) ? " TEST" : " test");
 
                     // triangle changed ?
                     consoleColour((oldCtl[i] & 0x10) ? ctrlon : ctrloff);
                     // triangle on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x10) ? " TRI" : " ___");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x10) ? " TRI" : " ___");
 
                     // sawtooth changed ?
                     consoleColour((oldCtl[i] & 0x20) ? ctrlon : ctrloff);
                     // sawtooth on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x20) ? " SAW" : " ___");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x20) ? " SAW" : " ___");
 
                     // pulse changed ?
                     consoleColour((oldCtl[i] & 0x40) ? ctrlon : ctrloff);
                     // pulse on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x40) ? " PUL" : " ___");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x40) ? " PUL" : " ___");
 
                     // noise changed ?
                     consoleColour((oldCtl[i] & 0x80) ? ctrlon : ctrloff);
                     // noise on ?
-                    cerr << ((registers[0x04 + i * 0x07] & 0x80) ? " NOI" : " ___");
+                    fmt::print("{}", (registers[0x04 + i * 0x07] & 0x80) ? " NOI" : " ___");
 
-                    cerr << dec << endl;
+                    fmt::print("\n");
                 }
             }
             else
             {
-                consoleTable (table_t::middle); fmt::print("???\n");
-                consoleTable (table_t::middle); fmt::print("???\n");
-                consoleTable (table_t::middle); fmt::print("???\n");
+                consoleTable(table_t::middle); fmt::print("???\n");
+                consoleTable(table_t::middle); fmt::print("???\n");
+                consoleTable(table_t::middle); fmt::print("???\n");
             }
         }
 
-        consoleTable (table_t::end);
+        consoleTable(table_t::end);
     }
     else
 #endif
