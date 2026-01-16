@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2025 Leandro Nini
+ * Copyright 2011-2026 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -244,7 +244,6 @@ private:
 
 private:
     // Console
-    void consoleColour  (color_t colour);
     void consoleTable   (table_t table);
     void consoleRestore (void);
 
