@@ -2,7 +2,7 @@
  * This file is part of sidplayfp, a console SID player.
  *
  * Copyright 2000 Simon White
- * Copyright 2013-2016 Leandro Nini
+ * Copyright 2013-2026 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,13 +27,7 @@
 
 #include "miniaudio/audiodrv.h"
 
-// Warn if a sound driver is not found
-// and fall back to the null driver
-#ifndef AudioDriver
-#  warning Audio hardware not recognised, only null driver will be available.
-#  include "null/null.h"
-#  define HAVE_NULL
-#endif
+#include "null/null.h"
 
 #include <iostream>
 
@@ -44,12 +38,11 @@ bool audioDrv::open(AudioConfig &cfg)
         audio.reset(new Audio_Miniaudio());
         res = audio->open(cfg);
     }
-#ifdef HAVE_NULL
     if (!res)
     {
         audio.reset(new Audio_Null());
         res = audio->open(cfg);
     }
-#endif
+
     return res;
 }

@@ -153,7 +153,7 @@ bool WavFile::open(AudioConfig &cfg)
     // We need to make a buffer for the user
     try
     {
-        _sampleBuffer = new short[bufSize/2];
+        m_sampleBuffer = new short[bufSize/2];
     }
     catch (std::bad_alloc const &ba)
     {
@@ -180,7 +180,7 @@ bool WavFile::open(AudioConfig &cfg)
         file = new std::ofstream(name.c_str(), std::ios::out|std::ios::binary|std::ios::trunc);
     }
 
-    _settings = cfg;
+    m_settings = cfg;
     return true;
 }
 
@@ -203,7 +203,7 @@ bool WavFile::write(uint_least32_t frames)
         if (m_precision == 16)
         {
             bytes *= 2;
-            file->write((char*)_sampleBuffer, bytes);
+            file->write((char*)m_sampleBuffer, bytes);
         }
         else
         {
@@ -212,7 +212,7 @@ bool WavFile::write(uint_least32_t frames)
             // normalize floats
             for (unsigned long i=0; i<size; i++)
             {
-                buffer[i] = ((float)_sampleBuffer[i])/32768.f;
+                buffer[i] = ((float)m_sampleBuffer[i])/32768.f;
             }
             file->write((char*)&buffer.front(), bytes);
         }
@@ -241,7 +241,7 @@ void WavFile::close()
             delete file;
         }
         file = nullptr;
-        delete[] _sampleBuffer;
+        delete[] m_sampleBuffer;
     }
 }
 

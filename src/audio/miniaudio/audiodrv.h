@@ -18,38 +18,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef AUDIO_ALSA_H
-#define AUDIO_ALSA_H
+#ifndef AUDIO_MINIAUDIO_H
+#define AUDIO_MINIAUDIO_H
 
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif
 
-#ifdef HAVE_ALSA
+#include "osaudio.h"
 
-#ifndef AudioDriver
-#  define AudioDriver Audio_ALSA
-#endif
-
-#define ALSA_PCM_NEW_HW_PARAMS_API
-
-
-#include <alsa/asoundlib.h>
 #include "../AudioBase.h"
 
 
-class Audio_ALSA: public AudioBase
+class Audio_Miniaudio: public AudioBase
 {
 private:  // ------------------------------------------------------- private
-    snd_pcm_t *_audioHandle;
+    osaudio_t m_audioHandle;
 
 private:
     void outOfOrder();
-    static void checkResult(int err);
 
 public:  // --------------------------------------------------------- public
-    Audio_ALSA();
-    ~Audio_ALSA() override;
+    Audio_Miniaudio();
+    ~Audio_Miniaudio() override;
 
     bool open  (AudioConfig &cfg) override;
     void close () override;
@@ -58,5 +49,4 @@ public:  // --------------------------------------------------------- public
     void pause () override {}
 };
 
-#endif // HAVE_ALSA
 #endif // AUDIO_ALSA_H

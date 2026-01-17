@@ -38,7 +38,7 @@ bool Audio_Null::open(AudioConfig &cfg)
     }
 
     isOpen    = true;
-    _settings = cfg;
+    m_settings = cfg;
     return true;
 }
 
