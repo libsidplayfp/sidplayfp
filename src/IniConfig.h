@@ -31,6 +31,8 @@
 #include <sidplayfp/sidplayfp.h>
 #include <sidplayfp/SidConfig.h>
 
+#include <string>
+
 /*
  * Sidplayfp config file reader.
  */
@@ -52,14 +54,14 @@ public:
     struct console_section
     {   // INI Section - [Console]
         bool ansi;
-        char topLeft;
-        char topRight;
-        char bottomLeft;
-        char bottomRight;
-        char vertical;
-        char horizontal;
-        char junctionLeft;
-        char junctionRight;
+        std::string topLeft;
+        std::string topRight;
+        std::string bottomLeft;
+        std::string bottomRight;
+        std::string vertical;
+        std::string horizontal;
+        std::string junctionLeft;
+        std::string junctionRight;
         color_t decorations;
         color_t title;
         color_t label_core;

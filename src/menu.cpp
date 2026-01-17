@@ -32,9 +32,8 @@
 #include <cmath>
 #include <cstdio>
 
-#include <iostream>
-#include <iomanip>
 #include <string>
+#include <algorithm>
 
 using std::string;
 
@@ -42,7 +41,7 @@ using std::string;
 #include <sidplayfp/SidTuneInfo.h>
 
 struct fill {
-  char value;
+  std::string value;
   int width;
 };
 
@@ -51,7 +50,10 @@ struct fmt::formatter<fill> {
   constexpr const char* parse(format_parse_context& ctx) const { return ctx.begin(); }
 
   fmt::basic_appender<char> format(fill f, format_context& ctx) const {
-    return std::fill_n(ctx.out(), f.width, f.value);
+    auto it = ctx.out();
+    for (size_t i = 0; i < f.width; ++i)
+        it = std::copy_n(f.value.begin(), f.value.size(), it);
+    return it;
   }
 };
 
@@ -613,7 +615,7 @@ void ConsolePlayer::consoleTable(table_t table)
     case table_t::middle:
         fmt::print(fg((m_iniCfg.console()).decorations),
                    "{0}{1}\r{1}",
-                   fill{' ', tableWidth+1},
+                   fill{" ", tableWidth+1},
                    (m_iniCfg.console()).vertical);
         return;
 
