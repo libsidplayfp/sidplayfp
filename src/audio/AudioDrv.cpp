@@ -25,19 +25,7 @@
 
 #include "AudioDrv.h"
 
-// Generic Sound Driver
-#ifdef HAVE_OUT123
-#  include "out123/audiodrv.h"
-#endif
-
-// Unix Sound Drivers
-#include "pulse/audiodrv.h"
-#include "alsa/audiodrv.h"
-#include "oss/audiodrv.h"
-
-// Windows Sound Drivers
-#include "directx/audiodrv.h"
-#include "mmsystem/audiodrv.h"
+#include "miniaudio/audiodrv.h"
 
 // Warn if a sound driver is not found
 // and fall back to the null driver
@@ -52,50 +40,12 @@
 bool audioDrv::open(AudioConfig &cfg)
 {
     bool res = false;
-#ifdef HAVE_OUT123
-    if(!res)
     {
-        audio.reset(new Audio_OUT123());
+        audio.reset(new Audio_Miniaudio());
         res = audio->open(cfg);
     }
-#endif
-#ifdef HAVE_PULSE
-    if(!res)
-    {
-        audio.reset(new Audio_Pulse());
-        res = audio->open(cfg);
-    }
-#endif
-#ifdef HAVE_ALSA
-    if(!res)
-    {
-        audio.reset(new Audio_ALSA());
-        res = audio->open(cfg);
-    }
-#endif
-#ifdef HAVE_OSS
-    if(!res)
-    {
-        audio.reset(new Audio_OSS());
-        res = audio->open(cfg);
-    }
-#endif
-#ifdef HAVE_DIRECTX
-    if(!res)
-    {
-        audio.reset(new Audio_DirectX());
-        res = audio->open(cfg);
-    }
-#endif
-#ifdef HAVE_MMSYSTEM
-    if(!res)
-    {
-        audio.reset(new Audio_MMSystem());
-        res = audio->open(cfg);
-    }
-#endif
 #ifdef HAVE_NULL
-    if(!res)
+    if (!res)
     {
         audio.reset(new Audio_Null());
         res = audio->open(cfg);
