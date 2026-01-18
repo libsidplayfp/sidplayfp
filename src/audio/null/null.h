@@ -26,12 +26,6 @@
 #  include "config.h"
 #endif
 
-#if defined(HAVE_SIDPLAYFP_BUILDERS_HARDSID_H) || defined(HAVE_SIDPLAYFP_BUILDERS_EXSID_H) || defined(HAVE_SIDPLAYFP_BUILDERS_USBSID_H)
-#  ifndef AudioDriver
-#    define AudioDriver Audio_Null
-#  endif
-#endif
-
 #include "../AudioBase.h"
 
 /*

@@ -213,7 +213,7 @@ bool auFile::open(AudioConfig &cfg)
     // We need to make a buffer for the user
     try
     {
-        _sampleBuffer = new short[bufSize/2];
+        m_sampleBuffer = new short[bufSize/2];
     }
     catch (std::bad_alloc const &ba)
     {
@@ -235,7 +235,7 @@ bool auFile::open(AudioConfig &cfg)
         file = new std::ofstream(name.c_str(), std::ios::out|std::ios::binary|std::ios::trunc);
     }
 
-    _settings = cfg;
+    m_settings = cfg;
     return true;
 }
 
@@ -257,7 +257,7 @@ bool auFile::write(uint_least32_t frames)
             bytes *= 2;
             for (unsigned long i=0; i<size; i++)
             {
-                uint_least16_t temp = _sampleBuffer[i];
+                uint_least16_t temp = m_sampleBuffer[i];
                 buffer[i] = endian_big16((uint8_t*)&temp);
             }
             file->write((char*)&buffer.front(), bytes);
@@ -269,7 +269,7 @@ bool auFile::write(uint_least32_t frames)
             // normalize floats
             for (unsigned long i=0; i<size; i++)
             {
-                float temp = ((float)_sampleBuffer[i])/32768.f;
+                float temp = ((float)m_sampleBuffer[i])/32768.f;
                 buffer[i] = endian_big32((uint8_t*)&temp);
             }
             file->write((char*)&buffer.front(), bytes);
@@ -293,6 +293,6 @@ void auFile::close()
             delete file;
         }
         file = nullptr;
-        delete[] _sampleBuffer;
+        delete[] m_sampleBuffer;
     }
 }
