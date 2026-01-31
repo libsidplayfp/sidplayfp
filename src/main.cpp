@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012 Leandro Nini
+ * Copyright 2012-2026 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -23,11 +23,6 @@
 
 #include <csignal>
 #include <cstdlib>
-
-#include <iostream>
-
-using std::cerr;
-using std::endl;
 
 #include "keyboard.h"
 

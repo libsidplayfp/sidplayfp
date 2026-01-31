@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2025 Leandro Nini
+ * Copyright 2011-2026 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -114,14 +114,14 @@ void IniConfig::clear()
     sidplay2_s.verboseLevel = 0;
 
     console_s.ansi          = false;
-    console_s.topLeft       = '+';
-    console_s.topRight      = '+';
-    console_s.bottomLeft    = '+';
-    console_s.bottomRight   = '+';
-    console_s.vertical      = '|';
-    console_s.horizontal    = '-';
-    console_s.junctionLeft  = '+';
-    console_s.junctionRight = '+';
+    console_s.topLeft       = "┌";
+    console_s.topRight      = "┐";
+    console_s.bottomLeft    = "└";
+    console_s.bottomRight   = "┘";
+    console_s.vertical      = "│";
+    console_s.horizontal    = "─";
+    console_s.junctionLeft  = "┤";
+    console_s.junctionRight = "├";
     console_s.decorations   = color_t::bright_white;
     console_s.title         = color_t::white;
     console_s.label_core    = color_t::bright_green;
@@ -400,16 +400,21 @@ void IniConfig::readConsole(iniHandler &ini)
     if (!ini.setSection (TEXT("Console")))
         ini.addSection(TEXT("Console"));
 
-    readBool(ini, TEXT("Ansi"),                console_s.ansi);
-    readChar(ini, TEXT("Char Top Left"),       console_s.topLeft);
-    readChar(ini, TEXT("Char Top Right"),      console_s.topRight);
-    readChar(ini, TEXT("Char Bottom Left"),    console_s.bottomLeft);
-    readChar(ini, TEXT("Char Bottom Right"),   console_s.bottomRight);
-    readChar(ini, TEXT("Char Vertical"),       console_s.vertical);
-    readChar(ini, TEXT("Char Horizontal"),     console_s.horizontal);
-    readChar(ini, TEXT("Char Junction Left"),  console_s.junctionLeft);
-    readChar(ini, TEXT("Char Junction Right"), console_s.junctionRight);
+    bool ascii;
+    readBool(ini, TEXT("ASCII"), ascii);
+    if (ascii)
+    {
+        console_s.topLeft       = "+";
+        console_s.topRight      = "+";
+        console_s.bottomLeft    = "+";
+        console_s.bottomRight   = "+";
+        console_s.vertical      = "|";
+        console_s.horizontal    = "-";
+        console_s.junctionLeft  = "+";
+        console_s.junctionRight = "+";
+    }
 
+    readBool(ini, TEXT("Ansi"),                console_s.ansi);
     readColor(ini, TEXT("Color Decorations"),  console_s.decorations);
     readColor(ini, TEXT("Color Title"),        console_s.title);
     readColor(ini, TEXT("Color Label Core"),   console_s.label_core);

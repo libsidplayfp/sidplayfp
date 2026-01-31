@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2025 Leandro Nini
+ * Copyright 2011-2026 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,21 +21,15 @@
 
 #include "player.h"
 
-#include <iostream>
-
-#include <climits>
-#include <cstdlib>
-#include <cstring>
-
+#include "fmt/format.h"
 #include "ini/types.h"
-
 #include "sidlib_features.h"
 
 #include "sidcxx11.h"
 
-using std::cout;
-using std::cerr;
-using std::endl;
+#include <climits>
+#include <cstdlib>
+#include <cstring>
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #  include <sidplayfp/builders/hardsid.h>
@@ -148,14 +142,12 @@ bool parseAddress(const char *str, uint_least16_t &address)
 
 void displayDebugArgs()
 {
-    std::ostream &out = cout;
-
-    out << "Debug Options:" << endl
-        << " --cpu-debug   display cpu register and assembly dumps" << endl
-        << " --delay=<num> simulate c64 power on delay (default: random)" << endl
-        << " --noaudio     no audio output device" << endl
-        << " --nosid       no sid emulation" << endl
-        << " --none        no audio output device and no sid emulation" << endl;
+    fmt::print("Debug Options:\n"
+        " --cpu-debug   display cpu register and assembly dumps\n"
+        " --delay=<num> simulate c64 power on delay (default: random)\n"
+        " --noaudio     no audio output device\n"
+        " --nosid       no sid emulation\n"
+        " --none        no audio output device and no sid emulation\n");
 }
 
 // Parse command line arguments
@@ -703,85 +695,83 @@ int ConsolePlayer::args(int argc, const char *argv[])
 }
 
 
-void ConsolePlayer::displayArgs (const char *arg)
+void ConsolePlayer::displayArgs(const char *arg)
 {
-    std::ostream &out = arg ? cerr : cout;
-
     if (arg)
-        out << "Option Error: " << arg << endl;
+        fmt::print(stderr, "Option Error: {}\n", arg);
     else
-        out << "Syntax: " << m_name << " [-<option>...] <datafile>" << endl;
+        fmt::print("Syntax: {} [-<option>...] <datafile>\n", m_name);
 
-    out << "Options:" << endl
-        << " --help|-h    display this screen" << endl
-        << " --help-debug debug help menu" << endl
-        << " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)" << endl
+    fmt::print("Options:\n"
+        " --help|-h    display this screen\n"
+        " --help-debug debug help menu\n"
+        " -b<num>      set start time in [mins:]secs[.milli] format (default: 0)\n"
 #ifdef FEAT_NEW_PLAY_API
-        << " -fo[a|b]<num> set fade-out time in seconds, ends a(fter) or starts b(efore) actual song end time (default: 0=no fade out)" << endl
+        " -fo[a|b]<num> set fade-out time in seconds, ends a(fter) or starts b(efore) actual song end time (default: 0=no fade out)\n"
 #endif
-        << " -f<num>      set frequency in Hz (default: "
-        << SidConfig::DEFAULT_SAMPLING_FREQ << ")" << endl
-        << " -ds<addr>    set second sid address (e.g. -ds0xd420)" << endl
-        << " -ts<addr>    set third sid address (e.g. -ts0xd440)" << endl
+        " -f<num>      set frequency in Hz (default: {})\n"
+        " -ds<addr>    set second sid address (e.g. -ds0xd420)\n"
+        " -ts<addr>    set third sid address (e.g. -ts0xd440)\n"
 
-        << " -u<num>      mute voice <num> (e.g. -u1 -u2)" << endl
+        " -u<num>      mute voice <num> (e.g. -u1 -u2)\n"
 #ifdef FEAT_SAMPLE_MUTE
-        << " -g<num>      mute samples <num> (e.g. -g1 -g2)" << endl
+        " -g<num>      mute samples <num> (e.g. -g1 -g2)\n"
 #endif
-        << " -nf          no SID filter emulation" << endl
+        " -nf          no SID filter emulation\n"
 
-        << " -o<l|s>[num] looping and/or single track" << endl
-        << " -o<num>      start track (default: preset)" << endl
+        " -o<l|s>[num] looping and/or single track\n"
+        " -o<num>      start track (default: preset)\n"
 
-        << " -p<num>      set format for file output (16 = signed 16 bit, 32 = 32 bit float)"
-        << "(default: 16)" << endl
+        " -p<num>      set format for file output (16 = signed 16 bit, 32 = 32 bit float)"
+        "(default: 16)\n"
 
-        << " -s           force stereo output" << endl
-        << " -m           force mono output" << endl
+        " -s           force stereo output\n"
+        " -m           force mono output\n"
 
-        << " -t<num>      set play length in [mins:]secs[.milli] format (0 is endless)" << endl
+        " -t<num>      set play length in [mins:]secs[.milli] format (0 is endless)\n"
 
-        << " -<v|q>[x]    verbose or quiet output. x is the optional level, default=1" << endl
-        << " -v[p|n][f]   set VIC PAL/NTSC clock speed (default: defined by song)" << endl
-        << "              Use 'f' to force the clock by preventing speed fixing" << endl
+        " -<v|q>[x]    verbose or quiet output. x is the optional level, default=1\n"
+        " -v[p|n][f]   set VIC PAL/NTSC clock speed (default: defined by song)\n"
+        "              Use 'f' to force the clock by preventing speed fixing\n"
 
-        << " -m<o|n>[f]   set SID new/old chip model (default: old)" << endl
-        << "              Use 'f' to force the model" << endl
-        << " --digiboost  Enable digiboost for 8580 model" << endl
+        " -m<o|n>[f]   set SID new/old chip model (default: old)\n"
+        "              Use 'f' to force the model\n"
+        " --digiboost  Enable digiboost for 8580 model\n"
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
-        << " -r[i|r][f]   set resampling method (default: resample interpolate)" << endl
-        << "              Use 'f' to enable fast resampling (only for reSID)" << endl
+        " -r[i|r][f]   set resampling method (default: resample interpolate)\n"
+        "              Use 'f' to enable fast resampling (only for reSID)\n"
 #else
-        << " -r[i|r]      set resampling method (default: resample interpolate)" << endl
+        " -r[i|r]      set resampling method (default: resample interpolate)\n"
 #endif
-        << " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
+        " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)\n"
 #ifdef FEAT_FILTER_RANGE
-        << " --frange=<num>|auto Controls the filter range in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)" << endl
+        " --frange=<num>|auto Controls the filter range in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)\n"
 #endif
 #ifdef FEAT_CW_STRENGTH
-        << " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)" << endl
+        " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)\n"
 #endif
-        << " -w[name]     create wav file (default: <datafile>[n].wav)" << endl
-        << " --au[name]   create au file (default: <datafile>[n].au)" << endl
-        << " --info       add metadata to wav file" << endl;
+        " -w[name]     create wav file (default: <datafile>[n].wav)\n"
+        " --au[name]   create au file (default: <datafile>[n].au)\n"
+        " --info       add metadata to wav file\n"
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
-    out << " --residfp    use reSIDfp emulation (default)" << endl;
+        " --residfp    use reSIDfp emulation (default)\n"
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
-    out << " --residfp2   use reSIDfpII emulation" << endl;
+        " --residfp2   use reSIDfpII emulation\n"
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
-    out << " --resid      use reSID emulation" << endl;
+        " --resid      use reSID emulation\n"
 #endif
+        , SidConfig::DEFAULT_SAMPLING_FREQ);
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     {
         HardSIDBuilder hs("");
         if (hs.availDevices ())
-            out << " --hardsid    enable hardsid support" << endl;
+            fmt::print(" --hardsid    enable hardsid support\n");
     }
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
@@ -790,7 +780,7 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifndef FEAT_NO_CREATE
         if (es.availDevices ())
 #endif
-            out << " --exsid      enable exSID support" << endl;
+            fmt::print(" --exsid      enable exSID support\n");
     }
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
@@ -799,9 +789,8 @@ void ConsolePlayer::displayArgs (const char *arg)
 #ifndef FEAT_NO_CREATE
         if (us.availDevices ())
 #endif
-            out << " --usbsid     enable USBSID support" << endl;
+            fmt::print(" --usbsid     enable USBSID support\n");
     }
 #endif
-    out << endl
-        << "Home Page: " PACKAGE_URL << endl;
+    fmt::print("\nHome Page: {}\n", PACKAGE_URL);
 }

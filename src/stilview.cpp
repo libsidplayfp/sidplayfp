@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012-2025 Leandro Nini
+ * Copyright 2012-2026 Leandro Nini
  * Copyright 1998, 2002 LaLa <LaLa@C64.org>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -22,6 +22,8 @@
 //
 // STILView - command line version
 //
+
+#include "fmt/format.h"
 
 #include <fstream>
 #include <iostream>
@@ -57,7 +59,11 @@ char OTHER_HVSC_BASE_DIR[]="E:\\MUSIC\\SID\\C64music\\";
 
 constexpr int STIL_MAX_PATH_SIZE = 1024;
 
-using namespace std;
+template<typename T>
+requires std::is_enum_v<T>
+auto format_as(T t) { return fmt::underlying(t); } 
+
+//using namespace std;
 
 char toLowerAscii(char c)
 {
@@ -79,10 +85,9 @@ bool strEquals(const char* s1, const char* s2)
 
 void printUsageStr(void)
 {
-    cout << endl;
-    cout << myStil.getVersion();
-    cout << "USAGE: STILView [-e=<entry>] [-l=<HVSC loc>] [-t=<tuneNo>] [-f=<field>]" << endl;
-    cout << "                [-d] [-i] [-s] [-b] [-o] [-v] [-h] [-m]" << endl;
+    fmt::print("\n{}", myStil.getVersion());
+    fmt::print("USAGE: STILView [-e=<entry>] [-l=<HVSC loc>] [-t=<tuneNo>] [-f=<field>]\n");
+    fmt::print("                [-d] [-i] [-s] [-b] [-o] [-v] [-h] [-m]\n");
 }
 
 void printUsage(void)
@@ -94,30 +99,27 @@ void printUsage(void)
 void printHelp(void)
 {
     printUsageStr();
-    cout << "Arguments can be specified in any order." << endl;
-    cout << endl;
-    cout << "-e=<entry>    - Specifies the desired STIL entry with an HVSC-relative path." << endl;
-    cout << "-l=<HVSC loc> - Specifies the location of the HVSC base directory. If not" << endl;
-    cout << "                specified, the value of the HVSC_BASE env. variable will be" << endl;
-    cout << "                used. Specifying this option will override HVSC_BASE." << endl;
-    cout << "-t=<tuneNo>   - If specified, only the STIL entry for the given tune number is" << endl;
-    cout << "                printed. (Default: 0)" << endl;
-    cout << "-f=<field>    - If specified, only the STIL entry for the given field is" << endl;
-    cout << "                printed. (Default: all)" << endl;
-    cout << "                Valid values for <field> are:" << endl;
-    cout << "                all, name, author, title, artist, comment" << endl;
-    cout << "-d            - Turns on debug mode for STILView." << endl;
-    cout << "-i            - Enter interactive mode." << endl;
-    cout << "-m            - Demo mode (tests STILView and shows its capabilities)." << endl;
-    cout << "-s            - If specified, section-global (per dir/per composer) comments" << endl;
-    cout << "                will NOT be printed." << endl;
-    cout << "-b            - If specified, BUG entries will NOT be printed." << endl;
-    cout << "-o            - If specified, STIL entries will NOT be printed." << endl;
-    cout << "-v            - Print STILView's and STIL's version number." << endl;
-    cout << "-h            - Print this help screen (all other options are ignored)." << endl;
-    cout << endl;
-    cout << "See user manual for further details and for examples." << endl;
-    cout << endl;
+    fmt::print("Arguments can be specified in any order.\n\n");
+    fmt::print("-e=<entry>    - Specifies the desired STIL entry with an HVSC-relative path.\n");
+    fmt::print("-l=<HVSC loc> - Specifies the location of the HVSC base directory. If not\n");
+    fmt::print("                specified, the value of the HVSC_BASE env. variable will be\n");
+    fmt::print("                used. Specifying this option will override HVSC_BASE.\n");
+    fmt::print("-t=<tuneNo>   - If specified, only the STIL entry for the given tune number is\n");
+    fmt::print("                printed. (Default: 0)\n");
+    fmt::print("-f=<field>    - If specified, only the STIL entry for the given field is\n");
+    fmt::print("                printed. (Default: all)\n");
+    fmt::print("                Valid values for <field> are:\n");
+    fmt::print("                all, name, author, title, artist, comment\n");
+    fmt::print("-d            - Turns on debug mode for STILView.\n");
+    fmt::print("-i            - Enter interactive mode.\n");
+    fmt::print("-m            - Demo mode (tests STILView and shows its capabilities).\n");
+    fmt::print("-s            - If specified, section-global (per dir/per composer) comments\n");
+    fmt::print("                will NOT be printed.\n");
+    fmt::print("-b            - If specified, BUG entries will NOT be printed.\n");
+    fmt::print("-o            - If specified, STIL entries will NOT be printed.\n");
+    fmt::print("-v            - Print STILView's and STIL's version number.\n");
+    fmt::print("-h            - Print this help screen (all other options are ignored).\n\n");
+    fmt::print("See user manual for further details and for examples.\n\n");
     exit(EXIT_SUCCESS);
 }
 
@@ -154,7 +156,7 @@ void processArguments(int argc, char **argv)
                 case 'E':
                     entryStr = getArgValue(argv[i]);
                     if (entryStr == nullptr) {
-                        cerr << "ERROR: STIL entry was not specified correctly!" << endl;
+                        fmt::print(stderr, "ERROR: STIL entry was not specified correctly!\n");
                         printUsage();
                     }
                     break;
@@ -180,7 +182,7 @@ void processArguments(int argc, char **argv)
                 {
                     char *tuneStr = getArgValue(argv[i]);
                     if (tuneStr == nullptr) {
-                        cerr << "ERROR: tune number was not specified correctly!" << endl;
+                        fmt::print(stderr, "ERROR: tune number was not specified correctly!\n");
                         printUsage();
                     }
                     sscanf(tuneStr, "%d", &tuneNo);
@@ -207,7 +209,7 @@ void processArguments(int argc, char **argv)
                 {
                     char *fieldStr = getArgValue(argv[i]);
                     if (fieldStr == nullptr) {
-                        cerr << "ERROR: field was not specified correctly!" << endl;
+                        fmt::print(stderr, "ERROR: field was not specified correctly!\n");
                         printUsage();
                     }
                     if (strEquals(fieldStr, "all")) {
@@ -229,9 +231,9 @@ void processArguments(int argc, char **argv)
                         field = STIL::comment;
                     }
                     else {
-                        cerr << "ERROR: Unknown STIL field specified: '" << fieldStr << "' !" << endl;
-                        cerr << "Valid values for <field> are:" << endl;
-                        cerr << "all, name, author, title, artist, comment." << endl;
+                        fmt::print(stderr, "ERROR: Unknown STIL field specified: '{}' !\n", fieldStr);
+                        fmt::print(stderr, "Valid values for <field> are:\n");
+                        fmt::print(stderr, "all, name, author, title, artist, comment.\n");
                         printUsage();
                     }
                 }
@@ -241,14 +243,14 @@ void processArguments(int argc, char **argv)
                     printHelp();
                     break;
                 default:
-                    cerr << "ERROR: Unknown argument: '" << argv[i] << "' !" << endl;
+                    fmt::print(stderr, "ERROR: Unknown argument: '{}' !\n", argv[i]);
                     printUsage();
                     break;
             }
         }
         else
         {
-            cerr << "ERROR: Unknown argument: '" << argv[i] << "' !" << endl;
+            fmt::print(stderr, "ERROR: Unknown argument: '{}' !\n", argv[i]);
             printUsage();
         }
     }
@@ -261,9 +263,9 @@ void checkArguments(void)
         if (interactive || demo)
         {
             hvscLoc = new char[STIL_MAX_PATH_SIZE];
-            cout << "Enter HVSC base directory: ";
-            cin.width(STIL_MAX_PATH_SIZE);
-            cin >> *hvscLoc;
+            fmt::print("Enter HVSC base directory: ");
+            std::cin.width(STIL_MAX_PATH_SIZE);
+            std::cin >> *hvscLoc;
         }
         else
         {
@@ -275,7 +277,7 @@ void checkArguments(void)
             }
             else
             {
-                cerr << "ERROR: HVSC base dir was not specified and HVSC_BASE is not set, either!" << endl;
+                fmt::print(stderr, "ERROR: HVSC base dir was not specified and HVSC_BASE is not set, either!\n");
                 printUsage();
             }
         }
@@ -292,7 +294,7 @@ void checkArguments(void)
             }
             else
             {
-                cerr << "ERROR: STIL entry was not specified!" << endl;
+                fmt::print(stderr, "ERROR: STIL entry was not specified!\n");
                 printUsage();
             }
         }
@@ -323,7 +325,7 @@ int main(int argc, char **argv)
     codeConvert cvt;
 
     if (interactive || demo) {
-        cout << "Reading STIL..." << endl;
+        fmt::print("Reading STIL...\n");
     }
     else
     {
@@ -332,11 +334,11 @@ int main(int argc, char **argv)
             versionPtr = myStil.getVersion();
             if (versionPtr == nullptr)
             {
-                cerr << "ERROR: No STIL version string was found!" << endl;
+                fmt::print(stderr, "ERROR: No STIL version string was found!\n");
             }
             else
             {
-                cout << versionPtr;
+                fmt::print("{}", versionPtr);
             }
 
             exit(EXIT_SUCCESS);
@@ -345,7 +347,7 @@ int main(int argc, char **argv)
 
     if (myStil.setBaseDir(hvscLoc) != true)
     {
-        cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
+        fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
         exit(EXIT_FAILURE);
     }
 
@@ -390,35 +392,35 @@ int main(int argc, char **argv)
         {
             if ((sectionPtr != nullptr) || (entryPtr != nullptr) || (bugPtr != nullptr))
             {
-                cout << "--- STILView  VERSION ---" << endl;
+                fmt::print("--- STILView  VERSION ---\n");
             }
-            cout << versionPtr;
+            fmt::print("{}", versionPtr);
         }
 
         if (sectionPtr != nullptr)
         {
             if ((versionPtr != nullptr) || (entryPtr != nullptr) || (bugPtr != nullptr))
             {
-                cout << "---- GLOBAL  COMMENT ----" << endl;
+                fmt::print("---- GLOBAL  COMMENT ----\n");
             }
-            cout << cvt.convert(sectionPtr);
+            fmt::print("{}", cvt.convert(sectionPtr));
         }
 
         if (entryPtr != nullptr)
         {
             if ((versionPtr != nullptr) || (sectionPtr != nullptr) || (bugPtr != nullptr))
             {
-                cout << "------ STIL  ENTRY ------" << endl;
+                fmt::print("------ STIL  ENTRY ------\n");
             }
-            cout << cvt.convert(entryPtr);
+            fmt::print("{}", cvt.convert(entryPtr));
         }
 
         if (bugPtr != nullptr) {
             if ((versionPtr != nullptr) || (sectionPtr != nullptr) || (entryPtr != nullptr))
             {
-                cout << "---------- BUG ----------" << endl;
+                fmt::print("---------- BUG ----------\n");
             }
-            cout << cvt.convert(bugPtr);
+            fmt::print("{}", cvt.convert(bugPtr));
         }
     }
     else {
@@ -427,9 +429,9 @@ int main(int argc, char **argv)
 
         if (demo)
         {
-            cout << "==== STILVIEW  DEMO MODE ====" << endl;
-            cout << endl << "---- STIL VERSION ----" << endl;
-            cout << "---- ONE STRING ----" << endl;
+            fmt::print("==== STILVIEW  DEMO MODE ====\n");
+            fmt::print("\n---- STIL VERSION ----\n");
+            fmt::print("---- ONE STRING ----\n");
         }
 
         // This gets printed regardless.
@@ -437,37 +439,37 @@ int main(int argc, char **argv)
         versionPtr = myStil.getVersion();
         if (versionPtr == nullptr)
         {
-            cerr << "ERROR: No STIL version string was found!" << endl;
+            fmt::print(stderr, "ERROR: No STIL version string was found!\n");
         }
         else
         {
-            cout << versionPtr;
+            fmt::print("{}", versionPtr);
         }
 
         if (demo)
         {
             // Demo mode.
 
-            cout << "---- STIL CLASS VERSION # ----" << endl;
+            fmt::print("---- STIL CLASS VERSION # ----\n");
             tempval = myStil.getVersionNo();
             if (tempval == 0)
             {
-                cerr << "ERROR: STILView version number was not found!" << endl;
+                fmt::print(stderr, "ERROR: STILView version number was not found!\n");
             }
             else
             {
-                cout << "STILView v" << tempval << endl;
+                fmt::print("STILView v{}\n", tempval);
             }
 
-            cout << "---- STIL.txt VERSION # ----" << endl;
+            fmt::print("---- STIL.txt VERSION # ----\n");
             tempval = myStil.getSTILVersionNo();
             if (tempval == 0)
             {
-                cerr << "ERROR: STIL version number was not found!" << endl;
+                fmt::print(stderr, "ERROR: STIL version number was not found!\n");
             }
             else
             {
-                cout << "STIL v" << tempval << endl;
+                fmt::print("STIL v{}\n", tempval);
             }
 
             // For testing setBaseDir().
@@ -476,53 +478,53 @@ int main(int argc, char **argv)
             {
                 if (myStil.setBaseDir(OTHER_HVSC_BASE_DIR) != true)
                 {
-                    cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
-                    cerr << "Couldn't switch to new dir: '" << OTHER_HVSC_BASE_DIR << "'" << endl;
-                    cerr << "Reverting back to '" << hvscLoc << "'" << endl;
+                    fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
+                    fmt::print(stderr, "Couldn't switch to new dir: '{}'\n", OTHER_HVSC_BASE_DIR);
+                    fmt::print(stderr, "Reverting back to '{}'\n", hvscLoc);
                 }
                 else
                 {
                     hvscLoc = OTHER_HVSC_BASE_DIR;
 
-                    cout << "Switch to new dir '" << hvscLoc << "' was successful!" << endl;
+                    fmt::print("Switch to new dir '{}' was successful!\n", hvscLoc);
 
-                    cout << "---- ONE STRING ----" << endl;
+                    fmt::print("---- ONE STRING ----\n");
 
                     versionPtr = myStil.getVersion();
                     if (versionPtr == nullptr)
                     {
-                        cerr << "ERROR: No STIL version string was found!" << endl;
+                        fmt::print(stderr, "ERROR: No STIL version string was found!\n");
                     }
                     else
                     {
-                        cout << versionPtr;
+                        fmt::print("{}", versionPtr);
                     }
 
-                    cout << "---- STIL CLASS VERSION # ----" << endl;
+                    fmt::print("---- STIL CLASS VERSION # ----\n");
                     tempval = myStil.getVersionNo();
                     if (tempval == 0)
                     {
-                        cerr << "ERROR: STILView version number was not found!" << endl;
+                        fmt::print(stderr, "ERROR: STILView version number was not found!\n");
                     }
                     else
                     {
-                        cout << "STILView v" << tempval << endl;
+                       fmt::print("STILView v{}\n", tempval);
                     }
 
-                    cout << "---- STIL.txt VERSION # ----" << endl;
+                    fmt::print("---- STIL.txt VERSION # ----\n");
                     tempval = myStil.getSTILVersionNo();
                     if (tempval == 0)
                     {
-                        cerr << "ERROR: STIL version number was not found!" << endl;
+                        fmt::print(stderr, "ERROR: STIL version number was not found!\n");
                     }
                     else
                     {
-                        cout << "STIL v" << tempval << endl;
+                        fmt::print("STIL v{}\n", tempval);
                     }
                 }
             }
 
-            cout << endl << "==== STIL ABSOLUTE PATH TO " << entryStr << ", Tune #" << tuneNo << " ====" << endl << endl;
+            fmt::print("\n==== STIL ABSOLUTE PATH TO {}, Tune #{} ====\n\n", entryStr, tuneNo);
 
             std::string t(hvscLoc);
 
@@ -533,84 +535,84 @@ int main(int argc, char **argv)
             }
             t.append(entryStr);
 
-            cout << "---- GLOBAL  COMMENT ----" << endl;
+            fmt::print("---- GLOBAL  COMMENT ----\n");
 
             tmpptr = myStil.getAbsGlobalComment(t.c_str());
 
             if (tmpptr == nullptr)
             {
-                cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
+                fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
             }
             else
             {
-                cout << cvt.convert(tmpptr);
+                fmt::print("{}", cvt.convert(tmpptr));
             }
 
-            cout << "-- TUNE GLOBAL COMMENT --" << endl;
+            fmt::print("-- TUNE GLOBAL COMMENT --\n");
 
             tmpptr = myStil.getAbsEntry(t.c_str(), 0, STIL::comment);
 
             if (tmpptr == nullptr)
             {
-                cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
+                fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
             }
             else
             {
-                cout << cvt.convert(tmpptr);
+                fmt::print("{}", cvt.convert(tmpptr));
             }
 
-            cout << "------ STIL  ENTRY ------" << endl;
-            cout << "(For tune #1)" << endl;
+            fmt::print("------ STIL  ENTRY ------\n");
+            fmt::print("(For tune #1)\n");
 
             tmpptr = myStil.getAbsEntry(t.c_str(), 1, STIL::all);
 
             if (tmpptr == nullptr)
             {
-                cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
+                fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
             }
             else
             {
-                cout << cvt.convert(tmpptr);
+                fmt::print("{}", cvt.convert(tmpptr));
             }
 
-            cout << "---------- BUG ----------" << endl;
+            fmt::print("---------- BUG ----------\n");
 
             tmpptr = myStil.getAbsBug(t.c_str(), tuneNo);
 
             if (tmpptr == nullptr)
             {
-                cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
+                fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
             }
             else
             {
-                cout << cvt.convert(tmpptr);
+                fmt::print("{}", cvt.convert(tmpptr));
             }
 
-            cout << "==== END OF ENTRY ====" << endl;
+            fmt::print("==== END OF ENTRY ====\n");
 
-            cout << endl << "Trying to do setBaseDir() to wrong location..." << endl;
+            fmt::print("\nTrying to do setBaseDir() to wrong location...\n");
 
             if (myStil.setBaseDir("This_should_not_work") != true)
             {
-                cout << "setBaseDir() failed!" << endl;
-                cout << "But it should't have an impact on private data!" << endl;
-                cout << "You should see the same entry below:" << endl;
-                cout << endl << "------ STIL  ENTRY ------" << endl;
+                fmt::print("setBaseDir() failed!\n");
+                fmt::print("But it should't have an impact on private data!\n");
+                fmt::print("You should see the same entry below:\n");
+                fmt::print("\n------ STIL  ENTRY ------\n");
 
                 tmpptr = myStil.getAbsEntry(t.c_str(), tuneNo, STIL::all);
 
                 if (tmpptr == nullptr)
                 {
-                    cerr << "STIL error #" << myStil.getError() << ": " << myStil.getErrorStr() << endl;
+                    fmt::print(stderr, "STIL error #{}: {}\n", myStil.getError(), myStil.getErrorStr());
                 }
                 else
                 {
-                    cout << cvt.convert(tmpptr);
+                    fmt::print("{}", cvt.convert(tmpptr));
                 }
             }
             else
             {
-                cout << "Oops, it should've failed!" << endl;
+                fmt::print("Oops, it should've failed!\n");
             }
         }
 
@@ -618,24 +620,24 @@ int main(int argc, char **argv)
         {
             // Interactive mode.
 
-            cout << endl << "==== ENTERING INTERACTIVE MODE ====" << endl << endl;
+            fmt::print("\n==== ENTERING INTERACTIVE MODE ====\n\n");
 
             char temp[STIL_MAX_PATH_SIZE];
             do
             {
-                cout << "Enter desired entry (relative path) or 'q' to exit." << endl;
-                cout << "Entry: ";
-                cin.width(STIL_MAX_PATH_SIZE);
-                cin >> temp;
+                fmt::print("Enter desired entry (relative path) or 'q' to exit.\n");
+                fmt::print("Entry: ");
+                std::cin.width(STIL_MAX_PATH_SIZE);
+                std::cin >> temp;
 
                 if (*temp == '/')
                 {
-                    cout << "Enter tune number (can enter 0, too): ";
-                    cin >> tuneNo;
+                    fmt::print("Enter tune number (can enter 0, too): ");
+                    std::cin >> tuneNo;
 
-                    cout << "Field [(A)ll, (N)ame, A(U)thor (T)itle, A(R)tist,(C)omment]: ";
+                    fmt::print("Field [(A)ll, (N)ame, A(U)thor (T)itle, A(R)tist,(C)omment]: ");
                     char fieldchar;
-                    cin >> fieldchar;
+                    std::cin >> fieldchar;
 
                     switch (fieldchar)
                     {
@@ -664,56 +666,56 @@ int main(int argc, char **argv)
                             field = STIL::comment;
                             break;
                         default:
-                            cout << "Wrong field. Assuming (A)ll." << endl;
+                            fmt::print("Wrong field. Assuming (A)ll.\n");
                             field = STIL::all;
                             break;
                     }
 
-                    cout << endl << "==== " << temp << ", Tune #" << tuneNo << " ====" << endl << endl;
-                    cout << "---- GLOBAL  COMMENT ----" << endl;
+                    fmt::print("\n==== {}, Tune #{} ====\n\n", temp, tuneNo);
+                    fmt::print("---- GLOBAL  COMMENT ----\n");
 
                     tmpptr = myStil.getGlobalComment(temp);
 
                     if (tmpptr)
                     {
-                        cout << cvt.convert(tmpptr);
+                        fmt::print("{}", cvt.convert(tmpptr));
                     }
                     else
                     {
-                        cout << "NONE!" << endl;
+                        fmt::print("NONE!\n");
                     }
 
-                    cout << "------ STIL  ENTRY ------" << endl;
+                    fmt::print("------ STIL  ENTRY ------\n");
 
                     tmpptr = myStil.getEntry(temp, tuneNo, field);
 
                     if (tmpptr)
                     {
-                        cout << cvt.convert(tmpptr);
+                        fmt::print("{}", cvt.convert(tmpptr));
                     }
                     else
                     {
-                        cout << "NONE!" << endl;
+                        fmt::print("NONE!\n");
                     }
 
-                    cout << "---------- BUG ----------" << endl;
+                    fmt::print("---------- BUG ----------\n");
 
                     tmpptr = myStil.getBug(temp, tuneNo);
 
                     if (tmpptr)
                     {
-                        cout << cvt.convert(tmpptr);
+                        fmt::print("{}", cvt.convert(tmpptr));
                     }
                     else
                     {
-                        cout << "NONE!" << endl;
+                        fmt::print("NONE!\n");
                     }
 
-                    cout << "==== END OF ENTRY ====" << endl << endl;
+                    fmt::print("==== END OF ENTRY ====\n\n");
                 }
             } while (*temp == '/');
 
-            cout << "BYE!" << endl;
+            fmt::print("BYE!\n");
         }
     }
 
