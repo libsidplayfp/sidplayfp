@@ -75,9 +75,9 @@ const char* ERR_NOT_ENOUGH_MEMORY = "ERROR: Not enough memory.";
 const char ConsolePlayer::RESIDFP_ID[] = "ReSIDfp";
 #endif
 
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
-#  include <sidplayfp/builders/residfpII.h>
-const char ConsolePlayer::RESIDFPII_ID[] = "ReSIDfpII";
+#ifdef HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
+#  include <sidplayfp/builders/sidlite.h>
+const char ConsolePlayer::SIDLITE_ID[] = "SidLite";
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
@@ -412,9 +412,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
             {
                 m_driver.sid    = EMU_RESIDFP;
             }
-            else if (emulation.engine.compare(TEXT("RESIDFPII")) == 0)
+            else if (emulation.engine.compare(TEXT("SIDLITE")) == 0)
             {
-                m_driver.sid    = EMU_RESIDFPII;
+                m_driver.sid    = EMU_SIDLITE;
             }
             else if (emulation.engine.compare(TEXT("RESID")) == 0)
             {
@@ -736,87 +736,19 @@ bool ConsolePlayer::createSidEmu (SIDEMUS emu, const SidTuneInfo *tuneInfo)
     }
 #endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
 
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
-    case EMU_RESIDFPII:
+#ifdef HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
+    case EMU_SIDLITE:
     {
         try
         {
-            ReSIDfpIIBuilder *rs = new ReSIDfpIIBuilder( RESIDFPII_ID );
+            SIDLiteBuilder *rs = new SIDLiteBuilder( SIDLITE_ID );
 
             m_engCfg.sidEmulation = rs;
-            rs->combinedWaveformsStrength(m_combinedWaveformsStrength);
-
-            double frange = m_filter.filterRange6581;
-
-            if (m_autofilter && (tuneInfo->numberOfInfoStrings() == 3))
-            {
-                double rfr = getRecommendedFilterRange(tuneInfo->infoString(1));
-                if (rfr < 0.)
-                {
-                    if (m_verboseLevel > 1)
-                        cerr << "No recommended filter range available" << endl;
-                }
-                else
-                {
-                    if (m_verboseLevel > 1)
-                        cerr << "Recommended filter range: " << rfr << endl;
-                    frange = rfr;
-                }
-            }
-
-            if (m_frange.has_value())
-            {
-                frange = m_frange.value();
-            }
-
-            if ((frange < 0.0) || (frange > 1.0))
-            {
-                cerr << "Invalid 6581 filter range: " << frange << endl;
-                exit(EXIT_FAILURE);
-            }
-
-            if (m_verboseLevel)
-                cerr << "6581 filter range: " << frange << endl;
-            rs->filter6581Range(frange);
-
-            // 6581
-            double fcurve = m_filter.filterCurve6581;
-            if (m_fcurve.has_value())
-            {
-                fcurve = m_fcurve.value();
-            }
-
-            if ((fcurve < 0.0) || (fcurve > 1.0))
-            {
-                cerr << "Invalid 6581 filter curve: " << fcurve << endl;
-                exit(EXIT_FAILURE);
-            }
-
-            if (m_verboseLevel)
-                cerr << "6581 filter curve: " << fcurve << endl;
-            rs->filter6581Curve(fcurve);
-
-            // 8580
-            fcurve = m_filter.filterCurve8580;
-            if (m_fcurve.has_value())
-            {
-                fcurve = m_fcurve.value();
-            }
-
-            if ((fcurve < 0.0) || (fcurve > 1.0))
-            {
-                cerr << "Invalid 8580 filter curve: " << fcurve << endl;
-                exit(EXIT_FAILURE);
-            }
-
-            if (m_verboseLevel)
-                cerr << "8580 filter curve: " << fcurve << endl;
-            rs->filter8580Curve(fcurve);
         }
         catch (std::bad_alloc const &ba) {}
         break;
     }
-#endif // HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
+#endif // HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     case EMU_RESID:
