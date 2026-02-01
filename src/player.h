@@ -79,7 +79,7 @@ typedef enum
     /* The following require a soundcard */
     EMU_DEFAULT,
     EMU_RESIDFP,
-    EMU_RESIDFPII,
+    EMU_SIDLITE,
     EMU_RESID,
     /* The following should disable the soundcard */
     EMU_HARDSID,
@@ -118,8 +118,8 @@ private:
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     static const char  RESIDFP_ID[];
 #endif
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFPII_H
-    static const char  RESIDFPII_ID[];
+#ifdef HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
+    static const char  SIDLITE_ID[];
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
     static const char  RESID_ID[];
