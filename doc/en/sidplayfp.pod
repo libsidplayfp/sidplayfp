@@ -173,6 +173,10 @@ Use VICE's original reSID emulation engine.
 
 Use reSIDfp emulation engine.
 
+=item B<--sidlite>
+
+Use sidlite emulation engine.
+
 =item B<--hardsid>
 
 Use HardSID device.
@@ -389,7 +393,7 @@ Wrote the original man page.
 
 =item Copyright (C) 2009-2015 VICE Project
 
-=item Copyright (C) 2010-2024 Leandro Nini
+=item Copyright (C) 2010-2026 Leandro Nini
 
 =back
 
