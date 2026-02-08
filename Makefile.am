@@ -8,12 +8,6 @@ if MINGW32
   W32_LIBS = -lshlwapi
 endif
 
-if USE_LIBOUT123
-  OUT123_SOURCES = \
-src/audio/out123/audiodrv.cpp \
-src/audio/out123/audiodrv.h
-endif
-
 if USE_ICONV
   ICONV_SOURCES = \
 src/codepages.h
@@ -22,12 +16,10 @@ endif
 AM_CPPFLAGS = \
 -I $(top_builddir)/src \
 -I $(top_srcdir)/src \
+-I $(top_srcdir)/libs/miniaudio \
 -DPKGDATADIR="\"$(pkgdatadir)/\"" \
 $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \
-$(ALSA_CFLAGS) \
-$(PULSE_CFLAGS) \
-$(OUT123_CFLAGS) \
 ${W32_CPPFLAGS} \
 @debug_flags@
 
@@ -40,6 +32,9 @@ src/stilview
 # sidplayfp
 
 src_sidplayfp_SOURCES = \
+libs/miniaudio/osaudio_miniaudio.c \
+libs/miniaudio/osaudio.h \
+libs/miniaudio/miniaudio.h \
 src/IniConfig.cpp \
 src/IniConfig.h \
 src/args.cpp \
@@ -66,21 +61,12 @@ src/audio/AudioConfig.h \
 src/audio/AudioDrv.cpp \
 src/audio/AudioDrv.h \
 src/audio/IAudio.h \
-src/audio/alsa/audiodrv.cpp \
-src/audio/alsa/audiodrv.h \
 src/audio/au/auFile.cpp \
 src/audio/au/auFile.h \
-src/audio/directx/audiodrv.cpp \
-src/audio/directx/audiodrv.h \
-src/audio/mmsystem/audiodrv.cpp \
-src/audio/mmsystem/audiodrv.h \
+src/audio/miniaudio/audiodrv.cpp \
+src/audio/miniaudio/audiodrv.h \
 src/audio/null/null.cpp \
 src/audio/null/null.h \
-src/audio/oss/audiodrv.cpp \
-src/audio/oss/audiodrv.h \
-$(OUT123_SOURCES) \
-src/audio/pulse/audiodrv.cpp \
-src/audio/pulse/audiodrv.h \
 src/audio/wav/WavFile.cpp \
 src/audio/wav/WavFile.h \
 src/ini/iniHandler.h \
@@ -90,12 +76,8 @@ src/ini/types.h
 
 src_sidplayfp_LDADD = \
 $(LIBICONV) \
-$(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
-$(BUILDERS_LDFLAGS) \
-$(ALSA_LIBS) \
-$(PULSE_LIBS) \
-$(OUT123_LIBS) \
+$(BUILDERS_LDFLAGS)
 $(W32_LIBS)
 
 #=========================================================

@@ -45,41 +45,41 @@ protected:
 
 private:
     const char *m_backendName;
-    std::string _errorString;
+    std::string m_errorString;
 
 protected:
-    AudioConfig _settings;
-    short      *_sampleBuffer;
+    AudioConfig m_settings;
+    short      *m_sampleBuffer;
 
 protected:
     void setError(const char* msg)
     {
-        _errorString.assign(m_backendName).append(" ERROR: ").append(msg);
+        m_errorString.assign(m_backendName).append(" ERROR: ").append(msg);
     }
 
     void clearError()
     {
-        _errorString.clear();
+        m_errorString.clear();
     }
 
 public:
     AudioBase(const char* name) :
         m_backendName(name),
-        _sampleBuffer(nullptr) {}
+        m_sampleBuffer(nullptr) {}
     ~AudioBase() override = default;
 
-    short *buffer() const override { return _sampleBuffer; }
+    short *buffer() const override { return m_sampleBuffer; }
 
-    void clearBuffer() override { std::memset(_sampleBuffer, 0, _settings.getBufBytes()); }
+    void clearBuffer() override { std::memset(m_sampleBuffer, 0, m_settings.getBufBytes()); }
 
     void getConfig(AudioConfig &cfg) const override
     {
-        cfg = _settings;
+        cfg = m_settings;
     }
 
     const char *getErrorString() const override
     {
-        return _errorString.c_str();
+        return m_errorString.c_str();
     }
 
     const char *getDriverString() const override
