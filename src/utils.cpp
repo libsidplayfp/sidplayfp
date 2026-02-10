@@ -28,9 +28,9 @@
 #  include <shlwapi.h>
 
 #ifdef UNICODE
-#  define _tgetenv _wgetenv
+#  define _tgetenv_s _wgetenv_s
 #else
-#  define _tgetenv getenv
+#  define _tgetenv_s getenv_s
 #endif
 
 SID_STRING utils::getExecPath()
@@ -50,8 +50,10 @@ SID_STRING utils::getPath()
 
     if (SHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, szPath)!=S_OK)
     {
-        TCHAR *path = _tgetenv(TEXT("USERPROFILE"));
-        if (!path)
+        TCHAR path[MAX_PATH];
+        size_t pReturnValue;
+        errno_t res = _tgetenv_s(&pReturnValue, path, TEXT("USERPROFILE"));
+        if (res != 0)
             throw error();
         returnPath.append(path).append(TEXT("\\Application Data"));
     }
