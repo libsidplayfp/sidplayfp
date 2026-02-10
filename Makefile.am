@@ -91,7 +91,6 @@ src_sidplayfp_LDADD = \
 $(LIBICONV) \
 $(AUDIO_LDFLAGS) \
 $(SIDPLAYFP_LIBS) \
-$(BUILDERS_LDFLAGS) \
 $(ALSA_LIBS) \
 $(PULSE_LIBS) \
 $(OUT123_LIBS) \
