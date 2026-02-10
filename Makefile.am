@@ -77,7 +77,6 @@ src/ini/types.h
 src_sidplayfp_LDADD = \
 $(LIBICONV) \
 $(SIDPLAYFP_LIBS) \
-$(BUILDERS_LDFLAGS)
 $(W32_LIBS)
 
 #=========================================================
