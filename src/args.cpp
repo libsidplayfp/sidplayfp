@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2011-2025 Leandro Nini
+ * Copyright 2011-2026 Leandro Nini
  * Copyright 2000-2001 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,6 +20,8 @@
  */
 
 #include "player.h"
+
+#include "dataParser.h"
 
 #include <iostream>
 
@@ -427,7 +429,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 }
                 else
                 {
-                    m_fcurve = atof(&argv[i][9]);
+                    m_fcurve = dataParser::parseDouble(&argv[i][9]);
                 }
             }
 #ifdef FEAT_FILTER_RANGE
@@ -439,7 +441,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 }
                 else
                 {
-                    m_frange = atof(&argv[i][9]);
+                    m_frange = dataParser::parseDouble(&argv[i][9]);
                 }
             }
 #endif
