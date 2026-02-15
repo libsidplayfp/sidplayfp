@@ -57,6 +57,7 @@ $(fmt_SOURCES) \
 libs/miniaudio/osaudio_miniaudio.c \
 libs/miniaudio/osaudio.h \
 libs/miniaudio/miniaudio.h \
+libs/filesystem/filesystem.hpp \
 src/IniConfig.cpp \
 src/IniConfig.h \
 src/args.cpp \
@@ -92,9 +93,7 @@ src/audio/null/null.h \
 src/audio/wav/WavFile.cpp \
 src/audio/wav/WavFile.h \
 src/ini/iniHandler.h \
-src/ini/iniHandler.cpp \
-src/ini/sidfstream.h \
-src/ini/types.h
+src/ini/iniHandler.cpp
 
 src_sidplayfp_LDADD = \
 $(LIBICONV) \

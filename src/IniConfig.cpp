@@ -40,54 +40,53 @@
 #  include <windows.h>
 #endif
 
-#ifdef HAVE_UNISTD_H
-#  include <unistd.h>
-#endif
-
 #include "utils.h"
 #include "dataParser.h"
 
 #include "sidcxx11.h"
 
-const TCHAR* colorStrings[16] =
+#undef SEPARATOR
+#define SEPARATOR "/"
+
+const char* colorStrings[16] =
 {
-    TEXT("black"),
-    TEXT("red"),
-    TEXT("green"),
-    TEXT("yellow"),
-    TEXT("blue"),
-    TEXT("magenta"),
-    TEXT("cyan"),
-    TEXT("white"),
-    TEXT("bright black"),
-    TEXT("bright red"),
-    TEXT("bright green"),
-    TEXT("bright yellow"),
-    TEXT("bright blue"),
-    TEXT("bright magenta"),
-    TEXT("bright cyan"),
-    TEXT("bright white")
+    "black",
+    "red",
+    "green",
+    "yellow",
+    "blue",
+    "magenta",
+    "cyan",
+    "white",
+    "bright black",
+    "bright red",
+    "bright green",
+    "bright yellow",
+    "bright blue",
+    "bright magenta",
+    "bright cyan",
+    "bright white"
 };
 
-inline void debug(MAYBE_UNUSED const TCHAR *msg, MAYBE_UNUSED const TCHAR *val)
+inline void debug(MAYBE_UNUSED const char *msg, MAYBE_UNUSED const char *val)
 {
 #ifndef NDEBUG
-    SID_COUT << msg << val << std::endl;
+    fmt::print("{}{}\n", msg, val);
 #endif
 }
 
-inline void error(const TCHAR *msg)
+inline void error(const char *msg)
 {
-    SID_CERR << msg << std::endl;
+    fmt::print(stderr, "{}\n", msg);
 }
 
-inline void error(const TCHAR *msg, const TCHAR *val)
+inline void error(const char *msg, const char *val)
 {
-    SID_CERR << msg << val << std::endl;
+    fmt::print(stderr, "{}{}\n", msg, val);
 }
 
-const TCHAR *DIR_NAME = TEXT("sidplayfp");
-const TCHAR *FILE_NAME = TEXT("sidplayfp.ini");
+const char *DIR_NAME = "sidplayfp";
+const char *FILE_NAME = "sidplayfp.ini";
 
 
 IniConfig::IniConfig()
@@ -162,13 +161,13 @@ void IniConfig::clear()
 
 // static helpers
 
-const TCHAR* readKey(iniHandler &ini, const TCHAR *key)
+const char* readKey(iniHandler &ini, const char *key)
 {
-    const TCHAR* value = ini.getValue(key);
+    const char* value = ini.getValue(key);
     if (value == nullptr)
     {   // Doesn't exist, add it
-        ini.addValue(key, TEXT(""));
-        debug(TEXT("Key doesn't exist: "), key);
+        ini.addValue(key, "");
+        debug("Key doesn't exist: ", key);
     }
     else if (!value[0])
     {
@@ -179,9 +178,9 @@ const TCHAR* readKey(iniHandler &ini, const TCHAR *key)
     return value;
 }
 
-void readDouble(iniHandler &ini, const TCHAR *key, double &result)
+void readDouble(iniHandler &ini, const char *key, double &result)
 {
-    const TCHAR* value = readKey(ini, key);
+    const char* value = readKey(ini, key);
     if (value == nullptr)
         return;
 
@@ -191,14 +190,14 @@ void readDouble(iniHandler &ini, const TCHAR *key, double &result)
     }
     catch (dataParser::parseError const &e)
     {
-        error(TEXT("Error parsing double at "), key);
+        error("Error parsing double at ", key);
     }
 }
 
 
-void readInt(iniHandler &ini, const TCHAR *key, int &result)
+void readInt(iniHandler &ini, const char *key, int &result)
 {
-    const TCHAR* value = readKey(ini, key);
+    const char* value = readKey(ini, key);
     if (value == nullptr)
         return;
 
@@ -208,14 +207,14 @@ void readInt(iniHandler &ini, const TCHAR *key, int &result)
     }
     catch (dataParser::parseError const &e)
     {
-        error(TEXT("Error parsing int at "), key);
+        error("Error parsing int at ", key);
     }
 }
 
 
-void readBool(iniHandler &ini, const TCHAR *key, bool &result)
+void readBool(iniHandler &ini, const char *key, bool &result)
 {
-    const TCHAR* value = readKey(ini, key);
+    const char* value = readKey(ini, key);
     if (value == nullptr)
         return;
 
@@ -225,33 +224,33 @@ void readBool(iniHandler &ini, const TCHAR *key, bool &result)
     }
     catch (dataParser::parseError const &e)
     {
-        error(TEXT("Error parsing bool at "), key);
+        error("Error parsing bool at ", key);
     }
 }
 
 
-SID_STRING readString(iniHandler &ini, const TCHAR *key)
+std::string readString(iniHandler &ini, const char *key)
 {
-    const TCHAR* value = ini.getValue(key);
+    const char* value = ini.getValue(key);
     if (value == nullptr)
     {
         // Doesn't exist, add it
-        ini.addValue(key, TEXT(""));
-        debug(TEXT("Key doesn't exist: "), key);
-        return SID_STRING();
+        ini.addValue(key, "");
+        debug("Key doesn't exist: ", key);
+        return std::string();
     }
 
-    return SID_STRING(value);
+    return std::string(value);
 }
 
 
-void readChar(iniHandler &ini, const TCHAR *key, char &ch)
+void readChar(iniHandler &ini, const char *key, char &ch)
 {
-    SID_STRING str = readString(ini, key);
+    std::string str = readString(ini, key);
     if (str.empty())
         return;
 
-    TCHAR c = 0;
+    char c = 0;
 
     // Check if we have an actual character
     if (str[0] == '\'')
@@ -269,7 +268,7 @@ void readChar(iniHandler &ini, const TCHAR *key, char &ch)
         }
         catch (dataParser::parseError const &e)
         {
-            error(TEXT("Error parsing int at "), key);
+            error("Error parsing int at ", key);
         }
     }
 
@@ -279,9 +278,9 @@ void readChar(iniHandler &ini, const TCHAR *key, char &ch)
 }
 
 
-bool readTime(iniHandler &ini, const TCHAR *key, int &value)
+bool readTime(iniHandler &ini, const char *key, int &value)
 {
-    SID_STRING str = readString(ini, key);
+    std::string str = readString(ini, key);
     if (str.empty())
         return false;
 
@@ -291,7 +290,7 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
     const size_t dot = str.find_first_of('.');
     try
     {
-        if (sep == SID_STRING::npos)
+        if (sep == std::string::npos)
         {   // User gave seconds
             time = dataParser::parseInt(str.c_str());
         }
@@ -303,14 +302,14 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
             time = min * 60;
 
             int sec;
-            if (dot == SID_STRING::npos)
+            if (dot == std::string::npos)
             {
                 sec  = dataParser::parseInt(str.substr(sep + 1).c_str());
             }
             else
             {
                 sec  = dataParser::parseInt(str.substr(sep + 1, dot - sep).c_str());
-                SID_STRING msec = str.substr(dot + 1);
+                std::string msec = str.substr(dot + 1);
                 milliseconds = dataParser::parseInt(msec.c_str());
                 switch (msec.length())
                 {
@@ -328,7 +327,7 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
     }
     catch (dataParser::parseError const &e)
     {
-        error(TEXT("Error parsing time at "), key);
+        error("Error parsing time at ", key);
         return false;
     }
 
@@ -336,13 +335,13 @@ bool readTime(iniHandler &ini, const TCHAR *key, int &value)
     return true;
 
 IniCofig_readTime_error:
-    error(TEXT("Invalid time at "), key);
+    error("Invalid time at ", key);
     return false;
 }
 
-bool readColor(iniHandler &ini, const TCHAR *key, color_t &ch)
+bool readColor(iniHandler &ini, const char *key, color_t &ch)
 {
-    SID_STRING str = readString(ini, key);
+    std::string str = readString(ini, key);
     if (str.empty())
         return false;
 
@@ -361,47 +360,54 @@ bool readColor(iniHandler &ini, const TCHAR *key, color_t &ch)
 
 void IniConfig::readSidplay2(iniHandler &ini)
 {
-    if (!ini.setSection(TEXT("SIDPlayfp")))
-        ini.addSection(TEXT("SIDPlayfp"));
+    if (!ini.setSection("SIDPlayfp"))
+        ini.addSection("SIDPlayfp");
 
     int version = sidplay2_s.version;
-    readInt(ini, TEXT("Version"), version);
+    readInt(ini, "Version", version);
     if (version > 0)
         sidplay2_s.version = version;
 
-    sidplay2_s.database = readString(ini, TEXT("Songlength Database"));
+    sidplay2_s.database = readString(ini, "Songlength Database");
 
-#if !defined _WIN32
     if (sidplay2_s.database.empty())
     {
-        SID_STRING buffer(utils::getDataPath());
+        std::string buffer(utils::getDataPath());
         buffer.append(SEPARATOR).append(DIR_NAME).append(SEPARATOR).append("Songlengths.txt");
-        if (::access(buffer.c_str(), R_OK) == 0)
-            sidplay2_s.database.assign(buffer);
+        fs::path f(buffer);
+        std::error_code ec; // For noexcept overload usage.
+        if (fs::is_regular_file(f) && fs::exists(f, ec) && !ec)
+        {
+            auto perms = fs::status(f, ec).permissions();
+            if ((perms & fs::perms::owner_read) != fs::perms::none &&
+                (perms & fs::perms::group_read) != fs::perms::none &&
+                (perms & fs::perms::others_read) != fs::perms::none
+            )
+                sidplay2_s.database.assign(buffer);
+        }
     }
-#endif
 
     int time;
-    if (readTime(ini, TEXT("Default Play Length"), time))
+    if (readTime(ini, "Default Play Length", time))
         sidplay2_s.playLength = time;
-    if (readTime(ini, TEXT("Default Record Length"), time))
+    if (readTime(ini, "Default Record Length", time))
         sidplay2_s.recordLength = time;
 
-    sidplay2_s.kernalRom = readString(ini, TEXT("Kernal Rom"));
-    sidplay2_s.basicRom = readString(ini, TEXT("Basic Rom"));
-    sidplay2_s.chargenRom = readString(ini, TEXT("Chargen Rom"));
+    sidplay2_s.kernalRom = readString(ini, "Kernal Rom");
+    sidplay2_s.basicRom = readString(ini, "Basic Rom");
+    sidplay2_s.chargenRom = readString(ini, "Chargen Rom");
 
-    readInt(ini, TEXT("VerboseLevel"), sidplay2_s.verboseLevel);
+    readInt(ini, "VerboseLevel", sidplay2_s.verboseLevel);
 }
 
 
 void IniConfig::readConsole(iniHandler &ini)
 {
-    if (!ini.setSection (TEXT("Console")))
-        ini.addSection(TEXT("Console"));
+    if (!ini.setSection ("Console"))
+        ini.addSection("Console");
 
     bool ascii;
-    readBool(ini, TEXT("ASCII"), ascii);
+    readBool(ini, "ASCII", ascii);
     if (ascii)
     {
         console_s.topLeft       = "+";
@@ -414,143 +420,152 @@ void IniConfig::readConsole(iniHandler &ini)
         console_s.junctionRight = "+";
     }
 
-    readBool(ini, TEXT("Ansi"),                console_s.ansi);
-    readColor(ini, TEXT("Color Decorations"),  console_s.decorations);
-    readColor(ini, TEXT("Color Title"),        console_s.title);
-    readColor(ini, TEXT("Color Label Core"),   console_s.label_core);
-    readColor(ini, TEXT("Color Text Core"),    console_s.text_core);
-    readColor(ini, TEXT("Color Label Extra"),  console_s.label_extra);
-    readColor(ini, TEXT("Color Text Extra"),   console_s.text_extra);
-    readColor(ini, TEXT("Color Notes"),        console_s.notes);
-    readColor(ini, TEXT("Color Control On"),   console_s.control_on);
-    readColor(ini, TEXT("Color Control Off"),  console_s.control_off);
+    readBool(ini, "Ansi",                console_s.ansi);
+//     readChar(ini, "Char Top Left",       console_s.topLeft);
+//     readChar(ini, "Char Top Right",      console_s.topRight);
+//     readChar(ini, "Char Bottom Left",    console_s.bottomLeft);
+//     readChar(ini, "Char Bottom Right",   console_s.bottomRight);
+//     readChar(ini, "Char Vertical",       console_s.vertical);
+//     readChar(ini, "Char Horizontal",     console_s.horizontal);
+//     readChar(ini, "Char Junction Left",  console_s.junctionLeft);
+//     readChar(ini, "Char Junction Right", console_s.junctionRight);
+
+    readColor(ini, "Color Decorations",  console_s.decorations);
+    readColor(ini, "Color Title",        console_s.title);
+    readColor(ini, "Color Label Core",   console_s.label_core);
+    readColor(ini, "Color Text Core",    console_s.text_core);
+    readColor(ini, "Color Label Extra",  console_s.label_extra);
+    readColor(ini, "Color Text Extra",   console_s.text_extra);
+    readColor(ini, "Color Notes",        console_s.notes);
+    readColor(ini, "Color Control On",   console_s.control_on);
+    readColor(ini, "Color Control Off",  console_s.control_off);
 }
 
 
 void IniConfig::readAudio(iniHandler &ini)
 {
-    if (!ini.setSection (TEXT("Audio")))
-        ini.addSection(TEXT("Audio"));
+    if (!ini.setSection ("Audio"))
+        ini.addSection("Audio");
 
-    readInt(ini, TEXT("Frequency"), audio_s.frequency);
+    readInt(ini, "Frequency", audio_s.frequency);
 
-    readInt(ini, TEXT("Channels"),  audio_s.channels);
+    readInt(ini, "Channels",  audio_s.channels);
 
-    readInt(ini, TEXT("BitsPerSample"), audio_s.precision);
+    readInt(ini, "BitsPerSample", audio_s.precision);
 
-    readInt(ini, TEXT("BufferLength"), audio_s.bufLength);
+    readInt(ini, "BufferLength", audio_s.bufLength);
 }
 
 
 void IniConfig::readEmulation(iniHandler &ini)
 {
-    if (!ini.setSection (TEXT("Emulation")))
-        ini.addSection(TEXT("Emulation"));
+    if (!ini.setSection ("Emulation"))
+        ini.addSection("Emulation");
 
-    emulation_s.engine = readString (ini, TEXT("Engine"));
+    emulation_s.engine = readString (ini, "Engine");
 
     {
-        SID_STRING str = readString (ini, TEXT("C64Model"));
+        std::string str = readString (ini, "C64Model");
         if (!str.empty())
         {
-            if (str.compare(TEXT("PAL")) == 0)
+            if (str.compare("PAL") == 0)
                 emulation_s.modelDefault = SidConfig::PAL;
-            else if (str.compare(TEXT("NTSC")) == 0)
+            else if (str.compare("NTSC") == 0)
                 emulation_s.modelDefault = SidConfig::NTSC;
-            else if (str.compare(TEXT("OLD_NTSC")) == 0)
+            else if (str.compare("OLD_NTSC") == 0)
                 emulation_s.modelDefault = SidConfig::OLD_NTSC;
-            else if (str.compare(TEXT("DREAN")) == 0)
+            else if (str.compare("DREAN") == 0)
                 emulation_s.modelDefault = SidConfig::DREAN;
         }
     }
 
-    readBool(ini, TEXT("ForceC64Model"), emulation_s.modelForced);
-    readBool(ini, TEXT("DigiBoost"), emulation_s.digiboost);
+    readBool(ini, "ForceC64Model", emulation_s.modelForced);
+    readBool(ini, "DigiBoost", emulation_s.digiboost);
     {
-        SID_STRING str = readString(ini, TEXT("CiaModel"));
+        std::string str = readString(ini, "CiaModel");
         if (!str.empty())
         {
-            if (str.compare(TEXT("MOS6526")) == 0)
+            if (str.compare("MOS6526") == 0)
                 emulation_s.ciaModel = SidConfig::MOS6526;
-            else if (str.compare(TEXT("MOS8521")) == 0)
+            else if (str.compare("MOS8521") == 0)
                 emulation_s.ciaModel = SidConfig::MOS8521;
         }
     }
     {
-        SID_STRING str = readString(ini, TEXT("SidModel"));
+        std::string str = readString(ini, "SidModel");
         if (!str.empty())
         {
-            if (str.compare(TEXT("MOS6581")) == 0)
+            if (str.compare("MOS6581") == 0)
                 emulation_s.sidModel = SidConfig::MOS6581;
-            else if (str.compare(TEXT("MOS8580")) == 0)
+            else if (str.compare("MOS8580") == 0)
                 emulation_s.sidModel = SidConfig::MOS8580;
         }
     }
 
-    readBool(ini, TEXT("ForceSidModel"), emulation_s.forceModel);
+    readBool(ini, "ForceSidModel", emulation_s.forceModel);
 
-    readBool(ini, TEXT("UseFilter"), emulation_s.filter);
+    readBool(ini, "UseFilter", emulation_s.filter);
 
-    readDouble(ini, TEXT("FilterBias"), emulation_s.bias);
-    readDouble(ini, TEXT("FilterCurve6581"), emulation_s.filterCurve6581);
+    readDouble(ini, "FilterBias", emulation_s.bias);
+    readDouble(ini, "FilterCurve6581", emulation_s.filterCurve6581);
 #ifdef FEAT_FILTER_RANGE
     {
         // For backward compatibility, remove for 3.0
-        const TCHAR *key = TEXT("filterRange6581");
-        const TCHAR* value = ini.getValue(key);
+        const char *key = "filterRange6581";
+        const char* value = ini.getValue(key);
         if (value && value[0])
         {
-            ini.addValue(TEXT("FilterRange6581"), value);
+            ini.addValue("FilterRange6581", value);
             ini.removeValue(key);
         }
     }
-    readDouble(ini, TEXT("FilterRange6581"), emulation_s.filterRange6581);
+    readDouble(ini, "FilterRange6581", emulation_s.filterRange6581);
 
 #endif
-    readDouble(ini, TEXT("FilterCurve8580"), emulation_s.filterCurve8580);
+    readDouble(ini, "FilterCurve8580", emulation_s.filterCurve8580);
 
 #ifdef FEAT_CW_STRENGTH
     {
-        SID_STRING str = readString(ini, TEXT("CombinedWaveforms"));
+        std::string str = readString(ini, "CombinedWaveforms");
         if (!str.empty())
         {
-            if (str.compare(TEXT("AVERAGE")) == 0)
+            if (str.compare("AVERAGE") == 0)
                 emulation_s.combinedWaveformsStrength = SidConfig::AVERAGE;
-            else if (str.compare(TEXT("WEAK")) == 0)
+            else if (str.compare("WEAK") == 0)
                 emulation_s.combinedWaveformsStrength = SidConfig::WEAK;
-            else if (str.compare(TEXT("STRONG")) == 0)
+            else if (str.compare("STRONG") == 0)
                 emulation_s.combinedWaveformsStrength = SidConfig::STRONG;
         }
     }
 #endif
 
-    readInt(ini, TEXT("PowerOnDelay"), emulation_s.powerOnDelay);
+    readInt(ini, "PowerOnDelay", emulation_s.powerOnDelay);
 
     {
-        SID_STRING str = readString(ini, TEXT("Sampling"));
+        std::string str = readString(ini, "Sampling");
         if (!str.empty())
         {
-            if (str.compare(TEXT("INTERPOLATE")) == 0)
+            if (str.compare("INTERPOLATE") == 0)
                 emulation_s.samplingMethod = SidConfig::INTERPOLATE;
-            else if (str.compare(TEXT("RESAMPLE")) == 0)
+            else if (str.compare("RESAMPLE") == 0)
                 emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
         }
     }
 
-    readBool(ini, TEXT("ResidFastSampling"), emulation_s.fastSampling);
+    readBool(ini, "ResidFastSampling", emulation_s.fastSampling);
 }
 
 class iniError
 {
 private:
-    const SID_STRING msg;
+    const std::string msg;
 
 public:
-    iniError(const TCHAR* msg) : msg(msg) {}
-    const SID_STRING message() const { return msg; }
+    iniError(const char* msg) : msg(msg) {}
+    const std::string message() const { return msg; }
 };
 
-void createDir(const SID_STRING& path)
+void createDir(const std::string& path)
 {
 #ifndef _WIN32
     DIR *dir = opendir(path.c_str());
@@ -570,14 +585,25 @@ void createDir(const SID_STRING& path)
         throw iniError(strerror(errno));
     }
 #else
-    if (GetFileAttributes(path.c_str()) == INVALID_FILE_ATTRIBUTES)
+    // TODO MB2WC
+#ifdef UNICODE
+    std::wstring p = utils::utf8_decode(path.c_str());
+#else
+    std::string p = path;
+#endif
+    if (GetFileAttributes(p.c_str()) == INVALID_FILE_ATTRIBUTES)
     {
-        if (CreateDirectory(path.c_str(), NULL) == 0)
+        if (CreateDirectory(p.c_str(), NULL) == 0)
         {
             LPTSTR pBuffer;
             FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM|FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pBuffer, 0, NULL);
-            iniError err(pBuffer);
+#ifdef UNICODE
+    std::string e = utils::utf8_encode(pBuffer);
+#else
+    std::string e = pBuffer;
+#endif
+            iniError err(e.c_str());
             LocalFree(pBuffer);
             throw err;
         }
@@ -585,9 +611,9 @@ void createDir(const SID_STRING& path)
 #endif
 }
 
-SID_STRING getConfigPath()
+std::string getConfigPath()
 {
-    SID_STRING configPath;
+    std::string configPath;
 
     try
     {
@@ -595,10 +621,10 @@ SID_STRING getConfigPath()
     }
     catch (utils::error const &e)
     {
-        throw iniError(TEXT("Cannot get config path!"));
+        throw iniError("Cannot get config path!");
     }
 
-    debug(TEXT("Config path: "), configPath.c_str());
+    debug("Config path: ", configPath.c_str());
 
     // Make sure the config path exists
     createDir(configPath);
@@ -610,7 +636,7 @@ SID_STRING getConfigPath()
 
     configPath.append(SEPARATOR).append(FILE_NAME);
 
-    debug(TEXT("Config file: "), configPath.c_str());
+    debug("Config file: ", configPath.c_str());
 
     return configPath;
 }
@@ -620,7 +646,7 @@ bool tryOpen(MAYBE_UNUSED iniHandler &ini)
 #ifdef _WIN32
     {
         // Try exec dir first
-        SID_STRING execPath(utils::getExecPath());
+        std::string execPath(utils::getExecPath());
         execPath.append(SEPARATOR).append(FILE_NAME);
         if (ini.tryOpen(execPath.c_str()))
             return true;
@@ -639,12 +665,12 @@ void IniConfig::read()
     {
         try
         {
-            SID_STRING configPath = getConfigPath();
+            std::string configPath = getConfigPath();
 
             // Opens an existing file or creates a new one
             if (!ini.open(configPath.c_str()))
             {
-                error(TEXT("Error reading config file!"));
+                error("Error reading config file!");
                 return;
             }
         } catch (iniError const &e) {

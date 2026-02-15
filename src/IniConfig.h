@@ -22,7 +22,6 @@
 #ifndef INICONFIG_H
 #define INICONFIG_H
 
-#include "ini/types.h"
 #include "ini/iniHandler.h"
 
 #include "siddefines.h"
@@ -42,12 +41,12 @@ public:
     struct sidplay2_section
     {
         int            version;
-        SID_STRING     database;
+        std::string     database;
         uint_least32_t playLength;
         uint_least32_t recordLength;
-        SID_STRING     kernalRom;
-        SID_STRING     basicRom;
-        SID_STRING     chargenRom;
+        std::string     kernalRom;
+        std::string     basicRom;
+        std::string     chargenRom;
         int            verboseLevel;
     };
 
@@ -84,7 +83,7 @@ public:
 
     struct emulation_section
     {   // INI Section - [Emulation]
-        SID_STRING    engine;
+        std::string    engine;
         SidConfig::c64_model_t  modelDefault;
         bool          modelForced;
         SidConfig::sid_model_t  sidModel;
@@ -121,13 +120,13 @@ protected:
     void readEmulation (iniHandler &ini);
 
 private:
-    SID_STRING m_fileName;
+    std::string m_fileName;
 
 public:
     IniConfig  ();
     ~IniConfig ();
 
-    SID_STRING getFilename() const { return m_fileName; }
+    std::string getFilename() const { return m_fileName; }
 
     void read ();
 

@@ -81,3 +81,7 @@ the character conversion requires presence of the POSIX/XSI iconv function famil
 * miniaudio
   https://github.com/mackron/miniaudio
   distributed under MIT license
+
+* filesystem
+  https://github.com/gulrak/filesystem
+  distributed under MIT license

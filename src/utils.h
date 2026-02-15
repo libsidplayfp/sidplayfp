@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013-2017 Leandro Nini
+ * Copyright 2013-2026 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,9 @@
 
 #include <string>
 
-#include "ini/types.h"
+#ifdef _WIN32
+#  include <windows.h>
+#endif
 
 class utils
 {
@@ -32,18 +34,37 @@ public:
 
 private:
 #ifdef _WIN32
-    static SID_STRING getPath();
+    static std::string getPath();
 #else
-    static SID_STRING getPath(const char* id, const char* def);
+    static std::string getPath(const char* id, const char* def);
 #endif
 
 public:
-    static SID_STRING getDataPath();
+    /**
+     * Get the system path for data files.
+     */
+    static std::string getDataPath();
 
-    static SID_STRING getConfigPath();
+    /**
+     * Get the system path for config files.
+     */
+    static std::string getConfigPath();
 
 #ifdef _WIN32
-    static SID_STRING getExecPath();
+    /**
+     * Get the path of the executable.
+     */
+    static std::string getExecPath();
+
+    /**
+     * Convert from UTF8 to UTF16.
+     */
+    static std::wstring utf8_decode(const char *str);
+
+    /**
+     * Convert from UTF16 to UTF8.
+     */
+    static std::string utf8_encode(const TCHAR *wstr);
 #endif
 };
 

@@ -28,12 +28,12 @@ public:
     class parseError {};
 
 private:
-    template<typename T, typename U>
-    static T convertString(const U* data)
+    template<typename T>
+    static T convertString(const char* data)
     {
         T value;
 
-        std::basic_stringstream<U> stream(data);
+        std::stringstream stream(data);
         stream >> std::boolalpha >> value;
         if (stream.fail()) {
             throw parseError();
@@ -42,12 +42,9 @@ private:
     }
 
 public:
-    template<typename U>
-    static double parseDouble(const U* data) { return convertString<double>(data); }
-    template<typename U>
-    static int parseInt(const U* data) { return convertString<int>(data); }
-    template<typename U>
-    static bool parseBool(const U* data) { return convertString<bool>(data); }
+    static double parseDouble(const char* data) { return convertString<double>(data); }
+    static int parseInt(const char* data) { return convertString<int>(data); }
+    static bool parseBool(const char* data) { return convertString<bool>(data); }
 };
 
 #endif // DATAPARSER_H

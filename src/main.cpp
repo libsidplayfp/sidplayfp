@@ -21,6 +21,10 @@
 
 #include "player.h"
 
+#include "filesystem/filesystem.hpp"
+
+#include <iostream>
+
 #include <csignal>
 #include <cstdlib>
 
@@ -28,6 +32,7 @@
 
 const char* ERR_SIGHANDLER = "ERROR: Could not install signal handler.";
 
+namespace fs = ghc::filesystem;
 
 // Function prototypes
 static void sighandler (int signum);
@@ -35,6 +40,11 @@ static ConsolePlayer *g_player;
 
 int main(int argc, char *argv[])
 {
+    fs::u8arguments u8guard(argc, argv);
+    if(!u8guard.valid()) {
+        std::cerr << "Warning, non UTF-8 encoding." << std::endl;
+    }
+
     ConsolePlayer player(argv[0]);
     g_player = &player;
 

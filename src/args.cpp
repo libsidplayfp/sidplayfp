@@ -22,6 +22,8 @@
 #include "player.h"
 
 #include "dataParser.h"
+#include "utils.h"
+#include "fmt/format.h"
 
 #include <iostream>
 
@@ -29,9 +31,6 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "fmt/format.h"
-
-#include "ini/types.h"
 #include "sidlib_features.h"
 
 #include "sidcxx11.h"
@@ -660,7 +659,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     // Try loading the database specificed by the user
 #if defined(_WIN32) && defined(UNICODE)
 #  ifdef FEAT_DB_WCHAR_OPEN
-                    const wchar_t *database = (m_iniCfg.sidplay2()).database.c_str();
+                    const wchar_t *database = utils::utf8_decode((m_iniCfg.sidplay2()).database.c_str()).c_str();
 #  else
                     char database[MAX_PATH];
                     const int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
@@ -676,7 +675,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                         return -1;
                     }
 
-                    if ((m_iniCfg.sidplay2()).database.find(TEXT(".md5")) != SID_STRING::npos)
+                    if ((m_iniCfg.sidplay2()).database.find(".md5") != std::string::npos)
                         songlengthDB = sldb_t::MD5;
                     else
                         songlengthDB = sldb_t::TXT;

@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2013-2017 Leandro Nini
+ * Copyright 2013-2026 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 #include <cstdlib>
 
 #ifdef _WIN32
-#  include <windows.h>
 #  include <shlobj.h>
 #  include <shlwapi.h>
 
@@ -33,47 +32,71 @@
 #  define _tgetenv_s getenv_s
 #endif
 
-SID_STRING utils::getExecPath()
+std::wstring utils::utf8_decode(const char *str)
+{
+    if (!str)
+        return std::wstring();
+
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, str, -1, NULL, 0);
+    std::wstring strTo(size_needed, 0);
+    MultiByteToWideChar(CP_UTF8, 0, str, -1, &strTo[0], size_needed);
+    return strTo;
+}
+
+std::string utils::utf8_encode(const TCHAR *wstr)
+{
+    if (!wstr)
+        return std::string();
+#ifdef UNICODE
+    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr, -1, NULL, 0, NULL, NULL);
+    std::string strTo(size_needed, 0);
+    WideCharToMultiByte(CP_UTF8, 0, wstr, -1, &strTo[0], size_needed, NULL, NULL);
+    return strTo;
+#else
+    return std::string(wstr);
+#endif
+}
+
+std::string utils::getExecPath()
 {
     HMODULE hModule = GetModuleHandle(NULL);
     TCHAR path[MAX_PATH];
     GetModuleFileName(hModule, path, MAX_PATH);
     PathRemoveFileSpec(path);
-    return path;
+    return utf8_encode(path);
 }
 
-SID_STRING utils::getPath()
+std::string utils::getPath()
 {
-    SID_STRING returnPath;
+    std::string returnPath;
 
     TCHAR szPath[MAX_PATH];
 
     if (SHGetFolderPath(NULL, CSIDL_APPDATA|CSIDL_FLAG_CREATE, NULL, 0, szPath)!=S_OK)
     {
-        TCHAR path[MAX_PATH];
         size_t pReturnValue;
-        errno_t res = _tgetenv_s(&pReturnValue, path, TEXT("USERPROFILE"));
+        errno_t res = _tgetenv_s(&pReturnValue, szPath, TEXT("USERPROFILE"));
         if (res != 0)
             throw error();
-        returnPath.append(path).append(TEXT("\\Application Data"));
+        returnPath.append(utf8_encode(szPath)).append("\\Application Data");
     }
     else
     {
-        returnPath.append(szPath);
+        returnPath.append(utf8_encode(szPath));
     }
 
     return returnPath;
 }
 
-SID_STRING utils::getDataPath() { return getPath(); }
+std::string utils::getDataPath() { return getPath(); }
 
-SID_STRING utils::getConfigPath() { return getPath(); }
+std::string utils::getConfigPath() { return getPath(); }
 
 #else
 
-SID_STRING utils::getPath(const char* id, const char* def)
+std::string utils::getPath(const char* id, const char* def)
 {
-    SID_STRING returnPath;
+    std::string returnPath;
 
     char *path = std::getenv(id);
     if (!path)
@@ -89,8 +112,8 @@ SID_STRING utils::getPath(const char* id, const char* def)
     return returnPath;
 }
 
-SID_STRING utils::getDataPath() { return getPath("XDG_DATA_HOME", "/.local/share"); }
+std::string utils::getDataPath() { return getPath("XDG_DATA_HOME", "/.local/share"); }
 
-SID_STRING utils::getConfigPath() { return getPath("XDG_CONFIG_HOME", "/.config"); }
+std::string utils::getConfigPath() { return getPath("XDG_CONFIG_HOME", "/.config"); }
 
 #endif

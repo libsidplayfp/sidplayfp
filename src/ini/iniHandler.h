@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010-2020 Leandro Nini
+ *  Copyright (C) 2010-2026 Leandro Nini
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,18 +19,20 @@
 #ifndef INIHANDLER_H
 #define INIHANDLER_H
 
+#include "filesystem/filesystem.hpp"
+
 #include <string>
 #include <vector>
 
-#include "types.h"
+namespace fs = ghc::filesystem;
 
 class iniHandler
 {
 private:
-    using stringPair_t = std::pair<SID_STRING, SID_STRING>;
+    using stringPair_t = std::pair<std::string, std::string>;
     using keys_t = std::vector<stringPair_t>;
 
-    using keyPair_t = std::pair<SID_STRING, keys_t>;
+    using keyPair_t = std::pair<std::string, keys_t>;
     using sections_t = std::vector<keyPair_t>;
 
     class parseError {};
@@ -40,32 +42,32 @@ private:
 
     sections_t::iterator curSection;
 
-    SID_STRING fileName;
+    fs::path fileName;
 
     bool changed;
 
 private:
-    SID_STRING parseSection(const SID_STRING &buffer);
+    std::string parseSection(const std::string &buffer);
 
-    stringPair_t parseKey(const SID_STRING &buffer);
+    stringPair_t parseKey(const std::string &buffer);
 
 public:
     iniHandler();
     ~iniHandler();
 
-    SID_STRING getFilename() const { return fileName; }
+    std::string getFilename() const { return fileName.string(); }
 
-    bool tryOpen(const TCHAR *fName);
-    bool open(const TCHAR *fName);
-    bool write(const TCHAR *fName);
+    bool tryOpen(const fs::path &fName);
+    bool open(const fs::path &fName);
+    bool write(const fs::path &fName);
     void close();
 
-    bool setSection(const TCHAR *section);
-    const TCHAR *getValue(const TCHAR *key) const;
+    bool setSection(const char *section);
+    const char *getValue(const char *key) const;
 
-    void addSection(const TCHAR *section);
-    void addValue(const TCHAR *key, const TCHAR *value);
-    void removeValue(const TCHAR *key);
+    void addSection(const char *section);
+    void addValue(const char *key, const char *value);
+    void removeValue(const char *key);
 };
 
 #endif // INIHANDLER_H

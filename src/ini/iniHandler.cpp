@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2010-2020 Leandro Nini
+ *  Copyright (C) 2010-2026 Leandro Nini
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,6 +18,8 @@
 
 #include "iniHandler.h"
 
+#include "filesystem/filesystem.hpp"
+
 #include <cstdlib>
 
 #include <fstream>
@@ -26,18 +28,19 @@
 
 #ifdef _WIN32
 #  include <windows.h>
+#  include <stringapiset.h>
 #endif
 
-//
+namespace fs = ghc::filesystem;
 
 template<class T>
 class compare
 {
 private:
-    SID_STRING s;
+    std::string s;
 
 public:
-    compare(const TCHAR *str) : s(str) {}
+    compare(const char *str) : s(str) {}
 
     bool operator () (T const &p) { return s.compare(p.first) == 0; }
 };
@@ -53,11 +56,11 @@ iniHandler::~iniHandler()
     close();
 }
 
-SID_STRING iniHandler::parseSection(const SID_STRING &buffer)
+std::string iniHandler::parseSection(const std::string &buffer)
 {
     const size_t pos = buffer.find(']');
 
-    if (pos == SID_STRING::npos)
+    if (pos == std::string::npos)
     {
         throw parseError();
     }
@@ -65,53 +68,43 @@ SID_STRING iniHandler::parseSection(const SID_STRING &buffer)
     return buffer.substr(1, pos-1);
 }
 
-iniHandler::stringPair_t iniHandler::parseKey(const SID_STRING &buffer)
+iniHandler::stringPair_t iniHandler::parseKey(const std::string &buffer)
 {
     const size_t pos = buffer.find('=');
 
-    if (pos == SID_STRING::npos)
+    if (pos == std::string::npos)
     {
         throw parseError();
     }
 
-    const SID_STRING key = buffer.substr(0, buffer.find_last_not_of(' ', pos-1) + 1);
+    const std::string key = buffer.substr(0, buffer.find_last_not_of(' ', pos-1) + 1);
     const size_t vpos = buffer.find_first_not_of(' ', pos+1);
-    const SID_STRING value = (vpos == SID_STRING::npos) ? TEXT("") : buffer.substr(vpos);
+    const std::string value = (vpos == std::string::npos) ? "" : buffer.substr(vpos);
     return make_pair(key, value);
 }
 
-bool iniHandler::open(const TCHAR *fName)
+bool iniHandler::open(const fs::path &fName)
 {
     if (tryOpen(fName))
         return true;
 
     // Try creating new file
-#ifdef _WIN32
-    const HANDLE h = CreateFile(fName, GENERIC_READ|GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
-    if (h != INVALID_HANDLE_VALUE)
-    {
-        CloseHandle(h);
-        return true;
-    }
-    return false;
-#else
-    SID_WOFSTREAM newIniFile(fName);
+    fs::ofstream newIniFile(fName);
     return newIniFile.is_open();
-#endif
 }
 
-bool iniHandler::tryOpen(const TCHAR *fName)
+bool iniHandler::tryOpen(const fs::path &fName)
 {
     fileName.assign(fName);
 
-    SID_WIFSTREAM iniFile(fName);
+    fs::ifstream iniFile(fName);
 
     if (!iniFile.is_open())
     {
         return false;
     }
 
-    SID_STRING buffer;
+    std::string buffer;
 
     while (getline(iniFile, buffer))
     {
@@ -126,14 +119,14 @@ bool iniHandler::tryOpen(const TCHAR *fName)
             if (!sections.empty())
             {
                 sections_t::reference lastSect(sections.back());
-                lastSect.second.push_back(make_pair(SID_STRING(), buffer));
+                lastSect.second.push_back(make_pair(std::string(), buffer));
             }
             break;
 
         case '[':
             try
             {
-                const SID_STRING section = parseSection(buffer);
+                const std::string section = parseSection(buffer);
                 const keys_t keys;
                 sections.push_back(make_pair(section, keys));
             }
@@ -170,46 +163,41 @@ void iniHandler::close()
     changed = false;
 }
 
-bool iniHandler::setSection(const TCHAR *section)
+bool iniHandler::setSection(const char *section)
 {
     curSection = std::find_if(sections.begin(), sections.end(), compare<keyPair_t>(section));
     return (curSection != sections.end());
 }
 
-const TCHAR *iniHandler::getValue(const TCHAR *key) const
+const char *iniHandler::getValue(const char *key) const
 {
     keys_t::const_iterator keyIt = std::find_if((*curSection).second.begin(), (*curSection).second.end(), compare<stringPair_t>(key));
     return (keyIt != (*curSection).second.end()) ? keyIt->second.c_str() : nullptr;
 }
 
-void iniHandler::addSection(const TCHAR *section)
+void iniHandler::addSection(const char *section)
 {
     const keys_t keys;
     curSection = sections.insert(curSection, make_pair(section, keys));
     changed = true;
 }
 
-void iniHandler::addValue(const TCHAR *key, const TCHAR *value)
+void iniHandler::addValue(const char *key, const char *value)
 {
-    (*curSection).second.push_back(make_pair(SID_STRING(key), SID_STRING(value)));
+    (*curSection).second.push_back(make_pair(std::string(key), std::string(value)));
     changed = true;
 }
 
-void iniHandler::removeValue(const TCHAR *key)
+void iniHandler::removeValue(const char *key)
 {
     auto section = &(*curSection).second;
     section->erase(std::remove_if(section->begin(), section->end(), compare<stringPair_t>(key)));
     changed = true;
 }
 
-bool iniHandler::write(const TCHAR *fName)
+bool iniHandler::write(const fs::path &fName)
 {
-    SID_WOFSTREAM iniFile(fName);
-
-#ifdef _WIN32
-    // On Windows XP it seems that opening an ofstream sets the read-only attribute
-    SetFileAttributes(fName, GetFileAttributes(fName) & ~FILE_ATTRIBUTE_READONLY);
-#endif
+    fs::ofstream iniFile(fName);
 
     if (!iniFile.is_open())
     {
@@ -222,7 +210,7 @@ bool iniHandler::write(const TCHAR *fName)
 
         for (keys_t::iterator entry = section.second.begin(); entry != section.second.end(); ++entry)
         {
-            const SID_STRING key = (*entry).first;
+            const std::string key = (*entry).first;
             if (!key.empty())
                 iniFile << key << " = ";
             iniFile << (*entry).second << std::endl;

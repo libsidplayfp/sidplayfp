@@ -43,7 +43,6 @@
 #include "audio/AudioDrv.h"
 #include "audio/au/auFile.h"
 #include "audio/wav/WavFile.h"
-#include "ini/types.h"
 
 #include "sidcxx11.h"
 
@@ -51,8 +50,10 @@
 #include <sidplayfp/SidInfo.h>
 #include <sidplayfp/SidTuneInfo.h>
 
-
 #include <unordered_map>
+
+#undef SEPARATOR
+#define SEPARATOR "/"
 
 using filter_map_t = std::unordered_map<std::string, double>;
 using filter_map_iter_t = std::unordered_map<std::string, double>::const_iterator;
@@ -266,9 +267,9 @@ double getRecommendedFilterCurve(const std::string& author)
 }
 #endif
 
-std::unique_ptr<uint8_t[]> loadRom(const SID_STRING &romPath, const int size)
+std::unique_ptr<uint8_t[]> loadRom(const std::string &romPath, const int size)
 {
-    SID_IFSTREAM is(romPath.c_str(), std::ios::binary);
+    std::ifstream is(romPath.c_str(), std::ios::binary); // FIXME use fs
 
     if (is.is_open())
     {
@@ -290,7 +291,7 @@ std::unique_ptr<uint8_t[]> loadRom(const SID_STRING &romPath, const int size)
 }
 
 
-std::unique_ptr<uint8_t[]> loadRom(const SID_STRING &romPath, const int size, const TCHAR* defaultRom)
+std::unique_ptr<uint8_t[]> loadRom(const std::string &romPath, const int size, const char* defaultRom)
 {
     // Try to load given rom
     if (!romPath.empty())
@@ -306,16 +307,16 @@ std::unique_ptr<uint8_t[]> loadRom(const SID_STRING &romPath, const int size, co
 #ifdef _WIN32
         {
             // Try exec dir first
-            SID_STRING execPath(utils::getExecPath());
+            std::string execPath(utils::getExecPath());
             execPath.append(SEPARATOR).append(defaultRom);
             std::unique_ptr<uint8_t[]> buffer = loadRom(execPath, size);
             if (buffer)
                 return buffer;
         }
 #endif
-        SID_STRING dataPath(utils::getDataPath());
+        std::string dataPath(utils::getDataPath());
 
-        dataPath.append(SEPARATOR).append(TEXT("sidplayfp")).append(SEPARATOR).append(defaultRom);
+        dataPath.append(SEPARATOR).append("sidplayfp").append(SEPARATOR).append(defaultRom);
 
 #if !defined _WIN32 && defined HAVE_UNISTD_H
         if (::access(dataPath.c_str(), R_OK) != 0)
@@ -405,40 +406,40 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
         if (!emulation.engine.empty())
         {
-            if (emulation.engine.compare(TEXT("RESIDFP")) == 0)
+            if (emulation.engine.compare("RESIDFP") == 0)
             {
                 m_driver.sid    = EMU_RESIDFP;
             }
-            else if (emulation.engine.compare(TEXT("SIDLITE")) == 0)
+            else if (emulation.engine.compare("SIDLITE") == 0)
             {
                 m_driver.sid    = EMU_SIDLITE;
             }
-            else if (emulation.engine.compare(TEXT("RESID")) == 0)
+            else if (emulation.engine.compare("RESID") == 0)
             {
                 m_driver.sid    = EMU_RESID;
             }
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
-            else if (emulation.engine.compare(TEXT("HARDSID")) == 0)
+            else if (emulation.engine.compare("HARDSID") == 0)
             {
                 m_driver.sid    = EMU_HARDSID;
                 m_driver.output = output_t::NONE;
             }
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_EXSID_H
-            else if (emulation.engine.compare(TEXT("EXSID")) == 0)
+            else if (emulation.engine.compare("EXSID") == 0)
             {
                 m_driver.sid    = EMU_EXSID;
                 m_driver.output = output_t::NONE;
             }
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
-            else if (emulation.engine.compare(TEXT("USBSID")) == 0)
+            else if (emulation.engine.compare("USBSID") == 0)
             {
                 m_driver.sid    = EMU_USBSID;
                 m_driver.output = output_t::NONE;
             }
 #endif
-            else if (emulation.engine.compare(TEXT("NONE")) == 0)
+            else if (emulation.engine.compare("NONE") == 0)
             {
                 m_driver.sid    = EMU_NONE;
             }
@@ -453,9 +454,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     createOutput (output_t::NONE, nullptr);
     createSidEmu (EMU_NONE, nullptr);
 
-    std::unique_ptr<uint8_t[]> kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, TEXT("kernal"));
-    std::unique_ptr<uint8_t[]> basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, TEXT("basic"));
-    std::unique_ptr<uint8_t[]> chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, TEXT("chargen"));
+    std::unique_ptr<uint8_t[]> kernalRom = loadRom((m_iniCfg.sidplay2()).kernalRom, 8192, "kernal");
+    std::unique_ptr<uint8_t[]> basicRom = loadRom((m_iniCfg.sidplay2()).basicRom, 8192, "basic");
+    std::unique_ptr<uint8_t[]> chargenRom = loadRom((m_iniCfg.sidplay2()).chargenRom, 4096, "chargen");
     m_engine.setRoms(kernalRom.get(), basicRom.get(), chargenRom.get());
 }
 

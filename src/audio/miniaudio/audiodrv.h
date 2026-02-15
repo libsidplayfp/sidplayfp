@@ -25,7 +25,7 @@
 #  include "config.h"
 #endif
 
-#include "osaudio.h"
+#include "miniaudio/osaudio.h"
 
 #include "../AudioBase.h"
 

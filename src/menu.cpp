@@ -174,11 +174,7 @@ void ConsolePlayer::menu ()
     if (m_verboseLevel > 1)
     {
         fmt::print("Config loaded from\n");
-#if defined(_WIN32) && defined(UNICODE)
-        fmt::print(L"{}\n", m_iniCfg.getFilename());
-#else
         fmt::print("{}\n", m_iniCfg.getFilename());
-#endif
     }
 
     // fmt::print("\n\f"); // New Page
