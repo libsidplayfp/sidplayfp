@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2014 Leandro Nini
+ *  Copyright (C) 2014-2026 Leandro Nini
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,20 +22,18 @@
 #include <sstream>
 #include <cstring>
 
-#include "ini/types.h"
-
 class dataParser
 {
 public:
     class parseError {};
 
 private:
-    template<typename T>
-    static T convertString(const TCHAR* data)
+    template<typename T, typename U>
+    static T convertString(const U* data)
     {
         T value;
 
-        SID_STRINGTREAM stream(data);
+        std::basic_stringstream<U> stream(data);
         stream >> std::boolalpha >> value;
         if (stream.fail()) {
             throw parseError();
@@ -44,9 +42,12 @@ private:
     }
 
 public:
-    static double parseDouble(const TCHAR* data) { return convertString<double>(data); }
-    static int parseInt(const TCHAR* data) { return convertString<int>(data); }
-    static bool parseBool(const TCHAR* data) { return convertString<bool>(data); }
+    template<typename U>
+    static double parseDouble(const U* data) { return convertString<double>(data); }
+    template<typename U>
+    static int parseInt(const U* data) { return convertString<int>(data); }
+    template<typename U>
+    static bool parseBool(const U* data) { return convertString<bool>(data); }
 };
 
 #endif // DATAPARSER_H
