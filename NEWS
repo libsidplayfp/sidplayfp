@@ -1,3 +1,9 @@
+2.16.1 2026-02-15
+* Parse float arguments as locale independent (#118)
+* Use secure version of getenv on Windows
+
+
+
 2.16.0 2025-12-23
 * Add USBSID support (#84)
 * Display the actual used SID model(s) (#79)
