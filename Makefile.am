@@ -53,6 +53,7 @@ libs/fmt/xchar.h
 # sidplayfp
 
 src_sidplayfp_SOURCES = \
+$(fmt_SOURCES) \
 libs/miniaudio/osaudio_miniaudio.c \
 libs/miniaudio/osaudio.h \
 libs/miniaudio/miniaudio.h \

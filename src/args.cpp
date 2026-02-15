@@ -768,7 +768,7 @@ void ConsolePlayer::displayArgs(const char *arg)
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
-    out << " --sidlite   use sidlite emulation" << endl;
+        " --sidlite   use sidlite emulation\n"
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
