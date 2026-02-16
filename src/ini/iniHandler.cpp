@@ -18,12 +18,8 @@
 
 #include "iniHandler.h"
 
-#include "filesystem/filesystem.hpp"
-
 #include <cstdlib>
 
-#include <fstream>
-#include <iostream>
 #include <algorithm>
 
 #ifdef _WIN32
