@@ -121,6 +121,8 @@ void Mixer::doMix(short** buffers, uint_least32_t samples)
         m_buffer.resize(static_cast<std::size_t>(rem)*m_channels);
         mix(buffers, cnt, rem, m_buffer.data());
     }
+    else
+        m_buffer.clear();
 }
 
 void Mixer::setVolume(unsigned int vol)
