@@ -1,3 +1,8 @@
+2.16.2 2026-02-22
+* Fixed crackling noise (#120)
+
+
+
 2.16.1 2026-02-15
 * Parse float arguments as locale independent (#118)
 * Use secure version of getenv on Windows
