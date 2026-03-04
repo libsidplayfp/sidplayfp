@@ -120,6 +120,26 @@ const char* getClock(SidTuneInfo::clock_t clock)
     }
 }
 
+const char* getEmu(SIDEMUS emu)
+{
+    switch (emu)
+    {
+    default:
+    case EMU_RESIDFP:
+        return "RESIDFP";
+    case EMU_SIDLITE:
+        return "SIDLITE";
+    case EMU_RESID:
+        return "RESID";
+    case EMU_HARDSID:
+        return "HARDSID";
+    case EMU_EXSID:
+        return "EXSID";
+    case EMU_USBSID:
+        return "USBSID";
+    }
+}
+
 string trimString(const char* str, unsigned int maxLen)
 {
     string data(str);
@@ -380,8 +400,8 @@ void ConsolePlayer::menu ()
         fmt::print(fg(text_color), "{}\n", (info.channels() == 1 ? "Mono" : "Stereo"));
 
         consoleTable(table_t::middle);
-        fmt::print(fg(label_color), " SID Filter   : ");
-        fmt::print(fg(text_color), "{}\n", (m_filter.enabled ? "Yes" : "No"));
+        fmt::print(fg(label_color), " SID Engine   : ");
+        fmt::print(fg(text_color), "{} {}\n", getEmu(m_driver.sid), (m_filter.enabled ? "" : "(No Filter)"));
 
         consoleTable(table_t::middle);
         fmt::print(fg(label_color), " DigiBoost    : ");
