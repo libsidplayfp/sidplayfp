@@ -134,7 +134,7 @@ void IniConfig::clear()
     audio_s.frequency = SidConfig::DEFAULT_SAMPLING_FREQ;
     audio_s.channels  = 0;
     audio_s.precision = 16;
-    audio_s.bufLength = 250;
+    audio_s.bufLength = 0;
 
     emulation_s.modelDefault  = SidConfig::PAL;
     emulation_s.modelForced   = false;
