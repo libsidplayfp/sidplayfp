@@ -55,6 +55,7 @@ bool Audio_Miniaudio::open(AudioConfig &cfg)
     config.format   = OSAUDIO_FORMAT_S16;
     config.channels = cfg.channels;
     config.rate     = cfg.frequency;
+    config.buffer_size = cfg.bufSize; /* In frames. Set to 0 to use the system default. */
 
     int res = osaudio_open(&m_audioHandle, &config);
     if (res != OSAUDIO_SUCCESS) {
@@ -64,6 +65,8 @@ bool Audio_Miniaudio::open(AudioConfig &cfg)
             setError("Failed to open audio device.");
         return false;
     }
+
+    cfg.bufSize = config.buffer_size;
 
     try
     {
