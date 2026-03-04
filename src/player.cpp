@@ -406,18 +406,28 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 
         if (!emulation.engine.empty())
         {
-            if (emulation.engine.compare("RESIDFP") == 0)
+            if (emulation.engine.compare("NONE") == 0)
+            {
+                m_driver.sid    = EMU_NONE;
+            }
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+            else if (emulation.engine.compare("RESIDFP") == 0)
             {
                 m_driver.sid    = EMU_RESIDFP;
             }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
             else if (emulation.engine.compare("SIDLITE") == 0)
             {
                 m_driver.sid    = EMU_SIDLITE;
             }
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
             else if (emulation.engine.compare("RESID") == 0)
             {
                 m_driver.sid    = EMU_RESID;
             }
+#endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
             else if (emulation.engine.compare("HARDSID") == 0)
             {
@@ -439,10 +449,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
                 m_driver.output = output_t::NONE;
             }
 #endif
-            else if (emulation.engine.compare("NONE") == 0)
-            {
-                m_driver.sid    = EMU_NONE;
-            }
         }
     }
 
