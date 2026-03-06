@@ -6,10 +6,8 @@ https://github.com/libsidplayfp/sidplayfp
 sidplayfp is a console C64 music player which uses the libsidplayfp engine
 to provide the best SID listening experience.
 
-Copyright (c) 2000 Simon White
-
-Copyright (c) 2007-2010 Antti Lankila
-
+Copyright (c) 2000 Simon White  
+Copyright (c) 2007-2010 Antti Lankila  
 Copyright (c) 2010-2026 Leandro Nini (drfiemost@users.sourceforge.net)
 
 
@@ -19,8 +17,7 @@ stilview
 STILView is a command-line driven program to help you retrieve
 the entries stored in STIL fast and accurately.
 
-Copyright (c) 1998, 2002 LaLa
-
+Copyright (c) 1998, 2002 LaLa  
 Copyright (c) 2013-2017 Leandro Nini (drfiemost@users.sourceforge.net)
 
 -----------------------------------------------------------------------------
@@ -62,6 +59,7 @@ and default search paths.
 This package uses autotools, so the usual `./configure && make` is enough to build
 the programs. If cloning the bare sources, the package needs to be bootstrapped
 in advance with `autoreconf -vfi`.
+Requires [libsidplayfp](https://github.com/libsidplayfp/libsidplayfp) version 2 or later.
 
 In addition to the standard build options the following are available:
 
