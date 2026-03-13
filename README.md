@@ -76,14 +76,14 @@ the character conversion requires presence of the POSIX/XSI iconv function famil
 
 # 3rd party software
 
-* miniaudio
-  https://github.com/mackron/miniaudio
+* miniaudio  
+  https://github.com/mackron/miniaudio  
   distributed under MIT license
 
-* fmt
-  https://github.com/fmtlib/fmt
+* fmt  
+  https://github.com/fmtlib/fmt  
   distributed under MIT license
 
-* filesystem
-  https://github.com/gulrak/filesystem
+* filesystem  
+  https://github.com/gulrak/filesystem  
   distributed under MIT license
