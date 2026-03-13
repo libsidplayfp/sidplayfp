@@ -294,7 +294,6 @@ void ConsolePlayer::menu ()
                 i += m_track.songs;
         }
         fmt::print(fg(text_color), "{}/{}", i, m_track.songs);
-        fmt::print(fg(text_color), " (tune ", tuneInfo->currentSong());
         fmt::print(fg(text_color), " (tune {}/{} [{}])",
             tuneInfo->currentSong(),
             tuneInfo->songs(),
