@@ -396,7 +396,9 @@ void ConsolePlayer::menu ()
 
         consoleTable(table_t::middle);
         fmt::print(fg(label_color), " Play mode    : ");
-        fmt::print(fg(text_color), "{}\n", (info.channels() == 1 ? "Mono" : "Stereo"));
+        fmt::print(fg(text_color), "{} - {}Hz\n",
+                   (info.channels() == 1 ? "Mono" : "Stereo"),
+                   m_engCfg.frequency);
 
         consoleTable(table_t::middle);
         fmt::print(fg(label_color), " SID Engine   : ");
