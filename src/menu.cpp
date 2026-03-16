@@ -51,7 +51,7 @@ struct fmt::formatter<fill> {
 
   fmt::basic_appender<char> format(fill f, format_context& ctx) const {
     auto it = ctx.out();
-    for (size_t i = 0; i < f.width; ++i)
+    for (int i = 0; i < f.width; ++i)
         it = std::copy_n(f.value.begin(), f.value.size(), it);
     return it;
   }
