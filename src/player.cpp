@@ -22,6 +22,7 @@
 #include "player.h"
 
 #include "fmt/format.h"
+#include "filesystem/filesystem.hpp"
 
 #include <cstdlib>
 #include <cmath>
@@ -29,7 +30,6 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include <fstream>
 #include <memory>
 #include <new>
 
@@ -248,6 +248,8 @@ static const filter_map_t filterCurveMap =
 };
 #endif
 
+namespace fs = ghc::filesystem;
+
 #ifdef FEAT_FILTER_RANGE
 double getRecommendedFilterRange(const std::string& author)
 {
@@ -269,7 +271,7 @@ double getRecommendedFilterCurve(const std::string& author)
 
 std::unique_ptr<uint8_t[]> loadRom(const std::string &romPath, const int size)
 {
-    std::ifstream is(romPath.c_str(), std::ios::binary); // FIXME use fs
+    fs::ifstream is(romPath, std::ios::binary);
 
     if (is.is_open())
     {
