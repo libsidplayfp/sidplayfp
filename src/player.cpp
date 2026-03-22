@@ -599,6 +599,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
     }
     // See what we got
     m_engCfg.frequency = m_driver.cfg.frequency;
+#ifndef FEAT_NEW_PLAY_API
     switch (m_driver.cfg.channels)
     {
     case 1:
@@ -611,6 +612,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
         fmt::print(stderr, "{}: ERROR: {} audio channels not supported\n", m_name, m_channels);
         return false;
     }
+#endif
 
     return true;
 }
@@ -914,7 +916,7 @@ bool ConsolePlayer::open()
         m_freqTable = freqTablePal;
 #endif
 #ifdef FEAT_NEW_PLAY_API
-    m_mixer.initialize(m_engine.installedSIDs(), m_engCfg.playback == SidConfig::STEREO);
+    m_mixer.initialize(m_engine.installedSIDs(), m_driver.cfg.channels == 2);
 #endif
 
     // Start the player.  Do this by fast
