@@ -52,6 +52,10 @@
 
 #include <unordered_map>
 
+#ifdef HAVE_CONFIG_H
+#  include <config.h>
+#endif
+
 #undef SEPARATOR
 #define SEPARATOR "/"
 
@@ -399,6 +403,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 #ifdef FEAT_CW_STRENGTH
         m_combinedWaveformsStrength = emulation.combinedWaveformsStrength;
 #endif
+#ifdef FEAT_RESID_CAPS
+        m_old6581Caps = emulation.old6581Caps;
+#endif
 
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;
@@ -735,6 +742,10 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
             if (m_verboseLevel)
                 fmt::print("8580 filter curve: {}\n", fcurve);
             rs->filter8580Curve(fcurve);
+
+#ifdef FEAT_RESID_CAPS
+            rs->enableOld6581caps(m_old6581Caps);
+#endif
         }
         catch (std::bad_alloc const &ba) {}
         break;

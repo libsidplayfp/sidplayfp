@@ -153,6 +153,9 @@ void IniConfig::clear()
 #ifdef FEAT_CW_STRENGTH
     emulation_s.combinedWaveformsStrength = SidConfig::AVERAGE;
 #endif
+#ifdef FEAT_RESID_CAPS
+    emulation_s.old6581Caps     = false;
+#endif
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
     emulation_s.fastSampling = false;
@@ -537,6 +540,10 @@ void IniConfig::readEmulation(iniHandler &ini)
                 emulation_s.combinedWaveformsStrength = SidConfig::STRONG;
         }
     }
+#endif
+
+#ifdef FEAT_RESID_CAPS
+    readBool(ini, "Old6581Caps", emulation_s.old6581Caps);
 #endif
 
     readInt(ini, "PowerOnDelay", emulation_s.powerOnDelay);

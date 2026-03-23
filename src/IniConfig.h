@@ -100,6 +100,9 @@ public:
 #ifdef FEAT_CW_STRENGTH
         SidConfig::sid_cw_t combinedWaveformsStrength;
 #endif
+#ifdef FEAT_RESID_CAPS
+        bool          old6581Caps;
+#endif
         int           powerOnDelay;
         SidConfig::sampling_method_t  samplingMethod;
         bool          fastSampling;
