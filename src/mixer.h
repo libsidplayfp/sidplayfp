@@ -44,7 +44,7 @@ private:
     template <int MAX_VAL>
     class randomLCG
     {
-    static_assert((MAX_VAL != 0) && ((MAX_VAL & (MAX_VAL - 1)) == 0), "MAX_VAL must be a power of two");
+    static_assert((MAX_VAL > 0) && ((MAX_VAL & (MAX_VAL - 1)) == 0), "MAX_VAL must be a power of two");
 
     private:
         uint32_t rand_seed;
