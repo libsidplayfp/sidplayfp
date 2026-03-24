@@ -1,7 +1,3 @@
 TODO:
 
-* drop audio drivers and use out123
-* support unicode filenames on Windows (depends on libsidplayfp)
 * add playlist support (pls)
-
-* fix building on Cygwin
