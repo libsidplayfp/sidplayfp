@@ -710,6 +710,7 @@ void ConsolePlayer::displayArgs(const char *arg)
     else
         fmt::print("Syntax: {} [-<option>...] <datafile>\n", m_name);
 
+    unsigned int defaultSamplingFreq = SidConfig::DEFAULT_SAMPLING_FREQ;
     fmt::print("Options:\n"
         " --help|-h    display this screen\n"
         " --help-debug debug help menu\n"
@@ -773,7 +774,7 @@ void ConsolePlayer::displayArgs(const char *arg)
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
         " --resid      use reSID emulation\n"
 #endif
-        , SidConfig::DEFAULT_SAMPLING_FREQ);
+        , defaultSamplingFreq);
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
     {
