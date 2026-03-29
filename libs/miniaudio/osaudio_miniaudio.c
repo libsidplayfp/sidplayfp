@@ -649,7 +649,9 @@ osaudio_result_t osaudio_close(osaudio_t audio)
         return OSAUDIO_INVALID_ARGS;
     }
 
+    ma_pcm_rb_uninit(&audio->buffer);
     ma_device_uninit(&audio->device);
+    free(audio);
     osaudio_unref_context();
 
     return OSAUDIO_SUCCESS;
