@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2012-2016 Leandro Nini
+ * Copyright 2012-2026 Leandro Nini
  * Copyright 2000 Simon White
  *
  * This program is free software; you can redistribute it and/or modify
@@ -82,7 +82,7 @@ static char keytable[] =
     // xterm sequences
     CSI,'H',0,          A_HOME,
     CSI,'F',0,          A_END,
-    SS3,'P',0,          A_HELP, // F1
+    SS3,'P',0,          A_HELP,
 
     CSI,'1','0',0,      A_INVALID,
     CSI,'2','0',0,      A_INVALID,
@@ -127,7 +127,7 @@ static char keytable[] =
  */
 static int keyboard_search (char *cmd)
 {
-    for (char *p = keytable, *q = cmd;;  p++, q++)
+    for (char *p = keytable, *q = cmd;;  p++)
     {
         if (*p == *q)
         {
@@ -155,6 +155,7 @@ static int keyboard_search (char *cmd)
                 }
                 return (a);
             }
+            q++;
         }
         else if (*q == '\0')
         {
@@ -185,7 +186,7 @@ static int keyboard_search (char *cmd)
                 continue;
             while (*p == A_SKIP)
                 p++;
-            q = cmd-1;
+            q = cmd;
         }
     }
     /*
