@@ -409,7 +409,7 @@ void IniConfig::readConsole(iniHandler &ini)
     if (!ini.setSection ("Console"))
         ini.addSection("Console");
 
-    bool ascii;
+    bool ascii = false;
     readBool(ini, "ASCII", ascii);
     if (ascii)
     {
