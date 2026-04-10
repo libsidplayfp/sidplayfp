@@ -39,9 +39,6 @@ AS_IF([test $ax_cv_cxx_compile_cxx20__std_cpp20 != "yes"], [
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN
 
-AM_ICONV
-AM_CONDITIONAL([USE_ICONV], [test "x$am_cv_func_iconv" = "xyes"])
-
 PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 

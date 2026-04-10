@@ -8,11 +8,6 @@ if MINGW32
   W32_LIBS = -lshlwapi
 endif
 
-if USE_ICONV
-  ICONV_SOURCES = \
-src/codepages.h
-endif
-
 AM_CPPFLAGS = \
 -I $(top_builddir)/src \
 -I $(top_srcdir)/src \
@@ -78,7 +73,6 @@ src/utils.cpp \
 src/utils.h \
 src/codeConvert.cpp \
 src/codeConvert.h \
-$(ICONV_SOURCES) \
 src/audio/AudioBase.h \
 src/audio/AudioConfig.h \
 src/audio/AudioDrv.cpp \
@@ -96,7 +90,6 @@ src/ini/iniHandler.h \
 src/ini/iniHandler.cpp
 
 src_sidplayfp_LDADD = \
-$(LIBICONV) \
 $(SIDPLAYFP_LIBS) \
 $(W32_LIBS)
 
@@ -107,11 +100,9 @@ src_stilview_SOURCES = \
 $(fmt_SOURCES) \
 src/codeConvert.cpp \
 src/codeConvert.h \
-$(ICONV_SOURCES) \
 src/stilview.cpp
 
 src_stilview_LDADD = \
-$(LIBICONV) \
 $(STILVIEW_LIBS)
 
 #=========================================================
