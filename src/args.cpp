@@ -746,19 +746,6 @@ void ConsolePlayer::displayArgs(const char *arg)
         " -m<o|n>[f]   set SID new/old chip model (default: old)\n"
         "              Use 'f' to force the model\n"
         " --digiboost  Enable digiboost for 8580 model\n"
-#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
-        " -r[i|r][f]   set resampling method (default: resample interpolate)\n"
-        "              Use 'f' to enable fast resampling (only for reSID)\n"
-#else
-        " -r[i|r]      set resampling method (default: resample interpolate)\n"
-#endif
-        " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)\n"
-#ifdef FEAT_FILTER_RANGE
-        " --frange=<num>|auto Controls the filter range in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)\n"
-#endif
-#ifdef FEAT_CW_STRENGTH
-        " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)\n"
-#endif
         " -w[name]     create wav file (default: <datafile>[n].wav)\n"
         " --au[name]   create au file (default: <datafile>[n].au)\n"
         " --info       add metadata to wav file\n"
@@ -768,7 +755,7 @@ void ConsolePlayer::displayArgs(const char *arg)
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_SIDLITE_H
-        " --sidlite   use sidlite emulation\n"
+        " --sidlite    use sidlite emulation\n"
 #endif
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
@@ -801,5 +788,23 @@ void ConsolePlayer::displayArgs(const char *arg)
             fmt::print(" --usbsid     enable USBSID support\n");
     }
 #endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
+    fmt::print("resid specific:\n"
+        " -r[i|r][f]   set resampling method (default: resample interpolate)\n"
+        "              Use 'f' to enable fast resampling\n"
+    );
+#endif
+#ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
+    fmt::print("residfp specific:\n"
+        " -r[i|r]      set resampling method (default: resample interpolate)\n"
+        " --fcurve=<num>|auto Controls the filter curve in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)\n"
+#  ifdef FEAT_FILTER_RANGE
+        " --frange=<num>|auto Controls the filter range in the ReSIDfp emulation (0.0 to 1.0, default: 0.5)\n"
+#  endif
+#  ifdef FEAT_CW_STRENGTH
+        " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)\n"
+#  endif
+#endif
+    );
     fmt::print("\nHome Page: {}\n", PACKAGE_URL);
 }
