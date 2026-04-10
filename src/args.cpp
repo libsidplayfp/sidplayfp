@@ -460,7 +460,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_combinedWaveformsStrength  = SidConfig::STRONG;
             }
 #endif
-#ifdef FEAT_CW_STRENGTH
+#ifdef FEAT_RESID_CAPS
             else if (std::strcmp(&argv[i][1], "co") == 0)
             {
                 m_old6581Caps = true;

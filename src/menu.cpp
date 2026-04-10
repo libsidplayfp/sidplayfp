@@ -404,7 +404,11 @@ void ConsolePlayer::menu ()
         fmt::print(fg(label_color), " SID Engine   : ");
         fmt::print(fg(text_color), "{} {}\n", getEmu(m_driver.sid),
                    m_filter.enabled ?
+#ifdef FEAT_RESID_CAPS
                        ((m_driver.sid == EMU_RESIDFP && m_old6581Caps) ? "(Old 6581 caps)" : "")
+#else
+                       ""
+#endif
                        : "(No Filter)");
 
         consoleTable(table_t::middle);
