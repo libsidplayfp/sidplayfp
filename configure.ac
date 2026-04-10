@@ -20,6 +20,7 @@ AM_CONDITIONAL([MINGW32], [test "x$MINGW32" = "xyes"])
 AC_PROG_RANLIB
 
 dnl Checks for programs.
+AC_PROG_CC
 AC_PROG_CXX
 
 dnl Use C++ for tests.
