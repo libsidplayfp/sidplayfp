@@ -460,6 +460,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_combinedWaveformsStrength  = SidConfig::STRONG;
             }
 #endif
+#ifdef FEAT_CW_STRENGTH
+            else if (std::strcmp(&argv[i][1], "co") == 0)
+            {
+                m_old6581Caps = true;
+            }
+#endif
             // File format conversions
             else if (argv[i][1] == 'w')
             {
@@ -803,6 +809,9 @@ void ConsolePlayer::displayArgs(const char *arg)
 #  endif
 #  ifdef FEAT_CW_STRENGTH
         " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)\n"
+#  endif
+#  ifdef FEAT_RESID_CAPS
+        " -co          Set old caps for 6581\n"
 #  endif
 #endif
     );
