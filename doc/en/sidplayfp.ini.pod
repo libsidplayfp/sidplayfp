@@ -246,6 +246,7 @@ emulation.  The default value is AVERAGE.
 
 Enable/disable old caps for 6581 model.
 true to enable old 2200pF caps used on ASSY 326298
+producing a lower cutoff
 false to use the standard 470pF caps, the default
 is false.
 

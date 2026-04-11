@@ -221,6 +221,12 @@ Set the strength (width) of combined waveforms.
 'w' for weak (thin) waves, 'a' for average waves,
 and 's' for strong (wide) waves.
 
+=item B<-co>
+
+Enable old caps for 6581 model. Use old 2200pF caps mounted
+on ASSY 326298 in place of the standard 470pF caps
+producing a lower cutoff.
+
 =item B<--noaudio>
 
 Run without an audio output device.
