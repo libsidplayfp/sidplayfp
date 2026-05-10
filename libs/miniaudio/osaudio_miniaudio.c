@@ -398,7 +398,7 @@ static void osaudio_data_callback_playback(osaudio_t audio, void* pOutput, ma_ui
             break;
         }
 
-        memcpy(pOutput, pBuffer, framesToRead * ma_get_bytes_per_frame(audio->device.playback.format, audio->device.playback.channels));
+        memcpy(pOutput, pBuffer, (size_t)framesToRead * ma_get_bytes_per_frame(audio->device.playback.format, audio->device.playback.channels));
         ma_pcm_rb_commit_read(&audio->buffer, framesToRead);
 
         frameCount -= framesToRead;
@@ -439,7 +439,7 @@ static void osaudio_data_callback_capture(osaudio_t audio, const void* pInput, m
             break;
         }
 
-        memcpy(pBuffer, pInput, framesToWrite * ma_get_bytes_per_frame(audio->device.capture.format, audio->device.capture.channels));
+        memcpy(pBuffer, pInput, (size_t)framesToWrite * ma_get_bytes_per_frame(audio->device.capture.format, audio->device.capture.channels));
         ma_pcm_rb_commit_write(&audio->buffer, framesToWrite);
 
         frameCount -= framesToWrite;
