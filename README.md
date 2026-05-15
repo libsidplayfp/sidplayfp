@@ -1,10 +1,10 @@
 sidplayfp
 =========
 
-https://github.com/libsidplayfp/sidplayfp
-
 sidplayfp is a console C64 music player which uses the libsidplayfp engine
 to provide the best SID listening experience.
+
+https://github.com/libsidplayfp/sidplayfp
 
 Copyright (c) 2000 Simon White  
 Copyright (c) 2007-2010 Antti Lankila  
