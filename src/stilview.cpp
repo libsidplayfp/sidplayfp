@@ -59,9 +59,7 @@ char OTHER_HVSC_BASE_DIR[]="E:\\MUSIC\\SID\\C64music\\";
 
 constexpr int STIL_MAX_PATH_SIZE = 1024;
 
-template<typename T>
-requires std::is_enum_v<T>
-auto format_as(T t) { return fmt::underlying(t); } 
+auto format_as(STIL::STILerror t) { return fmt::underlying(t); }
 
 //using namespace std;
 
