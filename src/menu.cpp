@@ -195,8 +195,8 @@ void ConsolePlayer::menu()
     if ((m_iniCfg.console ()).ansi)
     {
         fmt::print("\x1b[40m");  // Background black
-        fmt::print("\x1b[2J");   // Clear screen
-        fmt::print("\x1b[0;0H"); // Move cursor to 0,0
+        fmt::print("\x1b[H");    // Move cursor to 0,0
+        fmt::print("\x1b[J");    // Clear screen
         fmt::print("\x1b[?25l"); // and hide it
 
         m_console_inited = true;
