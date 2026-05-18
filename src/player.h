@@ -248,7 +248,6 @@ private:
 private:
     // Console
     void consoleTable   (table_t table) const;
-    void consoleRestore () const;
 
     // Command line args
     void displayArgs    (const char *arg = nullptr);

@@ -516,7 +516,10 @@ void ConsolePlayer::menu ()
     if ( !m_quietLevel )
         fmt::print("00:00");
 
-    consoleRestore();
+    if ((m_iniCfg.console ()).ansi) {
+        fmt::print("\x1b[?25h");    // show cursor
+        fmt::print("\x1b[0m");      // reset all modes (styles and colors)
+    }
 
     std::fflush(stdout);
 }
@@ -656,14 +659,4 @@ void ConsolePlayer::consoleTable(table_t table) const
 
     // Move back to begining of row and skip first char
     fmt::print("\n");
-}
-
-
-// Restore Ansi Console to defaults
-void ConsolePlayer::consoleRestore() const
-{
-    if ((m_iniCfg.console ()).ansi) {
-        fmt::print("\x1b[?25h");
-        fmt::print("\x1b[0m");
-    }
 }
