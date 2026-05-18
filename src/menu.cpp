@@ -183,7 +183,7 @@ void ConsolePlayer::displayVersion()
 }
 
 // Display console menu
-void ConsolePlayer::menu ()
+void ConsolePlayer::menu()
 {
     if (m_quietLevel > 1)
         return;
@@ -198,6 +198,8 @@ void ConsolePlayer::menu ()
         fmt::print("\x1b[2J");   // Clear screen
         fmt::print("\x1b[0;0H"); // Move cursor to 0,0
         fmt::print("\x1b[?25l"); // and hide it
+
+        m_console_inited = true;
     }
 
     consoleTable(table_t::start);
@@ -515,11 +517,6 @@ void ConsolePlayer::menu ()
     // is not disturbed.
     if ( !m_quietLevel )
         fmt::print("00:00");
-
-    if ((m_iniCfg.console ()).ansi) {
-        fmt::print("\x1b[?25h");    // show cursor
-        fmt::print("\x1b[0m");      // reset all modes (styles and colors)
-    }
 
     std::fflush(stdout);
 }

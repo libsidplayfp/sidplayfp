@@ -348,7 +348,8 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_showhelp(false),
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
-    m_autofilter(false)
+    m_autofilter(false),
+    m_console_inited(false)
 {
 #ifdef FEAT_REGS_DUMP_SID
     std::memset(m_registers, 0, 32*3);
@@ -1020,7 +1021,7 @@ bool ConsolePlayer::open()
     return true;
 }
 
-void ConsolePlayer::close ()
+void ConsolePlayer::close()
 {
 #ifndef FEAT_NEW_PLAY_API
     m_engine.stop();
@@ -1039,6 +1040,14 @@ void ConsolePlayer::close ()
     createSidEmu    (EMU_NONE, nullptr);
     m_engine.load   (nullptr);
     m_engine.config (m_engCfg);
+
+    if (m_console_inited)
+    {
+        // Correctly leave ansi mode and get prompt to
+        // end up in a suitable location
+        fmt::print("\x1b[?25h");    // show cursor
+        fmt::print("\x1b[0m");      // reset all modes (styles and colors)
+    }
 }
 
 // Flush any hardware sid fifos so all music is played

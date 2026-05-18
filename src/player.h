@@ -183,6 +183,8 @@ private:
 
     bool               m_autofilter;
 
+    bool               m_console_inited;
+
     std::bitset<9>     m_mute_channel;
 #ifdef FEAT_SAMPLE_MUTE
     std::bitset<3>     m_mute_samples;
