@@ -89,9 +89,13 @@ src/audio/wav/WavFile.h \
 src/ini/iniHandler.h \
 src/ini/iniHandler.cpp
 
+src_sidplayfp_CXXFLAGS = \
+$(PTHREAD_CFLAGS)
+
 src_sidplayfp_LDADD = \
 $(SIDPLAYFP_LIBS) \
-$(W32_LIBS)
+$(W32_LIBS) \
+$(PTHREAD_LIBS)
 
 #=========================================================
 # stilview
