@@ -40,6 +40,8 @@ AS_IF([test $ax_cv_cxx_compile_cxx20__std_cpp20 != "yes"], [
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_BIGENDIAN
 
+AX_PTHREAD
+
 PKG_CHECK_MODULES(SIDPLAYFP, [libsidplayfp >= 2.0])
 PKG_CHECK_MODULES(STILVIEW, [libstilview >= 1.0])
 
