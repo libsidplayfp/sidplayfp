@@ -191,12 +191,6 @@ void ConsolePlayer::menu ()
     const SidInfo &info         = m_engine.info ();
     const SidTuneInfo *tuneInfo = m_tune.getInfo();
 
-    if (m_verboseLevel > 1)
-    {
-        fmt::print("Config loaded from\n");
-        fmt::print("{}\n", m_iniCfg.getFilename());
-    }
-
     // fmt::print("\n\f"); // New Page
     if ((m_iniCfg.console ()).ansi)
     {

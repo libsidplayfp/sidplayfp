@@ -872,6 +872,12 @@ createSidEmu_error:
 
 bool ConsolePlayer::open()
 {
+    if (m_verboseLevel > 1)
+    {
+        fmt::print("Config loaded from\n");
+        fmt::print("{}\n", m_iniCfg.getFilename());
+    }
+
     if ((m_state & ~playerFast) == playerRestart)
     {
         if (m_quietLevel < 2)
@@ -1001,7 +1007,13 @@ bool ConsolePlayer::open()
     m_timer.current = ~0;
     m_timer.starting = true;
     m_state = playerRunning;
-
+/*
+    if (m_verboseLevel)
+    {
+        fmt::print("Press enter to continue...");
+        getchar();
+    }
+*/
     // Update display
     menu();
     updateDisplay();
