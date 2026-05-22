@@ -1,3 +1,10 @@
+3.0.1 2026-05-xx
+* Reset the terminal only at exit, the cursor is now properly hidden
+* Link with pthreads, fixes build on BSD
+* Avoid using concepts, restores pre-c++20 compatibility
+
+
+
 3.0.0 2026-05-02
 * Use Miniaudio for audio output (#115)
 * Use ghc::filesystem to handle paths (#119)
