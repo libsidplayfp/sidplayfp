@@ -191,7 +191,7 @@ void ConsolePlayer::menu()
     const SidInfo &info         = m_engine.info ();
     const SidTuneInfo *tuneInfo = m_tune.getInfo();
 
-    // fmt::print("\n\f"); // New Page
+    fmt::print("\n\f"); // New Page
     if ((m_iniCfg.console ()).ansi)
     {
         fmt::print("\x1b[40m");  // Background black
