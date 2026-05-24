@@ -1,4 +1,4 @@
-3.0.1 2026-05-xx
+3.0.1 2026-05-24
 * Reset the terminal only at exit, the cursor is now properly hidden
 * Link with pthreads, fixes build on BSD
 * Avoid using concepts, restores pre-c++20 compatibility
