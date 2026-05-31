@@ -27,45 +27,42 @@
 #  include <windows.h>
 #endif
 
-class utils
+namespace utils
 {
-public:
-    class error {};
 
-private:
-#ifdef _WIN32
-    static std::string getPath();
-#else
-    static std::string getPath(const char* id, const char* def);
-#endif
+class error {};
 
-public:
-    /**
-     * Get the system path for data files.
-     */
-    static std::string getDataPath();
+/**
+    * Get the system path for data files.
+    *
+    * @throws error
+    */
+std::string getDataPath();
 
-    /**
-     * Get the system path for config files.
-     */
-    static std::string getConfigPath();
+/**
+    * Get the system path for config files.
+    *
+    * @throws error
+    */
+std::string getConfigPath();
 
 #ifdef _WIN32
-    /**
-     * Get the path of the executable.
-     */
-    static std::string getExecPath();
+/**
+    * Get the path of the executable.
+    */
+std::string getExecPath();
 
-    /**
-     * Convert from UTF8 to UTF16.
-     */
-    static std::wstring utf8_decode(const char *str);
+/**
+    * Convert from UTF8 to UTF16.
+    */
+std::wstring utf8_decode(const char *str);
 
-    /**
-     * Convert from UTF16 to UTF8.
-     */
-    static std::string utf8_encode(const TCHAR *wstr);
+/**
+    * Convert from UTF16 to UTF8.
+    */
+std::string utf8_encode(const TCHAR *wstr);
 #endif
-};
+
+}
 
 #endif

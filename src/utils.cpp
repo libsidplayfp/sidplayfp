@@ -63,10 +63,10 @@ std::string utils::getExecPath()
     TCHAR path[MAX_PATH];
     GetModuleFileName(hModule, path, MAX_PATH);
     PathRemoveFileSpec(path);
-    return utf8_encode(path);
+    return utils::utf8_encode(path);
 }
 
-std::string utils::getPath()
+std::string getPath()
 {
     std::string returnPath;
 
@@ -77,12 +77,12 @@ std::string utils::getPath()
         size_t pReturnValue;
         errno_t res = _tgetenv_s(&pReturnValue, szPath, TEXT("USERPROFILE"));
         if (res != 0)
-            throw error();
-        returnPath.append(utf8_encode(szPath)).append("\\Application Data");
+            throw utils::error();
+        returnPath.append(utils::utf8_encode(szPath)).append("\\Application Data");
     }
     else
     {
-        returnPath.append(utf8_encode(szPath));
+        returnPath.append(utils::utf8_encode(szPath));
     }
 
     return returnPath;
@@ -94,7 +94,7 @@ std::string utils::getConfigPath() { return getPath(); }
 
 #else
 
-std::string utils::getPath(const char* id, const char* def)
+std::string getPath(const char* id, const char* def)
 {
     std::string returnPath;
 
@@ -103,7 +103,7 @@ std::string utils::getPath(const char* id, const char* def)
     {
         path = std::getenv("HOME");
         if (!path)
-            throw error();
+            throw utils::error();
         returnPath.append(path).append(def);
     }
     else
