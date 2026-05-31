@@ -349,8 +349,12 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
     m_autofilter(false),
-    m_console_inited(false)
+    m_console_inited(false),
+    no_color(false)
 {
+    if (std::getenv("NO_COLOR"))
+        no_color = true;
+
 #ifdef FEAT_REGS_DUMP_SID
     std::memset(m_registers, 0, 32*3);
 #endif
@@ -372,6 +376,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     // Read default configuration
     m_iniCfg.read ();
     m_engCfg = m_engine.config ();
+
+    if (!m_iniCfg.console().ansi)
+        no_color = true;
 
     {   // Load ini settings
         IniConfig::audio_section     audio     = m_iniCfg.audio();

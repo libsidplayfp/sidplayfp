@@ -115,6 +115,13 @@ enum class sldb_t
 class ConsolePlayer
 {
 private:
+    template <typename... T>
+    inline void sid_print(fmt::text_style ts, fmt::format_string<T...> fmt, T&&... args) const
+    {
+        fmt::print(no_color ? fmt::text_style() : ts, fmt, std::forward<T>(args)...);
+    }
+
+private:
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
     static const char  RESIDFP_ID[];
 #endif
@@ -184,6 +191,8 @@ private:
     bool               m_autofilter;
 
     bool               m_console_inited;
+
+    bool               no_color;
 
     std::bitset<9>     m_mute_channel;
 #ifdef FEAT_SAMPLE_MUTE
