@@ -583,7 +583,7 @@ int ConsolePlayer::args(int argc, const char *argv[])
     // convert to milliseconds
     m_fadeoutTime *= 1000;
 #endif
-    const char* hvscBase = getenv("HVSC_BASE");
+    const char* hvscBase = std::getenv("HVSC_BASE");
 
     // Load the tune
     m_filename = argv[infile];

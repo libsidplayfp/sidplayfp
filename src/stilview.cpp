@@ -51,6 +51,7 @@ bool showVersion = false;
 bool interactive = false;
 bool demo = false;
 
+
 char STIL_DEMO_ENTRY[]="/Galway_Martin/Green_Beret.sid";
 
 // This is used for testing setBaseDir() when switching between different
@@ -183,7 +184,7 @@ void processArguments(int argc, char **argv)
                         fmt::print(stderr, "ERROR: tune number was not specified correctly!\n");
                         printUsage();
                     }
-                    sscanf(tuneStr, "%d", &tuneNo);
+                    std::sscanf(tuneStr, "%d", &tuneNo);
                 }
                     break;
                 case 's':
@@ -314,7 +315,7 @@ int main(int argc, char **argv)
         printHelp();
     }
 
-    hvscLoc = getenv("HVSC_BASE");
+    hvscLoc = std::getenv("HVSC_BASE");
 
     processArguments(argc, argv);
 
