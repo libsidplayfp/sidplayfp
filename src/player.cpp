@@ -67,6 +67,7 @@ constexpr uint_least32_t FREQ_NTSC = 60;
 
 
 const char* ERR_NOT_ENOUGH_MEMORY = "ERROR: Not enough memory.";
+const char* ERR_NO_SID_EMULATION  = "ERROR: Requested SID emulation not built in.";
 
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESIDFP_H
@@ -854,8 +855,8 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
     if (!m_engCfg.sidEmulation)
     {
         if (emu > EMU_DEFAULT)
-        {   // No sid emulation?
-            displayError (ERR_NOT_ENOUGH_MEMORY);
+        {   // The requested SID emulation was not compiled in.
+            displayError (ERR_NO_SID_EMULATION);
             return false;
         }
     }
