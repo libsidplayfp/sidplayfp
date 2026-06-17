@@ -75,7 +75,7 @@ disabled by default
   https://github.com/mackron/miniaudio  
   distributed under MIT license
 
-* fmt  
+* fmt 12.2.0  
   https://github.com/fmtlib/fmt  
   distributed under MIT license
 
