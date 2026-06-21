@@ -5,11 +5,11 @@ on:
   push:
     branches:
       - master
-      - sidplayfp-2.16
+      - sidplayfp-3.0
   pull_request:
     branches:
       - master
-      - sidplayfp-2.16
+      - sidplayfp-3.0
 
 jobs:
   analyze:
@@ -27,7 +27,7 @@ jobs:
 
     steps:
     - name: deps
-      run: sudo apt-get install gettext libsidplayfp-dev libstilview-dev libmpg123-dev
+      run: sudo apt-get install gettext libsidplayfp-dev libstilview-dev
     - name: Checkout repository
       uses: actions/checkout@v6
 
