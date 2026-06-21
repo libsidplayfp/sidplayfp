@@ -567,11 +567,11 @@ void IniConfig::readEmulation(iniHandler &ini)
 class iniError
 {
 private:
-    const std::string msg;
+    const std::string m_msg;
 
 public:
-    explicit iniError(const char* msg) : msg(msg) {}
-    const std::string message() const { return msg; }
+    explicit iniError(const char* msg) : m_msg(msg) {}
+    const std::string message() const { return m_msg; }
 };
 
 void createDir(const std::string& path)
