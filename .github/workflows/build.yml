@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - master
-      - sidplayfp-2.16
+      - sidplayfp-3.0
   pull_request:
     branches:
       - master
-      - sidplayfp-2.16
+      - sidplayfp-3.0
 
 permissions:
   contents: read
@@ -16,16 +16,76 @@ permissions:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        include:
+        - os: ubuntu-latest
+        - os: ubuntu-latest
+          cxxflags: -std=c++11
+        - os: macos-latest
+      fail-fast: false
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
-    - name: deps
-      run: sudo apt-get install libsidplayfp-dev libstilview-dev libmpg123-dev
+    - name: deps [Linux]
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get install \
+          libsidplayfp-dev \
+          libstilview-dev
+    - name: deps [macOS]
+      if: runner.os == 'macOS'
+      run: |
+        export HOMEBREW_NO_INSTALL_CLEANUP=1
+        brew update
+        brew upgrade || true
+        brew uninstall --ignore-dependencies --force pkg-config@0.29.2
+        brew install \
+          autoconf \
+          automake \
+          libtool \
+          pkgconf \
+          coreutils \
+          gnu-sed \
+          libsidplayfp
     - uses: actions/checkout@v6
-    - name: bootstrap
-      run: autoreconf -vfi
-    - name: configure
-      run: ./configure
-    - name: make distcheck
-      run: make distcheck
+    - name: build
+      run: |
+        autoreconf -vfi
+        ./configure
+        make distcheck
+
+  build-mingw:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    strategy:
+      matrix:
+        sys: [UCRT64]
+
+    steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{matrix.sys}}
+        update: true
+        install: >-
+          git
+          zip
+          upx
+          base-devel
+        pacboy: >-
+          toolchain:p
+          autotools:p
+          libsidplayfp:p
+    - uses: actions/checkout@v6
+      with:
+        submodules: true
+    - name: build
+      run: |
+        export CXXFLAGS="-DUNICODE -D_UNICODE"
+        autoreconf -vfi
+        ./configure
+        make distcheck
