@@ -1,3 +1,10 @@
+3.1.0 2026-06-21
+* Allow disabling colors when ANSI configuration is false or when NO_COLOR env var is defined
+* fix error message when no suitable engine found
+* Update fmt to 12.2.0
+
+
+
 3.0.2 2026-05-28
 * Fixed reading config file on Windows (#127)
 
