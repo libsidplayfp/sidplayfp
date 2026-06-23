@@ -49,7 +49,7 @@ jobs:
           coreutils \
           gnu-sed \
           libsidplayfp
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - name: build
       run: |
         autoreconf -vfi
@@ -80,7 +80,7 @@ jobs:
           toolchain:p
           autotools:p
           libsidplayfp:p
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         submodules: true
     - name: build
