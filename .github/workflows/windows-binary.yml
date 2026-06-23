@@ -79,7 +79,7 @@ jobs:
         cd libsidplayfp*/.
         ./configure --disable-dependency-tracking --disable-shared --enable-static ${{matrix.cfg_parms}}
         make && make install
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         ref: ${{ github.ref }}
     - name: Get the tag name
