@@ -22,9 +22,10 @@
 #include "player.h"
 
 #include "codeConvert.h"
-#include "fmt/format.h"
+
+#include <fmt/format.h>
 #if defined(_WIN32) && defined(UNICODE)
-#  include "fmt/xchar.h"
+#  include <fmt/xchar.h>
 #endif
 
 #include <cctype>

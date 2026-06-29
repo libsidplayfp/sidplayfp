@@ -23,7 +23,7 @@
 // STILView - command line version
 //
 
-#include "fmt/format.h"
+#include <fmt/format.h>
 
 #include <fstream>
 #include <iostream>
