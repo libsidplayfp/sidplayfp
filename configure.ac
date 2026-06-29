@@ -94,6 +94,20 @@ AS_IF([test "x$enable_debug" = "xno"],
   [AC_MSG_RESULT([yes])],
 )
 
+AC_ARG_WITH([system-fmt], AS_HELP_STRING([--with-system-fmt], [use system fmt library instead of bundled version]),
+    [with_system_fmt=$withval],
+    [with_system_fmt=no]
+)
+
+AS_IF([test "x$with_system_fmt" = "xyes"], [
+    PKG_CHECK_MODULES([FMT], [fmt >= 11.0.0])
+    AC_DEFINE([USE_SYSTEM_FMT], [1], [Use system fmt])
+], [
+    AC_MSG_NOTICE([Using bundled fmt library])
+])
+
+AM_CONDITIONAL([USE_SYSTEM_FMT], [test "x$with_system_fmt" = "xyes"])
+
 AC_SUBST([debug_flags])
 
 AC_CONFIG_FILES([

@@ -23,7 +23,8 @@
 
 #include "dataParser.h"
 #include "utils.h"
-#include "fmt/format.h"
+
+#include <fmt/format.h>
 
 #include <iostream>
 

@@ -26,23 +26,29 @@ src/stilview
 
 #=========================================================
 #fmt
+if USE_SYSTEM_FMT
+AM_CPPFLAGS += $(FMT_CFLAGS)
+fmt_SOURCES =
+else
+AM_CPPFLAGS += -I $(top_srcdir)/libs/fmt_internal
 fmt_SOURCES = \
-libs/fmt/args.h \
-libs/fmt/base.h \
-libs/fmt/chrono.h \
-libs/fmt/color.h \
-libs/fmt/compile.h \
-libs/fmt/core.h \
-libs/fmt/format-inl.h \
-libs/fmt/format.cc \
-libs/fmt/format.h \
-libs/fmt/os.cc \
-libs/fmt/os.h \
-libs/fmt/ostream.h \
-libs/fmt/printf.h \
-libs/fmt/ranges.h \
-libs/fmt/std.h \
-libs/fmt/xchar.h
+libs/fmt_internal/fmt/args.h \
+libs/fmt_internal/fmt/base.h \
+libs/fmt_internal/fmt/chrono.h \
+libs/fmt_internal/fmt/color.h \
+libs/fmt_internal/fmt/compile.h \
+libs/fmt_internal/fmt/core.h \
+libs/fmt_internal/fmt/format-inl.h \
+libs/fmt_internal/fmt/format.cc \
+libs/fmt_internal/fmt/format.h \
+libs/fmt_internal/fmt/os.cc \
+libs/fmt_internal/fmt/os.h \
+libs/fmt_internal/fmt/ostream.h \
+libs/fmt_internal/fmt/printf.h \
+libs/fmt_internal/fmt/ranges.h \
+libs/fmt_internal/fmt/std.h \
+libs/fmt_internal/fmt/xchar.h
+endif
 
 #=========================================================
 # sidplayfp
@@ -95,7 +101,8 @@ $(PTHREAD_CFLAGS)
 src_sidplayfp_LDADD = \
 $(SIDPLAYFP_LIBS) \
 $(W32_LIBS) \
-$(PTHREAD_LIBS)
+$(PTHREAD_LIBS) \
+$(FMT_LIBS)
 
 #=========================================================
 # stilview
@@ -107,7 +114,8 @@ src/codeConvert.h \
 src/stilview.cpp
 
 src_stilview_LDADD = \
-$(STILVIEW_LIBS)
+$(STILVIEW_LIBS) \
+$(FMT_LIBS)
 
 #=========================================================
 # docs

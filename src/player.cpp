@@ -21,8 +21,9 @@
 
 #include "player.h"
 
-#include "fmt/format.h"
 #include "filesystem/filesystem.hpp"
+
+#include <fmt/format.h>
 
 #include <cstdlib>
 #include <cmath>

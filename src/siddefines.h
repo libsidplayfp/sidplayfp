@@ -22,7 +22,7 @@
 #ifndef SIDDEFINES_H
 #define SIDDEFINES_H
 
-#include "fmt/color.h"
+#include <fmt/color.h>
 
 using color_t = fmt::terminal_color;
 
