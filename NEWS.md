@@ -1,3 +1,8 @@
+3.2.0 2026-0x-xx
+* Allow building with system fmt
+
+
+
 3.1.0 2026-06-21
 * Allow disabling colors when ANSI configuration is false or when NO_COLOR env var is defined
 * fix error message when no suitable engine found

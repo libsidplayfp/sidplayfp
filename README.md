@@ -71,7 +71,7 @@ disabled by default
 
 # 3rd party software
 
-* miniaudio  
+* miniaudio 0.11.25  
   https://github.com/mackron/miniaudio  
   distributed under MIT license
 
@@ -79,6 +79,6 @@ disabled by default
   https://github.com/fmtlib/fmt  
   distributed under MIT license
 
-* filesystem  
+* filesystem 1.5.14  
   https://github.com/gulrak/filesystem  
   distributed under MIT license

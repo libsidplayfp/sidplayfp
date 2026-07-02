@@ -5,11 +5,11 @@ on:
   push:
     branches:
       - master
-      - sidplayfp-3.0
+      - sidplayfp-3.1
   pull_request:
     branches:
       - master
-      - sidplayfp-3.0
+      - sidplayfp-3.1
 
 jobs:
   analyze:
