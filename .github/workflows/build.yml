@@ -80,6 +80,7 @@ jobs:
           toolchain:p
           autotools:p
           libsidplayfp:p
+          fmt:p
     - uses: actions/checkout@v7
       with:
         submodules: true
@@ -87,5 +88,5 @@ jobs:
       run: |
         export CXXFLAGS="-DUNICODE -D_UNICODE"
         autoreconf -vfi
-        ./configure
+        ./configure --with-system-fmt
         make distcheck

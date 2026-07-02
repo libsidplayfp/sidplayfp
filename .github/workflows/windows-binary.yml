@@ -46,6 +46,7 @@ jobs:
         pacboy: >-
           toolchain:p
           autotools:p
+          fmt:p
           ${{matrix.usb_libs}}
     - uses: dsaltares/fetch-gh-release-asset@master
       with:
@@ -91,7 +92,7 @@ jobs:
         export CXXFLAGS="-O2 -march=${{matrix.arch}} -fomit-frame-pointer -pipe -D_UNICODE -DUNICODE"
         export PKG_CONFIG="pkg-config --static"
         autoreconf -vfi
-        ./configure --disable-dependency-tracking
+        ./configure --disable-dependency-tracking --with-system-fmt
         make
         mv src/*.exe .
         strip *.exe
