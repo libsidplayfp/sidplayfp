@@ -413,6 +413,11 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 #ifdef FEAT_RESID_CAPS
         m_old6581Caps = emulation.old6581Caps;
 #endif
+#ifdef FEAT_RESID_NEW_TUNABLES
+        m_leakage = emulation.leakage;
+        m_offset6581 = emulation.offset6581;
+        m_dcbRes = emulation.dcbRes;
+#endif
 
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;
@@ -752,6 +757,14 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
 
 #ifdef FEAT_RESID_CAPS
             rs->enableOld6581caps(m_old6581Caps);
+#endif
+#ifdef FEAT_RESID_NEW_TUNABLES
+            if (m_leakage.has_value())
+                rs->dacLeakage(m_leakage.value());
+            if (m_offset6581.has_value())
+                rs->offset6581(m_offset6581.value());
+            if (m_dcbRes.has_value())
+                rs->dcbRes(m_dcbRes.value());
 #endif
         }
         catch (std::bad_alloc const &ba) {}

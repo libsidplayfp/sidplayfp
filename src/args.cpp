@@ -814,6 +814,9 @@ void ConsolePlayer::displayArgs(const char *arg)
 #  ifdef FEAT_RESID_CAPS
         " -co          Set old caps for 6581\n"
 #  endif
+#  ifdef FEAT_RESID_NEW_TUNABLES
+        // TODO
+#  endif
     );
 #endif
     fmt::print("\nHome Page: {}\n", PACKAGE_URL);

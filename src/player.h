@@ -166,6 +166,11 @@ private:
 #ifdef FEAT_RESID_CAPS
     bool               m_old6581Caps;
 #endif
+#ifdef FEAT_RESID_NEW_TUNABLES
+    Setting<double>    m_leakage;
+    Setting<double>    m_offset6581;
+    Setting<double>    m_dcbRes;
+#endif
 #ifdef FEAT_NEW_PLAY_API
     uint_least32_t     m_fadeoutTime;
     /*
