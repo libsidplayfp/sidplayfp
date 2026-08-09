@@ -270,6 +270,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_track.single = true;
                 m_track.first  = std::atoi(&argv[i][3]);
             }
+#ifdef FEAT_RESID_NEW_TUNABLES
+            else if (std::strncmp (&argv[i][1], "of", 2) == 0)
+            {
+                m_offset6581 = std::atoi(&argv[i][2]);
+            }
+#endif
             else if (argv[i][1] == 'o')
             {   // User forgot track number ?
                 if (argv[i][2] == '\0')
@@ -815,7 +821,7 @@ void ConsolePlayer::displayArgs(const char *arg)
         " -co          Set old caps for 6581\n"
 #  endif
 #  ifdef FEAT_RESID_NEW_TUNABLES
-        // TODO
+        " -of<num>     Set the wave offset for the 6581 model (0.0 to 1.0, default: 0.0)\n"
 #  endif
     );
 #endif

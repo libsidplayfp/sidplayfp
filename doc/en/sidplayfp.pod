@@ -227,6 +227,13 @@ Enable old caps for 6581 model. Use old 2200pF caps mounted
 on ASSY 326298 in place of the standard 470pF caps
 producing a lower cutoff.
 
+=item B<-of>I<< <num> >>
+
+If available controls the wave offset for the 6581 model in the ReSIDfp
+emulation.  Affects the volume of digi samples.
+Ranges from 0.0 (faint digis) to 1.0 (loud digis), the default
+value is 0.0.
+
 =item B<--noaudio>
 
 Run without an audio output device.
@@ -412,7 +419,7 @@ Author of filesystem.
 
 =over
 
-=item Home page: L<https://github.com/libsidplayfp/>
+=item Home page: L<https://github.com/libsidplayfp/sidplayfp>
 
 =item Sidplay2 homepage: L<http://sidplay2.sourceforge.net/>
 
