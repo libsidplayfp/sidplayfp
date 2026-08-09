@@ -250,6 +250,27 @@ producing a lower cutoff
 false to use the standard 470pF caps, the default
 is false.
 
+=item B<DacLeakage>=I<< <number> >>
+
+Controls the DAC current leakage level in the ReSIDfp
+emulation.  Affects the envelope and waveform generators.
+Ranges from 0.0 (no leak) to 1.0, the default
+value is 1.0.
+
+=item B<Offset6581>=I<< <number> >>
+
+Controls the wave offset for the 6581 model in the ReSIDfp
+emulation.  Affects the volume of digi samples.
+Ranges from 0.0 (faint digis) to 1.0 (loud digis), the default
+value is 0.0.
+
+=item B<DCBlockerRes>=I<< <number> >>
+
+Controls the DC-Blocker resistance in the ReSIDfp
+emulation.  Affects the highpass filter cutoff frequency.
+Ranges from 0.0 (~1.6Hz) to 1.0 (~16Hz), the default
+value is 1.0.
+
 =item B<PowerOnDelay>=I<< <number> >>
 
 The C64 power on delay in number of CPU cycles.
