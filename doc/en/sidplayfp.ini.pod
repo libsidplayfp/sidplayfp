@@ -242,13 +242,12 @@ value is 0.5.
 Controls the combined waveforms strength in the ReSIDfp
 emulation.  The default value is AVERAGE.
 
-=item B<Old6581Caps>=I<true|false>
+=item B<Caps6581>=I<OLD_CAPS|STANDARD_CAPS|GALWAY_CAPS>
 
-Enable/disable old caps for 6581 model.
-true to enable old 2200pF caps used on ASSY 326298
-producing a lower cutoff
-false to use the standard 470pF caps, the default
-is false.
+Set the caps for 6581 model, old 2200pF caps mounted
+on ASSY 326298 producing a lower cutoff, standard 470pF caps
+or 'Galway' 330pF caps with higher cutoff.
+The default value is STANDARD_CAPS.
 
 =item B<DacLeakage>=I<< <number> >>
 

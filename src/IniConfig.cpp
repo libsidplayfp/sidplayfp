@@ -563,6 +563,12 @@ void IniConfig::readEmulation(iniHandler &ini)
             else if (str.compare("GALWAY_CAPS") == 0)
                 emulation_s.caps6581 = SidConfig::C330PF;
         }
+        else
+        {
+            bool old6581Caps = false;
+            readBool(ini, "Old6581Caps", old6581Caps);
+            emulation_s.caps6581 = old6581Caps ? SidConfig::C2200PF : SidConfig::C470PF;
+        }
     }
 #elif defined FEAT_RESID_CAPS
     readBool(ini, "Old6581Caps", emulation_s.old6581Caps);
