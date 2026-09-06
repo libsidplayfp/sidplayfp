@@ -155,7 +155,9 @@ void IniConfig::clear()
 #ifdef FEAT_CW_STRENGTH
     emulation_s.combinedWaveformsStrength = SidConfig::AVERAGE;
 #endif
-#ifdef FEAT_RESID_CAPS
+#ifdef FEAT_RESID_CAPS_TUNABLE
+    emulation_s.caps6581     = SidConfig::C470PF;
+#elif defined FEAT_RESID_CAPS
     emulation_s.old6581Caps     = false;
 #endif
 #ifdef FEAT_RESID_NEW_TUNABLES
@@ -549,7 +551,20 @@ void IniConfig::readEmulation(iniHandler &ini)
     }
 #endif
 
-#ifdef FEAT_RESID_CAPS
+#ifdef FEAT_RESID_CAPS_TUNABLE
+    {
+        std::string str = readString(ini, "Caps6581");
+        if (!str.empty())
+        {
+            if (str.compare("OLD_CAPS") == 0)
+                emulation_s.caps6581 = SidConfig::C2200PF;
+            else if (str.compare("STANDARD_CAPS") == 0)
+                emulation_s.caps6581 = SidConfig::C470PF;
+            else if (str.compare("GALWAY_CAPS") == 0)
+                emulation_s.caps6581 = SidConfig::C330PF;
+        }
+    }
+#elif defined FEAT_RESID_CAPS
     readBool(ini, "Old6581Caps", emulation_s.old6581Caps);
 #endif
 #ifdef FEAT_RESID_NEW_TUNABLES
