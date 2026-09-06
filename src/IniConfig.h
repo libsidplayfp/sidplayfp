@@ -100,7 +100,9 @@ public:
 #ifdef FEAT_CW_STRENGTH
         SidConfig::sid_cw_t combinedWaveformsStrength;
 #endif
-#ifdef FEAT_RESID_CAPS
+#ifdef FEAT_RESID_CAPS_TUNABLE
+        SidConfig::sid_caps_t  caps6581;
+#elif defined FEAT_RESID_CAPS
         bool          old6581Caps;
 #endif
 #ifdef FEAT_RESID_NEW_TUNABLES

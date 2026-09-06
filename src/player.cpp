@@ -410,7 +410,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 #ifdef FEAT_CW_STRENGTH
         m_combinedWaveformsStrength = emulation.combinedWaveformsStrength;
 #endif
-#ifdef FEAT_RESID_CAPS
+#ifdef FEAT_RESID_CAPS_TUNABLE
+        m_caps6581 = emulation.caps6581;
+#elif defined FEAT_RESID_CAPS
         m_old6581Caps = emulation.old6581Caps;
 #endif
 #ifdef FEAT_RESID_NEW_TUNABLES
@@ -755,7 +757,9 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 fmt::print("8580 filter curve: {}\n", fcurve);
             rs->filter8580Curve(fcurve);
 
-#ifdef FEAT_RESID_CAPS
+#ifdef FEAT_RESID_CAPS_TUNABLE
+            rs->set6581caps(m_caps6581);
+#elif defined FEAT_RESID_CAPS
             rs->enableOld6581caps(m_old6581Caps);
 #endif
 #ifdef FEAT_RESID_NEW_TUNABLES

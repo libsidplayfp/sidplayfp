@@ -141,6 +141,27 @@ const char* getEmu(SIDEMUS emu)
     }
 }
 
+#ifdef FEAT_RESID_CAPS_TUNABLE
+const char* getCaps(SidConfig::sid_caps_t caps)
+{
+    switch (caps)
+    {
+    default:
+    case SidConfig::C2200PF:
+        return "(OLD CAPS)";
+    case SidConfig::C470PF:
+        return "(STANDARD CAPS)";
+    case SidConfig::C330PF:
+        return "('GALWAY' CAPS)";
+    }
+}
+#elif defined FEAT_RESID_CAPS
+const char* getCaps(bool caps)
+{
+    return caps ? "(OLD CAPS)" : "(STANDARD CAPS)";
+}
+#endif
+
 string trimString(const char* str, unsigned int maxLen)
 {
     string data(str);
@@ -400,9 +421,11 @@ void ConsolePlayer::menu()
         consoleTable(table_t::middle);
         sid_print(fg(label_color), " SID Engine   : ");
         sid_print(fg(text_color), "{} {}\n", getEmu(m_driver.sid),
-                   m_filter.enabled ?
-#ifdef FEAT_RESID_CAPS
-                       ((m_driver.sid == EMU_RESIDFP && m_old6581Caps) ? "(Old 6581 caps)" : "")
+                   m_filter.enabled ? 
+#ifdef FEAT_RESID_CAPS_TUNABLE
+                       ((m_driver.sid == EMU_RESIDFP) ? getCaps(m_caps6581) : "")
+#elif defined FEAT_RESID_CAPS
+                       ((m_driver.sid == EMU_RESIDFP) ?  getCaps(m_old6581Caps) : "")
 #else
                        ""
 #endif
