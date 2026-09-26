@@ -47,6 +47,7 @@
 #include "sidlib_features.h"
 
 #include <string>
+#include <vector>
 #include <bitset>
 
 #ifdef HAVE_TSID
@@ -235,6 +236,11 @@ private:
         IAudio*        device;   // HW/File Driver
         Audio_Null     null;     // Used for everything
     } m_driver;
+
+#ifdef HAVE_SIDPLAYFP_BUILDERS_USBSID_H
+    // USBSID-Pico board serials, empty for the first board
+    std::vector<std::string> m_usbsidBoards;
+#endif
 
     struct m_timer_t
     {   // secs

@@ -187,7 +187,19 @@ Use exSID device.
 
 =item B<--usbsid>
 
-Use USBSID-Pico device.
+Use USBSID-Pico device. Opens the first board in USB bus/port order.
+
+=item B<--usbsid=>I<< <serial>[,<serial>...] >>
+
+Use the USBSID-Pico boards with these serial numbers. SIDs are
+assigned in list order: the first board listed takes the first SIDs,
+in the SID order of its own configuration, the second board listed
+takes the SIDs after those. A single serial selects that board and uses it as B<--usbsid>
+does. Playback fails when a listed board is not attached.
+
+=item B<--usbsid-list>
+
+List the serial numbers of the attached USBSID-Pico boards and exit.
 
 =item B<--cpu-debug>
 

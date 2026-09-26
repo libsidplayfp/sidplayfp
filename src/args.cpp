@@ -149,6 +149,47 @@ bool parseAddress(const char *str, uint_least16_t &address)
     return true;
 }
 
+#if defined(HAVE_SIDPLAYFP_BUILDERS_USBSID_H) && defined(USBSID_MULTIBOARD)
+// Split a comma separated list of board serials
+bool parseUsbsidBoards(const char *str, std::vector<std::string> &serials)
+{
+    serials.clear();
+
+    std::string list(str);
+    size_t start = 0;
+    for (;;)
+    {
+        const size_t end = list.find(',', start);
+        std::string serial = list.substr(start, (end == std::string::npos) ? std::string::npos : end - start);
+
+        const size_t first = serial.find_first_not_of(" \t");
+        const size_t last = serial.find_last_not_of(" \t");
+        if (first == std::string::npos)
+            return false;
+        serials.push_back(serial.substr(first, last - first + 1));
+
+        if (end == std::string::npos)
+            return true;
+        start = end + 1;
+    }
+}
+
+// Print the serial number of every attached board
+void listUsbsidBoards()
+{
+    const std::vector<std::string> serials = USBSIDBuilder::listBoards();
+    if (serials.empty())
+    {
+        fmt::print("No USBSID-Pico boards found\n");
+        return;
+    }
+
+    fmt::print("USBSID-Pico boards, in USB bus/port order:\n");
+    for (size_t i = 0; i < serials.size(); i++)
+        fmt::print(" {}: {}\n", i + 1, serials[i].empty() ? "<no serial>" : serials[i]);
+}
+#endif
+
 void displayDebugArgs()
 {
     fmt::print("Debug Options:\n"
@@ -542,7 +583,22 @@ int ConsolePlayer::args(int argc, const char *argv[])
             {
                 m_driver.sid    = EMU_USBSID;
                 m_driver.output = output_t::NONE;
+                m_usbsidBoards.clear();
             }
+#  ifdef USBSID_MULTIBOARD
+            else if (std::strncmp (&argv[i][1], "-usbsid=", 8) == 0)
+            {
+                m_driver.sid    = EMU_USBSID;
+                m_driver.output = output_t::NONE;
+                if (!parseUsbsidBoards (&argv[i][9], m_usbsidBoards))
+                    err = true;
+            }
+            else if (std::strcmp (&argv[i][1], "-usbsid-list") == 0)
+            {
+                listUsbsidBoards ();
+                return 0;
+            }
+#  endif // USBSID_MULTIBOARD
 #endif // HAVE_SIDPLAYFP_BUILDERS_USBSID_H
 
             // These are for debug
@@ -799,6 +855,12 @@ void ConsolePlayer::displayArgs(const char *arg)
         if (us.availDevices ())
 #endif
             fmt::print(" --usbsid     enable USBSID support\n");
+#  ifdef USBSID_MULTIBOARD
+        fmt::print(" --usbsid=<serial>[,<serial>...]\n"
+            "              play on these USBSID-Pico boards, SIDs follow the list order\n"
+            " --usbsid-list\n"
+            "              list the serial numbers of attached USBSID-Pico boards\n");
+#  endif
     }
 #endif
 #ifdef HAVE_SIDPLAYFP_BUILDERS_RESID_H
