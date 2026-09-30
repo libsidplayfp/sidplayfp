@@ -728,10 +728,11 @@ int ConsolePlayer::args(int argc, const char *argv[])
                     // Try loading the database specificed by the user
 #if defined(_WIN32) && defined(UNICODE)
 #  ifdef FEAT_DB_WCHAR_OPEN
-                    const wchar_t *database = utils::utf8_decode((m_iniCfg.sidplay2()).database.c_str()).c_str();
+                    std::wstring db{utils::utf8_decode((m_iniCfg.sidplay2()).database.c_str())};
+                    const wchar_t *database = db.c_str();
 #  else
                     char database[MAX_PATH];
-                    const int ret = wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
+                    size_t ret = std::wcstombs(database, (m_iniCfg.sidplay2()).database.c_str(), sizeof(database));
                     if (ret >= MAX_PATH)
                         database[0] = '\0';
 #  endif
