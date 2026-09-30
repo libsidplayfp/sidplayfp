@@ -26,8 +26,6 @@
 
 #include <fmt/format.h>
 
-#include <iostream>
-
 #include <climits>
 #include <cstdlib>
 #include <cstring>
@@ -35,10 +33,6 @@
 #include "sidlib_features.h"
 
 #include "sidcxx11.h"
-
-#include <climits>
-#include <cstdlib>
-#include <cstring>
 
 #ifdef HAVE_SIDPLAYFP_BUILDERS_HARDSID_H
 #  include <sidplayfp/builders/hardsid.h>
