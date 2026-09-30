@@ -70,6 +70,30 @@ const char* colorStrings[16] =
     "bright white"
 };
 
+color_t getColor(int i)
+{
+    switch (i)
+    {
+    default: /* unreachable */
+    case 0: return color_t::black;
+    case 1: return color_t::red;
+    case 2: return color_t::green;
+    case 3: return color_t::yellow;
+    case 4: return color_t::blue;
+    case 5: return color_t::magenta;
+    case 6: return color_t::cyan;
+    case 7: return color_t::white;
+    case 8: return color_t::bright_black;
+    case 9: return color_t::bright_red;
+    case 10: return color_t::bright_green;
+    case 11: return color_t::bright_yellow;
+    case 12: return color_t::bright_blue;
+    case 13: return color_t::bright_magenta;
+    case 14: return color_t::bright_cyan;
+    case 15: return color_t::bright_white;
+    }
+}
+
 inline void debug(MAYBE_UNUSED const char *msg, MAYBE_UNUSED const char *val)
 {
 #ifndef NDEBUG
@@ -359,7 +383,7 @@ bool readColor(iniHandler &ini, const char *key, color_t &ch)
     {
         if (str.compare(colorStrings[i]) == 0)
         {
-            ch = static_cast<color_t>(i);
+            ch = getColor(i);
             return true;
         }
     }
