@@ -1,4 +1,4 @@
-3.2.1 2026-10-xx
+3.2.1 2026-10-02
 * Fix reading Songlength Database on Windows (#140)
 * Fix parsing colors from config (#141)
 
