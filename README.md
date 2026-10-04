@@ -63,7 +63,11 @@ Requires [libsidplayfp](https://github.com/libsidplayfp/libsidplayfp) version 2 
 
 In addition to the standard build options the following are available:
 
-`--enable-debug`:
+* `--enable-lto`:
+enable Link Time Optimization if supported by compiler
+(disabled by default)
+
+* `--enable-debug`:
 compile with debugging messages,
 disabled by default
 

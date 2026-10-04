@@ -108,6 +108,16 @@ AS_IF([test "x$with_system_fmt" = "xyes"], [
 
 AM_CONDITIONAL([USE_SYSTEM_FMT], [test "x$with_system_fmt" = "xyes"])
 
+AC_ARG_ENABLE([lto],
+  [AS_HELP_STRING([--enable-lto],
+    [enable link time optimization @<:@default=no@:>@])]
+)
+
+AS_IF([test "x$enable_lto" = "xyes"],
+  [AX_APPEND_COMPILE_FLAGS([-flto])]
+)
+
+
 AC_SUBST([debug_flags])
 
 AC_CONFIG_FILES([
