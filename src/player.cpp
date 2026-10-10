@@ -1279,13 +1279,16 @@ void ConsolePlayer::updateDisplay()
     const uint_least32_t milliseconds = m_engine.timeMs();
     const uint_least32_t seconds = milliseconds / 1000;
 
-    refreshRegDump();
-
-    if (!m_quietLevel && (seconds != (m_timer.current / 1000)))
+    if (!m_quietLevel)
     {
-        //fmt::print("\b\b\b\b\b");
-        fmt::print("{:02}:{:02}", ((seconds / 60) % 100), (seconds % 60));
-        std::fflush(stdout);
+        refreshRegDump();
+
+        if (seconds != (m_timer.current / 1000))
+        {
+            //fmt::print("\b\b\b\b\b");
+            fmt::print("{:02}:{:02}", ((seconds / 60) % 100), (seconds % 60));
+            std::fflush(stdout);
+        }
     }
 
     m_timer.current = milliseconds;
