@@ -17,6 +17,7 @@ AM_CPPFLAGS = \
 $(SIDPLAYFP_CFLAGS) \
 $(STILVIEW_CFLAGS) \
 ${W32_CPPFLAGS} \
+$(MINIAUDIO_CPPFLAGS) \
 @debug_flags@
 
 
@@ -102,7 +103,8 @@ src_sidplayfp_LDADD = \
 $(SIDPLAYFP_LIBS) \
 $(W32_LIBS) \
 $(PTHREAD_LIBS) \
-$(FMT_LIBS)
+$(FMT_LIBS) \
+$(MINIAUDIO_LIBS)
 
 #=========================================================
 # stilview
