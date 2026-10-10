@@ -613,7 +613,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
             return false;
         }
 
-        if (m_verboseLevel && (driver != output_t::NONE))
+        if (m_verboseLevel && !m_quietLevel && (driver != output_t::NONE))
             fmt::print("Using audio driver: {}\n", m_driver.device->getDriverString());
     }
     // See what we got
@@ -677,12 +677,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 double rfr = getRecommendedFilterRange(tuneInfo->infoString(1));
                 if (rfr < 0.)
                 {
-                    if (m_verboseLevel > 1)
+                    if ((m_verboseLevel > 1) && !m_quietLevel)
                         fmt::print("No recommended filter range available\n");
                 }
                 else
                 {
-                    if (m_verboseLevel > 1)
+                    if ((m_verboseLevel > 1) && !m_quietLevel)
                         fmt::print("Recommended filter range: {}\n", rfr);
                     frange = rfr;
                 }
@@ -699,7 +699,7 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 exit(EXIT_FAILURE);
             }
 
-            if (m_verboseLevel)
+            if (m_verboseLevel && !m_quietLevel)
                 fmt::print("6581 filter range: {}\n", frange);
             rs->filter6581Range(frange);
 #endif
@@ -712,12 +712,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 double rfc = getRecommendedFilterCurve(tuneInfo->infoString(1));
                 if (rfc < 0.)
                 {
-                    if (m_verboseLevel > 1)
+                    if ((m_verboseLevel > 1) && !m_quietLevel)
                         fmt::print("No recommended filter curve available\n");
                 }
                 else
                 {
-                    if (m_verboseLevel > 1)
+                    if ((m_verboseLevel > 1) && !m_quietLevel)
                         fmt::print("Recommended filter curve: {}\n", rfc);
                     fcurve = rfc;
                 }
@@ -734,7 +734,7 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 exit(EXIT_FAILURE);
             }
 
-            if (m_verboseLevel)
+            if (m_verboseLevel && !m_quietLevel)
                 fmt::print("6581 filter curve: {}\n", fcurve);
             rs->filter6581Curve(fcurve);
 
@@ -751,7 +751,7 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 exit(EXIT_FAILURE);
             }
 
-            if (m_verboseLevel)
+            if (m_verboseLevel && !m_quietLevel)
                 fmt::print("8580 filter curve: {}\n", fcurve);
             rs->filter8580Curve(fcurve);
 
@@ -898,7 +898,7 @@ createSidEmu_error:
 
 bool ConsolePlayer::open()
 {
-    if (m_verboseLevel > 1)
+    if ((m_verboseLevel > 1) && !m_quietLevel)
     {
         fmt::print("Config loaded from\n");
         fmt::print("{}\n", m_iniCfg.getFilename());
@@ -1034,7 +1034,7 @@ bool ConsolePlayer::open()
     m_timer.starting = true;
     m_state = playerRunning;
 /*
-    if (m_verboseLevel)
+    if (m_verboseLevel && !m_quietLevel)
     {
         fmt::print("Press enter to continue...");
         getchar();
