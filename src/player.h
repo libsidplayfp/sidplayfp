@@ -181,7 +181,7 @@ private:
     bool               m_fadeAfter;
 #endif
 #ifdef FEAT_REGS_DUMP_SID
-    uint8_t            m_registers[3][32];
+    uint8_t            m_registers[MAX_SIDS][32];
     uint16_t*          m_freqTable;
 #endif
 
@@ -199,7 +199,7 @@ private:
 
     bool               no_color;
 
-    std::bitset<9>     m_mute_channel;
+    std::bitset<MAX_SIDS * 3> m_mute_channel;
 #ifdef FEAT_SAMPLE_MUTE
     std::bitset<3>     m_mute_samples;
 #endif

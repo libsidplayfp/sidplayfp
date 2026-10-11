@@ -357,7 +357,7 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         no_color = true;
 
 #ifdef FEAT_REGS_DUMP_SID
-    std::memset(m_registers, 0, 32*3);
+    std::memset(m_registers, 0, sizeof(m_registers));
 #endif
     // Other defaults
     m_filter.enabled = true;
@@ -1127,8 +1127,8 @@ bool ConsolePlayer::play()
         short *buffer = m_driver.selected->buffer();
 #ifdef FEAT_NEW_PLAY_API
         m_mixer.begin(buffer, length);
-        short* buffers[3];
-        m_engine.buffers(buffers);
+        std::vector<short*> buffers(m_engine.installedSIDs());
+        m_engine.buffers(buffers.data());
 
         do
         {
@@ -1142,7 +1142,7 @@ bool ConsolePlayer::play()
             if (!buffer) UNLIKELY
                 break;
             if (samples > 0)
-                m_mixer.doMix(buffers, samples);
+                m_mixer.doMix(buffers.data(), samples);
             else break;
         }
         while (!m_mixer.isFull());

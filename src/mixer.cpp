@@ -23,7 +23,10 @@
 #include "mixer.h"
 
 #include <cassert>
+#include <cmath>
 #include <cstring>
+
+#include "siddefines.h"
 
 Mixer::Mixer() :
     m_rand(257254)
@@ -33,7 +36,7 @@ Mixer::Mixer() :
 
 void Mixer::initialize(unsigned int chips, bool stereo)
 {
-    assert((chips >= 1) && (chips <= 3));
+    assert((chips >= 1) && (chips <= MAX_SIDS));
     m_channels = stereo ? 2 : 1;
     m_mix.resize(m_channels);
     m_chips = chips;
@@ -51,6 +54,12 @@ void Mixer::initialize(unsigned int chips, bool stereo)
     case 3:
         m_mix[0] = stereo ? &Mixer::stereo_ch1_ThreeChips : &Mixer::template mono<3>;
         if (stereo) m_mix[1] = &Mixer::stereo_ch2_ThreeChips;
+        break;
+    default:
+        // no panning, same signal on both channels
+        m_monoScale = static_cast<int_least32_t>((1.0 / std::sqrt(static_cast<double>(chips))) * SCALE_FACTOR);
+        m_mix[0] = &Mixer::monoN;
+        if (stereo) m_mix[1] = &Mixer::monoN;
         break;
      }
 }

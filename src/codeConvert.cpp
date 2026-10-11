@@ -25,26 +25,29 @@
 
 const char* codeConvert::convert(const char* src)
 {
-    int i=0;
-    while (src[i])
+    // keep room for a two byte sequence and the terminator
+    const unsigned int limit = sizeof(buffer) - 3;
+    unsigned int i=0; // source index
+    unsigned int j=0; // destination index
+    while (src[i] && (j <= limit))
     {
-        unsigned char ch = static_cast<unsigned char>(src[i]);
+        unsigned char ch = static_cast<unsigned char>(src[i++]);
         if (ch < 0x80)
-            buffer[i++] = static_cast<char>(ch);
+            buffer[j++] = static_cast<char>(ch);
         else if (ch <= 0xBF)
         {
-            buffer[i++] = static_cast<char>(0xC2);
-            buffer[i++] = static_cast<char>(ch);
+            buffer[j++] = static_cast<char>(0xC2);
+            buffer[j++] = static_cast<char>(ch);
         }
         else
         {
-            buffer[i++] = static_cast<char>(0xC3);
-            buffer[i++] = static_cast<char>(ch - 0x40);
+            buffer[j++] = static_cast<char>(0xC3);
+            buffer[j++] = static_cast<char>(ch - 0x40);
         }
     }
 
     // terminate buffer string
-    buffer[i] = 0;
+    buffer[j] = 0;
 
     return buffer;
 }
