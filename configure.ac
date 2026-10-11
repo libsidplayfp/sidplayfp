@@ -94,6 +94,8 @@ AS_IF([test "x$enable_debug" = "xno"],
   [AC_MSG_RESULT([yes])],
 )
 
+AC_SUBST([debug_flags])
+
 AC_ARG_WITH([system-fmt], AS_HELP_STRING([--with-system-fmt], [use system fmt library instead of bundled version]),
     [with_system_fmt=$withval],
     [with_system_fmt=no]
@@ -117,8 +119,28 @@ AS_IF([test "x$enable_lto" = "xyes"],
   [AX_APPEND_COMPILE_FLAGS([-flto])]
 )
 
+# miniaudio options
+AC_ARG_ENABLE([jack], [AS_HELP_STRING([--enable-jack], [compile with Jack support])])
+AS_IF([test "x$enable_jack" != "xyes"],
+  [MINIAUDIO_CPPFLAGS="$MINIAUDIO_CPPFLAGS -DMA_NO_JACK"]
+)
 
-AC_SUBST([debug_flags])
+AC_ARG_ENABLE([pulseaudio], [AS_HELP_STRING([--enable-pulseaudio], [compile with Pulseaudio support])])
+AS_IF([test "x$enable_pulseaudio" != "xyes"],
+  [MINIAUDIO_CPPFLAGS="$MINIAUDIO_CPPFLAGS -DMA_NO_PULSEAUDIO"],
+  [
+    AC_SEARCH_LIBS([dlopen], [dl dld], [], [
+        AC_MSG_ERROR([unable to find the dlopen() function])
+    ])
+    AS_IF([test "x$ac_cv_search_dlopen" != 'xno' &&
+           test "x$ac_cv_search_dlopen" != 'xnone required'],
+      [MINIAUDIO_LIBS="$ac_cv_search_dlopen"]
+    )
+  ]
+)
+
+AC_SUBST([MINIAUDIO_CPPFLAGS])
+AC_SUBST([MINIAUDIO_LIBS])
 
 AC_CONFIG_FILES([
 Makefile

@@ -71,6 +71,14 @@ enable Link Time Optimization if supported by compiler
 compile with debugging messages,
 disabled by default
 
+* `--enable-jack`:
+compile with Jack support,
+disabled by default
+
+* `--enable-pulseaudio`:
+compile with Pulseaudio support,
+disabled by default
+
 -----------------------------------------------------------------------------
 
 # 3rd party software
