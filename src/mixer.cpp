@@ -64,6 +64,49 @@ void Mixer::initialize(unsigned int chips, bool stereo)
      }
 }
 
+#ifdef FEAT_SID_V5
+void Mixer::initialize(unsigned int chips, bool stereo, const std::vector<SidTuneInfo::pan_t> *pans)
+{
+    if (!stereo || !pans)
+    {
+        initialize(chips, stereo);
+        return;
+    }
+
+    assert((chips >= 1) && (chips <= MAX_SIDS));
+    m_channels = 2;
+    m_mix.resize(m_channels);
+    m_chips = chips;
+    m_iSamples.resize(chips);
+
+    // chips feeding each channel, a centered chip feeds both
+    unsigned int countL = 0;
+    unsigned int countR = 0;
+    for (unsigned int i = 0; i < chips; i++)
+    {
+        const SidTuneInfo::pan_t pan = (i < pans->size()) ? (*pans)[i] : SidTuneInfo::PAN_CENTER;
+        if (pan != SidTuneInfo::PAN_RIGHT) countL++;
+        if (pan != SidTuneInfo::PAN_LEFT) countR++;
+    }
+
+    // scale by sqrt(chips in channel), empty channel stays silent
+    const int_least32_t scaleL = countL ? static_cast<int_least32_t>((1.0 / std::sqrt(static_cast<double>(countL))) * SCALE_FACTOR) : 0;
+    const int_least32_t scaleR = countR ? static_cast<int_least32_t>((1.0 / std::sqrt(static_cast<double>(countR))) * SCALE_FACTOR) : 0;
+
+    m_gainL.assign(chips, 0);
+    m_gainR.assign(chips, 0);
+    for (unsigned int i = 0; i < chips; i++)
+    {
+        const SidTuneInfo::pan_t pan = (i < pans->size()) ? (*pans)[i] : SidTuneInfo::PAN_CENTER;
+        m_gainL[i] = (pan != SidTuneInfo::PAN_RIGHT) ? scaleL : 0;
+        m_gainR[i] = (pan != SidTuneInfo::PAN_LEFT) ? scaleR : 0;
+    }
+
+    m_mix[0] = &Mixer::stereo_ch1_Generic;
+    m_mix[1] = &Mixer::stereo_ch2_Generic;
+}
+#endif
+
 void Mixer::begin(short *buffer, uint_least32_t length)
 {
     m_dest = buffer;
