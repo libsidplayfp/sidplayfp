@@ -102,7 +102,8 @@ src_sidplayfp_LDADD = \
 $(SIDPLAYFP_LIBS) \
 $(W32_LIBS) \
 $(PTHREAD_LIBS) \
-$(FMT_LIBS)
+$(FMT_LIBS) \
+$(MINIAUDIO_LIBS)
 
 #=========================================================
 # stilview

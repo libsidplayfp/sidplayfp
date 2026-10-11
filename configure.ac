@@ -94,6 +94,8 @@ AS_IF([test "x$enable_debug" = "xno"],
   [AC_MSG_RESULT([yes])],
 )
 
+AC_SUBST([debug_flags])
+
 AC_ARG_WITH([system-fmt], AS_HELP_STRING([--with-system-fmt], [use system fmt library instead of bundled version]),
     [with_system_fmt=$withval],
     [with_system_fmt=no]
@@ -108,7 +110,15 @@ AS_IF([test "x$with_system_fmt" = "xyes"], [
 
 AM_CONDITIONAL([USE_SYSTEM_FMT], [test "x$with_system_fmt" = "xyes"])
 
-AC_SUBST([debug_flags])
+AC_SEARCH_LIBS([dlopen], [dl dld], [], [
+    AC_MSG_ERROR([unable to find the dlopen() function])
+])
+AS_IF([test "x$ac_cv_search_dlopen" != 'xno' &&
+        test "x$ac_cv_search_dlopen" != 'xnone required'],
+    [MINIAUDIO_LIBS="$ac_cv_search_dlopen"]
+)
+
+AC_SUBST([MINIAUDIO_LIBS])
 
 AC_CONFIG_FILES([
 Makefile
