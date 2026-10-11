@@ -31,6 +31,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <algorithm>
 #include <memory>
 #include <new>
 #include <chrono>
@@ -955,7 +956,18 @@ bool ConsolePlayer::open()
         m_freqTable = freqTablePal;
 #endif
 #ifdef FEAT_NEW_PLAY_API
+#  ifdef FEAT_SID_V5
+    {
+        const unsigned int chips = m_engine.installedSIDs();
+        std::vector<SidTuneInfo::pan_t> pans(chips);
+        for (unsigned int i = 0; i < chips; i++)
+            pans[i] = tuneInfo->sidPanning(i);
+        m_mixer.initialize(chips, m_driver.cfg.channels == 2,
+                           tuneInfo->hasPanning() ? &pans : nullptr);
+    }
+#  else
     m_mixer.initialize(m_engine.installedSIDs(), m_driver.cfg.channels == 2);
+#  endif
 #endif
 
     // Start the player.  Do this by fast
@@ -970,14 +982,17 @@ bool ConsolePlayer::open()
     m_engine.fastForward(100 * m_speed.current);
 #endif
 
-    for (int chip=0; chip<3; chip++)
+    const unsigned int muteChips = std::min<unsigned int>(
+        m_engine.installedSIDs(), m_mute_channel.size() / 3);
+    for (unsigned int chip=0; chip<muteChips; chip++)
     {
         for (int channel=0; channel<3; channel++)
         {
             m_engine.mute(chip, channel, m_mute_channel[chip*3 + channel]);
         }
 #ifdef FEAT_SAMPLE_MUTE
-        m_engine.mute(chip, 3, m_mute_samples[chip]);
+        if (chip < m_mute_samples.size())
+            m_engine.mute(chip, 3, m_mute_samples[chip]);
 #endif
     }
 
@@ -988,6 +1003,14 @@ bool ConsolePlayer::open()
         int_least32_t length = songlengthDB == sldb_t::MD5
             ? m_database.lengthMs(m_tune)
             : (m_database.length(m_tune) * 1000);
+#ifdef FEAT_SID_V5
+        // Embedded v5 table beats the database, 0 means none
+        const int_least32_t embeddedLength = tuneInfo->songLength(m_track.selected);
+        if (embeddedLength > 0)
+        {
+            length = embeddedLength;
+        }
+#endif
         if (length > 0)
         {
             if (m_engCfg.forceC64Model)

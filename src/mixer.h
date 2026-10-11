@@ -30,6 +30,11 @@
 #include <vector>
 
 #include "sidcxx11.h"
+#include "sidlib_features.h"
+
+#ifdef FEAT_SID_V5
+#  include <sidplayfp/SidTuneInfo.h>
+#endif
 
 #if defined(HAVE_CXX20) && defined(__cpp_lib_math_constants)
 #  include <numbers>
@@ -104,6 +109,8 @@ private:
     scale_func_t m_scale;
 
     std::vector<int_least32_t> m_iSamples;
+    std::vector<int_least32_t> m_gainL; // per chip gain of the left channel, panned stereo only
+    std::vector<int_least32_t> m_gainR; // per chip gain of the right channel, panned stereo only
     std::vector<short> m_buffer;
     std::vector<mixer_func_t> m_mix;
 
@@ -160,6 +167,18 @@ private:
         return static_cast<int_least32_t>(res * m_monoScale / SCALE_FACTOR);
     }
 
+    // Panned stereo mixing, int64 accumulate of sample * gain
+    int_least32_t stereoGeneric(const std::vector<int_least32_t> &gain) const
+    {
+        int_least64_t res = 0;
+        for (std::size_t i = 0; i < m_iSamples.size(); i++)
+            res += static_cast<int_least64_t>(m_iSamples[i]) * gain[i];
+        return static_cast<int_least32_t>(res / SCALE_FACTOR);
+    }
+
+    int_least32_t stereo_ch1_Generic() const { return stereoGeneric(m_gainL); }
+    int_least32_t stereo_ch2_Generic() const { return stereoGeneric(m_gainR); }
+
     // Stereo mixing
     int_least32_t stereo_OneChip() const { return m_iSamples[0]; }
 
@@ -187,6 +206,17 @@ public:
     Mixer();
 
     void initialize(unsigned int chips, bool stereo);
+
+#ifdef FEAT_SID_V5
+    /**
+     * Initialize with per chip panning.
+     * Panning applies to stereo only, mono or a null pans pointer
+     * behave exactly as initialize(chips, stereo).
+     *
+     * @param pans position of each chip, missing entries count as centered
+     */
+    void initialize(unsigned int chips, bool stereo, const std::vector<SidTuneInfo::pan_t> *pans);
+#endif
 
     void begin(short *buffer, uint_least32_t length);
 

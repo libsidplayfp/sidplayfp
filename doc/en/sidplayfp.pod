@@ -92,7 +92,8 @@ may  be specified in exadecimal (e.g -ts0xd440) or decimal (e.g.
 
 Mute a channel.  May be used more than one time.  Channel 1 to 3
 are for the first SID chip while channels from 4 to 6 are for
-the second one and 7 to 9 for the third.
+the second one and 7 to 9 for the third.  Voices of all SID chips
+of the tune are accepted, up to 45 for 15 chips.
 
 =item B<-g>I<< <num> >>
 
@@ -122,6 +123,8 @@ The following variations are possible:
 =item B<-t>I<< <num> >>
 
 Set play length in [mins:]secs[.milli] format (0 is endless).
+For SID v5 files with an embedded song length table, that length is used
+before the Songlengths database; this option still overrides it.
 
 =item B<-v>I<< <n|p>[f] >>
 

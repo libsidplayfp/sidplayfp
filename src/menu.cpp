@@ -34,6 +34,7 @@
 #include <cstdio>
 
 #include <string>
+#include <vector>
 #include <algorithm>
 
 using std::string;
@@ -73,6 +74,56 @@ const char *noteName[] =
 #endif
 
 constexpr unsigned int tableWidth = 54;
+
+// Width of the value column inside the table (label is 16 columns)
+constexpr unsigned int valueWidth = tableWidth - 16;
+
+// Display width of a UTF-8 string in code points (continuation bytes not counted)
+size_t utf8Width(const std::string& s)
+{
+    size_t cols = 0;
+    for (size_t i = 0; i < s.size(); i++)
+    {
+        if ((static_cast<unsigned char>(s[i]) & 0xC0) != 0x80)
+            cols++;
+    }
+    return cols;
+}
+
+// Split text into lines of at most width code points, breaking only at spaces.
+// The break space is dropped. A word longer than width gets its own unbroken line.
+// Text that fits is returned unchanged.
+std::vector<std::string> wrapText(const std::string& s, const unsigned int width)
+{
+    std::vector<std::string> lines;
+    if (utf8Width(s) <= width)
+    {
+        lines.push_back(s);
+        return lines;
+    }
+    std::string line;
+    size_t pos = 0;
+    while (pos < s.size())
+    {
+        const size_t end = std::min(s.find(' ', pos), s.size());
+        const std::string word = s.substr(pos, end - pos);
+        pos = end + 1;
+        if (word.empty())
+            continue;
+        if (line.empty())
+            line = word;
+        else if (utf8Width(line) + 1 + utf8Width(word) <= width)
+            line += ' ' + word;
+        else
+        {
+            lines.push_back(line);
+            line = word;
+        }
+    }
+    if (!line.empty() || lines.empty())
+        lines.push_back(line);
+    return lines;
+}
 
 const char SID6581[] = "MOS6581";
 const char SID8580[] = "CSG8580";
@@ -141,16 +192,25 @@ const char* getEmu(SIDEMUS emu)
     }
 }
 
-string trimString(const char* str, unsigned int maxLen)
+// Shorten to maxLen code points with a trailing "...", never splitting a UTF-8 sequence
+string trimString(const string& data, unsigned int maxLen)
 {
-    string data(str);
-    // avoid too long file names
-    if (data.length() > maxLen)
+    if (utf8Width(data) <= maxLen)
+        return data;
+    // keep maxLen - 3 code points, then cut at the next lead byte
+    size_t keep = maxLen - 3;
+    size_t pos = 0;
+    while (pos < data.size())
     {
-        data.resize(maxLen - 3);
-        data.append("...");
+        if ((static_cast<unsigned char>(data[pos]) & 0xC0) != 0x80)
+        {
+            if (keep == 0)
+                break;
+            keep--;
+        }
+        pos++;
     }
-    return data;
+    return data.substr(0, pos) + "...";
 }
 
 #ifdef FEAT_REGS_DUMP_SID
@@ -216,6 +276,23 @@ void ConsolePlayer::menu()
     color_t label_color = (m_iniCfg.console()).label_core;
     color_t text_color = (m_iniCfg.console()).text_core;
 
+    // Print text wrapped to the table, continuation rows get a blank label
+    auto printWrapped = [&](const std::string& text, const color_t lc, const color_t tc, const char* tail)
+    {
+        const std::vector<std::string> lines = wrapText(text, valueWidth);
+        for (size_t l = 0; l < lines.size(); l++)
+        {
+            if (l)
+            {
+                sid_print(fg(tc), "\n"); // end previous row, like single rows do
+                consoleTable(table_t::middle);
+                sid_print(fg(lc), "              : ");
+            }
+            sid_print(fg(tc), "{}", lines[l]);
+        }
+        sid_print(fg(tc), "{}\n", tail);
+    };
+
     const unsigned int n = tuneInfo->numberOfInfoStrings();
     if (n)
     {
@@ -225,15 +302,15 @@ void ConsolePlayer::menu()
 
         consoleTable(table_t::middle);
         sid_print(fg(label_color), " Title        : ");
-        sid_print(fg(text_color), "{}\n", codeset.convert(tuneInfo->infoString(0)));
+        sid_print(fg(text_color), "{}\n", trimString(codeset.convert(tuneInfo->infoString(0)), valueWidth));
         if (n>1)
         {
             consoleTable(table_t::middle);
             sid_print(fg(label_color), " Author       : ");
-            sid_print(fg(text_color), "{}\n", codeset.convert(tuneInfo->infoString(1)));
+            sid_print(fg(text_color), "{}\n", trimString(codeset.convert(tuneInfo->infoString(1)), valueWidth));
             consoleTable(table_t::middle);
             sid_print(fg(label_color), " Released     : ");
-            sid_print(fg(text_color), "{}\n", codeset.convert(tuneInfo->infoString(2)));
+            sid_print(fg(text_color), "{}\n", trimString(codeset.convert(tuneInfo->infoString(2)), valueWidth));
         }
     }
 
@@ -366,21 +443,78 @@ void ConsolePlayer::menu()
 
         consoleTable(table_t::middle);
         sid_print(fg(label_color), " SID Details  : ");
-        sid_print(fg(text_color), "1st SID = $D400, Model = {}\n", getModel(tuneInfo->sidModel(0)));
-        if (tuneInfo->sidChips() > 1)
+#ifdef FEAT_SID_V5
+        const bool showPan = tuneInfo->hasPanning() && (tuneInfo->sidChips() > 1) && (m_driver.cfg.channels != 1);
+#else
+        const bool showPan = false;
+#endif
+        // Pan tag appended to each SID row, empty unless a stereo panning hint applies
+        auto panTag = [&](unsigned int i) -> const char*
+        {
+#ifdef FEAT_SID_V5
+            if (!showPan)
+                return "";
+            switch (tuneInfo->sidPanning(i))
+            {
+            case SidTuneInfo::PAN_LEFT:
+                return " (L)";
+            case SidTuneInfo::PAN_RIGHT:
+                return " (R)";
+            default:
+                return " (C)";
+            }
+#else
+            (void)i;
+            return "";
+#endif
+        };
+        sid_print(fg(text_color), "1st SID = $D400, Model = {}{}\n", getModel(tuneInfo->sidModel(0)), panTag(0));
+#ifdef FEAT_SID_V5
+        const bool listAllSids = (tuneInfo->sidChips() > 3);
+#else
+        const bool listAllSids = false;
+#endif
+        if (listAllSids)
+        {
+            // SID v5 tunes with more than 3 chips: list every chip
+            for (unsigned int i=1; i<static_cast<unsigned int>(tuneInfo->sidChips()); i++)
+            {
+                consoleTable(table_t::middle);
+                sid_print(fg(label_color), "              : ");
+                sid_print(fg(text_color), "{}{} SID = ${:0>4X}", i + 1,
+                    (i == 1) ? "nd" : (i == 2) ? "rd" : "th", tuneInfo->sidChipBase(i));
+                sid_print(fg(text_color), ", Model = {}{}\n", getModel(tuneInfo->sidModel(i)), panTag(i));
+            }
+        }
+        else if (tuneInfo->sidChips() > 1)
         {
             consoleTable(table_t::middle);
             sid_print(fg(label_color), "              : ");
             sid_print(fg(text_color), "2nd SID = ${:0>4X}", tuneInfo->sidChipBase(1));
-            sid_print(fg(text_color), ", Model = {}\n", getModel(tuneInfo->sidModel(1)));
+            sid_print(fg(text_color), ", Model = {}{}\n", getModel(tuneInfo->sidModel(1)), panTag(1));
             if (tuneInfo->sidChips() > 2)
             {
                 consoleTable(table_t::middle);
                 sid_print(fg(label_color), "              : ");
                 sid_print(fg(text_color), "3rd SID = ${:0>4X}", tuneInfo->sidChipBase(2));
-                sid_print(fg(text_color), ", Model = {}\n", getModel(tuneInfo->sidModel(2)));
+                sid_print(fg(text_color), ", Model = {}{}\n", getModel(tuneInfo->sidModel(2)), panTag(2));
             }
         }
+
+#ifdef FEAT_SID_V5
+        if (showPan)
+        {
+            static const char* const layouts[] = { "Standard", "LCR", "Center first", "Centered" };
+            static const char* const modes[] = { "Direct", "Reverse", "Group", "Spread" };
+            const unsigned int layout = static_cast<unsigned int>(tuneInfo->panLayout());
+            const unsigned int mode = static_cast<unsigned int>(tuneInfo->panMode());
+            consoleTable(table_t::middle);
+            sid_print(fg(label_color), " Panning      : ");
+            sid_print(fg(text_color), "{}/{}\n",
+                (layout < 4) ? layouts[layout] : "Unknown",
+                (mode < 4) ? modes[mode] : "Unknown");
+        }
+#endif
 
         consoleTable(table_t::separator);
 
@@ -415,9 +549,21 @@ void ConsolePlayer::menu()
         consoleTable(table_t::middle);
         sid_print(fg(label_color), " SID Model(s) : ");
 #ifdef FEAT_SID_MODEL
-        for (unsigned int i=0; i<info.numberOfSIDs(); i++)
-            sid_print(fg(text_color), "{} ", getModel(info.sidModel(i)));
-        fmt::print("\n");
+        {
+            std::string models;
+            bool same = true;
+            for (unsigned int i=0; i<info.numberOfSIDs(); i++)
+            {
+                if (i)
+                    models += ' ';
+                models += getModel(info.sidModel(i));
+                same = same && info.sidModel(i) == info.sidModel(0);
+            }
+            // collapse more than 3 identical models to "<N>x <NAME>"
+            if (info.numberOfSIDs() > 3 && same)
+                models = std::to_string(info.numberOfSIDs()) + "x " + getModel(info.sidModel(0));
+            printWrapped(models, label_color, text_color, " ");
+        }
 #else
         if (m_engCfg.forceSidModel)
             sid_print(fg(text_color), "Forced ");
