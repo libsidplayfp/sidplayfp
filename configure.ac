@@ -110,13 +110,15 @@ AS_IF([test "x$with_system_fmt" = "xyes"], [
 
 AM_CONDITIONAL([USE_SYSTEM_FMT], [test "x$with_system_fmt" = "xyes"])
 
-AC_SEARCH_LIBS([dlopen], [dl dld], [], [
-    AC_MSG_ERROR([unable to find the dlopen() function])
+AS_IF([test "x$MINGW32" != "xyes"], [
+    AC_SEARCH_LIBS([dlopen], [dl dld], [], [
+        AC_MSG_ERROR([unable to find the dlopen() function])
+    ])
+    AS_IF([test "x$ac_cv_search_dlopen" != 'xno' &&
+            test "x$ac_cv_search_dlopen" != 'xnone required'],
+        [MINIAUDIO_LIBS="$ac_cv_search_dlopen"]
+    )
 ])
-AS_IF([test "x$ac_cv_search_dlopen" != 'xno' &&
-        test "x$ac_cv_search_dlopen" != 'xnone required'],
-    [MINIAUDIO_LIBS="$ac_cv_search_dlopen"]
-)
 
 AC_SUBST([MINIAUDIO_LIBS])
 
