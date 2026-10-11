@@ -75,9 +75,9 @@ disabled by default
 compile with Jack support,
 disabled by default
 
-* `--enable-pulseaudio`:
-compile with Pulseaudio support,
-disabled by default
+* `--disable-pulseaudio`:
+compile without Pulseaudio support,
+enabled by default
 
 -----------------------------------------------------------------------------
 
