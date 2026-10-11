@@ -361,9 +361,9 @@ int ConsolePlayer::args(int argc, const char *argv[])
             else if (argv[i][1] == 'q')
             {
                 if (argv[i][2] == '\0')
-                    m_quietLevel = 1;
+                    m_verboseLevel = -1;
                 else
-                    m_quietLevel = std::atoi(&argv[i][2]);
+                    m_verboseLevel = -1 * std::atoi(&argv[i][2]);
             }
 
             else if (argv[i][1] == 't')

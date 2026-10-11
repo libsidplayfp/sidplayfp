@@ -186,7 +186,7 @@ void ConsolePlayer::displayVersion()
 // Display console menu
 void ConsolePlayer::menu()
 {
-    if (m_quietLevel > 1)
+    if (m_verboseLevel < -1)
         return;
 
     const SidInfo &info         = m_engine.info ();
@@ -516,7 +516,7 @@ void ConsolePlayer::menu()
 
     // Get all the text to the screen so music playback
     // is not disturbed.
-    if ( !m_quietLevel )
+    if (m_verboseLevel >= 0)
         fmt::print("00:00");
 
     std::fflush(stdout);

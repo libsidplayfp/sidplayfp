@@ -186,8 +186,7 @@ private:
 #endif
 
     // Display parameters
-    uint_least8_t      m_quietLevel;
-    uint_least8_t      m_verboseLevel;
+    int                m_verboseLevel;
     bool               m_showhelp;
 
     sldb_t             songlengthDB;

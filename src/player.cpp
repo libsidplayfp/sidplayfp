@@ -346,7 +346,6 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
     m_state(playerStopped),
     m_outfile(nullptr),
     m_filename(""),
-    m_quietLevel(0),
     m_showhelp(false),
     songlengthDB(sldb_t::NONE),
     m_cpudebug(false),
@@ -613,7 +612,7 @@ bool ConsolePlayer::createOutput (output_t driver, const SidTuneInfo *tuneInfo)
             return false;
         }
 
-        if (m_verboseLevel && !m_quietLevel && (driver != output_t::NONE))
+        if ((m_verboseLevel > 0) && (driver != output_t::NONE))
             fmt::print("Using audio driver: {}\n", m_driver.device->getDriverString());
     }
     // See what we got
@@ -677,12 +676,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 double rfr = getRecommendedFilterRange(tuneInfo->infoString(1));
                 if (rfr < 0.)
                 {
-                    if ((m_verboseLevel > 1) && !m_quietLevel)
+                    if (m_verboseLevel > 1)
                         fmt::print("No recommended filter range available\n");
                 }
                 else
                 {
-                    if ((m_verboseLevel > 1) && !m_quietLevel)
+                    if (m_verboseLevel > 1)
                         fmt::print("Recommended filter range: {}\n", rfr);
                     frange = rfr;
                 }
@@ -699,7 +698,7 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 exit(EXIT_FAILURE);
             }
 
-            if (m_verboseLevel && !m_quietLevel)
+            if (m_verboseLevel > 0)
                 fmt::print("6581 filter range: {}\n", frange);
             rs->filter6581Range(frange);
 #endif
@@ -712,12 +711,12 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 double rfc = getRecommendedFilterCurve(tuneInfo->infoString(1));
                 if (rfc < 0.)
                 {
-                    if ((m_verboseLevel > 1) && !m_quietLevel)
+                    if (m_verboseLevel > 1)
                         fmt::print("No recommended filter curve available\n");
                 }
                 else
                 {
-                    if ((m_verboseLevel > 1) && !m_quietLevel)
+                    if (m_verboseLevel > 1)
                         fmt::print("Recommended filter curve: {}\n", rfc);
                     fcurve = rfc;
                 }
@@ -734,7 +733,7 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 exit(EXIT_FAILURE);
             }
 
-            if (m_verboseLevel && !m_quietLevel)
+            if (m_verboseLevel > 0)
                 fmt::print("6581 filter curve: {}\n", fcurve);
             rs->filter6581Curve(fcurve);
 
@@ -751,7 +750,7 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 exit(EXIT_FAILURE);
             }
 
-            if (m_verboseLevel && !m_quietLevel)
+            if (m_verboseLevel > 0)
                 fmt::print("8580 filter curve: {}\n", fcurve);
             rs->filter8580Curve(fcurve);
 
@@ -898,7 +897,7 @@ createSidEmu_error:
 
 bool ConsolePlayer::open()
 {
-    if ((m_verboseLevel > 1) && !m_quietLevel)
+    if (m_verboseLevel > 1)
     {
         fmt::print("Config loaded from\n");
         fmt::print("{}\n", m_iniCfg.getFilename());
@@ -906,7 +905,7 @@ bool ConsolePlayer::open()
 
     if ((m_state & ~playerFast) == playerRestart)
     {
-        if (m_quietLevel < 2)
+        if (m_verboseLevel > -2)
             fmt::print("\n");
         if (m_state & playerFast)
             m_driver.selected->reset ();
@@ -1034,7 +1033,7 @@ bool ConsolePlayer::open()
     m_timer.starting = true;
     m_state = playerRunning;
 /*
-    if (m_verboseLevel && !m_quietLevel)
+    if (m_verboseLevel > 0)
     {
         fmt::print("Press enter to continue...");
         getchar();
@@ -1182,11 +1181,11 @@ bool ConsolePlayer::play()
         // Check for a keypress (approx 250ms rate, but really depends
         // on music buffer sizes).  Don't do this for high quiet levels
         // as chances are we are under remote control.
-        if ((m_quietLevel < 2) && _kbhit ())
+        if ((m_verboseLevel > -2) && _kbhit ())
             decodeKeys ();
         return true;
     default:
-        if (m_quietLevel < 2)
+        if (m_verboseLevel > -2)
             fmt::print("\n");
 #ifndef FEAT_NEW_PLAY_API
         m_engine.stop ();
@@ -1282,7 +1281,7 @@ void ConsolePlayer::updateDisplay()
     const uint_least32_t milliseconds = m_engine.timeMs();
     const uint_least32_t seconds = milliseconds / 1000;
 
-    if (!m_quietLevel)
+    if (m_verboseLevel >= 0)
     {
         refreshRegDump();
 
