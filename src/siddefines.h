@@ -26,6 +26,9 @@
 
 using color_t = fmt::terminal_color;
 
+// Maximum number of SID chips handled by the player
+constexpr unsigned int MAX_SIDS = 15;
+
 enum class table_t
 {
     start,

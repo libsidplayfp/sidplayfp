@@ -96,6 +96,7 @@ private:
 
     unsigned int m_channels = 1;
     unsigned int m_chips;
+    int_least32_t m_monoScale = SCALE_FACTOR; // mono scale for more than 3 chips
     int m_oldRandomValue = 0;
     unsigned int m_fastForwardFactor = 1;
 
@@ -150,6 +151,13 @@ private:
         static_assert((Chips >= 1) && (Chips <= 3), "Unsupported number of chips");
         int_least32_t res = std::accumulate(m_iSamples.begin(), m_iSamples.end(), 0);
         return res * SCALE[Chips-1] / SCALE_FACTOR;
+    }
+
+    // Mono mixing for more than 3 chips, scale by sqrt(chips)
+    int_least32_t monoN() const
+    {
+        const int_least64_t res = std::accumulate(m_iSamples.begin(), m_iSamples.end(), static_cast<int_least32_t>(0));
+        return static_cast<int_least32_t>(res * m_monoScale / SCALE_FACTOR);
     }
 
     // Stereo mixing
