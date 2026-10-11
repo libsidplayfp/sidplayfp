@@ -1,3 +1,9 @@
+3.2.2 2026-10-11
+* Don't print messages when quiet (#146)
+* Link with dl (#142)
+
+
+
 3.2.1 2026-10-02
 * Fix reading Songlength Database on Windows (#140)
 * Fix parsing colors from config (#141)
