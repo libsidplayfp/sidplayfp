@@ -160,7 +160,7 @@ private:
         return res * SCALE[Chips-1] / SCALE_FACTOR;
     }
 
-    // Mono mixing for more than 3 chips, scale by sqrt(chips)
+    // Mono mixing for more than 3 chips, scale by 1/chips
     int_least32_t monoN() const
     {
         const int_least64_t res = std::accumulate(m_iSamples.begin(), m_iSamples.end(), static_cast<int_least32_t>(0));
