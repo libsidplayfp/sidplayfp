@@ -23,7 +23,6 @@
 #include "mixer.h"
 
 #include <cassert>
-#include <cmath>
 #include <cstring>
 
 #include "siddefines.h"
@@ -57,7 +56,8 @@ void Mixer::initialize(unsigned int chips, bool stereo)
         break;
     default:
         // no panning, same signal on both channels
-        m_monoScale = static_cast<int_least32_t>((1.0 / std::sqrt(static_cast<double>(chips))) * SCALE_FACTOR);
+        // scale by 1/chips, keeps the sum of full scale chips in 16 bit
+        m_monoScale = SCALE_FACTOR / static_cast<int_least32_t>(chips);
         m_mix[0] = &Mixer::monoN;
         if (stereo) m_mix[1] = &Mixer::monoN;
         break;
@@ -89,9 +89,9 @@ void Mixer::initialize(unsigned int chips, bool stereo, const std::vector<SidTun
         if (pan != SidTuneInfo::PAN_LEFT) countR++;
     }
 
-    // scale by sqrt(chips in channel), empty channel stays silent
-    const int_least32_t scaleL = countL ? static_cast<int_least32_t>((1.0 / std::sqrt(static_cast<double>(countL))) * SCALE_FACTOR) : 0;
-    const int_least32_t scaleR = countR ? static_cast<int_least32_t>((1.0 / std::sqrt(static_cast<double>(countR))) * SCALE_FACTOR) : 0;
+    // scale by 1/(chips in channel), empty channel stays silent
+    const int_least32_t scaleL = countL ? SCALE_FACTOR / static_cast<int_least32_t>(countL) : 0;
+    const int_least32_t scaleR = countR ? SCALE_FACTOR / static_cast<int_least32_t>(countR) : 0;
 
     m_gainL.assign(chips, 0);
     m_gainR.assign(chips, 0);
