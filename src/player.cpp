@@ -982,8 +982,12 @@ bool ConsolePlayer::open()
     m_engine.fastForward(100 * m_speed.current);
 #endif
 
+#ifdef FEAT_NEW_PLAY_API
     const unsigned int muteChips = std::min<unsigned int>(
         m_engine.installedSIDs(), m_mute_channel.size() / 3);
+#else
+    const unsigned int muteChips = 3;
+#endif
     for (unsigned int chip=0; chip<muteChips; chip++)
     {
         for (int channel=0; channel<3; channel++)
