@@ -127,7 +127,8 @@ private:
     int scale(unsigned int ch)
     {
         const int_least32_t sample = (this->*(m_mix[ch]))();
-        return (sample * m_volume + triangularDithering()) / VOLUME_MAX;
+        // Divide signed, an unsigned divisor wraps negative samples
+        return (sample * m_volume + triangularDithering()) / static_cast<int_least32_t>(VOLUME_MAX);
     }
 
     int noScale(unsigned int ch)
