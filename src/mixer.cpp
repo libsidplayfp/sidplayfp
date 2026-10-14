@@ -91,7 +91,8 @@ uint_least32_t Mixer::mix(short** buffers, uint_least32_t start, uint_least32_t 
                     sample += buffer[k];
                 }
 
-                m_iSamples[c] = sample / m_fastForwardFactor;
+                // Divide signed, an unsigned divisor wraps negative sums
+                m_iSamples[c] = sample / static_cast<int_least32_t>(m_fastForwardFactor);
             }
 
             // increment i to mark we ate some samples.
