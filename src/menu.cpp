@@ -276,6 +276,7 @@ void ConsolePlayer::menu()
     color_t label_color = (m_iniCfg.console()).label_core;
     color_t text_color = (m_iniCfg.console()).text_core;
 
+#ifdef FEAT_SID_MODEL
     // Print text wrapped to the table, continuation rows get a blank label
     auto printWrapped = [&](const std::string& text, const color_t lc, const color_t tc, const char* tail)
     {
@@ -292,6 +293,7 @@ void ConsolePlayer::menu()
         }
         sid_print(fg(tc), "{}\n", tail);
     };
+#endif
 
     const unsigned int n = tuneInfo->numberOfInfoStrings();
     if (n)
@@ -445,8 +447,6 @@ void ConsolePlayer::menu()
         sid_print(fg(label_color), " SID Details  : ");
 #ifdef FEAT_SID_V5
         const bool showPan = tuneInfo->hasPanning() && (tuneInfo->sidChips() > 1) && (m_driver.cfg.channels != 1);
-#else
-        const bool showPan = false;
 #endif
         // Pan tag appended to each SID row, empty unless a stereo panning hint applies
         auto panTag = [&](unsigned int i) -> const char*
