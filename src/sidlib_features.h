@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a console SID player.
  *
- * Copyright 2021-2025 Leandro Nini
+ * Copyright 2021-2026 Leandro Nini
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@
 #if LIBSIDPLAYFP_VERSION_MAJ > 3 || (LIBSIDPLAYFP_VERSION_MAJ == 3 && LIBSIDPLAYFP_VERSION_MIN >= 2)
 #  define FEAT_SID_V5
 #  define FEAT_RESID_CAPS_TUNABLE
+#  define FEAT_RESID_NOISE
 #endif
 
 #endif

@@ -420,6 +420,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
         m_offset6581 = emulation.offset6581;
         m_dcbRes = emulation.dcbRes;
 #endif
+#ifdef FEAT_RESID_NOISE
+        m_noiseLevel = emulation.noiseLevel;
+#endif
 
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;
@@ -769,6 +772,10 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
                 rs->offset6581(m_offset6581.value());
             if (m_dcbRes.has_value())
                 rs->dcbRes(m_dcbRes.value());
+#endif
+#ifdef FEAT_RESID_NOISE
+            if (m_noiseLevel.has_value())
+                rs->setNoiseLevel(m_noiseLevel.value());
 #endif
         }
         catch (std::bad_alloc const &ba) {}

@@ -189,6 +189,9 @@ void IniConfig::clear()
     emulation_s.offset6581 = 1.0;
     emulation_s.dcbRes = 0.0;
 #endif
+#ifdef FEAT_RESID_NOISE
+    emulation_s.noiseLevel = 4;
+#endif
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
     emulation_s.fastSampling = false;
@@ -601,6 +604,9 @@ void IniConfig::readEmulation(iniHandler &ini)
     readDouble(ini, "DacLeakage", emulation_s.leakage);
     readDouble(ini, "Offset6581", emulation_s.offset6581);
     readDouble(ini, "DCBlockerRes", emulation_s.dcbRes);
+#endif
+#ifdef FEAT_RESID_NOISE
+    readInt(ini, "NoiseLevel", emulation_s.noiseLevel);
 #endif
     readInt(ini, "PowerOnDelay", emulation_s.powerOnDelay);
 

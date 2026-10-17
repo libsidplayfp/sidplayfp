@@ -174,6 +174,9 @@ private:
     Setting<double>    m_offset6581;
     Setting<double>    m_dcbRes;
 #endif
+#ifdef FEAT_RESID_NOISE
+    Setting<int>        m_noiseLevel;
+#endif
 #ifdef FEAT_NEW_PLAY_API
     uint_least32_t     m_fadeoutTime;
     /*

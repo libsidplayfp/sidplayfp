@@ -311,6 +311,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_offset6581 = std::atoi(&argv[i][2]);
             }
 #endif
+#ifdef FEAT_RESID_NOISE
+            else if (std::strncmp (&argv[i][1], "nl", 2) == 0)
+            {
+                m_noiseLevel = std::atoi(&argv[i][2]);
+            }
+#endif
             else if (argv[i][1] == 'o')
             {   // User forgot track number ?
                 if (argv[i][2] == '\0')
@@ -899,6 +905,9 @@ void ConsolePlayer::displayArgs(const char *arg)
 #  endif
 #  ifdef FEAT_RESID_NEW_TUNABLES
         " -of<num>     Set the wave offset for the 6581 model (0.0 to 1.0, default: 0.0)\n"
+#  endif
+#  ifdef FEAT_RESID_NOISE
+        " -nl<num>     Set the background noise level (0 to 8, default: 4)\n"
 #  endif
     );
 #endif
