@@ -270,6 +270,13 @@ emulation.  Affects the highpass filter cutoff frequency.
 Ranges from 0.0 (~1.6Hz) to 1.0 (~16Hz), the default
 value is 1.0.
 
+=item B<NoiseLevel>=I<< <number> >>
+
+Controls the background noise in the ReSIDfp
+emulation, between 0 (no noise) and 8 (max level).
+If disabled there will be audible quantization noise.
+The default value is 4.
+
 =item B<PowerOnDelay>=I<< <number> >>
 
 The C64 power on delay in number of CPU cycles.

@@ -249,6 +249,13 @@ emulation.  Affects the volume of digi samples.
 Ranges from 0.0 (faint digis) to 1.0 (loud digis), the default
 value is 0.0.
 
+=item B<-nl>I<< <num> >>
+
+If available controls background noise in the ReSIDfp
+emulation, between 0 (no noise) and 8 (max level).
+If disabled there will be audible quantization noise.
+The default value is 4.
+
 =item B<--noaudio>
 
 Run without an audio output device.
