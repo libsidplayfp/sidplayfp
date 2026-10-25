@@ -1,3 +1,8 @@
+3.2.3 2026-10-25
+* Fix assert on fast forward
+
+
+
 3.2.2 2026-10-11
 * Don't print messages when quiet (#146)
 * Link with dl (#142)
