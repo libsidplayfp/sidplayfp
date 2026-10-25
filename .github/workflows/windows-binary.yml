@@ -16,18 +16,13 @@ jobs:
 
     strategy:
       matrix:
-        sys: [MINGW32, MINGW64, UCRT64]
+        sys: [MINGW32, UCRT64]
         include:
           - sys: MINGW32
             arch: i686
             name: mingw32
             usb_libs:
             cfg_parms:
-          - sys: MINGW64
-            arch: x86-64
-            name: mingw64
-            usb_libs: libusb:p libftdi:p
-            cfg_parms: --with-usbsid --with-exsid
           - sys: UCRT64
             arch: x86-64
             name: ucrt64
