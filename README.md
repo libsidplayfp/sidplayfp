@@ -83,7 +83,7 @@ enabled by default
 
 # 3rd party software
 
-* miniaudio 0.11.25  
+* miniaudio 0.11.26  
   https://github.com/mackron/miniaudio  
   distributed under MIT license
 
