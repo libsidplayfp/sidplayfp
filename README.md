@@ -87,7 +87,7 @@ enabled by default
   https://github.com/mackron/miniaudio  
   distributed under MIT license
 
-* fmt 12.2.0  
+* fmt 12.2.1  
   https://github.com/fmtlib/fmt  
   distributed under MIT license
 
