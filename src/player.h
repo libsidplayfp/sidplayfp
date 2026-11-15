@@ -177,6 +177,9 @@ private:
 #ifdef FEAT_RESID_NOISE
     Setting<int>        m_noiseLevel;
 #endif
+#ifdef FEAT_RESID_STRONGPS
+    Setting<bool>       m_strongPS;
+#endif
 #ifdef FEAT_NEW_PLAY_API
     uint_least32_t     m_fadeoutTime;
     /*

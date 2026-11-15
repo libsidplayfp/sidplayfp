@@ -59,6 +59,7 @@
 #  define FEAT_SID_V5
 #  define FEAT_RESID_CAPS_TUNABLE
 #  define FEAT_RESID_NOISE
+#  define FEAT_RESID_STRONGPS
 #endif
 
 #endif

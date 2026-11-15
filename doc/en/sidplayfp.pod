@@ -256,6 +256,13 @@ emulation, between 0 (no noise) and 8 (max level).
 If disabled there will be audible quantization noise.
 The default value is 4.
 
+=item B<-ps>
+
+If enabled when Pulse and Saw are combined the
+topbit is not pulled down, providing a stronger
+sound.
+By default it is disabled.
+
 =item B<--noaudio>
 
 Run without an audio output device.

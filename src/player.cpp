@@ -423,6 +423,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 #ifdef FEAT_RESID_NOISE
         m_noiseLevel = emulation.noiseLevel;
 #endif
+#ifdef FEAT_RESID_STRONGPS
+        m_strongPS = emulation.strongPS;
+#endif
 
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;
@@ -776,6 +779,10 @@ bool ConsolePlayer::createSidEmu(SIDEMUS emu, const SidTuneInfo *tuneInfo)
 #ifdef FEAT_RESID_NOISE
             if (m_noiseLevel.has_value())
                 rs->setNoiseLevel(m_noiseLevel.value());
+#endif
+#ifdef FEAT_RESID_STRONGPS
+            if (m_strongPS.has_value())
+                rs->enableStrongPS(m_strongPS.value());
 #endif
         }
         catch (std::bad_alloc const &ba) {}
