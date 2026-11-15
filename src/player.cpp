@@ -981,6 +981,7 @@ bool ConsolePlayer::open()
         for (unsigned int i = 0; i < chips; i++)
             pans[i] = tuneInfo->sidPanning(i);
         m_mixer.initialize(chips, m_driver.cfg.channels == 2,
+                           tuneInfo->fmOpl(),
                            tuneInfo->hasPanning() ? &pans : nullptr);
     }
 #  else
