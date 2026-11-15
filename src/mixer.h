@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a SID player engine.
  *
- * Copyright 2011-2025 Leandro Nini <drfiemost@users.sourceforge.net>
+ * Copyright 2011-2026 Leandro Nini <drfiemost@users.sourceforge.net>
  * Copyright 2007-2010 Antti Lankila
  * Copyright (C) 2000 Simon White
  *
@@ -206,7 +206,7 @@ private:
 public:
     Mixer();
 
-    void initialize(unsigned int chips, bool stereo);
+    void initialize(unsigned int chips, bool stereo, bool opl=false);
 
 #ifdef FEAT_SID_V5
     /**
@@ -216,7 +216,7 @@ public:
      *
      * @param pans position of each chip, missing entries count as centered
      */
-    void initialize(unsigned int chips, bool stereo, const std::vector<SidTuneInfo::pan_t> *pans);
+    void initialize(unsigned int chips, bool stereo, bool opl, const std::vector<SidTuneInfo::pan_t> *pans);
 #endif
 
     void begin(short *buffer, uint_least32_t length);

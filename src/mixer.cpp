@@ -1,7 +1,7 @@
 /*
  * This file is part of sidplayfp, a SID player engine.
  *
- * Copyright 2011-2025 Leandro Nini <drfiemost@users.sourceforge.net>
+ * Copyright 2011-2026 Leandro Nini <drfiemost@users.sourceforge.net>
  * Copyright 2007-2010 Antti Lankila
  * Copyright (C) 2000 Simon White
  *
@@ -33,13 +33,15 @@ Mixer::Mixer() :
     setVolume(VOLUME_MAX);
 }
 
-void Mixer::initialize(unsigned int chips, bool stereo)
+void Mixer::initialize(unsigned int chips, bool stereo, bool opl)
 {
     assert((chips >= 1) && (chips <= MAX_SIDS));
     m_channels = stereo ? 2 : 1;
     m_mix.resize(m_channels);
     m_chips = chips;
-    m_iSamples.resize(chips);
+    if (opl)
+        m_chips++;
+    m_iSamples.resize(m_chips);
     switch (chips)
     {
     case 1:
@@ -57,7 +59,7 @@ void Mixer::initialize(unsigned int chips, bool stereo)
     default:
         // no panning, same signal on both channels
         // scale by 1/chips, keeps the sum of full scale chips in 16 bit
-        m_monoScale = SCALE_FACTOR / static_cast<int_least32_t>(chips);
+        m_monoScale = SCALE_FACTOR / static_cast<int_least32_t>(m_chips);
         m_mix[0] = &Mixer::monoN;
         if (stereo) m_mix[1] = &Mixer::monoN;
         break;
@@ -65,11 +67,11 @@ void Mixer::initialize(unsigned int chips, bool stereo)
 }
 
 #ifdef FEAT_SID_V5
-void Mixer::initialize(unsigned int chips, bool stereo, const std::vector<SidTuneInfo::pan_t> *pans)
+void Mixer::initialize(unsigned int chips, bool stereo, bool opl, const std::vector<SidTuneInfo::pan_t> *pans)
 {
     if (!stereo || !pans)
     {
-        initialize(chips, stereo);
+        initialize(chips, stereo, opl);
         return;
     }
 
@@ -77,7 +79,9 @@ void Mixer::initialize(unsigned int chips, bool stereo, const std::vector<SidTun
     m_channels = 2;
     m_mix.resize(m_channels);
     m_chips = chips;
-    m_iSamples.resize(chips);
+    if (opl)
+        m_chips++;
+    m_iSamples.resize(m_chips);
 
     // chips feeding each channel, a centered chip feeds both
     unsigned int countL = 0;
@@ -88,18 +92,26 @@ void Mixer::initialize(unsigned int chips, bool stereo, const std::vector<SidTun
         if (pan != SidTuneInfo::PAN_RIGHT) countL++;
         if (pan != SidTuneInfo::PAN_LEFT) countR++;
     }
+    if (opl)
+    {
+        countL++;
+        countR++;
+    }
 
     // scale by 1/(chips in channel), empty channel stays silent
     const int_least32_t scaleL = countL ? SCALE_FACTOR / static_cast<int_least32_t>(countL) : 0;
     const int_least32_t scaleR = countR ? SCALE_FACTOR / static_cast<int_least32_t>(countR) : 0;
 
-    m_gainL.assign(chips, 0);
-    m_gainR.assign(chips, 0);
     for (unsigned int i = 0; i < chips; i++)
     {
         const SidTuneInfo::pan_t pan = (i < pans->size()) ? (*pans)[i] : SidTuneInfo::PAN_CENTER;
-        m_gainL[i] = (pan != SidTuneInfo::PAN_RIGHT) ? scaleL : 0;
-        m_gainR[i] = (pan != SidTuneInfo::PAN_LEFT) ? scaleR : 0;
+        m_gainL.push_back((pan != SidTuneInfo::PAN_RIGHT) ? scaleL : 0);
+        m_gainR.push_back((pan != SidTuneInfo::PAN_LEFT) ? scaleR : 0);
+    }
+    if (opl)
+    {
+        m_gainL.push_back(scaleL);
+        m_gainR.push_back(scaleR);
     }
 
     m_mix[0] = &Mixer::stereo_ch1_Generic;
