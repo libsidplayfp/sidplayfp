@@ -317,6 +317,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 m_noiseLevel = std::atoi(&argv[i][2]);
             }
 #endif
+#ifdef FEAT_RESID_STRONGPS
+            else if (std::strncmp (&argv[i][1], "ps", 2) == 0)
+            {
+                m_strongPS = true;
+            }
+#endif
             else if (argv[i][1] == 'o')
             {   // User forgot track number ?
                 if (argv[i][2] == '\0')
@@ -899,7 +905,7 @@ void ConsolePlayer::displayArgs(const char *arg)
         " -cw<w|a|s>   Set the strength of combined waveforms, w(eak), a(verage) or s(trong)\n"
 #  endif
 #  ifdef FEAT_RESID_CAPS_TUNABLE
-        " -cp[o|n|g]   Set caps for 6581, o(ld) 2200pF, n(ew) 470pF, g(alway) 330pF (default new)\n"
+        " -cp[o|n|g]   Set caps for 6581, o(ld) 2200pF, n(ew) 470pF, g(alway) 330pF (default: new)\n"
 #  elif defined FEAT_RESID_CAPS
         " -co          Set old caps for 6581\n"
 #  endif
@@ -908,6 +914,9 @@ void ConsolePlayer::displayArgs(const char *arg)
 #  endif
 #  ifdef FEAT_RESID_NOISE
         " -nl<num>     Set the background noise level (0 to 8, default: 4)\n"
+#  endif
+#  ifdef FEAT_RESID_STRONGPS
+        " -ps          Enable strong PS (default: off)\n"
 #  endif
     );
 #endif

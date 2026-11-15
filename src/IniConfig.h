@@ -113,6 +113,9 @@ public:
 #ifdef FEAT_RESID_NOISE
         int           noiseLevel;
 #endif
+#ifdef FEAT_RESID_STRONGPS
+        bool          strongPS;
+#endif
         int           powerOnDelay;
         SidConfig::sampling_method_t  samplingMethod;
         bool          fastSampling;

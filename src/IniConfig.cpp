@@ -192,6 +192,9 @@ void IniConfig::clear()
 #ifdef FEAT_RESID_NOISE
     emulation_s.noiseLevel = 4;
 #endif
+#ifdef FEAT_RESID_STRONGPS
+    emulation_s.strongPS = false;
+#endif
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
     emulation_s.fastSampling = false;
@@ -607,6 +610,9 @@ void IniConfig::readEmulation(iniHandler &ini)
 #endif
 #ifdef FEAT_RESID_NOISE
     readInt(ini, "NoiseLevel", emulation_s.noiseLevel);
+#endif
+#ifdef FEAT_RESID_STRONGPS
+    readBool(ini, "StrongPS", emulation_s.strongPS);
 #endif
     readInt(ini, "PowerOnDelay", emulation_s.powerOnDelay);
 
