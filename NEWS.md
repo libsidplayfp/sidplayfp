@@ -1,3 +1,30 @@
+3.3.0 2026-08-10
+* Added lto build option (#143)
+* miniaudio: disable jack by default and allow disabling pulseaudio (#143) (#145)
+* Support SID version 5 tunes (#150)
+* Support new residfp tunables
+* Updated fmt to 12.2.1
+* Updated miniaudio to 0.11.26
+
+
+
+3.2.3 2026-10-25
+* Fix assert on fast forward
+
+
+
+3.2.2 2026-10-11
+* Don't print messages when quiet (#146)
+* Link with dl (#142)
+
+
+
+3.2.1 2026-10-02
+* Fix reading Songlength Database on Windows (#140)
+* Fix parsing colors from config (#141)
+
+
+
 3.2.0 2026-08-10
 * Allow building with system fmt
 * Support new residfp tunables
