@@ -157,15 +157,19 @@ private:
     int_least32_t mono() const
     {
         static_assert((Chips >= 1) && (Chips <= 3), "Unsupported number of chips");
-        int_least32_t res = std::accumulate(m_iSamples.begin(), m_iSamples.end(), 0);
-        return res * SCALE[Chips-1] / SCALE_FACTOR;
+        int_least64_t res = 0;
+        for (std::size_t i = 0; i < m_iSamples.size(); i++)
+            res += static_cast<int_least64_t>(m_iSamples[i]);
+        return static_cast<int_least32_t>((res * SCALE[Chips-1]) / SCALE_FACTOR);
     }
 
     // Mono mixing for more than 3 chips, scale by 1/chips
     int_least32_t monoN() const
     {
-        const int_least64_t res = std::accumulate(m_iSamples.begin(), m_iSamples.end(), static_cast<int_least32_t>(0));
-        return static_cast<int_least32_t>(res * m_monoScale / SCALE_FACTOR);
+        int_least64_t res = 0;
+        for (std::size_t i = 0; i < m_iSamples.size(); i++)
+            res += static_cast<int_least64_t>(m_iSamples[i]);
+        return static_cast<int_least32_t>((res * m_monoScale) / SCALE_FACTOR);
     }
 
     // Panned stereo mixing, int64 accumulate of sample * gain

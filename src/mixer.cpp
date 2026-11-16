@@ -37,7 +37,7 @@ void Mixer::initialize(unsigned int chips, bool stereo, bool opl)
 {
     assert((chips >= 1) && (chips <= MAX_SIDS));
     m_channels = stereo ? 2 : 1;
-    m_mix.resize(m_channels);
+    m_mix.clear();
     m_chips = chips;
     if (opl)
         m_chips++;
@@ -45,23 +45,23 @@ void Mixer::initialize(unsigned int chips, bool stereo, bool opl)
     switch (chips)
     {
     case 1:
-        m_mix[0] = stereo ? &Mixer::stereo_OneChip : &Mixer::template mono<1>;
-        if (stereo) m_mix[1] = &Mixer::stereo_OneChip;
+        m_mix.push_back(stereo ? &Mixer::stereo_OneChip : &Mixer::template mono<1>);
+        if (stereo) m_mix.push_back(&Mixer::stereo_OneChip);
         break;
     case 2:
-        m_mix[0] = stereo ? &Mixer::stereo_ch1_TwoChips : &Mixer::template mono<2>;
-        if (stereo) m_mix[1] = &Mixer::stereo_ch2_TwoChips;
+        m_mix.push_back(stereo ? &Mixer::stereo_ch1_TwoChips : &Mixer::template mono<2>);
+        if (stereo) m_mix.push_back(&Mixer::stereo_ch2_TwoChips);
         break;
     case 3:
-        m_mix[0] = stereo ? &Mixer::stereo_ch1_ThreeChips : &Mixer::template mono<3>;
-        if (stereo) m_mix[1] = &Mixer::stereo_ch2_ThreeChips;
+        m_mix.push_back(stereo ? &Mixer::stereo_ch1_ThreeChips : &Mixer::template mono<3>);
+        if (stereo) m_mix.push_back(&Mixer::stereo_ch2_ThreeChips);
         break;
     default:
         // no panning, same signal on both channels
         // scale by 1/chips, keeps the sum of full scale chips in 16 bit
         m_monoScale = SCALE_FACTOR / static_cast<int_least32_t>(m_chips);
-        m_mix[0] = &Mixer::monoN;
-        if (stereo) m_mix[1] = &Mixer::monoN;
+        m_mix.push_back(&Mixer::monoN);
+        if (stereo) m_mix.push_back(&Mixer::monoN);
         break;
      }
 }
@@ -77,7 +77,7 @@ void Mixer::initialize(unsigned int chips, bool stereo, bool opl, const std::vec
 
     assert((chips >= 1) && (chips <= MAX_SIDS));
     m_channels = 2;
-    m_mix.resize(m_channels);
+    m_mix.clear();
     m_chips = chips;
     if (opl)
         m_chips++;
@@ -114,8 +114,8 @@ void Mixer::initialize(unsigned int chips, bool stereo, bool opl, const std::vec
         m_gainR.push_back(scaleR);
     }
 
-    m_mix[0] = &Mixer::stereo_ch1_Generic;
-    m_mix[1] = &Mixer::stereo_ch2_Generic;
+    m_mix.push_back(&Mixer::stereo_ch1_Generic);
+    m_mix.push_back(&Mixer::stereo_ch2_Generic);
 }
 #endif
 
