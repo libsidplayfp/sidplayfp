@@ -294,6 +294,10 @@ If greater than 8191 the delay will be random.
 Set resampling mode:  Interpolation (less expensive) or
 resampling (accurate).
 
+=item B<OplModel>=I<< <YM3812|YM3526> >>
+
+Default OPL chip model, old YM3526 (OPL) or newer YM3812 (OPL2).
+
 =back
 
 

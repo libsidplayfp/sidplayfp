@@ -426,6 +426,9 @@ ConsolePlayer::ConsolePlayer (const char * const name) :
 #ifdef FEAT_RESID_STRONGPS
         m_strongPS = emulation.strongPS;
 #endif
+#ifdef FEAT_SID_V5
+        m_engCfg.oplModel = emulation.oplModel;
+#endif
 
         if (emulation.powerOnDelay >= 0)
             m_engCfg.powerOnDelay    = emulation.powerOnDelay;

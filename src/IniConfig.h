@@ -116,6 +116,9 @@ public:
 #ifdef FEAT_RESID_STRONGPS
         bool          strongPS;
 #endif
+#ifdef FEAT_SID_V5
+        SidConfig::opl_model_t  oplModel;
+#endif
         int           powerOnDelay;
         SidConfig::sampling_method_t  samplingMethod;
         bool          fastSampling;

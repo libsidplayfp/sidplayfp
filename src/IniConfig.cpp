@@ -195,6 +195,9 @@ void IniConfig::clear()
 #ifdef FEAT_RESID_STRONGPS
     emulation_s.strongPS = false;
 #endif
+#ifdef FEAT_SID_V5
+    emulation_s.oplModel      = SidConfig::YM3812;
+#endif
     emulation_s.powerOnDelay = -1;
     emulation_s.samplingMethod = SidConfig::RESAMPLE_INTERPOLATE;
     emulation_s.fastSampling = false;
@@ -543,6 +546,18 @@ void IniConfig::readEmulation(iniHandler &ini)
                 emulation_s.sidModel = SidConfig::MOS8580;
         }
     }
+#ifdef FEAT_SID_V5
+    {
+        std::string str = readString(ini, "OplModel");
+        if (!str.empty())
+        {
+            if (str.compare("YM3812") == 0)
+                emulation_s.oplModel = SidConfig::YM3812;
+            else if (str.compare("YM3526") == 0)
+                emulation_s.oplModel = SidConfig::YM3526;
+        }
+    }
+#endif
 
     readBool(ini, "ForceSidModel", emulation_s.forceModel);
 
