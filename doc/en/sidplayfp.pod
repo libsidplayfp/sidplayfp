@@ -263,6 +263,11 @@ topbit is not pulled down, providing a stronger
 sound.
 By default it is disabled.
 
+=item B<-opl>
+
+Adds an OPL chip, for tunes that supports it.
+By default it is disabled.
+
 =item B<--noaudio>
 
 Run without an audio output device.

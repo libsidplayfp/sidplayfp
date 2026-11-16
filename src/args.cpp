@@ -234,7 +234,12 @@ int ConsolePlayer::args(int argc, const char *argv[])
                 displayVersion();
                 return 0;
             }
-
+#ifdef FEAT_SID_V5
+            else if (std::strncmp (&argv[i][1], "opl", 3) == 0)
+            {
+                m_engCfg.forceOpl = true;
+            }
+#endif
             else if (argv[i][1] == 'b')
             {
                 if (!parseTime (&argv[i][2], m_timer.start))
@@ -917,6 +922,9 @@ void ConsolePlayer::displayArgs(const char *arg)
 #  endif
 #  ifdef FEAT_RESID_STRONGPS
         " -ps          Enable strong PS (default: off)\n"
+#  endif
+#  ifdef FEAT_SID_V5
+        " -opl         Force OPL chip (default: off)\n"
 #  endif
     );
 #endif
