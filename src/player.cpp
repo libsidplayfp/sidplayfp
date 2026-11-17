@@ -980,11 +980,12 @@ bool ConsolePlayer::open()
 #  ifdef FEAT_SID_V5
     {
         const unsigned int chips = m_engine.installedSIDs();
+        const bool opl = m_engine.installedOpl();
         std::vector<SidTuneInfo::pan_t> pans(chips);
         for (unsigned int i = 0; i < chips; i++)
             pans[i] = tuneInfo->sidPanning(i);
         m_mixer.initialize(chips, m_driver.cfg.channels == 2,
-                           tuneInfo->fmOpl() || m_engCfg.forceOpl,
+                           opl,
                            tuneInfo->hasPanning() ? &pans : nullptr);
     }
 #  else
@@ -1176,8 +1177,13 @@ bool ConsolePlayer::play()
         short *buffer = m_driver.selected->buffer();
 #ifdef FEAT_NEW_PLAY_API
         m_mixer.begin(buffer, length);
-        std::vector<short*> buffers(m_engine.installedSIDs());
+        unsigned int chips = m_engine.installedSIDs();
+        std::vector<short*> buffers(chips);
         m_engine.buffers(buffers.data());
+#  ifdef FEAT_SID_V5
+        if (m_engine.installedOpl())
+            buffers.push_back(m_engine.oplBuffer());
+#  endif
 
         do
         {
